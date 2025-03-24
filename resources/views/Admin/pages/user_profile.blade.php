@@ -3189,6 +3189,7 @@ $(document).ready(function () {
     // Open Confirmation on Button Click
     $('#homeloanfileSentBtn').click(function () {
         var leadId = $(this).data('id');
+        alert(leadId);
         swal({
             title: "Are you sure?",
             text: "Do you want to send this file?",
@@ -3249,7 +3250,7 @@ $(document).ready(function () {
                         swal("Success", data.message, "success");
                         $('#homeloanassignAdminModal').modal('hide');
                         setTimeout(function () {
-                            window.location.href = "/show_pl_od_leads";
+                            window.location.href = "/show_home_loan_leads";
                         }, 1500);
                     } else {
                         swal("Error!", data.message, "error");
