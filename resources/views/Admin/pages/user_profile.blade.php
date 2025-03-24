@@ -73,9 +73,9 @@
                 (!isset($leads->login_status) || $leads->login_status == ''))
                 <div>
                     @if ($leadCount <= 4)
-                        <button class="btn" id="homeloancopyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
+                        <button class="btn" id="homeloancopyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS Home LEAD</button>
                     @endif
-                    <button class="btn" id="homeloanfileSentBtn" data-id="{{$leads->id}}">FILE SENT TO LOGIN</button>
+                    <button class="btn" id="homeloanfileSentBtn" data-id="{{$leads->id}}">FILE SENT TO Home LOGIN</button>
                 </div>
             @endif
 
