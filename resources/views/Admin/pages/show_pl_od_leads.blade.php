@@ -28,6 +28,22 @@ div.dataTables_info {
     background-color: #00b1f2;
     color: black;
 }
+.leads_system_bg .inprogress{
+    background-color: yellow;
+    color: black;
+}
+.leads_system_bg .followup{
+    background-color: #00b1f2;
+    color: black;
+}
+.leads_system_bg .callback{
+    background-color: #ec7e30;
+    color: black;
+}
+.leads_system_bg .implead{
+    background-color: #fd0000;
+    color: black;
+}
 
 
 </style>
@@ -44,10 +60,10 @@ div.dataTables_info {
                 <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Lead Status --</option>
                     <option class="newlead" value="NEW LEAD">NEW LEAD</option>
-                    <option value="IN PROGRESS">IN PROGRESS</option>
-                    <option value="FOLLOW UP">FOLLOW UP</option>
-                    <option value="CALLBACK">CALLBACK</option>
-                    <option value="IMPORTANT LEADS">IMPORTANT LEAD</option>
+                    <option class="inprogress" value="IN PROGRESS">IN PROGRESS</option>
+                    <option class="followup" value="FOLLOW UP">FOLLOW UP</option>
+                    <option class="callback" value="CALLBACK">CALLBACK</option>
+                    <option class="implead" value="IMPORTANT LEADS">IMPORTANT LEAD</option>
                     <option value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
                     <option value="IN DOCUMENTATION">IN DOCUMENTATION</option>
                     <option value="FILE COMPLETED">FILE COMPLETED</option>
