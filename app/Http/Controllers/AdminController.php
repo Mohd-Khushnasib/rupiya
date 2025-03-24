@@ -4887,25 +4887,6 @@ class AdminController extends Controller
 
 
     // warning check warning form 
-    // public function issuedTotalWarning(Request $request)
-    // {
-    //     $warningTypeId = $request->warningtype_id;
-    //     $issuedTo = $request->issued_to; 
-    
-    //     $warnings = DB::table('tbl_warning')
-    //                 ->leftJoin('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-    //                 ->where('tbl_warning.warningtype_id', $warningTypeId)
-    //                 ->where('tbl_warning.assign', $issuedTo)
-    //                 ->select('tbl_warning.*', 'tbl_warning_type.warning_name') // Select all warning table data + warning name
-    //                 ->get(); // Get all matching records
-    
-    //     return response()->json([
-    //         'status' => 1,
-    //         'warnings' => $warnings // Returning full warning table data
-    //     ]);
-    // }
-    
-
     public function issuedTotalWarning(Request $request)
     {
         $warningTypeId = $request->warningtype_id;
