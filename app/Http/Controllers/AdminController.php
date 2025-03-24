@@ -3420,6 +3420,7 @@ class AdminController extends Controller
         }
     }
 
+    // File Sent to PlOdLogin
     public function updateFileSenttoLogin(Request $request)
     {
         $leadId   = $request->input('lead_id');
@@ -3449,6 +3450,39 @@ class AdminController extends Controller
         }
         return response()->json(['status' => 'success', 'message' => 'Lead Moved to Login Assigned By Operations Department Successfully']);
     }
+
+    // updateFileSenttoHomeLogin
+    public function updateFileSenttoHomeLogin(Request $request)
+    {
+        $leadId   = $request->input('lead_id');
+        $adminIds = $request->input('admin_ids'); // Array of Admin IDs
+
+        if (! $leadId || empty($adminIds)) {
+            return response()->json(['status' => 'error', 'message' => 'Please select at least one admin.']);
+        }
+
+        // Update Lead Status
+        DB::table('tbl_lead')->where('id', $leadId)->update([
+            'lead_status'       => 'FILE SENT TO HOME LOGIN',
+            'lead_login_status' => 'HOME LOAN LOGIN',
+            'login_status'      => 'NEW FILE',
+            'assign_operation'  => implode(',', $adminIds),
+            'move_login_date'  => $this->date,
+        ]);
+
+        // Assign Admins to Lead in tbl_lead_status
+        foreach ($adminIds as $adminId) {
+            DB::table('tbl_lead_status')->insert([
+                'admin_id'    => $adminId,
+                'lead_id'     => $leadId,
+                'lead_status' => 'Assigned FILE SENT TO HOME LOGIN',
+                'date'        => $this->date,
+            ]);
+        }
+        return response()->json(['status' => 'success', 'message' => 'Lead Moved to Login Assigned By Operations Department Successfully']);
+    }
+
+
 
     // get operation Department
     public function getAdminUsers()

@@ -260,6 +260,9 @@ Route::post('/update-imp-question', [AdminController::class, 'updateImpQuestion'
 Route::post('/copy-this-lead', [AdminController::class, 'copyThisLead']);
 // updateFileSenttoLogin
 Route::post('/update-file-sentto-login', [AdminController::class, 'updateFileSenttoLogin']);
+// updateFileSenttoHomeLogin
+Route::post('/update-file-sentto-home-login', [AdminController::class, 'updateFileSenttoHomeLogin']);
+
 Route::get('/get-admin-users', [AdminController::class, 'getAdminUsers']);
 
 // filter leads
