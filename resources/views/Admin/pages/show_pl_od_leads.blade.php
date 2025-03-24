@@ -637,7 +637,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                     ).join('');
 
                     const actionDropdown = `
-                        <select class="form-control action-dropdown" data-leadid="${item.id}">
+                        <select class="form-control leads_system_bg action-dropdown" data-leadid="${item.id}">
                             <option selected disabled>Select</option>
                             <option value="remark">Remark</option>
                             <option value="task">Task</option>
