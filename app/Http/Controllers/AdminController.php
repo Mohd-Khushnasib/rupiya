@@ -3007,7 +3007,7 @@ class AdminController extends Controller
             return view('Admin.pages.show_home_loan_leads');
         }
     
-        public function show_Home_Loan_LeadAPI(Request $request)
+        public function show_Home_Loan_LeadAPI000(Request $request)
         {
             $search             = $request->search;             // for search
             $lead_status        = $request->lead_status;        // for lead_status
@@ -3103,6 +3103,187 @@ class AdminController extends Controller
                 'success'      => 'success',
             ]);
         }
+
+
+
+        public function show_Home_Loan_LeadAPI(Request $request)
+    {
+        // Get session admin login 
+        $adminSession = collect(session()->get('admin_login'))->first();
+        $team_name     = $adminSession->team ?? null; 
+        $admin_id     = $adminSession->id ?? null; 
+        $admin_role   = strtolower($adminSession->role ?? ''); 
+    
+        $search      = $request->search;
+        $lead_status = $request->lead_status;
+        $from_date   = $request->from_date;
+        $to_date     = $request->to_date;
+        $activity_from_date     = $request->activity_from_date;
+        
+        $valid_statuses = [
+            'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
+            'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
+        ];
+        
+        // Start query to fetch leads
+        $query = DB::table('tbl_lead')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id') // Assigned Admin
+            ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager') // Manager Name
+            ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader') // Team Leader Name
+            ->select(
+                'tbl_lead.*',
+                'tbl_product.product_name',
+                'tbl_campaign.campaign_name',
+                'tbl_product_need.product_need',
+                'assigned_admin.name AS admin_name', // Assigned Admin Name
+                'assigned_admin.role AS admin_role',
+                'manager_admin.name AS manager_name', // Manager Name
+                'team_leader_admin.name AS team_leader_name' // Team Leader Name
+            )
+            // ->where('assigned_admin.department', 'Sales')
+            ->where('tbl_lead.lead_login_status', 'HOME LOAN LEADS');
+    
+        // **Case: If logged-in user is a Manager**
+        if ($admin_role === 'manager' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id); // Manager's own leads
+                
+                // Fetch all TLs where this Manager is assigned as their Manager
+                $tl_ids = DB::table('admin')
+                    ->where('manager', $admin_id)
+                    ->where('role', 'TL') // Only TL roles
+                    ->pluck('id')
+                    ->toArray();
+    
+                if (!empty($tl_ids)) {
+                    // Get leads where TL's ID is in admin_id
+                    $q->orWhereIn('tbl_lead.admin_id', $tl_ids);
+    
+                    // Fetch all Agents under these TLs
+                    $agent_ids = DB::table('admin')
+                        ->whereIn('team_leader', $tl_ids)
+                        ->where('role', 'Agent') // Only Agent roles
+                        ->pluck('id')
+                        ->toArray();
+    
+                    if (!empty($agent_ids)) {
+                        // Get leads where Agent's ID is in admin_id
+                        $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
+                    }
+                }
+            });
+        }
+    
+        // **Case: If logged-in user is a TL**
+        elseif ($admin_role === 'tl' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id); // TL's own leads
+    
+                // Fetch all Agents where this TL is assigned as their Team Leader
+                $agent_ids = DB::table('admin')
+                    ->where('team_leader', $admin_id)
+                    ->where('role', 'Agent') // Only Agent roles
+                    ->pluck('id')
+                    ->toArray();
+    
+                if (!empty($agent_ids)) {
+                    // Get leads where Agent's ID is in admin_id
+                    $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
+                }
+            });
+        }
+
+        // **Case: If logged-in user is an Agent**
+        elseif ($admin_role === 'agent' && !empty($admin_id)) {
+            $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
+        }
+    
+        // Order by latest leads
+        $query->orderBy('tbl_lead.id', 'desc');
+    
+        // **Search Filter**
+        if (!empty($search) && $search != 'undefined') {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_lead.name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.mobile', 'like', "%$search%")
+                    ->orWhere('tbl_product.product_name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.lead_status', 'like', "%$search%")
+                    ->orWhere('tbl_lead.pincode', 'like', "%$search%")
+                    ->orWhere('tbl_lead.company_name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.loan_amount', 'like', "%$search%");
+            });
+        }
+    
+        // **Lead Status Filter**
+        if (!empty($lead_status)) {
+            $query->where('tbl_lead.lead_status', $lead_status);
+        }
+    
+        // **Date Filters**
+        if (!empty($from_date) && !empty($to_date)) {
+            if ($from_date == $to_date) {
+                $query->whereDate('tbl_lead.date', '=', $from_date);
+            } else {
+                $query->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
+            }
+        } elseif (!empty($from_date)) {
+            $query->whereDate('tbl_lead.date', '>=', $from_date);
+        } elseif (!empty($to_date)) {
+            $query->whereDate('tbl_lead.date', '<=', $to_date);
+        }
+    
+    
+        // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
+        if (!empty($activity_from_date)) {
+            $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
+            $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
+    
+            // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
+            $leads_with_activity = DB::table('tbl_lead_status')
+                ->whereBetween(
+                    DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
+                    [$activity_from_date, $current_date]
+                )
+                ->distinct()
+                ->pluck('lead_id')
+                ->toArray();
+            // Exclude leads that have activity in the given range
+            if (!empty($leads_with_activity)) {
+                $query->whereNotIn('tbl_lead.id', $leads_with_activity);
+            }  
+        }
+        // Apply lead status filter if valid statuses are provided
+        // if (!empty($valid_statuses)) {
+        //     $query->whereIn('tbl_lead.lead_status', $valid_statuses);
+        // }
+        
+        // **Get Leads with Pagination**
+        $leads = $query->paginate(8);
+    
+        // **Return JSON Response**
+        return response()->json([
+            'data'         => $leads->items(),
+            'current_page' => $leads->currentPage(),
+            'last_page'    => $leads->lastPage(),
+            'per_page'     => $leads->perPage(),
+            'total'        => $leads->total(),
+            'team_name' => $team_name,
+            'role' => $admin_role,
+            'success'      => 'success',
+        ]);
+    }
+
+
+
+
+
+
+
+
+
 
     ################# Home Loan Login Start Here #################
         // Pl Od Login
