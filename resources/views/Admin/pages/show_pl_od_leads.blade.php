@@ -64,6 +64,10 @@ div.dataTables_info {
     background-color: #fd0000;
     color: black;
 }
+.leads_system_bg .lost{
+    background-color: #fd0000;
+    color: #000;
+}
 
 
 
@@ -90,13 +94,13 @@ div.dataTables_info {
                     <option class="filecomp" value="FILE COMPLETED">FILE COMPLETED</option>
                     <option class="notint" value="NOT INTERESTED">NOT INTERESTED</option>
                     <option class="fakelead" value="FAKE LEAD">FAKE LEAD</option>
-                    <option value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
-                    <option value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
-                    <option value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
-                    <option value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
-                    <option value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
-                    <option value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
-                    <option value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
+                    <option class="lost" value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
+                    <option class="lost" value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
+                    <option  class="lost"value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
+                    <option class="lost" value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
+                    <option class="lost" value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
+                    <option class="lost" value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
+                    <option class="lost" value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
                 </select>
             </div>    
             <!-- Lead Status Wise Filter End Here -->
