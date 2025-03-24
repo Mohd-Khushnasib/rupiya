@@ -2202,7 +2202,7 @@
             </div>
             <div class="modal-body">
                 <form id="assignAdminForm">
-                    <input type="hidden" id="lead_id" name="lead_id">
+                    <input type="text" id="lead_id" name="lead_id">
                     <label>Select Operation Department</label>
                     <select id="adminSelect" name="admin_ids[]" multiple class="form-control OperationDepartment"></select>
                 </form>
