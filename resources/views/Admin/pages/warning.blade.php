@@ -82,14 +82,13 @@
                 }
 
                 .warrinig_card_new_design {
-                    background: #ffecb3;
-                    color: #7b3f00;
+                    background: #000;
                     font-family: Arial, sans-serif;
                     font-weight: bold;
                     font-size: 20px;
                     border-radius: 15px;
                     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-                    border: 2px solid #d2691e;
+                    border: 2px solid #03b0f5;
                     margin: auto;
                 }
             </style>
