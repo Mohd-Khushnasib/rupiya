@@ -75,7 +75,7 @@
                     @if ($leadCount <= 4)
                         <button class="btn copyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
                     @endif
-                    <button class="btn" id="homeloanfileSentBtn" data-id="{{$leads->id}}">FILE SENT TO Home LOGIN</button>
+                    <button class="btn" id="homeloanfileSentBtn" data-homeloanid="{{$leads->id}}">FILE SENT TO Home LOGIN</button>
                 </div>
             @endif
 
@@ -3188,7 +3188,7 @@ $(document).ready(function () {
     $(document).ready(function () {
     // Open Confirmation on Button Click
     $('#homeloanfileSentBtn').click(function () {
-        var leadId = $(this).data('id');
+        var leadId = $(this).data('homeloanid');
         alert(leadId);
         swal({
             title: "Are you sure?",
