@@ -3200,7 +3200,8 @@ class AdminController extends Controller
             }
         
             // Order by latest leads
-            $query->orderBy('tbl_lead.id', 'desc');
+            // $query->orderBy('tbl_lead.id', 'desc');
+            $query->orderBy('tbl_lead.move_login_date', 'desc');
         
             // **Search Filter**
             if (!empty($search) && $search != 'undefined') {
@@ -3463,11 +3464,11 @@ class AdminController extends Controller
 
         // Update Lead Status
         DB::table('tbl_lead')->where('id', $leadId)->update([
-            'lead_status'       => 'FILE SENT TO HOME LOGIN',
+            'lead_status'       => 'FILE SENT TO HOME LOAN LOGIN',
             'lead_login_status' => 'HOME LOAN LOGIN',
             'login_status'      => 'NEW FILE',
             'assign_operation'  => implode(',', $adminIds),
-            'move_login_date'  => $this->date,
+            'move_homeloan_login_date'  => $this->date,
         ]);
 
         // Assign Admins to Lead in tbl_lead_status
@@ -3475,7 +3476,7 @@ class AdminController extends Controller
             DB::table('tbl_lead_status')->insert([
                 'admin_id'    => $adminId,
                 'lead_id'     => $leadId,
-                'lead_status' => 'Assigned FILE SENT TO HOME LOGIN',
+                'lead_status' => 'Assigned FILE SENT TO HOME LOAN LOGIN',
                 'date'        => $this->date,
             ]);
         }
