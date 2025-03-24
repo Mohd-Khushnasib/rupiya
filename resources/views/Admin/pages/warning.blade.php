@@ -116,82 +116,6 @@
                     <!-- BEGIN Main Content -->
                     <div class="row">
 
-<<<<<<< HEAD
-<!-- Task Modal Start Here -->
-<div id="AddWarningModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color:black;" id="modalTitle">Add Warning</h4>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <form id="add_form" method="post" class="mail-compose form-horizontal" action="javascript:void(0);">
-                        @csrf
-                        <input type="hidden" name="admin_id" value="{{$adminlogin->id}}">
-                        <p>
-                            <label for="">Issued By</label>
-                            <input type="text" value="{{$adminlogin->name}}" class="form-control" disabled>
-                        </p>
-                        <p>
-                            <label for="">Warning Type</label>
-                            <select name="warningtype_id" data-placeholder="Issued To" class="form-control warning_chosen"
-                                tabindex="6">
-                                <option selected="true" disabled="true">-- Select Warning Type --</option>
-                                @php
-                                    $warnings = DB::table('tbl_warning_type')->orderBy('id', 'desc')->get();
-                                @endphp
-                                @foreach($warnings as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->warning_name ?? '' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </p>
-                        <p>
-                        <label for="">Issued To</label>
-                            <select name="assign" data-placeholder="Issued To" class="form-control warning_chosen" tabindex="6">
-                                <optgroup>
-                                    @php
-                                    $admins = DB::table('admin')
-                                                ->where('role', '!=', 'Admin') // Exclude records where role is 'Admin'
-                                                ->orderBy('id', 'desc')
-                                                ->get();
-                                    @endphp
-                                    @foreach($admins as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->name ?? '' }}
-                                        </option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
-                        </p>
-                        <p>
-                            <!-- This div will hold the dynamically generated select box -->
-                            <div id="warningInfo"></div>
-                        </p>
-                        <p>
-                            <label for="">Penalty (₹):</label>
-                            <input type="number" name="penalty" class="form-control" placeholder="Enter Penalty AMount">
-                        </p>
-                        <p><textarea name="message" class="form-control wysihtml5" rows="6"></textarea></p>
-
-                        <p>
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-rocket"></i>
-                                Add</button>
-                            <a type="button" class="btn">Cancel</a>
-                        </p>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Task Modal End Here -->
-=======
                         @php
                             $adminId = $adminlogin->id; // Logged-in admin ki ID
                             // Warnings ko grouped karne ke liye query
@@ -203,7 +127,6 @@
                                 ->where('tbl_warning.assign', $adminId)
                                 ->get()
                                 ->groupBy('warningtype_id');
->>>>>>> 54f4841d2ad772ccd4ea41542e183863bd515163
 
                             // Total warnings count nikalne ke liye 
                             $totalWarnings = $groupedWarnings->sum(fn($warnings) => $warnings->count());
