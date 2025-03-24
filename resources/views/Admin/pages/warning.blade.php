@@ -105,9 +105,9 @@
                     border: 2px solid #03b0f5;
                     margin: auto;
                 }
-                .warrinig_card_new_design h3{
-                     color: #03b0f5;
-                    margin-top:10px;
+                .warrinig_card_new_design h4{
+                    color: #03b0f5 !important;
+                    margin-top:20px !important;
                     text-align: center;
                 }
             </style>
