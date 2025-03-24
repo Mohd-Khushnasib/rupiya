@@ -138,14 +138,14 @@
                         <div class="col-md-12">
                             <div class="tabbable">
                                 <!-- <ul id="myTab1" class="nav nav-tabs">
-                                    <li class="active">
-                                        <a href="#all" data-toggle="tab"><i class="fa fa-home"></i>
-                                            All Warnings</a></li>
-                                            <li><a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i>
-                                            My Warnings </a></li>
-                                            <li><a href="#teamwarning" data-toggle="tab"><i class="fa fa-user"></i>
-                                            Team Warnings </a></li>
-                                </ul> -->
+                                                <li class="active">
+                                                    <a href="#all" data-toggle="tab"><i class="fa fa-home"></i>
+                                                        All Warnings</a></li>
+                                                        <li><a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i>
+                                                        My Warnings </a></li>
+                                                        <li><a href="#teamwarning" data-toggle="tab"><i class="fa fa-user"></i>
+                                                        Team Warnings </a></li>
+                                            </ul> -->
                                 @php
                                     $adminRole = $adminlogin->role; // Logged-in admin ka role
                                 @endphp
@@ -256,68 +256,9 @@
                                     <div class="tab-pane fade in all_tabs_bg" id="dashboard">
                                         <div class="boligation_tabls">
                                             <div class="row">
-                                                <div class="col-md-12" style="margin-top: 20px;">
-                                                    <div class="table-responsive" style="border:0">
-                                                        <table class="table table-advance" id="table1">
-                                                            <thead>
-                                                                <tr>
-                                                                    <!--<th style="width:18px"><input type="checkbox"></th>-->
-                                                                    <!--<th>Action</th>-->
-                                                                    @if ($adminlogin->role === 'Admin')
-                                                                        <th style="width:18px"><input type="checkbox"></th>
-                                                                        <th>Action</th>
-                                                                    @endif
-                                                                    <th>Created By</th>
-                                                                    <th>Ticket Status</th>
-                                                                    <th>Warning Type</th>
-                                                                    <th>Message</th>
-                                                                    <th>Assign</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @if($warnings->isEmpty())
-                                                                @else
-                                                                                                            @php
-                                                                                                                $sr = 1;
-                                                                                                            @endphp
-                                                                                                            @foreach($warnings as $item)
-                                                                                                                                                    <tr class="table-flag-blue">
-                                                                                                                                                        @if ($adminlogin->role === 'Admin')
-                                                                                                                                                            <td><input type="checkbox"></td>
-                                                                                                                                                            <td>
-                                                                                                                                                                <a href="javascript:void(0);"
-                                                                                                                                                                    class="text-white btn btn-danger delete small-btn"
-                                                                                                                                                                    data-id="{{ $item->id }}">
-                                                                                                                                                                    Delete
-                                                                                                                                                                </a>
-                                                                                                                                                            </td>
-                                                                                                                                                        @endif
-                                                                                                                                                        <td>{{$item->createdby ?? ''}}</td>
-                                                                                                                                                        <td>{{$item->task_status ?? ''}}</td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <a href="javascript:void(0);" class="edit"
-                                                                                                                                                                data-warningtype_id="{{$item->warningtype_id}}"
-                                                                                                                                                                data-message="{{$item->message}}"
-                                                                                                                                                                data-assign="{{ json_encode($item->assign) }}"
-                                                                                                                                                                data-id="{{ $item->id }}">
-                                                                                                                                                                {{$item->warning_name ?? ''}}
-                                                                                                                                                            </a>
-                                                                                                                                                        </td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <a href="#" class="view-full-message"
-                                                                                                                                                                data-message="{{ $item->message }}">
-                                                                                                                                                                <i class="fas fa-eye"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                        </td>
-                                                                                                                                                        <td>{{$item->assigned_names ?? '' }}</td>
-                                                                                                                                                    </tr>
-                                                                                                                                                    @php
-                                                                                                                                                        $sr++;
-                                                                                                                                                    @endphp
-                                                                                                            @endforeach
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
+                                                <div class="col-md-6" style="margin-top: 20px;">
+                                                    <div class="card">
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -1005,17 +946,17 @@
                                 console.log("Formatted Date:", formattedDate);
 
                                 var commentHTML = `
-                            <li>
-                                <img src="{{ asset('Admin/img/demo/avatar/avatar2.jpg') }}" alt="User">
-                                <div>
-                                    <div>
-                                        <h5 class="theam_color">${item.createdby}</h5>
-                                        <span class="time"><i class="fa fa-clock-o"></i> ${formattedDate}</span>
-                                    </div>
-                                    <p>${item.comment}</p>
-                                </div>
-                            </li>
-                        `;
+                                        <li>
+                                            <img src="{{ asset('Admin/img/demo/avatar/avatar2.jpg') }}" alt="User">
+                                            <div>
+                                                <div>
+                                                    <h5 class="theam_color">${item.createdby}</h5>
+                                                    <span class="time"><i class="fa fa-clock-o"></i> ${formattedDate}</span>
+                                                </div>
+                                                <p>${item.comment}</p>
+                                            </div>
+                                        </li>
+                                    `;
                                 $('#get_comments').append(commentHTML);
                             });
                         },
@@ -1049,13 +990,13 @@
                                     });
 
                                     var historyRow = `
-                                    <tr class="history_table">
-                                        <td>${sr}</td>
-                                        <td>${formattedDate}</td>
-                                        <td>${item.createdby}</td>
-                                        <td>${item.changes}</td>
-                                    </tr>
-                                `;
+                                                <tr class="history_table">
+                                                    <td>${sr}</td>
+                                                    <td>${formattedDate}</td>
+                                                    <td>${item.createdby}</td>
+                                                    <td>${item.changes}</td>
+                                                </tr>
+                                            `;
                                     $('#get_history').append(historyRow);
                                     sr++;
                                 });
