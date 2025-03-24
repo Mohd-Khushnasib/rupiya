@@ -21,53 +21,6 @@ div.dataTables_info {
     padding-top: 8px;
     display: none;
 }
-.leads_system_bg option{
-    font-weight: 800 !important;
-}
-.leads_system_bg .newlead{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .inprogress{
-    background-color: yellow;
-    color: black;
-}
-.leads_system_bg .followup{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .callback{
-    background-color: #ec7e30;
-    color: black;
-}
-.leads_system_bg .implead{
-    background-color: #fd0000;
-    color: black;
-}
-.leads_system_bg .longfollowup{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .indoct{
-    background-color: #00af50;
-    color: black;
-}
-.leads_system_bg .filecomp{
-    background-color: #000;
-    color: #fff;
-}
-.leads_system_bg .notint{
-    background-color: red;
-    color: black;
-}
-.leads_system_bg .fakelead{
-    background-color: #fd0000;
-    color: black;
-}
-.leads_system_bg .lost{
-    background-color: #fd0000;
-    color: #000;
-}
 
 
 
