@@ -21,6 +21,50 @@ div.dataTables_info {
     padding-top: 8px;
     display: none;
 }
+.leads_system_bg option{
+    font-weight: 800 !important;
+}
+.leads_system_bg .newlead{
+    background-color: #00b1f2;
+    color: black;
+}
+.leads_system_bg .inprogress{
+    background-color: yellow;
+    color: black;
+}
+.leads_system_bg .followup{
+    background-color: #00b1f2;
+    color: black;
+}
+.leads_system_bg .callback{
+    background-color: #ec7e30;
+    color: black;
+}
+.leads_system_bg .implead{
+    background-color: #fd0000;
+    color: black;
+}
+.leads_system_bg .longfollowup{
+    background-color: #00b1f2;
+    color: black;
+}
+.leads_system_bg .indoct{
+    background-color: #00af50;
+    color: black;
+}
+.leads_system_bg .filecomp{
+    background-color: #000;
+    color: #fff;
+}
+.leads_system_bg .notint{
+    background-color: red;
+    color: black;
+}
+.leads_system_bg .fakelead{
+    background-color: #fd0000;
+    color: black;
+}
+
 
 
 </style>
@@ -34,18 +78,18 @@ div.dataTables_info {
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
-                <select id="leadStatusFilter" class="form-control" tabindex="1">
+                <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Lead Status --</option>
-                    <option value="NEW LEAD">NEW LEAD</option>
-                    <option value="IN PROGRESS">IN PROGRESS</option>
-                    <option value="FOLLOW UP">FOLLOW UP</option>
-                    <option value="CALLBACK">CALLBACK</option>
-                    <option value="IMPORTANT LEADS">IMPORTANT LEAD</option>
-                    <option value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
-                    <option value="IN DOCUMENTATION">IN DOCUMENTATION</option>
-                    <option value="FILE COMPLETED">FILE COMPLETED</option>
-                    <option value="NOT INTERESTED">NOT INTERESTED</option>
-                    <option value="FAKE LEAD">FAKE LEAD</option>
+                    <option class="newlead" value="NEW LEAD">NEW LEAD</option>
+                    <option class="inprogress" value="IN PROGRESS">IN PROGRESS</option>
+                    <option class="followup" value="FOLLOW UP">FOLLOW UP</option>
+                    <option class="callback" value="CALLBACK">CALLBACK</option>
+                    <option class="implead" value="IMPORTANT LEADS">IMPORTANT LEAD</option>
+                    <option class="longfollowup" value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
+                    <option class="indoct" value="IN DOCUMENTATION">IN DOCUMENTATION</option>
+                    <option class="filecomp" value="FILE COMPLETED">FILE COMPLETED</option>
+                    <option class="notint" value="NOT INTERESTED">NOT INTERESTED</option>
+                    <option class="fakelead" value="FAKE LEAD">FAKE LEAD</option>
                     <option value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
                     <option value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
                     <option value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
