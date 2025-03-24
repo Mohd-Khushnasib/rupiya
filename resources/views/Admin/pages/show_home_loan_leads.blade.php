@@ -599,7 +599,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
     const search_data = search || $(".search_data").val();
 
     $.ajax({
-        url: "{{ url('show_Pl_Od_LeadAPI') }}",
+        url: "{{ url('show_Home_Loan_LeadAPI') }}",
         type: 'POST',
         data: {
             search: search_data,
