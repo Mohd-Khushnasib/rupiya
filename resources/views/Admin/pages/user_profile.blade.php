@@ -3189,7 +3189,6 @@ $(document).ready(function () {
     // Open Confirmation on Button Click
     $('#homeloanfileSentBtn').click(function () {
         var leadId = $(this).data('homeloanid');
-        alert(leadId);
         swal({
             title: "Are you sure?",
             text: "Do you want to send this file?",
