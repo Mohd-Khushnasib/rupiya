@@ -639,21 +639,28 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             <option value="task">Task</option>
                         </select>
                     `;
+
+                    // Role in Admin Case 
+                    // **Show delete & checkbox only if role is Admin**
+                    var adminControls = data.role === "admin" ? `
+                        <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
+                        <td>
+                            <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
+                                title="Delete Lead" 
+                                href="javascript:void(0);" 
+                                data-id="${item.id}">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    ` : '';
+
                     var serial_number = start_serial_number + index + 1;  // for indexing 
                     tbody.append(`
                         <tr>
                             <td>${serial_number}</td>
-                            <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
-                            <td>
-                                <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
-                                    title="Delete Lead" 
-                                    href="javascript:void(0);" 
-                                    data-id="${item.id}">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </td>
-                            <td>Team 1</td>
-                            <td>Manager 1</td>
+                             ${adminControls} 
+                            <td>${data.team_name}</td>
+                            <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
                             <td>XYZ</td>
                             <td>XYZ</td>
                             <td><a href="{{url('/user_profile/${item.id}')}}">${item.name ?? ''}</a></td>

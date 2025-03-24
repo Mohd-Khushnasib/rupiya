@@ -455,7 +455,7 @@ div.dataTables_info {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"
-                    style="color:black;font-weight:bold">Filter Remark1</h5>
+                    style="color:black;font-weight:bold">Filter Remark</h5>
                 <button type="button" class="close" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
