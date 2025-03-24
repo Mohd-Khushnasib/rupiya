@@ -50,6 +50,7 @@ div.dataTables_info {
                 </select>
             </div>
             <!-- Lead Status Wise Filter End Here  -->
+
             <!-- Date Filter Start Here -->
             <div>
                 <span style="color:white"><b>From</b></span> &ensp;
@@ -66,7 +67,6 @@ div.dataTables_info {
         <input type="hidden" name="admin_id" id="admin_id" value="{{$adminlogin->id}}">
         <!-- END Page Title -->
         <div class="row">
-
             <!-- Activity Date Filter Start Here -->
             <div class="col-sm-12">
                 <!-- Date Filter Start Here -->
@@ -83,11 +83,9 @@ div.dataTables_info {
             <!-- Date Filter End Here -->
             </div>
             <!-- Activity Date Filter End Here -->
-
-
             <div class="col-md-12">
                 <div class="box-content">
-                    <div class="btn-toolbar pull-right">
+                <div class="btn-toolbar pull-right">
                         <div class="btn-group">
                            
                         <a href="javascript:void(0);" class="" id="exportButtonExcel"><img width="30" height="30" src="https://img.icons8.com/color/30/export-excel.png" alt="ms-excel"/></a>
@@ -110,8 +108,10 @@ div.dataTables_info {
                             <thead style="background-color: black;">
                                 <tr>
                                     <th>#</th>
-                                    <th style="width:18px"><input type="checkbox"></th>
-                                    <th>Action</th>
+                                     @if($adminlogin->role === "Admin")
+                                        <th style="width:18px"><input type="checkbox"></th>
+                                        <th>Action</th>
+                                    @endif
                                     <th>Team Name</th>
                                     <th>Manager Name</th>
                                     <th>TL</th>
@@ -473,15 +473,15 @@ div.dataTables_info {
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap.min.js"></script>
 
-
 <!-- XL Export Linking Start Here  -->
-<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-    <!-- XL Export Code Start Here  -->
+<!--<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>-->
+<!-- XL Export Code Start Here  -->
+    
     <script>
     const { jsPDF } = window.jspdf;
     // Export       
@@ -529,13 +529,6 @@ div.dataTables_info {
     </script>
     <!-- XL Export Code End Here -->
 
-
-
-
-
-
-
-
 <!-- Pagination With login_status and date filter Start Here  -->
 <script>
     let currentPage = 1;
@@ -561,17 +554,17 @@ $(document).ready(function() {
         toDate = $('#todate').val();
         view_enquiry_api(currentPage, searchKeyword, login_status, fromDate, toDate, activityfromDate);
     });
-    // Activity Date filter here 
-    $('#ActivityDateFilter').on('click', function() {
-        activityfromDate = $('#activityfromdate').val();
-        view_enquiry_api(currentPage, searchKeyword, login_status, fromDate, toDate, activityfromDate);
-    });
+
     // Lead status filter call here 
     $('#leadStatusFilter').on('change', function() {
         login_status = $(this).val();
         view_enquiry_api(currentPage, searchKeyword, login_status, fromDate, toDate, activityfromDate);
     });
-
+    // Activity Date filter here 
+    $('#ActivityDateFilter').on('click', function() {
+        activityfromDate = $('#activityfromdate').val();
+        view_enquiry_api(currentPage, searchKeyword, login_status, fromDate, toDate, activityfromDate);
+    });
     // Reset All Filter Here
     $("#resetFilters").click(function () {
         $("#leadStatusFilter").val("");
@@ -582,14 +575,13 @@ $(document).ready(function() {
         view_enquiry_api(currentPage, "", "", "", "", "");
     });
     // Reset All Filter Here
-
 });
 
 // Initial Function 
 function view_enquiry_api(page = 1, search = '', login_status = '', fromDate = '', toDate = '', activityfromDate='') {
     const search_data = search || $(".search_data").val();
     $.ajax({
-        url: "{{ url('show_Pl_Od_loginapi') }}",
+        url: "{{ url('show_Home_Loan_loginapi') }}",
         type: 'POST',
         data: {
             search: search_data,
@@ -600,13 +592,13 @@ function view_enquiry_api(page = 1, search = '', login_status = '', fromDate = '
             activity_from_date: activityfromDate
         },
         success: function(data) {
-            console.log(data);
+            // alert(data.team_name); 
             const tbody = $("#leadsTablenew tbody");
             const pagination = $('#pagination');
             tbody.empty();
             pagination.empty();
-             // for indexing start here 
-             var total_enquiries = data.total;
+            // for indexing start here 
+            var total_enquiries = data.total;
             var per_page = data.per_page;
             var start_serial_number = (page - 1) * per_page;
             // for indexing end here
@@ -632,22 +624,28 @@ function view_enquiry_api(page = 1, search = '', login_status = '', fromDate = '
                             <option value="task">Task</option>
                         </select>
                     `;
-
+                    
+                     // **Show delete & checkbox only if role is Admin**
+                    var adminControls = data.role === "admin" ? `
+                        <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
+                        <td>
+                            <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
+                                title="Delete Lead" 
+                                href="javascript:void(0);" 
+                                data-id="${item.id}">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    ` : '';
+                    
                     var serial_number = start_serial_number + index + 1;  // for indexing 
+
                     tbody.append(`
                         <tr>
                             <td>${serial_number}</td>
-                            <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
-                            <td>
-                                <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
-                                    title="Delete Lead" 
-                                    href="javascript:void(0);" 
-                                    data-id="${item.id}">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </td>
-                            <td>Team 1</td>
-                            <td>Manager 1</td>
+                            ${adminControls} 
+                           <td>${data.team_name}</td>
+                            <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
                             <td>XYZ</td>
                             <td>XYZ</td>
                             <td><a href="{{url('/user_profile/${item.id}')}}">${item.name ?? ''}</a></td>
@@ -770,7 +768,7 @@ function generatePaginationLinks(currentPage, lastPage, searchKeyword, login_sta
     if (currentPage > 3) {
         pagination.append(`
             <li class="page-item">
-                <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(1, '${searchKeyword}', '${login_status}', '${fromDate}', '${toDate}','${activityfromDate}')">1</a>
+                <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(1, '${searchKeyword}', '${login_status}', '${fromDate}', '${toDate}')">1</a>
             </li>
             <li class="page-item">
                 <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(2, '${searchKeyword}', '${login_status}', '${fromDate}', '${toDate}','${activityfromDate}')">2</a>
@@ -1213,6 +1211,7 @@ $('#exportButtonPdf').on('click', function()
         }
     });
 });
+
 </script>
 <!-- Single Delete Lead End Here -->
 

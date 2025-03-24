@@ -3280,17 +3280,13 @@ class AdminController extends Controller
 
 
 
-
-
-
-
     ################# Home Loan Login Start Here #################
         // Pl Od Login
         public function show_Home_Loan_Login(Request $request)
         {
             return view('Admin.pages.show_home_loan_login');
         }
-        public function show_Home_Loan_LoginAPI(Request $request)
+        public function show_Home_Loan_LoginAPI000(Request $request)
         {
             $search             = $request->search;             // for searching
             $from_date          = $request->from_date;          // for fromdate
@@ -3380,6 +3376,160 @@ class AdminController extends Controller
                 'last_page'    => $leads->lastPage(),
                 'per_page'     => $leads->perPage(),
                 'total'        => $leads->total(),
+                'success'      => 'success',
+            ]);
+        }
+
+
+        public function show_Home_Loan_LoginAPI(Request $request)
+        {
+            // Get session admin login 
+            $adminSession = collect(session()->get('admin_login'))->first();
+            $team_name    = $adminSession->team ?? null; 
+            $admin_id     = $adminSession->id ?? null; 
+            $admin_role   = strtolower($adminSession->role ?? ''); 
+
+            // Request parameters
+            $search             = $request->search;
+            $from_date          = $request->from_date;
+            $to_date            = $request->to_date;
+            $login_status       = $request->login_status;
+            $activity_from_date = $request->activity_from_date;
+
+            $valid_statuses = [
+                'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
+                'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
+            ];
+
+            // Base query
+            $query = DB::table('tbl_lead')
+                ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+                ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+                ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+                ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id')
+                ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager')
+                ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader')
+                ->select(
+                    'tbl_lead.*',
+                    'tbl_product.product_name',
+                    'tbl_campaign.campaign_name',
+                    'tbl_product_need.product_need',
+                    'assigned_admin.name AS admin_name',
+                    'assigned_admin.role AS admin_role',
+                    'manager_admin.name AS manager_name',
+                    'team_leader_admin.name AS team_leader_name'
+                )
+                ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN');
+
+            // Role-Based Filtering
+            if ($admin_role === 'manager' && !empty($admin_id)) {
+                $query->where(function ($q) use ($admin_id) {
+                    $q->where('tbl_lead.admin_id', $admin_id)
+                        ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                            // Fetch TLs under this Manager
+                            $subQuery->select('id')
+                                ->from('admin')
+                                ->where('manager', $admin_id)
+                                ->where('role', 'TL')
+                                ->union(
+                                    DB::table('admin')
+                                        ->select('admin.id')
+                                        ->whereIn('team_leader', function ($tlQuery) use ($admin_id) {
+                                            $tlQuery->select('id')
+                                                ->from('admin')
+                                                ->where('manager', $admin_id)
+                                                ->where('role', 'TL');
+                                        })
+                                        ->where('role', 'Agent')
+                                );
+                        });
+                });
+            } elseif ($admin_role === 'tl' && !empty($admin_id)) {
+                $query->where(function ($q) use ($admin_id) {
+                    $q->where('tbl_lead.admin_id', $admin_id)
+                        ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                            $subQuery->select('id')
+                                ->from('admin')
+                                ->where('team_leader', $admin_id)
+                                ->where('role', 'Agent');
+                        });
+                });
+            } elseif ($admin_role === 'agent' && !empty($admin_id)) {
+                $query->where('tbl_lead.admin_id', $admin_id);
+            }
+
+            $query->orderBy('tbl_lead.move_homeloan_login_date', 'desc');
+
+            // Search Filter
+            if (!empty($search) && $search !== 'undefined') {
+                $query->where(function ($q) use ($search) {
+                    $q->where('tbl_lead.name', 'like', "%{$search}%")
+                        ->orWhere('tbl_lead.mobile', 'like', "%{$search}%");
+                });
+            }
+
+            // Login Status Filter
+            if (!empty($login_status)) {
+                $query->where('tbl_lead.login_status', $login_status);
+            }
+
+            // Date Filters
+            if (!empty($from_date) && !empty($to_date)) {
+                if ($from_date === $to_date) {
+                    $query->where(function ($q) use ($from_date) {
+                        $q->whereDate('tbl_lead.date', '=', $from_date)
+                            ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
+                    });
+                } else {
+                    $to_date_plus_one = date('Y-m-d', strtotime($to_date . ' +1 day'));
+                    $query->where(function ($q) use ($from_date, $to_date_plus_one) {
+                        $q->whereBetween('tbl_lead.date', [$from_date, $to_date_plus_one])
+                            ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $to_date_plus_one]);
+                    });
+                }
+            } elseif (!empty($from_date)) {
+                $query->where(function ($q) use ($from_date) {
+                    $q->whereDate('tbl_lead.date', '>=', $from_date)
+                        ->orWhereDate('tbl_lead.disbursment_date', '>=', $from_date);
+                });
+            } elseif (!empty($to_date)) {
+                $query->where(function ($q) use ($to_date) {
+                    $q->whereDate('tbl_lead.date', '<=', $to_date)
+                        ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
+                });
+            }
+
+            // Activity Date Filter
+            if (!empty($activity_from_date)) {
+                $current_date = date('Y-m-d');
+                $activity_from_date = date('Y-m-d', strtotime($activity_from_date));
+
+                $leads_with_activity = DB::table('tbl_lead_status')
+                    ->whereBetween(
+                        DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
+                        [$activity_from_date, $current_date]
+                    )
+                    ->distinct()
+                    ->pluck('lead_id')
+                    ->toArray();
+
+                if (!empty($leads_with_activity)) {
+                    $query->whereNotIn('tbl_lead.id', $leads_with_activity);
+                }
+            }
+
+            // Pagination
+            $leads = $query->paginate(5);
+
+            // Return JSON Response
+            return response()->json([
+                'data'         => $leads->items(),
+                'current_page' => $leads->currentPage(),
+                'last_page'    => $leads->lastPage(),
+                'per_page'     => $leads->perPage(),
+                'total'        => $leads->total(),
+                'team_name'    => $team_name,
+                'role'         => $admin_role,
                 'success'      => 'success',
             ]);
         }

@@ -93,7 +93,6 @@ div.dataTables_info {
                 <div class="box-content">
                     <div class="btn-toolbar pull-right">
                         <div class="btn-group">
-                           
                         <!-- Excel Export Start Here -->
                             <a href="javascript:void(0);" class="" id="exportButtonExcel">
                                 <img width="30" height="30" src="https://img.icons8.com/color/30/export-excel.png" alt="ms-excel"/>
@@ -109,7 +108,6 @@ div.dataTables_info {
                             title="Delete selected" href="#"><i class="fa fa-trash-o"></i></a>
                             <!-- Multiple Delete Button -->
                         </div>
-                       
                     </div>
                     <br><br>
                     <div class="table-responsive">
