@@ -488,7 +488,7 @@
                                         </div>
                                         <!-- company type and company category end here  -->
                                         @elseif(isset($leads) && isset($leads->lead_login_status) && ($leads->lead_login_status === 'HOME LOAN LEADS' || $leads->lead_login_status === 'HOME LOAN LOGIN'))
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label class="text-light control-label">Property Market Value</label>
                                                     <div class="controls">
@@ -496,7 +496,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label class="control-label text-light">Property Type</label>
                                                     <div class="controls">
@@ -508,7 +508,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label class="control-label text-light">Case Type</label>
                                                     <div class="controls">
@@ -520,7 +520,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label class="control-label text-light">Property Registry Status</label>
                                                     <div class="controls">
