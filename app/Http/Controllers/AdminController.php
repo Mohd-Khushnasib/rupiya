@@ -3714,16 +3714,20 @@ class AdminController extends Controller
         $pos        = preg_replace('/[^0-9]/', '', $request->pos);
 
         $data = [
-            'id'                  => $id,
-            'salary'              => $request->salary,
-            'yearly_bonus'        => $request->yearly_bonus,
-            'loan_amount'         => $request->loan_amount,
-            'company_name'        => $request->company_name,
-            'company_type'        => $request->company_type,
+            'id' => $id,
+            'salary' => $request->salary,
+            'yearly_bonus' => $request->yearly_bonus,
+            'loan_amount' => $request->loan_amount,
+            'company_name' => $request->company_name,
+            'company_type' => $request->company_type,
             'company_category_id' => $request->company_category_id,
-            'obligation'          => $obligation,
-            'pos'                 => $pos,
-            'cibil_score'         => $request->cibil_score,
+            'market_value' => $request->market_value,
+            'property_type' => $request->property_type,
+            'case_type' => $request->case_type,
+            'property_registary_status' => $request->property_registary_status,
+            'obligation' => $obligation,
+            'pos' => $pos,
+            'cibil_score' => $request->cibil_score
         ];
 
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
