@@ -91,9 +91,20 @@
                     border: 2px solid #03b0f5;
                     margin: auto;
                 }
-                .warrinig_card_new_design h4{
-                     color: #03b0f5 !important;
-                    margin-top:20px !important;
+
+                .warrinig_card_new_design h4 {
+                    color: #03b0f5 !important;
+                    margin-top: 20px !important;
+                    text-align: center;
+                    font-weight: 700;
+                    font-size: 25px;
+                }
+
+                .warrinig_card_new_design h2 {
+                    font-size: 34px !important;
+                    font-weight: 800;
+                    color: #03b0f5 !important;
+                    margin-top: 30px;
                     text-align: center;
                 }
             </style>
@@ -154,14 +165,14 @@
                         <div class="col-md-12">
                             <div class="tabbable">
                                 <!-- <ul id="myTab1" class="nav nav-tabs">
-                                                                        <li class="active">
-                                                                            <a href="#all" data-toggle="tab"><i class="fa fa-home"></i>
-                                                                                All Warnings</a></li>
-                                                                                <li><a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i>
-                                                                                My Warnings </a></li>
-                                                                                <li><a href="#teamwarning" data-toggle="tab"><i class="fa fa-user"></i>
-                                                                                Team Warnings </a></li>
-                                                                    </ul> -->
+                                                                                    <li class="active">
+                                                                                        <a href="#all" data-toggle="tab"><i class="fa fa-home"></i>
+                                                                                            All Warnings</a></li>
+                                                                                            <li><a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i>
+                                                                                            My Warnings </a></li>
+                                                                                            <li><a href="#teamwarning" data-toggle="tab"><i class="fa fa-user"></i>
+                                                                                            Team Warnings </a></li>
+                                                                                </ul> -->
                                 @php
                                     $adminRole = $adminlogin->role; // Logged-in admin ka role
                                 @endphp
@@ -963,17 +974,17 @@
                                 console.log("Formatted Date:", formattedDate);
 
                                 var commentHTML = `
-                                                                <li>
-                                                                    <img src="{{ asset('Admin/img/demo/avatar/avatar2.jpg') }}" alt="User">
-                                                                    <div>
-                                                                        <div>
-                                                                            <h5 class="theam_color">${item.createdby}</h5>
-                                                                            <span class="time"><i class="fa fa-clock-o"></i> ${formattedDate}</span>
-                                                                        </div>
-                                                                        <p>${item.comment}</p>
-                                                                    </div>
-                                                                </li>
-                                                            `;
+                                                                            <li>
+                                                                                <img src="{{ asset('Admin/img/demo/avatar/avatar2.jpg') }}" alt="User">
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <h5 class="theam_color">${item.createdby}</h5>
+                                                                                        <span class="time"><i class="fa fa-clock-o"></i> ${formattedDate}</span>
+                                                                                    </div>
+                                                                                    <p>${item.comment}</p>
+                                                                                </div>
+                                                                            </li>
+                                                                        `;
                                 $('#get_comments').append(commentHTML);
                             });
                         },
@@ -1007,13 +1018,13 @@
                                     });
 
                                     var historyRow = `
-                                                                        <tr class="history_table">
-                                                                            <td>${sr}</td>
-                                                                            <td>${formattedDate}</td>
-                                                                            <td>${item.createdby}</td>
-                                                                            <td>${item.changes}</td>
-                                                                        </tr>
-                                                                    `;
+                                                                                    <tr class="history_table">
+                                                                                        <td>${sr}</td>
+                                                                                        <td>${formattedDate}</td>
+                                                                                        <td>${item.createdby}</td>
+                                                                                        <td>${item.changes}</td>
+                                                                                    </tr>
+                                                                                `;
                                     $('#get_history').append(historyRow);
                                     sr++;
                                 });
