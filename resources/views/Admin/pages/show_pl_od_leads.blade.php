@@ -672,7 +672,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             <td>${item.date ?? ''}</td>
                             <td>
                                 <div class="form-group">
-                                    <select class="form-control filterleadStatusSelect"
+                                    <select class="form-control leads_system_bg filterleadStatusSelect"
                                         data-id="${item.id}" data-selected="${item.lead_status}"
                                         data-row="${index + 1}" tabindex="1">
                                         ${leadStatusOptions}
