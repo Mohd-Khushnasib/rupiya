@@ -406,8 +406,7 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label class="text-light control-label"> Loan amount
-                                                    required</label>
+                                                <label class="text-light control-label"> Loan amount required</label>
                                                 <div class="controls">
                                                     <!-- <input type="text" value="{{$leads->loan_amount ?? ''}}"
                                                         name="loan_amount" placeholder="₹" class="form-control"> -->
@@ -433,6 +432,9 @@
                                             <a style="margin-top: 23px;" href="https://www.zaubacorp.com/"
                                                 target="_blank" class="btn">check</a>
                                         </div>
+
+                                        @if(isset($leads) && isset($leads->lead_login_status) && ($leads->lead_login_status === 'PL & OD LEADS' || $leads->lead_login_status === 'PL & OD LOGIN'))
+                                           <!-- Company type and company category start here  -->
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="control-label text-light">Company type</label>
@@ -484,6 +486,56 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- company type and company category end here  -->
+                                        @elseif(isset($leads) && isset($leads->lead_login_status) && ($leads->lead_login_status === 'HOME LOAN LEADS' || $leads->lead_login_status === 'HOME LOAN LOGIN'))
+                                        <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="text-light control-label">Property Market Value</label>
+                                                    <div class="controls">
+                                                        <input type="text" placeholder="Property Market Value" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label text-light">Property Type</label>
+                                                    <div class="controls">
+                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                            <option value="">Flat</option>
+                                                            <option value="">House</option>
+                                                            <option value="">Land Only</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label text-light">Case Type</label>
+                                                    <div class="controls">
+                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                            <option value="">Existing Hl Bt</option>
+                                                            <option value="">New Property Buying</option>
+                                                            <option value="">Need Lap On Property</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="control-label text-light">Property Registry Status</label>
+                                                    <div class="controls">
+                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                            <option value="">Yes</option>
+                                                            <option value="">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        
+
+
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="text-light control-label"> Obligation</label>
@@ -521,6 +573,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-advance" style="padding: 0px;">
