@@ -3201,7 +3201,7 @@ class AdminController extends Controller
         
             // Order by latest leads
             // $query->orderBy('tbl_lead.id', 'desc');
-            $query->orderBy('tbl_lead.move_login_date', 'desc');
+            $query->orderByRaw("STR_TO_DATE(tbl_lead.move_login_date, '%Y-%m-%d %h:%i %p') DESC");
         
             // **Search Filter**
             if (!empty($search) && $search != 'undefined') {
