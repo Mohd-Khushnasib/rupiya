@@ -21,6 +21,13 @@ div.dataTables_info {
     padding-top: 8px;
     display: none;
 }
+.leads_system_bg option{
+    font-weight: 800 !important;
+}
+.leads_system_bg .newlead{
+    background-color: #00b1f2;
+    color: black;
+}
 
 
 </style>
@@ -34,9 +41,9 @@ div.dataTables_info {
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
-                <select id="leadStatusFilter" class="form-control" tabindex="1">
+                <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Lead Status --</option>
-                    <option value="NEW LEAD">NEW LEAD</option>
+                    <option class="newlead" value="NEW LEAD">NEW LEAD</option>
                     <option value="IN PROGRESS">IN PROGRESS</option>
                     <option value="FOLLOW UP">FOLLOW UP</option>
                     <option value="CALLBACK">CALLBACK</option>
