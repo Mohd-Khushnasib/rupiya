@@ -492,7 +492,7 @@
                                                 <div class="form-group">
                                                     <label class="text-light control-label">Property Market Value</label>
                                                     <div class="controls">
-                                                        <input type="text" placeholder="Property Market Value" class="form-control">
+                                                        <input type="text" value="{{ $leads->market_value ?? '' }}" name="market_value" placeholder="Property Market Value" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -500,11 +500,20 @@
                                                 <div class="form-group">
                                                     <label class="control-label text-light">Property Type</label>
                                                     <div class="controls">
-                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
-                                                            <option value="">Flat</option>
-                                                            <option value="">House</option>
-                                                            <option value="">Land Only</option>
-                                                        </select>
+                                                    <select name="property_type" class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                        <option value="Flat" 
+                                                            {{ isset($leads->property_type) && $leads->property_type === 'Flat' ? 'selected' : '' }}>
+                                                            Flat
+                                                        </option>
+                                                        <option value="House" 
+                                                            {{ isset($leads->property_type) && $leads->property_type === 'House' ? 'selected' : '' }}>
+                                                            House
+                                                        </option>
+                                                        <option value="Land Only" 
+                                                            {{ isset($leads->property_type) && $leads->property_type === 'Land Only' ? 'selected' : '' }}>
+                                                            Land Only
+                                                        </option>
+                                                    </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -512,21 +521,37 @@
                                                 <div class="form-group">
                                                     <label class="control-label text-light">Case Type</label>
                                                     <div class="controls">
-                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
-                                                            <option value="">Existing Hl Bt</option>
-                                                            <option value="">New Property Buying</option>
-                                                            <option value="">Need Lap On Property</option>
+                                                        <select name="case_type" class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                            <option value="Existing Hl Bt" 
+                                                                {{ isset($leads->case_type) && $leads->case_type === 'Existing Hl Bt' ? 'selected' : '' }}>
+                                                                Existing Hl Bt
+                                                            </option>
+                                                            <option value="New Property Buying" 
+                                                                {{ isset($leads->case_type) && $leads->case_type === 'New Property Buying' ? 'selected' : '' }}>
+                                                                New Property Buying
+                                                            </option>
+                                                            <option value="Need Lap On Property" 
+                                                                {{ isset($leads->case_type) && $leads->case_type === 'Need Lap On Property' ? 'selected' : '' }}>
+                                                                Need Lap On Property
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label class="control-label text-light">Property Registry Status</label>
+                                                    <label class="control-label text-light">Property Registary Status</label>
                                                     <div class="controls">
-                                                        <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
-                                                            <option value="">Yes</option>
-                                                            <option value="">No</option>
+                                                        <select name="property_registary_status" class="form-control" data-placeholder="Choose a Category" tabindex="1">
+                                                            <option value="Yes" 
+                                                                {{ isset($leads->property_registary_status) && $leads->property_registary_status === 'Yes' ? 'selected' : '' }}>
+                                                                Yes
+                                                            </option>
+                                                            <option value="No" 
+                                                                {{ isset($leads->property_registary_status) && $leads->property_registary_status === 'No' ? 'selected' : '' }}>
+                                                                No
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
