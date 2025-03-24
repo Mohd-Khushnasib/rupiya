@@ -23,6 +23,7 @@ div.dataTables_info {
 }
 
 
+
 </style>
 
 <!-- Main Content Start Here  -->
@@ -30,29 +31,29 @@ div.dataTables_info {
     <div id="main-content">
         <div class="page-title lead_page_title ">
             <div>
-                <h3><i class="fa fa-file"></i> All Home Loan Leads</h3>
+                <h3><i class="fa fa-file"></i> All PL & OD Leads</h3>
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
-                <select id="leadStatusFilter" class="form-control" tabindex="1">
+                <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Lead Status --</option>
-                    <option value="NEW LEAD">NEW LEAD</option>
-                    <option value="IN PROGRESS">IN PROGRESS</option>
-                    <option value="FOLLOW UP">FOLLOW UP</option>
-                    <option value="CALLBACK">CALLBACK</option>
-                    <option value="IMPORTANT LEADS">IMPORTANT LEAD</option>
-                    <option value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
-                    <option value="IN DOCUMENTATION">IN DOCUMENTATION</option>
-                    <option value="FILE COMPLETED">FILE COMPLETED</option>
-                    <option value="NOT INTERESTED">NOT INTERESTED</option>
-                    <option value="FAKE LEAD">FAKE LEAD</option>
-                    <option value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
-                    <option value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
-                    <option value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
-                    <option value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
-                    <option value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
-                    <option value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
-                    <option value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
+                    <option class="newlead" value="NEW LEAD">NEW LEAD</option>
+                    <option class="inprogress" value="IN PROGRESS">IN PROGRESS</option>
+                    <option class="followup" value="FOLLOW UP">FOLLOW UP</option>
+                    <option class="callback" value="CALLBACK">CALLBACK</option>
+                    <option class="implead" value="IMPORTANT LEADS">IMPORTANT LEAD</option>
+                    <option class="longfollowup" value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
+                    <option class="indoct" value="IN DOCUMENTATION">IN DOCUMENTATION</option>
+                    <option class="filecomp" value="FILE COMPLETED">FILE COMPLETED</option>
+                    <option class="notint" value="NOT INTERESTED">NOT INTERESTED</option>
+                    <option class="fakelead" value="FAKE LEAD">FAKE LEAD</option>
+                    <option class="lost" value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
+                    <option class="lost" value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
+                    <option  class="lost"value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
+                    <option class="lost" value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
+                    <option class="lost" value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
+                    <option class="lost" value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
+                    <option class="lost" value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
                 </select>
             </div>    
             <!-- Lead Status Wise Filter End Here -->
@@ -117,10 +118,14 @@ div.dataTables_info {
                             <thead style="background-color: black;">
                                 <tr>
                                     <th>#</th>
-                                    <th style="width:18px"><input type="checkbox"></th>
-                                    <th>Action</th>
+                                    <!--<th style="width:18px"><input type="checkbox"></th>-->
+                                    <!--<th>Action</th>-->
+                                    @if($adminlogin->role === "Admin")
+                                        <th style="width:18px"><input type="checkbox"></th>
+                                        <th>Action</th>
+                                    @endif
                                     <th>Team Name</th>
-                                    <th>Manager Name</th>
+                                    <th>Created By</th>
                                     <th>TL</th>
                                     <th>Agent</th>
                                     <th>Customer Name</th>
@@ -144,7 +149,6 @@ div.dataTables_info {
                             </ul>
                         </nav>
                         <!-- Pagination links will be End here -->
-                        
                     </div>
                 </div>
             </div>
@@ -451,7 +455,7 @@ div.dataTables_info {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"
-                    style="color:black;font-weight:bold">Filter Remark1</h5>
+                    style="color:black;font-weight:bold">Filter Remark</h5>
                 <button type="button" class="close" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -479,6 +483,65 @@ div.dataTables_info {
 <!-- DataTables Start Here -->
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap.min.js"></script>
+
+
+    <!-- XL Export Linking Start Here  -->
+    <!--<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>-->
+    <!-- XL Export Code Start Here  -->
+
+
+    <script>
+    const { jsPDF } = window.jspdf;
+    // Export       
+    $('#exportButtonExcel').on('click', function() 
+    {
+        $.ajax({
+            url: "{{url('export_to_excel_plodlead')}}",
+            type: 'GET',
+            data: {
+                search: searchKeyword,
+                lead_status: lead_status,
+                from_date: fromDate,
+                to_date: toDate,
+                activity_from_date: activityfromDate,
+            },
+            success: function(response) {
+                var result = JSON.parse(response);
+                if (result.data) {
+                    // Create a new Workbook and Worksheet
+                    var workbook = XLSX.utils.book_new();
+                    // Remove anchor tags and their contents from the data
+                    var cleanedData = result.data.map(function(row) {
+                        var cleanedRow = Object.assign({}, row);
+                        for (var key in cleanedRow) {
+                            if (cleanedRow.hasOwnProperty(key) && typeof cleanedRow[key] === 'string') {
+                                cleanedRow[key] = cleanedRow[key].replace(/<a\b[^>]>(.?)<\/a>/g, '');
+                            }
+                        }
+                        return cleanedRow;
+                    });
+                    // Convert the data to a worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(cleanedData);
+                    // Add the Worksheet to the Workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+                    // Convert the Workbook to an Excel file
+                    var excelData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+                    // Save the Excel file as a Blob
+                    var blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var isAndroid = /Android/i.test(navigator.userAgent);
+                    saveAs(blob, 'PlOdLeads.xlsx');
+                }
+            }
+        });
+    });
+    </script>
+    <!-- XL Export Code End Here -->
+
 
 
 <!-- Pagination With lead_status and date filter Start Here  -->
@@ -536,7 +599,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
     const search_data = search || $(".search_data").val();
 
     $.ajax({
-        url: "{{ url('show_Home_Loan_LeadAPI') }}",
+        url: "{{ url('show_Pl_Od_LeadAPI') }}",
         type: 'POST',
         data: {
             search: search_data,
@@ -547,7 +610,6 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
             activity_from_date: activityfromDate
         },
         success: function(data) {
-            console.log(data);
             const tbody = $("#leadsTablenew tbody");
             const pagination = $('#pagination');
             tbody.empty();
@@ -558,6 +620,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
             var per_page = data.per_page;
             var start_serial_number = (page - 1) * per_page;
             // for indexing end here
+          
 
             if (data.data && data.data.length > 0) {
                 data.data.forEach((item, index) => {
@@ -574,13 +637,13 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                     ).join('');
 
                     const actionDropdown = `
-                        <select class="form-control action-dropdown" data-leadid="${item.id}">
+                        <select class="form-control leads_system_bg action-dropdown" data-leadid="${item.id}">
                             <option selected disabled>Select</option>
                             <option value="remark">Remark</option>
                             <option value="task">Task</option>
                         </select>
                     `;
-
+                    
                     // Role in Admin Case 
                     // **Show delete & checkbox only if role is Admin**
                     var adminControls = data.role === "admin" ? `
@@ -594,12 +657,13 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             </a>
                         </td>
                     ` : '';
-
+            
+            
                     var serial_number = start_serial_number + index + 1;  // for indexing 
                     tbody.append(`
                         <tr>
                             <td>${serial_number}</td>
-                             ${adminControls} 
+                            ${adminControls} 
                             <td>${data.team_name}</td>
                             <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
                             <td>XYZ</td>
@@ -608,7 +672,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             <td>${item.date ?? ''}</td>
                             <td>
                                 <div class="form-group">
-                                    <select class="form-control filterleadStatusSelect"
+                                    <select class="form-control leads_system_bg filterleadStatusSelect"
                                         data-id="${item.id}" data-selected="${item.lead_status}"
                                         data-row="${index + 1}" tabindex="1">
                                         ${leadStatusOptions}
