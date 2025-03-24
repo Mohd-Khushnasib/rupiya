@@ -2621,111 +2621,103 @@ class AdminController extends Controller
         $team_name    = $adminSession->team ?? null; 
         $admin_id     = $adminSession->id ?? null; 
         $admin_role   = strtolower($adminSession->role ?? ''); 
-    
+
+        // Request parameters
         $search             = $request->search;
         $from_date          = $request->from_date;
         $to_date            = $request->to_date;
         $login_status       = $request->login_status;
         $activity_from_date = $request->activity_from_date;
-    
+
         $valid_statuses = [
             'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
             'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
         ];
-    
+
         // Base query
         $query = DB::table('tbl_lead')
             ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
             ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
             ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-            ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id') // Assigned Admin
-            ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager') // Manager Name
-            ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader') // Team Leader Name
+            ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id')
+            ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager')
+            ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader')
             ->select(
                 'tbl_lead.*',
                 'tbl_product.product_name',
                 'tbl_campaign.campaign_name',
                 'tbl_product_need.product_need',
-                'assigned_admin.name AS admin_name', // Assigned Admin Name
+                'assigned_admin.name AS admin_name',
                 'assigned_admin.role AS admin_role',
-                'manager_admin.name AS manager_name', // Manager Name
-                'team_leader_admin.name AS team_leader_name' // Team Leader Name
+                'manager_admin.name AS manager_name',
+                'team_leader_admin.name AS team_leader_name'
             )
-            ->where('tbl_lead.lead_login_status', 'PL & OD LOGIN'); // Only 'Login' status leads
-            
-    
-        // **Role-Based Filtering**
+            ->where('tbl_lead.lead_login_status', 'PL & OD LOGIN');
+
+        // Role-Based Filtering
         if ($admin_role === 'manager' && !empty($admin_id)) {
             $query->where(function ($q) use ($admin_id) {
-                $q->where('tbl_lead.admin_id', $admin_id); // Manager's own leads
-                
-                // Fetch TLs under this Manager
-                $tl_ids = DB::table('admin')
-                    ->where('manager', $admin_id)
-                    ->where('role', 'TL')
-                    ->pluck('id')
-                    ->toArray();
-    
-                if (!empty($tl_ids)) {
-                    $q->orWhereIn('tbl_lead.admin_id', $tl_ids);
-    
-                    // Fetch Agents under these TLs
-                    $agent_ids = DB::table('admin')
-                        ->whereIn('team_leader', $tl_ids)
-                        ->where('role', 'Agent')
-                        ->pluck('id')
-                        ->toArray();
-    
-                    if (!empty($agent_ids)) {
-                        $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
-                    }
-                }
+                $q->where('tbl_lead.admin_id', $admin_id)
+                    ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                        // Fetch TLs under this Manager
+                        $subQuery->select('id')
+                            ->from('admin')
+                            ->where('manager', $admin_id)
+                            ->where('role', 'TL')
+                            ->union(
+                                DB::table('admin')
+                                    ->select('admin.id')
+                                    ->whereIn('team_leader', function ($tlQuery) use ($admin_id) {
+                                        $tlQuery->select('id')
+                                            ->from('admin')
+                                            ->where('manager', $admin_id)
+                                            ->where('role', 'TL');
+                                    })
+                                    ->where('role', 'Agent')
+                            );
+                    });
             });
         } elseif ($admin_role === 'tl' && !empty($admin_id)) {
             $query->where(function ($q) use ($admin_id) {
-                $q->where('tbl_lead.admin_id', $admin_id); // TL's own leads
-    
-                // Fetch Agents under this TL
-                $agent_ids = DB::table('admin')
-                    ->where('team_leader', $admin_id)
-                    ->where('role', 'Agent')
-                    ->pluck('id')
-                    ->toArray();
-    
-                if (!empty($agent_ids)) {
-                    $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
-                }
+                $q->where('tbl_lead.admin_id', $admin_id)
+                    ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                        $subQuery->select('id')
+                            ->from('admin')
+                            ->where('team_leader', $admin_id)
+                            ->where('role', 'Agent');
+                    });
             });
         } elseif ($admin_role === 'agent' && !empty($admin_id)) {
-            $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
+            $query->where('tbl_lead.admin_id', $admin_id);
         }
-    
-        ->orderBy('tbl_lead.move_login_date', 'desc');
 
-        // **Search Filter**
-        if (!empty($search) && $search != 'undefined') {
+        $query->orderBy('tbl_lead.move_login_date', 'desc');
+
+        // Search Filter
+        if (!empty($search) && $search !== 'undefined') {
             $query->where(function ($q) use ($search) {
-                $q->where('tbl_lead.name', 'like', "%$search%")
-                    ->orWhere('tbl_lead.mobile', 'like', "%$search%");
+                $q->where('tbl_lead.name', 'like', "%{$search}%")
+                    ->orWhere('tbl_lead.mobile', 'like', "%{$search}%");
             });
         }
-    
-        // **Login Status Filter**
+
+        // Login Status Filter
         if (!empty($login_status)) {
             $query->where('tbl_lead.login_status', $login_status);
         }
-    
-        // **Date Filters**
+
+        // Date Filters
         if (!empty($from_date) && !empty($to_date)) {
-            if ($from_date == $to_date) {
+            if ($from_date === $to_date) {
                 $query->where(function ($q) use ($from_date) {
                     $q->whereDate('tbl_lead.date', '=', $from_date)
                         ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
                 });
             } else {
-                $query->where(function ($q) use ($from_date, $to_date) {
-                    $q->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))])
-                        ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
+                $to_date_plus_one = date('Y-m-d', strtotime($to_date . ' +1 day'));
+                $query->where(function ($q) use ($from_date, $to_date_plus_one) {
+                    $q->whereBetween('tbl_lead.date', [$from_date, $to_date_plus_one])
+                        ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $to_date_plus_one]);
                 });
             }
         } elseif (!empty($from_date)) {
@@ -2739,13 +2731,12 @@ class AdminController extends Controller
                     ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
             });
         }
-    
-        // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
+
+        // Activity Date Filter
         if (!empty($activity_from_date)) {
-            $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
-            $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
-    
-            // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
+            $current_date = date('Y-m-d');
+            $activity_from_date = date('Y-m-d', strtotime($activity_from_date));
+
             $leads_with_activity = DB::table('tbl_lead_status')
                 ->whereBetween(
                     DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
@@ -2754,16 +2745,16 @@ class AdminController extends Controller
                 ->distinct()
                 ->pluck('lead_id')
                 ->toArray();
-            // Exclude leads that have activity in the given range
+
             if (!empty($leads_with_activity)) {
                 $query->whereNotIn('tbl_lead.id', $leads_with_activity);
-            }  
+            }
         }
-    
-        // **Pagination**
+
+        // Pagination
         $leads = $query->paginate(5);
-    
-        // **Return JSON Response**
+
+        // Return JSON Response
         return response()->json([
             'data'         => $leads->items(),
             'current_page' => $leads->currentPage(),
