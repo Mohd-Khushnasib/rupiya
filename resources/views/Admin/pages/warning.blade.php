@@ -83,7 +83,7 @@
                 <h3 class="theam_color_text"><i class="fa fa-list"></i> Warning ok</h3>
                 <div class="zxyzz">
                     <button type="button" class="btn btn-info" id="openModalBtn">
-                        Create Warning
+                        Create Warning ok
                     </button>
                 </div>
             </div>
