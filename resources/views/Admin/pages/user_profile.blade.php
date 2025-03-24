@@ -61,7 +61,7 @@
                 (!isset($leads->login_status) || $leads->login_status == ''))
                 <div>
                     @if ($leadCount <= 4)
-                        <button class="btn copyThisLeadBtn" id="copyThisLeadBtn1" data-id="{{$leads->id}}">COPY THIS LEAD</button>
+                        <button class="btn copyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
                     @endif
                     <button class="btn" id="fileSentBtn" data-id="{{$leads->id}}">FILE SENT TO LOGIN</button>
                 </div>
@@ -73,7 +73,7 @@
                 (!isset($leads->login_status) || $leads->login_status == ''))
                 <div>
                     @if ($leadCount <= 4)
-                        <button class="btn copyThisLeadBtn" id="homeloancopyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS Home LEAD</button>
+                        <button class="btn copyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
                     @endif
                     <button class="btn" id="homeloanfileSentBtn" data-id="{{$leads->id}}">FILE SENT TO Home LOGIN</button>
                 </div>
@@ -2217,6 +2217,32 @@
 <!-- Lead Move to Login Assigned Operation End Here -->
 
 
+<!-- Lead Move to Login Assigned Operation Start Here -->
+<div class="modal fade" id="homeloanassignAdminModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color:black">Assign Operation Department Home</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="homeloanassignAdminForm">
+                    <input type="text" id="lead_id" name="lead_id">
+                    <label>Select Operation Department Home</label>
+                    <select id="homeloanadminSelect" name="admin_ids[]" multiple class="form-control OperationDepartment"></select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="homeloansubmitAssign">Assign</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Lead Move to Login Assigned Operation End Here -->
+
+
+
 
 <!-- JS Links Start Here -->
 <script src="{{asset('Admin/assets/ajax/libs/jquery/2.1.1/jquery.min.js')}}"></script>
@@ -3075,43 +3101,8 @@ $('.copyThisLeadBtn').click(function() {
 </script>
 <!-- Copy This Lead End HERE  -->
 
-<!-- Complete Status to FILE SENT TO LOGIN START HERE  -->
+<!-- Complete Status to FILE SENT TO Pl Od LOGIN START HERE  -->
 <script>
-// $('#fileSentBtn').click(function() {
-//     var leadId = $(this).data('id');
-//     swal({
-//         title: "Are you sure?",
-//         text: "Do you want to send this file?",
-//         icon: "warning",
-//         buttons: ["No, Cancel", "Yes, Send it!"],
-//         dangerMode: true,
-//     }).then((willSend) => {
-//         if (willSend) {
-//             $.ajax({
-//                 url: "{{url('/update-file-sentto-login')}}",
-//                 method: 'POST',
-//                 data: {
-//                     lead_id: leadId,
-//                 },
-//                 success: function(data) {
-//                     if (data.status === 'success') {
-//                         swal(data.message, "", "success");
-//                         setTimeout(function() {
-//                             window.location.href = "/admin-dashboard";
-//                         }, 1500);
-
-//                     } else {
-//                         swal("Error!", data.message, "error");
-//                     }
-//                 },
-//                 error: function(xhr, status, error) {
-//                     swal("Error!", "Something went wrong!", "error");
-//                 }
-//             });
-//         }
-//     });
-// });
-
 $(document).ready(function () {
     // Open Confirmation on Button Click
     $('#fileSentBtn').click(function () {
@@ -3130,15 +3121,6 @@ $(document).ready(function () {
                 $.ajax({
                     url: "{{ url('/get-admin-users') }}",
                     method: "GET",
-                    // success: function (data) {
-                    //     console.log(data);
-                    //     if (data.status === 'success') {
-                    //         $.each(data.users, function (index, user) {
-                    //             $('#adminSelect').append(`<option value="${user.id}">${user.name}</option>`);
-                    //         });
-                    //         $('#adminSelect').trigger("OperationDepartment:updated"); // Update chosen.js
-                    //     }
-                    // }
                     success: function (data) {
                         console.log("Full Response:", data);
                         if (data.status === 'success' && Array.isArray(data.users)) {
@@ -3159,32 +3141,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    // Handle Form Submission
-    // $('#submitAssign').click(function () 
-    // {
-    //     var formData = $('#assignAdminForm').serialize();
-    //     $.ajax({
-    //         url: "{{ url('/update-file-sentto-login') }}",
-    //         method: "POST",
-    //         data: formData,
-    //         success: function (data) {
-    //             if (data.status === 'success') {
-    //                 swal("Success", data.message, "success");
-    //                 $('#assignAdminModal').modal('hide');
-    //                 setTimeout(function () {
-    //                     window.location.href = "/show_pl_od_leads";
-    //                 }, 1500);
-    //             } else {
-    //                 swal("Error!", data.message, "error");
-    //             }
-    //         },
-    //         error: function () {
-    //             swal("Error!", "Something went wrong!", "error");
-    //         }
-    //     });
-    // });
-
     // before submitting the form, check if all checkboxes are checked
     $('#submitAssign').click(function () 
     {
@@ -3220,42 +3176,94 @@ $(document).ready(function () {
                     swal("Error!", "Something went wrong!", "error");
                 }
             });
-        });
-    // end here 
-
+    });
 });
 </script>
-<!-- FILE SENT TO LOGIN END HERE  -->
+<!-- FILE SENT TO Pl Od LOGIN END HERE  -->
 
 
-<!-- Checked Imp Question Here -->
+
+<!-- FILE SENT TO Home Loan LOGIN END HERE  -->
 <script>
-// function updateImpQuestion(checkbox) 
-//{
-//     const leadId = $(checkbox).data('lead-id');
-//     const newValue = $(checkbox).is(':checked') ? 1 : 0; // If checked, set 1; otherwise, set 0.
+    $(document).ready(function () {
+    // Open Confirmation on Button Click
+    $('#homeloanfileSentBtn').click(function () {
+        var leadId = $(this).data('id');
+        swal({
+            title: "Are you sure?",
+            text: "Do you want to send this file?",
+            icon: "warning",
+            buttons: ["No, Cancel", "Yes, Send it!"],
+            dangerMode: true,
+        }).then((willSend) => {
+            if (willSend) {
+                $('#homeloanlead_id').val(leadId); // Set Lead ID in hidden field
+                $('#homeloanadminSelect').empty(); // Clear previous options
+                // Fetch Admin Users
+                $.ajax({
+                    url: "{{ url('/get-admin-users') }}",
+                    method: "GET",
+                    success: function (data) {
+                        console.log("Full Response:", data);
+                        if (data.status === 'success' && Array.isArray(data.users)) {
+                            console.log("Users Array:", data.users);
+                            $('#homeloanadminSelect').empty(); 
+                            $.each(data.users, function (index, user) {
+                                console.log("Appending:", user.id, user.name);
+                                $('#homeloanadminSelect').append(`<option value="${user.id}">${user.name}</option>`);
+                            });
 
-//     // Make an AJAX request to update the value in the database
-//     $.ajax({
-//         url: "{{url('/update-imp-question')}}",
-//         method: 'POST',
-//         data: {
-//             id: leadId,
-//             imp_question: newValue,
-//         },
-//         success: function(data) {
-//             if (data.success == 'success') {
-//                 swal("Important Question Saved Successfully!", "", "success");
-//             } else {
-//                 swal("Failed to Save", "", "error");
-//             }
-//         },
-//         error: function(errResponse) {
-//             swal("Something Went Wrong!", "", "error");
-//         }
-//     });
-// }
+                            $('#homeloanadminSelect').trigger("chosen:updated");
+                        } else {
+                            console.log("No users found or incorrect response format.");
+                        }
+                    }
+                });
+                $('#homeloanassignAdminModal').modal('show');
+            }
+        });
+    });
+
+    // before submitting the form, check if all checkboxes are checked
+    $('#homeloansubmitAssign').click(function () 
+    {
+        var allChecked = true;
+        // Check if all checkboxes are checked
+        $('.imp-checkbox').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false; // Break loop if any checkbox is unchecked
+            }
+        });
+        if (!allChecked) {
+            swal("Error!", "Please check all important questions before submitting.", "error");
+            return;
+        }
+        var formData = $('#homeloanassignAdminForm').serialize();
+            $.ajax({
+                url: "{{ url('/update-file-sentto-home-login') }}",
+                method: "POST",
+                data: formData,
+                success: function (data) {
+                    if (data.status === 'success') {
+                        swal("Success", data.message, "success");
+                        $('#homeloanassignAdminModal').modal('hide');
+                        setTimeout(function () {
+                            window.location.href = "/show_pl_od_leads";
+                        }, 1500);
+                    } else {
+                        swal("Error!", data.message, "error");
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Something went wrong!", "error");
+                }
+            });
+    });
+});
 </script>
+<!-- FILE SENT TO Home Loan LOGIN END HERE  -->
+
 
 
 

@@ -3432,7 +3432,7 @@ class AdminController extends Controller
         // Update Lead Status
         DB::table('tbl_lead')->where('id', $leadId)->update([
             'lead_status'       => 'FILE SENT TO LOGIN',
-            'lead_login_status' => 'Login',
+            'lead_login_status' => 'PL & OD LOGIN',
             'login_status'      => 'NEW FILE',
             'assign_operation'  => implode(',', $adminIds),
             'move_login_date'  => $this->date,

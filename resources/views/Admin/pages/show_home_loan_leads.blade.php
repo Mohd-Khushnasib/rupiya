@@ -102,7 +102,6 @@ div.dataTables_info {
                             <!-- Search Data Start Here -->
                                 <input type="text" class="search_data" placeholder="Search Here">
                             <!-- Search Data End Here -->
-
                         </div>
                         <div class="btn-group">
                              <!-- Multiple Delete Button -->
