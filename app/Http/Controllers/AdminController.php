@@ -2408,7 +2408,7 @@ class AdminController extends Controller
                 }
             });
         }
-    
+
         // **Case: If logged-in user is an Agent**
         elseif ($admin_role === 'agent' && !empty($admin_id)) {
             $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
@@ -2463,8 +2463,6 @@ class AdminController extends Controller
                 ->distinct()
                 ->pluck('lead_id')
                 ->toArray();
-            // dd($leads_with_activity);
-    
             // Exclude leads that have activity in the given range
             if (!empty($leads_with_activity)) {
                 $query->whereNotIn('tbl_lead.id', $leads_with_activity);
@@ -2616,9 +2614,6 @@ class AdminController extends Controller
         ]);
     }
     
-    
-    
-    
     public function show_Pl_Od_LoginAPI(Request $request)
     {
         // Get session admin login 
@@ -2656,8 +2651,8 @@ class AdminController extends Controller
                 'manager_admin.name AS manager_name', // Manager Name
                 'team_leader_admin.name AS team_leader_name' // Team Leader Name
             )
-            ->where('tbl_lead.lead_login_status', 'PL & OD LOGIN') // Only 'Login' status leads
-            ->orderBy('tbl_lead.move_login_date', 'desc');
+            ->where('tbl_lead.lead_login_status', 'PL & OD LOGIN'); // Only 'Login' status leads
+            
     
         // **Role-Based Filtering**
         if ($admin_role === 'manager' && !empty($admin_id)) {
@@ -2705,6 +2700,8 @@ class AdminController extends Controller
             $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
         }
     
+        ->orderBy('tbl_lead.move_login_date', 'desc');
+
         // **Search Filter**
         if (!empty($search) && $search != 'undefined') {
             $query->where(function ($q) use ($search) {
@@ -2714,7 +2711,7 @@ class AdminController extends Controller
         }
     
         // **Login Status Filter**
-        if ($login_status) {
+        if (!empty($login_status)) {
             $query->where('tbl_lead.login_status', $login_status);
         }
     
@@ -2757,8 +2754,6 @@ class AdminController extends Controller
                 ->distinct()
                 ->pluck('lead_id')
                 ->toArray();
-            // dd($leads_with_activity);
-    
             // Exclude leads that have activity in the given range
             if (!empty($leads_with_activity)) {
                 $query->whereNotIn('tbl_lead.id', $leads_with_activity);
