@@ -3200,8 +3200,7 @@ class AdminController extends Controller
             }
         
             // Order by latest leads
-            // $query->orderBy('tbl_lead.id', 'desc');
-            $query->orderByRaw("STR_TO_DATE(tbl_lead.move_login_date, '%Y-%m-%d %h:%i %p') DESC");
+            $query->orderBy('tbl_lead.id', 'desc');
         
             // **Search Filter**
             if (!empty($search) && $search != 'undefined') {
@@ -3310,7 +3309,6 @@ class AdminController extends Controller
                 ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
                 ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
                 ->select('tbl_lead.*', 'tbl_product.product_name', 'tbl_campaign.campaign_name', 'tbl_product_need.product_need')
-                // ->where('tbl_lead.lead_login_status', 'Login') // Show only 'Login' status leads
                 ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN') // Show only 'Login' status leads
                 ->orderBy('tbl_lead.move_login_date', 'desc');
     
