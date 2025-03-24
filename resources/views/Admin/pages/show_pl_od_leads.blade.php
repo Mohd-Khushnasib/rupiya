@@ -21,49 +21,6 @@ div.dataTables_info {
     padding-top: 8px;
     display: none;
 }
-.leads_system_bg option{
-    font-weight: 800 !important;
-}
-.leads_system_bg .newlead{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .inprogress{
-    background-color: yellow;
-    color: black;
-}
-.leads_system_bg .followup{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .callback{
-    background-color: #ec7e30;
-    color: black;
-}
-.leads_system_bg .implead{
-    background-color: #fd0000;
-    color: black;
-}
-.leads_system_bg .longfollowup{
-    background-color: #00b1f2;
-    color: black;
-}
-.leads_system_bg .indoct{
-    background-color: #00af50;
-    color: black;
-}
-.leads_system_bg .filecomp{
-    background-color: #000;
-    color: #fff;
-}
-.leads_system_bg .notint{
-    background-color: red;
-    color: black;
-}
-.leads_system_bg .fakelead{
-    background-color: #fd0000;
-    color: black;
-}
 
 
 
@@ -90,13 +47,13 @@ div.dataTables_info {
                     <option class="filecomp" value="FILE COMPLETED">FILE COMPLETED</option>
                     <option class="notint" value="NOT INTERESTED">NOT INTERESTED</option>
                     <option class="fakelead" value="FAKE LEAD">FAKE LEAD</option>
-                    <option value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
-                    <option value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
-                    <option value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
-                    <option value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
-                    <option value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
-                    <option value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
-                    <option value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
+                    <option class="lost" value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
+                    <option class="lost" value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
+                    <option  class="lost"value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
+                    <option class="lost" value="LOST LEAD-BOUNCING IN LATEST 3 MONTHS">LOST LEAD-BOUNCING IN LATEST 3 MONTHS</option>
+                    <option class="lost" value="LOST LEAD-REGULAR BOUNCING">LOST LEAD-REGULAR BOUNCING</option>
+                    <option class="lost" value="LOST LEAD-ALREADY DISBURSED BY OTHER">LOST LEAD-ALREADY DISBURSED BY OTHER</option>
+                    <option class="lost" value="LOST LEAD-OTHER REASON">LOST LEAD-OTHER REASON</option>
                 </select>
             </div>    
             <!-- Lead Status Wise Filter End Here -->
@@ -680,7 +637,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                     ).join('');
 
                     const actionDropdown = `
-                        <select class="form-control action-dropdown" data-leadid="${item.id}">
+                        <select class="form-control leads_system_bg action-dropdown" data-leadid="${item.id}">
                             <option selected disabled>Select</option>
                             <option value="remark">Remark</option>
                             <option value="task">Task</option>
@@ -715,7 +672,7 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             <td>${item.date ?? ''}</td>
                             <td>
                                 <div class="form-group">
-                                    <select class="form-control filterleadStatusSelect"
+                                    <select class="form-control leads_system_bg filterleadStatusSelect"
                                         data-id="${item.id}" data-selected="${item.lead_status}"
                                         data-row="${index + 1}" tabindex="1">
                                         ${leadStatusOptions}
