@@ -575,7 +575,6 @@ $(document).ready(function() {
         view_enquiry_api(currentPage, "", "", "", "", "");
     });
     // Reset All Filter Here
-
 });
 
 // Initial Function 

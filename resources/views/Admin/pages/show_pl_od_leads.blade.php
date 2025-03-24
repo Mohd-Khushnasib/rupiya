@@ -148,7 +148,6 @@ div.dataTables_info {
                             </ul>
                         </nav>
                         <!-- Pagination links will be End here -->
-                        
                     </div>
                 </div>
             </div>

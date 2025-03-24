@@ -96,7 +96,7 @@
             $adminId = $adminlogin->id; // Logged-in admin ki ID
             // Warnings ko grouped karne ke liye query
             $groupedWarnings = DB::table('tbl_warning')
-                ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                ->leftJoin('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
                 ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id') // Assign ka naam user table se laane ke liye
                 ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
                 ->select('tbl_warning.*', 'tbl_warning_type.warning_name', 'admin.name as assign_name','issued_admin.name as issued_by_name') // assign_name ko select kiya
@@ -405,7 +405,7 @@
                             <input type="number" name="penalty" class="form-control" placeholder="Enter Penalty AMount">
                         </p>
                         <p><textarea name="message" class="form-control wysihtml5" rows="6"></textarea></p>
-                        
+
                         <p>
                             <button type="submit" class="btn btn-primary"><i class="fa fa-rocket"></i>
                                 Add</button>
