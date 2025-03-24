@@ -69,25 +69,12 @@
                     margin: auto;
                 }
 
-<<<<<<< HEAD
-        @php
-            $adminId = $adminlogin->id; // Logged-in admin ki ID
-            // Warnings ko grouped karne ke liye query
-            $groupedWarnings = DB::table('tbl_warning')
-                ->leftJoin('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-                ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id') // Assign ka naam user table se laane ke liye
-                ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
-                ->select('tbl_warning.*', 'tbl_warning_type.warning_name', 'admin.name as assign_name','issued_admin.name as issued_by_name') // assign_name ko select kiya
-                ->where('tbl_warning.assign', $adminId)
-                ->get()
-                ->groupBy('warningtype_id');
-=======
                 .warning-card h2 {
                     margin: 0;
                     font-size: 22px;
                     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
                 }
->>>>>>> 54f4841d2ad772ccd4ea41542e183863bd515163
+
 
                 .warning-card .count {
                     font-size: 30px;
