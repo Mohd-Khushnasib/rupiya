@@ -3459,7 +3459,7 @@ class AdminController extends Controller
             }
 
             // $query->orderBy('tbl_lead.move_homeloan_login_date', 'desc');
-            $query->orderByRaw("STR_TO_DATE(tbl_lead.move_homeloan_login_date, '%Y-%m-%d %h:%i %p') ASC");
+            $query->orderByRaw("STR_TO_DATE(tbl_lead.move_homeloan_login_date, '%Y-%m-%d %h:%i %p') DESC");
 
 
             // Search Filter
