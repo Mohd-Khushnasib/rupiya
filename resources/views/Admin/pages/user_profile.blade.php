@@ -53,14 +53,29 @@
                 $leadCount = \DB::table('tbl_lead')->where('leadid', $leads->leadid)->count();
             @endphp
 
+            {{-- Condition 1: When lead_login_status is empty or 'PL & OD LEADS' --}}
             @if (isset($leads->lead_status) && $leads->lead_status == 'FILE COMPLETED' &&
-                isset($leads->lead_login_status) && $leads->lead_login_status != 'Login' &&
+                isset($leads->lead_login_status) && 
+                ($leads->lead_login_status == '' || $leads->lead_login_status == 'PL & OD LEADS') &&
+                $leads->lead_login_status != 'PL & OD LOGIN' &&
                 (!isset($leads->login_status) || $leads->login_status == ''))
                 <div>
-                    @if ($leadCount <= 4) 
+                    @if ($leadCount <= 4)
                         <button class="btn" id="copyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
                     @endif
                     <button class="btn" id="fileSentBtn" data-id="{{$leads->id}}">FILE SENT TO LOGIN</button>
+                </div>
+
+            {{-- Condition 2: When lead_login_status is 'HOME LOAN LEADS' --}}
+            @elseif (isset($leads->lead_status) && $leads->lead_status == 'FILE COMPLETED' &&
+                isset($leads->lead_login_status) && $leads->lead_login_status == 'HOME LOAN LEADS' &&
+                $leads->lead_login_status != 'HOME LOAN LOGIN' &&
+                (!isset($leads->login_status) || $leads->login_status == ''))
+                <div>
+                    @if ($leadCount <= 4)
+                        <button class="btn" id="homeloancopyThisLeadBtn" data-id="{{$leads->id}}">COPY THIS LEAD</button>
+                    @endif
+                    <button class="btn" id="homeloanfileSentBtn" data-id="{{$leads->id}}">FILE SENT TO LOGIN</button>
                 </div>
             @endif
 
