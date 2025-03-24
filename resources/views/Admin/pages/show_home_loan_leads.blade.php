@@ -481,65 +481,6 @@ div.dataTables_info {
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap.min.js"></script>
 
 
-    <!-- XL Export Linking Start Here  -->
-    <!-- <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script> -->
-    <!-- XL Export Code Start Here  -->
-
-
-    <script>
-    const { jsPDF } = window.jspdf;
-    // Export       
-    $('#exportButtonExcel').on('click', function() 
-    {
-        $.ajax({
-            url: "{{url('export_to_excel_plodlead')}}",
-            type: 'GET',
-            data: {
-                search: searchKeyword,
-                lead_status: lead_status,
-                from_date: fromDate,
-                to_date: toDate,
-                activity_from_date: activityfromDate,
-            },
-            success: function(response) {
-                var result = JSON.parse(response);
-                if (result.data) {
-                    // Create a new Workbook and Worksheet
-                    var workbook = XLSX.utils.book_new();
-                    // Remove anchor tags and their contents from the data
-                    var cleanedData = result.data.map(function(row) {
-                        var cleanedRow = Object.assign({}, row);
-                        for (var key in cleanedRow) {
-                            if (cleanedRow.hasOwnProperty(key) && typeof cleanedRow[key] === 'string') {
-                                cleanedRow[key] = cleanedRow[key].replace(/<a\b[^>]>(.?)<\/a>/g, '');
-                            }
-                        }
-                        return cleanedRow;
-                    });
-                    // Convert the data to a worksheet
-                    var worksheet = XLSX.utils.json_to_sheet(cleanedData);
-                    // Add the Worksheet to the Workbook
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-                    // Convert the Workbook to an Excel file
-                    var excelData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-                    // Save the Excel file as a Blob
-                    var blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                    var isAndroid = /Android/i.test(navigator.userAgent);
-                    saveAs(blob, 'PlOdLeads.xlsx');
-                }
-            }
-        });
-    });
-    </script>
-    <!-- XL Export Code End Here -->
-
-
-
 <!-- Pagination With lead_status and date filter Start Here  -->
 <script>
     let currentPage = 1;
