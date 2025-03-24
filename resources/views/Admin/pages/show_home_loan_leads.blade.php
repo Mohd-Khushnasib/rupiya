@@ -31,7 +31,7 @@ div.dataTables_info {
     <div id="main-content">
         <div class="page-title lead_page_title ">
             <div>
-                <h3><i class="fa fa-file"></i> All PL & OD Leads</h3>
+                <h3><i class="fa fa-file"></i> All Home Loan Leads</h3>
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
