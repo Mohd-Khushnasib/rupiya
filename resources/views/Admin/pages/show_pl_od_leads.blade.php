@@ -44,6 +44,27 @@ div.dataTables_info {
     background-color: #fd0000;
     color: black;
 }
+.leads_system_bg .longfollowup{
+    background-color: #00b1f2;
+    color: black;
+}
+.leads_system_bg .indoct{
+    background-color: #00af50;
+    color: black;
+}
+.leads_system_bg .filecomp{
+    background-color: #000;
+    color: #fff;
+}
+.leads_system_bg .notint{
+    background-color: red;
+    color: black;
+}
+.leads_system_bg .fakelead{
+    background-color: #fd0000;
+    color: black;
+}
+
 
 
 </style>
@@ -64,11 +85,11 @@ div.dataTables_info {
                     <option class="followup" value="FOLLOW UP">FOLLOW UP</option>
                     <option class="callback" value="CALLBACK">CALLBACK</option>
                     <option class="implead" value="IMPORTANT LEADS">IMPORTANT LEAD</option>
-                    <option value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
-                    <option value="IN DOCUMENTATION">IN DOCUMENTATION</option>
-                    <option value="FILE COMPLETED">FILE COMPLETED</option>
-                    <option value="NOT INTERESTED">NOT INTERESTED</option>
-                    <option value="FAKE LEAD">FAKE LEAD</option>
+                    <option class="longfollowup" value="LONG FOLLOW UP LEADS">LONG FOLLOW UP</option>
+                    <option class="indoct" value="IN DOCUMENTATION">IN DOCUMENTATION</option>
+                    <option class="filecomp" value="FILE COMPLETED">FILE COMPLETED</option>
+                    <option class="notint" value="NOT INTERESTED">NOT INTERESTED</option>
+                    <option class="fakelead" value="FAKE LEAD">FAKE LEAD</option>
                     <option value="LOST LEAD-SELF EMPLOYED">LOST LEAD-SELF EMPLOYED</option>
                     <option value="LOST LEAD-OVERLEVRAGED">LOST LEAD-OVERLEVRAGED</option>
                     <option value="LOST LEAD-CIBIL LOW">LOST LEAD-CIBIL LOW</option>
