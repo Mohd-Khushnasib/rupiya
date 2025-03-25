@@ -558,4 +558,5 @@ My Warnings me team1 ko filter kiya tb only total warning show ho rhi baki nhi h
 3=> message me line by line break me aye warning me 
 4=> delete krne ka admin ko hi dikhega 
 5=> edit krne ka 
-6=> 
+6=> ui warning me sahi krke dena hai 
+7=> warning category ka bhi filter rhega

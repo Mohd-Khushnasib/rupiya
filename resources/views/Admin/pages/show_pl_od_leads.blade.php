@@ -126,8 +126,6 @@ div.dataTables_info {
                                     @endif
                                     <th>Team Name</th>
                                     <th>Created By</th>
-                                    <th>TL</th>
-                                    <th>Agent</th>
                                     <th>Customer Name</th>
                                     <th>Date</th>
                                     <th>Status</th>
@@ -666,8 +664,6 @@ function view_enquiry_api(page = 1, search = '', lead_status = '', fromDate = ''
                             ${adminControls} 
                             <td>${data.team_name}</td>
                             <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
-                            <td>XYZ</td>
-                            <td>XYZ</td>
                             <td><a href="{{url('/user_profile/${item.id}')}}">${item.name ?? ''}</a></td>
                             <td>${item.date ?? ''}</td>
                             <td>
