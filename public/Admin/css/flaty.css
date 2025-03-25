@@ -8732,3 +8732,24 @@ table tbody tr td {
     background-color: #fd0000;
     color: #000;
 }
+.leads_system_bg .newfile{
+    background-color: #00b1ef;
+    color: #000;
+}
+.leads_system_bg .underwritten{
+    background-color: #ffff00;
+    color: #000;
+}
+.leads_system_bg .reelok{
+    background-color: #ee7e2d;
+    color: #000;
+}
+.leads_system_bg .approved{
+    background-color: #92d14f;
+    color: #000;
+}
+.leads_system_bg .disbursed{
+    background-color: #00af50;
+    color: #000;
+}
+
