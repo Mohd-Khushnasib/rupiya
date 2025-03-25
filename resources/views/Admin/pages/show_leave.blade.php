@@ -262,7 +262,7 @@
                     <form class="mail-compose form-horizontal" action="#">
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" name="id" placeholder="Name" class="form-control" value="{{$adminlogin->id ?? ''}}">
+                            <input type="text" name="id" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
                         </div>
 
                         <div class="col-sm-12">
