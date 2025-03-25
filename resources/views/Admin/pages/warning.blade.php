@@ -349,35 +349,35 @@
                                                             <tbody>
                                                                 @if($warnings->isEmpty())
                                                                 @else
-                                                                                                            @php
-                                                                                                                $sr = 1;
-                                                                                                            @endphp
-                                                                                                            @foreach($warnings as $item)
-                                                                                                                                                    <tr class="table-flag-blue">
-                                                                                                                                                        <td><input type="checkbox"></td>
-                                                                                                                                                        <td>{{$item->name ?? ''}}</td>
-                                                                                                                                                        <td>{{$item->task_status ?? ''}}</td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <a href="javascript:void(0);" class="edit"
-                                                                                                                                                                data-warningtype_id="{{$item->warningtype_id}}"
-                                                                                                                                                                data-message="{{$item->message}}"
-                                                                                                                                                                data-assign="{{ json_encode($item->assign) }}"
-                                                                                                                                                                data-id="{{ $item->id }}">
-                                                                                                                                                                {{$item->warning_name ?? ''}}
-                                                                                                                                                            </a>
-                                                                                                                                                        </td>
-                                                                                                                                                        <td>
-                                                                                                                                                            <a href="#" class="view-full-message"
-                                                                                                                                                                data-message="{{ $item->message }}">
-                                                                                                                                                                <i class="fas fa-eye"></i>
-                                                                                                                                                            </a>
-                                                                                                                                                        </td>
-                                                                                                                                                        <td>{{$item->assigned_names ?? '' }}</td>
-                                                                                                                                                    </tr>
-                                                                                                                                                    @php
-                                                                                                                                                        $sr++;
-                                                                                                                                                    @endphp
-                                                                                                            @endforeach
+                                                                @php
+                                                                    $sr = 1;
+                                                                @endphp
+                                                                @foreach($warnings as $item)
+                                                                                                                                                                                                            <tr class="table-flag-blue">
+                                                                                                                                                                                                                <td><input type="checkbox"></td>
+                                                                                                                                                                                                                <td>{{$item->createdby ?? ''}}</td>
+                                                                                                                                                                                                                <td>{{$item->task_status ?? ''}}</td>
+                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                    <a href="javascript:void(0);" class="edit"
+                                                                                                                                                                                                                        data-warningtype_id="{{$item->warningtype_id}}"
+                                                                                                                                                                                                                        data-message="{{$item->message}}"
+                                                                                                                                                                                                                        data-assign="{{ json_encode($item->assign) }}"
+                                                                                                                                                                                                                        data-id="{{ $item->id }}">
+                                                                                                                                                                                                                        {{$item->warning_name ?? ''}}
+                                                                                                                                                                                                                    </a>
+                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                    <a href="#" class="view-full-message"
+                                                                                                                                                                                                                        data-message="{{ $item->message }}">
+                                                                                                                                                                                                                        <i class="fas fa-eye"></i>
+                                                                                                                                                                                                                    </a>
+                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                <td>{{$item->assigned_names ?? '' }}</td>
+                                                                                                                                                                                                            </tr>
+                                                                                                                                                                                                            @php
+                                                                                                                                                                                                                $sr++;
+                                                                                                                                                                                                            @endphp
+                                                            @endforeach
                                                                 @endif
                                                             </tbody>
                                                         </table>
