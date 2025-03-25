@@ -5308,7 +5308,7 @@ class AdminController extends Controller
 
 
 
-    public function getwarning()
+    public function Getwarning()
     {
         $warnings = DB::table('tbl_warning')
             ->leftJoin('admin', 'admin.id', '=', 'tbl_warning.admin_id')
