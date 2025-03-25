@@ -676,7 +676,7 @@
                                         <div class="col-sm-6">
                                             <div class="input-group">
                                                 <label>Tenure (Years)</label>
-                                                <input type="text" id="tenureYears" placeholder="Years" readonly>
+                                                <input type="text" id="tenureYears" placeholder="Years" disabled>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
