@@ -216,7 +216,7 @@
                                     <div class="section-container">
                                         <h3 class="section-title"><i class="fa fa-user"></i> My Warnings</h3>
                                         <div class="row">
-                                            <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="col-md-3" style="margin-top: 20px;">
                                                 <div class="card warrinig_card_new_design" data-warning-type="my-total">
                                                     <h4>My Total Warnings</h4>
                                                     <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
@@ -224,7 +224,7 @@
                                             </div>
                                             
                                             @foreach($myWarnings as $warningTypeId => $warnings)
-                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
+                                                <div class="col-md-3 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
                                                     <div class="card warrinig_card_new_design">
                                                         <h4>{{ $warnings->first()->warning_name }}</h4>
                                                         <h2>{{ $warnings->count() }}</h2>
@@ -237,7 +237,7 @@
                                     <div class="section-container">
                                         <h3 class="section-title"><i class="fa fa-users"></i> All Warnings</h3>
                                         <div class="row">
-                                            <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="col-md-3" style="margin-top: 20px;">
                                                 <div class="card warrinig_card_new_design" data-warning-type="total">
                                                     <h4>Total Warnings</h4>
                                                     <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
@@ -245,7 +245,7 @@
                                             </div>
                                             
                                             @foreach($warningCounts as $warningCount)
-                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningCount->warning_name }}">
+                                                <div class="col-md-3 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningCount->warning_name }}">
                                                     <div class="card warrinig_card_new_design">
                                                         <h4>{{ $warningCount->warning_name }}</h4>
                                                         <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
@@ -259,7 +259,7 @@
                                     <div class="section-container">
                                         <h3 class="section-title"><i class="fa fa-user"></i> My Warnings</h3>
                                         <div class="row">
-                                            <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="col-md-3" style="margin-top: 20px;">
                                                 <div class="card warrinig_card_new_design" data-warning-type="my-total">
                                                     <h4>My Total Warnings</h4>
                                                     <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
@@ -267,7 +267,7 @@
                                             </div>
                                             
                                             @foreach($myWarnings as $warningTypeId => $warnings)
-                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
+                                                <div class="col-md-3 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
                                                     <div class="card warrinig_card_new_design">
                                                         <h4>{{ $warnings->first()->warning_name }}</h4>
                                                         <h2>{{ $warnings->count() }}</h2>
@@ -280,7 +280,7 @@
                                     <div class="section-container">
                                         <h3 class="section-title"><i class="fa fa-users"></i> Team Warnings</h3>
                                         <div class="row">
-                                            <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="col-md-3" style="margin-top: 20px;">
                                                 <div class="card warrinig_card_new_design" data-warning-type="team-total">
                                                     <h4>Team Total Warnings</h4>
                                                     <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
@@ -292,7 +292,7 @@
                                             @endphp
                                             
                                             @foreach($teamWarningsByType as $warningName => $warnings)
-                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningName }}" data-warning-section="team">
+                                                <div class="col-md-3 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningName }}" data-warning-section="team">
                                                     <div class="card warrinig_card_new_design">
                                                         <h4>{{ $warningName }}</h4>
                                                         <h2>{{ $warnings->count() }}</h2>
@@ -304,7 +304,7 @@
                                 @elseif($adminRole === 'agent')
                                     <!-- Agent Dashboard -->
                                     <div class="row">
-                                        <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="col-md-3" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design" data-warning-type="my-total">
                                                 <h4>My Total Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
@@ -312,7 +312,7 @@
                                         </div>
                                         
                                         @foreach($myWarnings as $warningTypeId => $warnings)
-                                            <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}">
+                                            <div class="col-md-3 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}">
                                                 <div class="card warrinig_card_new_design">
                                                     <h4>{{ $warnings->first()->warning_name }}</h4>
                                                     <h2>{{ $warnings->count() }}</h2>

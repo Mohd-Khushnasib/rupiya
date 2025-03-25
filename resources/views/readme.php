@@ -548,3 +548,14 @@ Client Secret :- 5Ammm4USKIkbbiAVeGP8Ilx6A3dNBrPU
 
 
 
+========================= Warning Panel Chanel Changes ===========================
+1=> filter me access ( jo jiske andar hai utne hi employee ka access mile)
+ex:- tl ke under 2 agent ho to wahi dikhega 
+manager ke andar => tl and agent ka dikhe 
+total admin ko dikhna hai 
+2=> jab manager login kiye tb 
+My Warnings me team1 ko filter kiya tb only total warning show ho rhi baki nhi ho rhi h 
+3=> message me line by line break me aye warning me 
+4=> delete krne ka admin ko hi dikhega 
+5=> edit krne ka 
+6=> 
