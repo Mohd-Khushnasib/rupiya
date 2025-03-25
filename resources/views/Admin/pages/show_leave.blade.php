@@ -232,6 +232,9 @@ function loadLeaves(status, page, search = '') {
     // Changed .search_contact to .search_admin to match the above event handler
     var search = search || $(".search_admin").val();
     
+    // Add debugging
+    console.log('Loading leaves with status:', status, 'page:', page, 'search:', search);
+    
     $.ajax({
         url: "{{ url('fetch_leave') }}",
         type: "POST",
@@ -241,13 +244,19 @@ function loadLeaves(status, page, search = '') {
             search: search // Search parameter send karna
         },
         success: function(data) {
-            console.log(data);
             let tbody = $("#leaveTable tbody");
             let pagination = $("#pagination");
             tbody.empty();
             pagination.empty();
 
-            if (data.data.length > 0) {
+            console.log('AJAX response:', data);
+            
+            // Check if the table exists
+            if($("#leaveTable").length === 0) {
+                console.error("Table with ID 'leaveTable' not found in the DOM");
+            }
+            
+            if (data.data && data.data.length > 0) {
                 // Update leave counts in tabs
                 $("#all_leave").text(data.all_leave);
                 $("#pending_leave").text(data.pending_leave);
@@ -258,6 +267,9 @@ function loadLeaves(status, page, search = '') {
                 var total_enquiries = data.total;
                 var per_page = data.per_page;
                 result = data.data;
+                
+                // Add debugging to see if data is coming through
+                console.log('Received data:', result);
                 
                 result.forEach((item, index) => {
                     // Get status badge class
@@ -276,7 +288,11 @@ function loadLeaves(status, page, search = '') {
                     const diffTime = Math.abs(toDate - fromDate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both days
                     
-                    tbody.append(`
+                    // Debug individual item
+                    console.log('Processing item:', item);
+                    
+                    // Create the row HTML first
+                    const rowHtml = `
                         <tr>
                             <td>
                                 <div class="custom-checkbox custom-control">
@@ -291,11 +307,18 @@ function loadLeaves(status, page, search = '') {
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
                         </tr>
-                    `);
+                    `;
+                    
+                    // Append to tbody
+                    tbody.append(rowHtml);
+                    
+                    // Check if row was added successfully
+                    console.log('Row added, current row count:', $('#leaveTable tbody tr').length);
                 });
 
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
             } else {
+                console.log('No data found or empty data array');
                 tbody.append(`<tr><td colspan="7" class="text-center">No Leave Data Found</td></tr>`);
             }
         }
