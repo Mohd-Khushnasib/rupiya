@@ -2103,12 +2103,13 @@ Bordered form layout
     text-transform: uppercase;
     color: #ffffff;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     
     /* 3D Effect Base */
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+    0 6px 0 #357abd,   /* Bottom shadow for 3D depth */
+    0 10px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
     
   }
 
