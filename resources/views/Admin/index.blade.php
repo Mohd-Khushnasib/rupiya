@@ -30,12 +30,8 @@ $total_user = DB::table('users')->count();
         </div>
         <!-- BEGIN Main Content -->
         <div class="row">
-            @if($adminlogin->role === "Admin")
-                <th style="width:18px"><input type="checkbox"></th>
-                <th>Action</th>
-            @endif
+            @if($adminlogin->role === "Admin" || $adminlogin->role === "HR")
             <div class="col-md-12">
-                <!-- <form id="postForm"> -->
                 <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                     @csrf
                     <textarea name="message" id="message" rows="10" style="width:100%"></textarea>
@@ -57,6 +53,8 @@ $total_user = DB::table('users')->count();
                     </div>
                 </form>
             </div>
+            @endif
+            
 
             <div class="col-md-12" style="margin-top: 15px;">
                 <h2 class="theam_color">Feeds</h2>
