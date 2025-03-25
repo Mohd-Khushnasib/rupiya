@@ -2086,7 +2086,7 @@ Bordered form layout
 
 
 /* Button ------------------------------------------ */
-.btn {
+/* .btn {
     background-image: none;
     filter: none;
     border: 0;
@@ -2094,7 +2094,27 @@ Bordered form layout
     -webkit-box-shadow: none;
     box-shadow: none;
     border-radius: 0 !important;
-}
+} */
+
+.btn {
+    position: relative;
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* 3D Effect Base */
+    box-shadow: 
+      0 6px 0 #357abd,   /* Bottom shadow for 3D depth */
+      0 10px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  }
 
 .btn.active,
 .btn:active,
