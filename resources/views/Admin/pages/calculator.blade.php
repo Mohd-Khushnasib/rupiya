@@ -685,16 +685,21 @@
                                                 <input type="text" id="interestRate" placeholder="Enter rate">
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="part-payments">
+                                       
+                                    </div>
+                                    <div class="row" style="display: flex; justify-content: center;">
+                                        <div class="col-sm-8">
+                                        <div class="part-payments">
                                                 <div id="partPaymentEntries"></div>
                                                 <button onclick="addPartPaymentField()">Add Part Payment</button>
                                             </div>
                                         </div>
+                                    </div>
+                                  
                                         <div class="col-sm-6">
                                             <button style="margin-top: 20px;" onclick="validateAndCalculateEMI()">Calculate EMI</button>
                                         </div>
-                                    </div>
+
 
 
                                     <div class="results">
