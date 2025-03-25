@@ -661,7 +661,7 @@
 
                                 <div id="emiCalculator" class="tab-content active">
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="input-group">
                                                 <label>Loan Amount</label>
                                                 <input type="text" id="loanAmount" placeholder="₹">
@@ -679,7 +679,7 @@
                                                 <input type="text" id="tenureYears" placeholder="Years" disabled>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12">
                                             <div class="input-group">
                                                 <label>Annual Interest Rate</label>
                                                 <input type="text" id="interestRate" placeholder="Enter rate">
@@ -692,7 +692,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <button onclick="validateAndCalculateEMI()">Calculate EMI</button>
+                                            <button style="margin-top: 20px;" onclick="validateAndCalculateEMI()">Calculate EMI</button>
                                         </div>
                                     </div>
 
