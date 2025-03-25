@@ -5334,9 +5334,113 @@ class AdminController extends Controller
 
 
 
+    // public function warning()
+    // {
+       
+    //     $adminSession = collect(session()->get('admin_login'))->first();
+        
+    //     if (!$adminSession) {
+    //         return redirect('/login');
+    //     }
+        
+    //     $admin_id = $adminSession->id;
+    //     $admin_role = strtolower($adminSession->role);
+        
+    //     // Get My Warnings (for all roles)
+    //     $myWarnings = DB::table('tbl_warning')
+    //         ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+    //         ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id')
+    //         ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
+    //         ->select(
+    //             'tbl_warning.*', 
+    //             'tbl_warning_type.warning_name', 
+    //             'admin.name as assign_name', 
+    //             'issued_admin.name as issued_by_name'
+    //         )
+    //         ->where('tbl_warning.assign', $admin_id)
+    //         ->get();
+            
+    //     // Get warnings by type for the user
+    //     $myWarningsByType = $myWarnings->groupBy('warningtype_id');
+        
+    //     // Initialize empty data for different tabs
+    //     $all_warnings = collect();
+    //     $team_warnings = collect();
+    //     $team_members = [];
+    //     $warning_types = DB::table('tbl_warning_type')->get();
+        
+    //     // Admin & HR get access to all warnings
+    //     if ($admin_role === 'admin' || $admin_role === 'hr') {
+    //         $all_warnings = DB::table('tbl_warning')
+    //             ->join('admin as warned_admin', 'tbl_warning.assign', '=', 'warned_admin.id')
+    //             ->join('admin as created_by', 'tbl_warning.admin_id', '=', 'created_by.id')
+    //             ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+    //             ->select(
+    //                 'tbl_warning.*',
+    //                 'created_by.name as createdby',
+    //                 'warned_admin.name as warned_to',
+    //                 'tbl_warning_type.warning_name'
+    //             )
+    //             ->orderBy('tbl_warning.id', 'desc')
+    //             ->get();
+                
+    //         // Get warning counts by type for dashboard
+    //         $warningCounts = DB::table('tbl_warning')
+    //             ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+    //             ->select('tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+    //             ->groupBy('tbl_warning_type.warning_name')
+    //             ->orderBy('total', 'desc')
+    //             ->limit(5)
+    //             ->get();
+                
+    //     } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
+    //         // Get team members
+    //         if ($admin_role === 'manager') {
+    //             $team_members_query = DB::table('admin')
+    //                 ->where('manager', $admin_id)
+    //                 ->pluck('name', 'id');
+    //         } else { // TL
+    //             $team_members_query = DB::table('admin')
+    //                 ->where('team_leader', $admin_id)
+    //                 ->pluck('name', 'id');
+    //         }
+            
+    //         $team_members = $team_members_query->toArray();
+    //         $team_member_ids = array_keys($team_members);
+            
+    //         // Get warnings for team members
+    //         if (!empty($team_member_ids)) {
+    //             $team_warnings = DB::table('tbl_warning')
+    //                 ->join('admin as warned_admin', 'tbl_warning.assign', '=', 'warned_admin.id')
+    //                 ->join('admin as created_by', 'tbl_warning.admin_id', '=', 'created_by.id')
+    //                 ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+    //                 ->select(
+    //                     'tbl_warning.*',
+    //                     'created_by.name as createdby',
+    //                     'warned_admin.name as warned_to',
+    //                     'tbl_warning_type.warning_name'
+    //                 )
+    //                 ->whereIn('tbl_warning.assign', $team_member_ids)
+    //                 ->orderBy('tbl_warning.id', 'desc')
+    //                 ->get();
+    //         }
+    //     }
+        
+    //     // Format the data to be returned to the view
+    //     return view('Admin.pages.warning', [
+    //         'admin_login' => $adminSession,
+    //         'all_warnings' => $all_warnings,
+    //         'team_warnings' => $team_warnings,
+    //         'team_members' => $team_members,
+    //         'myWarnings' => $myWarningsByType,
+    //         'warning_types' => $warning_types,
+    //         'warningCounts' => $warningCounts ?? collect(), // For admin dashboard
+    //     ]);
+    // }
+    
+    
     public function warning()
     {
-       
         $adminSession = collect(session()->get('admin_login'))->first();
         
         if (!$adminSession) {
@@ -5346,28 +5450,34 @@ class AdminController extends Controller
         $admin_id = $adminSession->id;
         $admin_role = strtolower($adminSession->role);
         
-        // Get My Warnings (for all roles)
-        $myWarnings = DB::table('tbl_warning')
-            ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-            ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id')
-            ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
-            ->select(
-                'tbl_warning.*', 
-                'tbl_warning_type.warning_name', 
-                'admin.name as assign_name', 
-                'issued_admin.name as issued_by_name'
-            )
-            ->where('tbl_warning.assign', $admin_id)
-            ->get();
-            
-        // Get warnings by type for the user
-        $myWarningsByType = $myWarnings->groupBy('warningtype_id');
+        // Get My Warnings (for non-admin roles)
+        $myWarnings = collect();
+        $myWarningsByType = collect();
+        
+        if ($admin_role !== 'admin') {
+            $myWarnings = DB::table('tbl_warning')
+                ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id')
+                ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
+                ->select(
+                    'tbl_warning.*', 
+                    'tbl_warning_type.warning_name', 
+                    'admin.name as assign_name', 
+                    'issued_admin.name as issued_by_name'
+                )
+                ->where('tbl_warning.assign', $admin_id)
+                ->get();
+                
+            // Get warnings by type for the user
+            $myWarningsByType = $myWarnings->groupBy('warningtype_id');
+        }
         
         // Initialize empty data for different tabs
         $all_warnings = collect();
         $team_warnings = collect();
         $team_members = [];
         $warning_types = DB::table('tbl_warning_type')->get();
+        $warningCounts = collect();
         
         // Admin & HR get access to all warnings
         if ($admin_role === 'admin' || $admin_role === 'hr') {
@@ -5387,10 +5497,9 @@ class AdminController extends Controller
             // Get warning counts by type for dashboard
             $warningCounts = DB::table('tbl_warning')
                 ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-                ->select('tbl_warning_type.warning_name', DB::raw('count(*) as total'))
-                ->groupBy('tbl_warning_type.warning_name')
+                ->select('tbl_warning_type.id', 'tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+                ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
                 ->orderBy('total', 'desc')
-                ->limit(5)
                 ->get();
                 
         } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
@@ -5423,9 +5532,33 @@ class AdminController extends Controller
                     ->whereIn('tbl_warning.assign', $team_member_ids)
                     ->orderBy('tbl_warning.id', 'desc')
                     ->get();
+                    
+                // Get warning counts for team dashboard
+                $warningCounts = DB::table('tbl_warning')
+                    ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                    ->whereIn('tbl_warning.assign', $team_member_ids)
+                    ->select('tbl_warning_type.id', 'tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+                    ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
+                    ->orderBy('total', 'desc')
+                    ->get();
             }
+        } elseif ($admin_role === 'agent') {
+            // For agent, just get their warning counts for dashboard
+            $warningCounts = DB::table('tbl_warning')
+                ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                ->where('tbl_warning.assign', $admin_id)
+                ->select('tbl_warning_type.id', 'tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+                ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
+                ->orderBy('total', 'desc')
+                ->get();
         }
         
+        // Get all employees for filter
+        $all_employees = DB::table('admin')
+            ->where('role', '!=', 'Admin')
+            ->orderBy('name')
+            ->get();
+            
         // Format the data to be returned to the view
         return view('Admin.pages.warning', [
             'admin_login' => $adminSession,
@@ -5434,11 +5567,45 @@ class AdminController extends Controller
             'team_members' => $team_members,
             'myWarnings' => $myWarningsByType,
             'warning_types' => $warning_types,
-            'warningCounts' => $warningCounts ?? collect(), // For admin dashboard
+            'warningCounts' => $warningCounts,
+            'all_employees' => $all_employees,
         ]);
     }
-    
-    
+
+    // New method to support filtering
+    public function getFilteredWarningCounts(Request $request)
+    {
+        $filter = $request->filter;
+        
+        $query = DB::table('tbl_warning')
+            ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id');
+        
+        if ($filter !== 'all' && is_array($filter)) {
+            $query->whereIn('tbl_warning.assign', $filter);
+        }
+        
+        // Get total count
+        $total = $query->count();
+        
+        // Get counts by warning type
+        $typeCounts = DB::table('tbl_warning')
+            ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id');
+            
+        if ($filter !== 'all' && is_array($filter)) {
+            $typeCounts->whereIn('tbl_warning.assign', $filter);
+        }
+        
+        $typeCounts = $typeCounts
+            ->select('tbl_warning_type.id', 'tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+            ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
+            ->pluck('total', 'id')
+            ->toArray();
+        
+        return response()->json([
+            'total' => $total,
+            'type_counts' => $typeCounts
+        ]);
+    }
 
     
 
@@ -5700,43 +5867,6 @@ class AdminController extends Controller
     }
 
     // Show All Active Inactive Employee 
-    public function fetchEmployee1(Request $request)
-    {
-        $status = $request->status; // 1 for Active, 0 for Inactive
-        $search = $request->search; // Search keyword
-    
-        // Query Admin Data
-        $query = DB::table('admin')->where('status', $status);
-    
-        // Apply search filter if search keyword exists
-        if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%')
-                  ->orWhere('mobile', 'like', '%' . $search . '%')
-                  ->orWhere('employee_id', 'like', '%' . $search . '%');
-            });
-        }
-    
-        // Pagination
-        $admins = $query->orderBy('id', 'desc')->paginate(2);
-    
-        // Count Active & Inactive Users
-        $total_active = DB::table('admin')->where('status', 1)->count();
-        $total_inactive = DB::table('admin')->where('status', 0)->count();
-    
-        return response()->json([
-            'data'          => $admins->items(),
-            'current_page'  => $admins->currentPage(),
-            'last_page'     => $admins->lastPage(),
-            'per_page'      => $admins->perPage(),
-            'total'         => $admins->total(),
-            'total_active'  => $total_active,
-            'total_inactive'=> $total_inactive,
-            'success'       => 'success',
-        ]);
-    }
-
     public function fetchEmployee(Request $request)
     {
         $status = $request->status; // 1 for Active, 0 for Inactive

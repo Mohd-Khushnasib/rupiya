@@ -101,8 +101,15 @@
         background-color: #007bff;
     }
     .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: #2d2929;
-}
+        background-color: #2d2929;
+    }
+    .filter-btn {
+        margin-left: 5px;
+        padding: 0 5px;
+        font-size: 12px;
+        background-color: #2196F3;
+        border: none;
+    }
 </style>
 
 <div class="container" id="main-container">
@@ -120,6 +127,11 @@
                         <button type="button" class="btn btn-info" id="openModalBtn">
                             <i class="fa fa-plus-circle"></i> Create Warning
                         </button>
+                        @if($adminRole === 'admin' || $adminRole === 'hr')
+                            <button type="button" class="btn btn-primary" id="filterBtn">
+                                <i class="fa fa-filter"></i> Filter Warnings
+                            </button>
+                        @endif
                     </div>
                 @endif
             </div>
@@ -128,80 +140,107 @@
 
         <!-- BEGIN Main Content -->
         <div class="row">
-            <!-- Show warning cards for Agents -->
-            @if($adminRole === 'agent')
-                <div class="col-md-12">
-                    <div class="row">
-                        @php
-                            $totalMyWarnings = $myWarnings->sum(fn($warnings) => $warnings->count());
-                        @endphp
-                        <div class="col-md-3">
-                            <div class="warning-card">
-                                <h2>Total Warnings</h2>
-                                <div class="count">{{ $totalMyWarnings }}</div>
-                            </div>
-                        </div>
-                        @foreach($myWarnings as $warningTypeId => $warnings)
-                            <div class="col-md-3">
-                                <div class="warning-card">
-                                    <h2>{{ $warnings->first()->warning_name }}</h2>
-                                    <div class="count">{{ $warnings->count() }}</div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
             <div class="col-md-12">
                 <div class="tabbable">
                     <ul id="myTab1" class="nav nav-tabs">
+                        <!-- Modified tab order based on requirements -->
                         @if($adminRole === 'admin')
                             <li class="active">
-                                <a href="#all" data-toggle="tab"><i class="fa fa-list"></i> All Warnings</a>
+                                <a href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard"></i> Dashboard</a>
                             </li>
                             <li>
+                                <a href="#all" data-toggle="tab"><i class="fa fa-list"></i> All Warnings</a>
+                            </li>
+                        @elseif($adminRole === 'hr')
+                            <li class="active">
                                 <a href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard"></i> Dashboard</a>
                             </li>
                             <li>
                                 <a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i> My Warnings</a>
                             </li>
-                        @elseif($adminRole === 'hr')
-                            <li class="active">
-                                <a href="#all" data-toggle="tab"><i class="fa fa-list"></i> All Warnings</a>
-                            </li>
                             <li>
-                                <a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i> My Warnings</a>
+                                <a href="#all" data-toggle="tab"><i class="fa fa-list"></i> All Warnings</a>
                             </li>
                         @elseif($adminRole === 'manager' || $adminRole === 'tl')
                             <li class="active">
-                                <a href="#teamwarning" data-toggle="tab"><i class="fa fa-users"></i> Team Warnings</a>
+                                <a href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard"></i> Dashboard</a>
                             </li>
                             <li>
                                 <a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i> My Warnings</a>
                             </li>
+                            <li>
+                                <a href="#teamwarning" data-toggle="tab"><i class="fa fa-users"></i> Team Warnings</a>
+                            </li>
                         @elseif($adminRole === 'agent')
                             <li class="active">
+                                <a href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard"></i> Dashboard</a>
+                            </li>
+                            <li>
                                 <a href="#mywarning" data-toggle="tab"><i class="fa fa-user"></i> My Warnings</a>
                             </li>
                         @endif
                     </ul>
 
                     <div id="myTabContent1" class="tab-content">
+                        <!-- Dashboard Tab (Now for All Roles) -->
+                        <div class="tab-pane fade in active all_tabs_bg" id="dashboard">
+                            <div class="boligation_tabls">
+                                <div class="row">
+                                    @if($adminRole === 'admin' || $adminRole === 'hr')
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>Total Warnings</h4>
+                                                <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
+                                            </div>
+                                        </div>
+                                    @elseif($adminRole === 'manager' || $adminRole === 'tl')
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>Team Warnings</h4>
+                                                <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
+                                            </div>
+                                        </div>
+                                    @elseif($adminRole === 'agent')
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>My Warnings</h4>
+                                                <h2 class="total-warnings-count">{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    @foreach($warningCounts as $warningCount)
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>{{ $warningCount->warning_name }}</h4>
+                                                <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- All Warnings Tab (Admin & HR Only) -->
                         @if($adminRole === 'admin' || $adminRole === 'hr')
-                            <div class="tab-pane fade in {{ $adminRole === 'admin' || $adminRole === 'hr' ? 'active' : '' }} all_tabs_bg" id="all">
+                            <div class="tab-pane fade in all_tabs_bg" id="all">
                                 <div class="boligation_tabls">
                                     <div class="row">
                                         <div class="col-md-12" style="margin-top: 20px;">
-                                            <div class="table-responsive" style="border:0">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                                                 <h3><i class="fa fa-list"></i> All Warnings</h3>
+                                                <div class="filter-container">
+                                                    <button type="button" class="btn btn-sm btn-primary filter-trigger">
+                                                        <i class="fa fa-filter"></i> Filter Employees
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive" style="border:0">
                                                 <table class="table table-bordered table-striped" id="allWarningsTable">
                                                     <thead>
                                                         <tr>
                                                             <th>Created By</th>
                                                             <th>Warning Given To</th>
-                                                            <!-- <th>Ticket Status</th> -->
                                                             <th>Warning Type</th>
                                                             <th>Penalty</th>
                                                             <th>Message</th>
@@ -212,7 +251,7 @@
                                                     <tbody>
                                                         @if($all_warnings->isEmpty())
                                                             <tr>
-                                                                <td colspan="8" class="text-center">No Warnings Found</td>
+                                                                <td colspan="7" class="text-center">No Warnings Found</td>
                                                             </tr>
                                                         @else
                                                             @foreach($all_warnings as $item)
@@ -222,7 +261,7 @@
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
                                                                     <td>₹{{ $item->penalty ?? '0' }}</td>
                                                                     <td>{{ $item->message }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
+                                                                    <td>{{ isset($item->date) ? \Carbon\Carbon::parse($item->date)->format('d/m/Y') : 'N/A' }}</td>
                                                                     <td>
                                                                         <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
                                                                             <i class="fa fa-edit"></i>
@@ -247,19 +286,25 @@
 
                         <!-- Team Warnings Tab (Manager & TL Only) -->
                         @if($adminRole === 'manager' || $adminRole === 'tl')
-                            <div class="tab-pane fade in active all_tabs_bg" id="teamwarning">
+                            <div class="tab-pane fade in all_tabs_bg" id="teamwarning">
                                 <div class="boligation_tabls">
                                     <div class="row">
                                         <div class="col-md-12" style="margin-top: 20px;">
-                                            <div class="table-responsive" style="border:0">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                                                 <h3><i class="fa fa-users"></i> Team Warnings</h3>
-                                                <h5>Team Members: {{ implode(', ', $team_members) }}</h5>
+                                                <div class="filter-container">
+                                                    <button type="button" class="btn btn-sm btn-primary filter-trigger">
+                                                        <i class="fa fa-filter"></i> Filter Team Members
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <h5>Team Members: {{ implode(', ', $team_members) }}</h5>
+                                            <div class="table-responsive" style="border:0">
                                                 <table class="table table-bordered table-striped" id="teamWarningsTable">
                                                     <thead>
                                                         <tr>
                                                             <th>Created By</th>
                                                             <th>Warning Given To</th>
-                                                            <!-- <th>Ticket Status</th> -->
                                                             <th>Warning Type</th>
                                                             <th>Penalty</th>
                                                             <th>Message</th>
@@ -270,7 +315,7 @@
                                                     <tbody>
                                                         @if($team_warnings->isEmpty())
                                                             <tr>
-                                                                <td colspan="8" class="text-center">No Team Warnings Found</td>
+                                                                <td colspan="7" class="text-center">No Team Warnings Found</td>
                                                             </tr>
                                                         @else
                                                             @foreach($team_warnings as $item)
@@ -280,7 +325,7 @@
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
                                                                     <td>₹{{ $item->penalty ?? '0' }}</td>
                                                                     <td>{{ $item->message }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
+                                                                    <td>{{ isset($item->date) ? \Carbon\Carbon::parse($item->date)->format('d/m/Y') : 'N/A' }}</td>
                                                                     <td>
                                                                         <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
                                                                             <i class="fa fa-edit"></i>
@@ -298,74 +343,51 @@
                             </div>
                         @endif
 
-                        <!-- My Warnings Tab (Visible to All Roles) -->
-                        <div class="tab-pane fade in {{ $adminRole === 'agent' ? 'active' : '' }} all_tabs_bg" id="mywarning">
-                            <div class="boligation_tabls">
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-top: 20px;">
-                                        <h3><i class="fa fa-user"></i> My Warnings</h3>
-                                        @if($myWarnings->isEmpty())
-                                            <div class="alert alert-info">
-                                                <i class="fa fa-info-circle"></i> No warnings found for your account.
-                                            </div>
-                                        @else
-                                            <div class="accordion">
-                                                @foreach($myWarnings as $warningTypeId => $warnings)
-                                                    <div class="accordion-header">
-                                                        <i class="fa fa-exclamation-circle"></i> {{ $warnings->first()->warning_name }} ({{ $warnings->count() }})
-                                                    </div>
-                                                    <div class="accordion-body">
-                                                        <table class="inner-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Date</th>
-                                                                    <th>Issued By</th>
-                                                                    <th>Penalty</th>
-                                                                    <th>Message</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach($warnings as $warning)
-                                                                    <tr>
-                                                                        <td>{{ $warning->assign_name ?? 'N/A' }}</td>
-                                                                        <td>{{ $warning->date ? \Carbon\Carbon::parse($warning->date)->format('d/m/Y') : 'N/A' }}</td>
-                                                                        <td>{{ $warning->issued_by_name }}</td>
-                                                                        <td>₹{{ $warning->penalty }}</td>
-                                                                        <td>{{ $warning->message }}</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Dashboard Tab (Admin Only) -->
-                        @if($adminRole === 'admin')
-                            <div class="tab-pane fade in all_tabs_bg" id="dashboard">
+                        <!-- My Warnings Tab (Visible to All except Admin) -->
+                        @if($adminRole !== 'admin')
+                            <div class="tab-pane fade in all_tabs_bg" id="mywarning">
                                 <div class="boligation_tabls">
                                     <div class="row">
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>Total Warnings</h4>
-                                                <h2>{{ $all_warnings->count() }}</h2>
-                                            </div>
-                                        </div>
-                                        
-                                        @foreach($warningCounts as $warningCount)
-                                            <div class="col-md-6" style="margin-top: 20px;">
-                                                <div class="card warrinig_card_new_design">
-                                                    <h4>{{ $warningCount->warning_name }}</h4>
-                                                    <h2>{{ $warningCount->total }}</h2>
+                                        <div class="col-md-12" style="margin-top: 20px;">
+                                            <h3><i class="fa fa-user"></i> My Warnings</h3>
+                                            @if($myWarnings->isEmpty())
+                                                <div class="alert alert-info">
+                                                    <i class="fa fa-info-circle"></i> No warnings found for your account.
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @else
+                                                <div class="accordion">
+                                                    @foreach($myWarnings as $warningTypeId => $warnings)
+                                                        <div class="accordion-header">
+                                                            <i class="fa fa-exclamation-circle"></i> {{ $warnings->first()->warning_name }} ({{ $warnings->count() }})
+                                                        </div>
+                                                        <div class="accordion-body">
+                                                            <table class="inner-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Date</th>
+                                                                        <th>Issued By</th>
+                                                                        <th>Penalty</th>
+                                                                        <th>Message</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($warnings as $warning)
+                                                                        <tr>
+                                                                            <td>{{ $warning->assign_name ?? 'N/A' }}</td>
+                                                                            <td>{{ isset($warning->date) ? \Carbon\Carbon::parse($warning->date)->format('d/m/Y') : 'N/A' }}</td>
+                                                                            <td>{{ $warning->issued_by_name }}</td>
+                                                                            <td>₹{{ $warning->penalty }}</td>
+                                                                            <td>{{ $warning->message }}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -502,8 +524,35 @@
                                 <div class="form-group text-right">
                                     <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Update</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-                                    </div>
+                                </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Filter Modal -->
+            <div id="filterWarningModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title" style="color:black;"><i class="fa fa-filter"></i> Filter Warnings</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="employee_filter">Filter by Employees:</label>
+                                <select id="employee_filter" class="form-control chosen" multiple>
+                                    <option value="all">All Employees</option>
+                                    @foreach($all_employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->name }} ({{ $employee->role }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="button" id="applyFilter" class="btn btn-primary"><i class="fa fa-check"></i> Apply Filter</button>
+                                <button type="button" id="clearFilter" class="btn btn-default"><i class="fa fa-refresh"></i> Clear Filter</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -535,12 +584,84 @@
             allow_single_deselect: true 
         });
         
-        // Initialize DataTables
-        $('#allWarningsTable, #teamWarningsTable').DataTable({
-            "order": [[6, "desc"]], // Sort by date column
+        // Initialize DataTables with saving state
+        let allWarningsTable = $('#allWarningsTable').DataTable({
+            "order": [[5, "desc"]], // Sort by date column
             "pageLength": 10,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "stateSave": true
         });
+        
+        let teamWarningsTable = $('#teamWarningsTable').DataTable({
+            "order": [[5, "desc"]], // Sort by date column
+            "pageLength": 10,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "stateSave": true
+        });
+        
+        // Filter button in all warnings section
+        $('.filter-trigger, #filterBtn').on('click', function() {
+            $('#filterWarningModal').modal('show');
+        });
+        
+        // Apply filter
+        $('#applyFilter').on('click', function() {
+            let selectedEmployees = $('#employee_filter').val();
+            
+            // If "All Employees" is selected or nothing is selected, show all
+            if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
+                allWarningsTable.column(1).search('').draw();
+                teamWarningsTable.column(1).search('').draw();
+                updateDashboardCounts('all');
+            } else {
+                // Create regex pattern for filtering
+                let filterRegex = selectedEmployees.map(function(id) {
+                    let employeeName = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0];
+                    return '^' + employeeName + '$';
+                }).join('|');
+                
+                // Apply filter using regex
+                allWarningsTable.column(1).search(filterRegex, true, false).draw();
+                teamWarningsTable.column(1).search(filterRegex, true, false).draw();
+                updateDashboardCounts(selectedEmployees);
+            }
+            
+            $('#filterWarningModal').modal('hide');
+        });
+        
+        // Clear filter
+        $('#clearFilter').on('click', function() {
+            $('#employee_filter').val('all').trigger('chosen:updated');
+            allWarningsTable.column(1).search('').draw();
+            teamWarningsTable.column(1).search('').draw();
+            updateDashboardCounts('all');
+            $('#filterWarningModal').modal('hide');
+        });
+        
+        // Function to update dashboard counts based on filter
+        function updateDashboardCounts(filter) {
+            $.ajax({
+                type: "POST",
+                url: "{{url('/get-filtered-warning-counts')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "filter": filter
+                },
+                dataType: "json",
+                success: function(data) {
+                    // Update total warnings count
+                    $('.total-warnings-count').text(data.total);
+                    
+                    // Update warning type counts
+                    Object.keys(data.type_counts).forEach(function(typeId) {
+                        $('.warning-count-' + typeId).text(data.type_counts[typeId]);
+                    });
+                },
+                error: function() {
+                    swal("Error", "Failed to update dashboard counts", "error");
+                }
+            });
+        }
         
         // Show add warning modal
         $('#openModalBtn').on('click', function() {
