@@ -187,21 +187,21 @@
                             <div class="boligation_tabls">
                                 <div class="row">
                                     @if($adminRole === 'admin' || $adminRole === 'hr')
-                                        <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="col-md-4" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>Total Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
                                             </div>
                                         </div>
                                     @elseif($adminRole === 'manager' || $adminRole === 'tl')
-                                        <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="col-md-4" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>Team Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
                                             </div>
                                         </div>
                                     @elseif($adminRole === 'agent')
-                                        <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="col-md-4" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>My Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
@@ -210,7 +210,7 @@
                                     @endif
                                     
                                     @foreach($warningCounts as $warningCount)
-                                        <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="col-md-4" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>{{ $warningCount->warning_name }}</h4>
                                                 <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
