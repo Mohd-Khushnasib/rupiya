@@ -2101,7 +2101,7 @@ Bordered form layout
     display: inline-block;
     font-weight: bold;
     text-transform: uppercase;
-    color: #ffffff;
+    /* color: #ffffff; */
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;  
