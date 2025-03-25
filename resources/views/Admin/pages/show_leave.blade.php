@@ -273,10 +273,10 @@
                         <div class="col-sm-12">
                             <label class="control-label">Leave Type</label>
                             <div class="controls">
-                                <select class="form-control" data-placeholder="Choose a Leave Type" tabindex="1">
-                                    <option value="">Leave Type</option>
-                                    <option value="leave_type_1">type 1</option>
-                                    <option value="leave_type_2">type 2</option>
+                                <select name="leave_type" class="form-control" data-placeholder="Choose a Leave Type" tabindex="1">
+                                    <option selected="true" disabled="true">Leave Type</option>
+                                    <option value="Paid Leave">Paid Leave</option>
+                                    <option value="Casual Leave">Casual Leave</option>
                                 </select>
                             </div>
                         </div>
@@ -285,22 +285,22 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label class="control-label">From Date</label>
-                                    <input type="date" class="form-control">
+                                    <input type="date" name="from_date" class="form-control">
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="control-label">To Date</label>
-                                    <input type="date" class="form-control">
+                                    <input type="date" name="to_date" class="form-control">
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <label class="control-label">Leave Duration</label>
-                            <input type="number" placeholder="Enter Leave Duration ( in days )" class="form-control" >
+                            <input type="number" name="duration" placeholder="Enter Leave Duration ( in days )" class="form-control" >
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea class="form-control wysihtml5" rows="6"><b>Write reason here ...</b></textarea>
+                            <textarea name="note" class="form-control wysihtml5" rows="6"><b>Write reason here ...</b></textarea>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
