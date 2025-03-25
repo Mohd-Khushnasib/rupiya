@@ -1,5 +1,5 @@
 @if(session()->get('admin_login'))
-@foreach(session()->get('admin_login') as $admin_login)
+@foreach(session()->get('admin_login') as $adminlogin)
 @extends('Admin.layouts.master')
 @section('main-content')
 <style>
@@ -249,12 +249,7 @@
 <!-- Main Content End Here  -->
 
 
-<!--
------------------------------------------------------------------------------------------------------------
-Add Leave Modal
------------------------------------------------------------------------------------------------------------
--->
-<!-- modal  -->
+<!-- Add Leave Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -267,12 +262,12 @@ Add Leave Modal
                     <form class="mail-compose form-horizontal" action="#">
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" placeholder="Name" class="form-control" value="Emp01" readonly>
+                            <input type="text" name="employee_id" placeholder="Name" class="form-control" value="{{$adminlogin->employee_id ?? ''}}" readonly>
                         </div>
 
                         <div class="col-sm-12">
                             <label class="control-label">Name</label>
-                            <input type="text" placeholder="Name" class="form-control" value="Abhishek Kumar" readonly>
+                            <input type="text" placeholder="Name" class="form-control" value="{{$adminlogin->name ?? ''}}" readonly>
                         </div>
 
                         <div class="col-sm-12">
