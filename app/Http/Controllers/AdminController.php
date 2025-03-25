@@ -6373,7 +6373,7 @@ class AdminController extends Controller
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('status', 'like', '%' . $search . '%')
-                ->orWhere('type', 'like', '%' . $search . '%')
+                ->orWhere('leave_type', 'like', '%' . $search . '%')
                 ->orWhere('from_date', 'like', '%' . $search . '%')
                 ->orWhere('to_date', 'like', '%' . $search . '%')
                 ->orWhere('note', 'like', '%' . $search . '%');
