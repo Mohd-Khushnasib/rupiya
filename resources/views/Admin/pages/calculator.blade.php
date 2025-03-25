@@ -32,16 +32,16 @@
                     }
 
                     /* body {
-                                                                                                            font-family: 'Poppins', sans-serif;
-                                                                                                            background-color: var(--bg-dark);
-                                                                                                            color: var(--text-light);
-                                                                                                            font-size: 20px;
-                                                                                                            line-height: 1.6;
-                                                                                                            padding: 20px;
-                                                                                                            max-width: 900px;
-                                                                                                            margin: 0 auto;
-                                                                                                            overflow-x: hidden;
-                                                                                                        } */
+                                                                                                                                                                                                                        font-family: 'Poppins', sans-serif;
+                                                                                                                                                                                                                        background-color: var(--bg-dark);
+                                                                                                                                                                                                                        color: var(--text-light);
+                                                                                                                                                                                                                        font-size: 20px;
+                                                                                                                                                                                                                        line-height: 1.6;
+                                                                                                                                                                                                                        padding: 20px;
+                                                                                                                                                                                                                        max-width: 900px;
+                                                                                                                                                                                                                        margin: 0 auto;
+                                                                                                                                                                                                                        overflow-x: hidden;
+                                                                                                                                                                                                                    } */
 
                     .calculator {
                         background: var(--card-dark);
@@ -649,168 +649,196 @@
             </head>
 
             <body>
-                <div class="calculator">
-                    <div class="tabs">
-                        <div class="tab active" onclick="switchTab('emiCalculator')">EMI Calculator</div>
-                        <div class="tab" onclick="switchTab('loanEligibilityCalculator')">Loan Eligibility Calculator</div>
-                    </div>
-
-                    <div id="emiCalculator" class="tab-content active">
-                        <div class="input-group">
-                            <label>Loan Amount</label>
-                            <input type="text" id="loanAmount" placeholder="₹">
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <label>Tenure (Months)</label>
-                                    <input type="text" id="tenureMonths" placeholder="Enter months">
+                <div id="main-content">
+                    <div class="row" style="display: flex; justify-content: center; background-color: #000000 !important">
+                        <div class="col-sm-8">
+                            <div class="calculator">
+                                <div class="tabs">
+                                    <div class="tab active" onclick="switchTab('emiCalculator')">EMI Calculator</div>
+                                    <div class="tab" onclick="switchTab('loanEligibilityCalculator')">Loan Eligibility Calculator
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <label>Tenure (Years)</label>
-                                    <input type="text" id="tenureYears" placeholder="Years" readonly>
+
+                                <div id="emiCalculator" class="tab-content active">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="input-group" style="display: grid !important; ">
+                                                <label>Loan Amount</label>
+                                                <input type="text" id="loanAmount" placeholder="₹">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label>Tenure (Months)</label>
+                                                <input type="text" id="tenureMonths" placeholder="Enter months">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label>Tenure (Years)</label>
+                                                <input type="text" id="tenureYears" placeholder="Years" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="input-group" style="display: grid !important; ">
+                                                <label>Annual Interest Rate</label>
+                                                <input type="text" id="interestRate" placeholder="Enter rate">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="part-payments">
+                                        <div id="partPaymentEntries"></div>
+                                        <div class="row" style="display: flex; justify-content: center;">
+                                            <div class="col-sm-8" style="display: grid;">
+                                                <button onclick="addPartPaymentField()">Add Part Payment</button>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="row" style="display: flex; justify-content: center">
+                                        <div class="col-sm-8" style="display: grid;">
+                                            <button style="margin-top: 10px;" onclick="validateAndCalculateEMI()">Calculate
+                                                EMI</button>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="results">
+                                        <div class="result-item">
+                                            Monthly EMI: <span id="emiResult">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            Total Principal + Interest: <span id="totalRepayment">₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            Total Interest Paid: <span id="totalInterest">₹0</span>
+                                        </div>
+                                        <div class="profit" id="interestSaving">
+                                            Interest Saved: <span>₹0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            Loan Closure Month: <span id="loanClosure">0</span>
+                                        </div>
+                                        <div class="result-item">
+                                            Number of Part Payments: <span id="partPaymentCount">0</span>
+                                        </div>
+                                    </div>
+                                    <button class="toggle-schedule" onclick="toggleSchedule()" style="display: none;">Show Repayment
+                                        Schedule</button>
+                                    <button onclick="generatePDF()" style="display: none; margin-left:10px;" id="pdfBtn">Download
+                                        PDF</button>
+                                    <div class="schedule-section" id="paymentSchedule">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Month</th>
+                                                    <th>EMI</th>
+                                                    <th>Principal</th>
+                                                    <th>Interest</th>
+                                                    <th>Part Payment</th>
+                                                    <th>Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="scheduleBody"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
-                        <div class="input-group">
-                            <label>Annual Interest Rate</label>
-                            <input type="text" id="interestRate" placeholder="Enter rate">
-                        </div>
-                        <div class="part-payments">
-                            <div id="partPaymentEntries"></div>
-                            <button onclick="addPartPaymentField()">Add Part Payment</button>
-                        </div>
-                        <button onclick="validateAndCalculateEMI()">Calculate EMI</button>
-                        <div class="results">
-                            <div class="result-item">
-                                Monthly EMI: <span id="emiResult">₹0</span>
-                            </div>
-                            <div class="result-item">
-                                Total Principal + Interest: <span id="totalRepayment">₹0</span>
-                            </div>
-                            <div class="result-item">
-                                Total Interest Paid: <span id="totalInterest">₹0</span>
-                            </div>
-                            <div class="profit" id="interestSaving">
-                                Interest Saved: <span>₹0</span>
-                            </div>
-                            <div class="result-item">
-                                Loan Closure Month: <span id="loanClosure">0</span>
-                            </div>
-                            <div class="result-item">
-                                Number of Part Payments: <span id="partPaymentCount">0</span>
-                            </div>
-                        </div>
-                        <button class="toggle-schedule" onclick="toggleSchedule()" style="display: none;">Show Repayment
-                            Schedule</button>
-                        <button onclick="generatePDF()" style="display: none; margin-left:10px;" id="pdfBtn">Download PDF</button>
-                        <div class="schedule-section" id="paymentSchedule">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Month</th>
-                                        <th>EMI</th>
-                                        <th>Principal</th>
-                                        <th>Interest</th>
-                                        <th>Part Payment</th>
-                                        <th>Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="scheduleBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
+                                <div id="loanEligibilityCalculator" class="tab-content">
+                                    <div class="input-group">
+                                        <label>Salary</label>
+                                        <input type="text" id="salary" placeholder="₹">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label>Company Category</label>
+                                                <select id="companyCategory" onchange="resetFOIRAndCalculate()">
+                                                    <option value="" disabled selected>Select Company Category</option>
+                                                    <option value="SUPER_CAT_A">SUPER CAT A</option>
+                                                    <option value="CAT_A">CAT A</option>
+                                                    <option value="CAT_B">CAT B</option>
+                                                    <option value="CAT_C">CAT C</option>
+                                                    <option value="UNLISTED">UNLISTED COMPANY</option>
+                                                </select>
+                                                <span id="foirOptions" class="foir-options" style="display: none;">
+                                                    <button onclick="selectFOIR(50)">50%</button>
+                                                    <button onclick="selectFOIR(60)">60%</button>
+                                                    <button onclick="selectFOIR(65)">65%</button>
+                                                    <button onclick="selectFOIR(70)">70%</button>
+                                                </span>
+                                                <button class="foir-toggle" id="foirToggle" onclick="toggleFOIR()">5%</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label>FOIR</label>
+                                                <input type="text" id="foir" placeholder="FOIR %" readonly>
+                                            </div>
+                                        </div>
 
-                    <div id="loanEligibilityCalculator" class="tab-content">
-                        <div class="input-group">
-                            <label>Salary</label>
-                            <input type="text" id="salary" placeholder="₹">
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <label>Company Category</label>
-                                    <select id="companyCategory" onchange="resetFOIRAndCalculate()">
-                                        <option value="" disabled selected>Select Company Category</option>
-                                        <option value="SUPER_CAT_A">SUPER CAT A</option>
-                                        <option value="CAT_A">CAT A</option>
-                                        <option value="CAT_B">CAT B</option>
-                                        <option value="CAT_C">CAT C</option>
-                                        <option value="UNLISTED">UNLISTED COMPANY</option>
-                                    </select>
-                                    <span id="foirOptions" class="foir-options" style="display: none;">
-                                        <button onclick="selectFOIR(50)">50%</button>
-                                        <button onclick="selectFOIR(60)">60%</button>
-                                        <button onclick="selectFOIR(65)">65%</button>
-                                        <button onclick="selectFOIR(70)">70%</button>
-                                    </span>
-                                    <button class="foir-toggle" id="foirToggle" onclick="toggleFOIR()">5%</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <label>EMI Can Pay As Per FOIR</label>
+                                                <input type="text" id="emiCanPayFOIR" placeholder="₹" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+
+
+                                            <div class="input-group">
+                                                <label>Obligation</label>
+                                                <input type="text" id="obligation" placeholder="₹">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label>Monthly EMI Can Pay</label>
+                                        <input type="text" id="monthlyEmiCanPay" placeholder="₹" readonly>
+                                    </div>
+                                    <div class="loan-type-buttons">
+                                        <button onclick="selectLoanType('fresh')" id="freshLoanBtn">Fresh Loan</button>
+                                        <button onclick="selectLoanType('bt')" id="btLoanBtn">Balance Transfer Loan</button>
+                                    </div>
+                                    <div class="input-group" id="btAmountGroup" style="display: none;">
+                                        <label>BT Amount</label>
+                                        <input type="text" id="btAmount" placeholder="₹">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Tenure (Months)</label>
+                                        <input type="text" id="eligibilityTenureMonths" placeholder="Enter months">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Tenure (Years)</label>
+                                        <input type="text" id="eligibilityTenureYears" placeholder="Years" readonly>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Annual Interest Rate</label>
+                                        <input type="text" id="eligibilityInterestRate" placeholder="Enter rate">
+                                    </div>
+                                    <button onclick="calculateLoanAmount()">Calculate Loan Amount</button>
+                                    <div class="results">
+                                        <div class="result-item">
+                                            Eligible Amount as FOIR: <span id="eligibleAmountFOIR">₹0</span>
+                                        </div>
+                                        <div class="comparison-text">Will Get Whichever is Lower</div>
+                                        <div class="result-item">
+                                            Eligible Amount as MULTIPLIER: <span id="eligibleAmountMultiplier"></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Multiplier</label>
+                                            <input type="text" id="multiplier" placeholder="Enter number (max 35)">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <label>FOIR</label>
-                                    <input type="text" id="foir" placeholder="FOIR %" readonly>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="input-group">
-                                    <label>EMI Can Pay As Per FOIR</label>
-                                    <input type="text" id="emiCanPayFOIR" placeholder="₹" readonly>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-
-
-                                <div class="input-group">
-                                    <label>Obligation</label>
-                                    <input type="text" id="obligation" placeholder="₹">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <label>Monthly EMI Can Pay</label>
-                            <input type="text" id="monthlyEmiCanPay" placeholder="₹" readonly>
-                        </div>
-                        <div class="loan-type-buttons">
-                            <button onclick="selectLoanType('fresh')" id="freshLoanBtn">Fresh Loan</button>
-                            <button onclick="selectLoanType('bt')" id="btLoanBtn">Balance Transfer Loan</button>
-                        </div>
-                        <div class="input-group" id="btAmountGroup" style="display: none;">
-                            <label>BT Amount</label>
-                            <input type="text" id="btAmount" placeholder="₹">
-                        </div>
-                        <div class="input-group">
-                            <label>Tenure (Months)</label>
-                            <input type="text" id="eligibilityTenureMonths" placeholder="Enter months">
-                        </div>
-                        <div class="input-group">
-                            <label>Tenure (Years)</label>
-                            <input type="text" id="eligibilityTenureYears" placeholder="Years" readonly>
-                        </div>
-                        <div class="input-group">
-                            <label>Annual Interest Rate</label>
-                            <input type="text" id="eligibilityInterestRate" placeholder="Enter rate">
-                        </div>
-                        <button onclick="calculateLoanAmount()">Calculate Loan Amount</button>
-                        <div class="results">
-                            <div class="result-item">
-                                Eligible Amount as FOIR: <span id="eligibleAmountFOIR">₹0</span>
-                            </div>
-                            <div class="comparison-text">Will Get Whichever is Lower</div>
-                            <div class="result-item">
-                                Eligible Amount as MULTIPLIER: <span id="eligibleAmountMultiplier"></span>
-                            </div>
-                            <div class="input-group">
-                                <label>Multiplier</label>
-                                <input type="text" id="multiplier" placeholder="Enter number (max 35)">
                             </div>
                         </div>
                     </div>
@@ -1156,10 +1184,10 @@
                         const div = document.createElement('div');
                         div.className = 'part-payment';
                         div.innerHTML = `
-                                                                                                                <input type="text" placeholder="Month" class="partPaymentMonth">
-                                                                                                                <input type="text" placeholder="Amount" class="partPaymentAmount">
-                                                                                                                <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
-                                                                                                            `;
+                                                                                                                                                                                                                            <input type="text" placeholder="Month" class="partPaymentMonth">
+                                                                                                                                                                                                                            <input type="text" placeholder="Amount" class="partPaymentAmount">
+                                                                                                                                                                                                                            <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+                                                                                                                                                                                                                        `;
                         container.appendChild(div);
 
                         div.querySelector('.partPaymentMonth').addEventListener('input', function (e) {
@@ -1254,13 +1282,13 @@
                                 const row = document.createElement('tr');
                                 if (entry.partPayment > 0) row.classList.add('highlight-green');
                                 row.innerHTML = `
-                                                                                                                        <td>${entry.month}</td>
-                                                                                                                        <td>${formatCurrencyWithCommas(entry.emi)}</td>
-                                                                                                                        <td>${formatCurrencyWithCommas(entry.principal)}</td>
-                                                                                                                        <td>${formatCurrencyWithCommas(entry.interest)}</td>
-                                                                                                                        <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
-                                                                                                                        <td>${formatCurrencyWithCommas(entry.balance)}</td>
-                                                                                                                    `;
+                                                                                                                                                                                                                                    <td>${entry.month}</td>
+                                                                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.emi)}</td>
+                                                                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.principal)}</td>
+                                                                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.interest)}</td>
+                                                                                                                                                                                                                                    <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
+                                                                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.balance)}</td>
+                                                                                                                                                                                                                                `;
                                 scheduleBody.appendChild(row);
                             });
 
