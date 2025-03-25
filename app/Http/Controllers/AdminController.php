@@ -6382,9 +6382,9 @@ class AdminController extends Controller
         
         // Get counts for stats (if you still need them)
         $all_leave = DB::table('tbl_leave')->count();
-        $total_pending = DB::table('tbl_leave')->where('status', 'Pending')->count();
-        $total_approved = DB::table('tbl_leave')->where('status', 'Approved')->count();
-        $total_rejected = DB::table('tbl_leave')->where('status', 'Rejectd')->count();
+        $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
+        $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
+        $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
         // Pagination
         $leaves = $query->orderBy('id', 'desc')->paginate(2);
         

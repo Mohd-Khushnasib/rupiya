@@ -229,7 +229,7 @@ $(document).ready(function() {
 });
 
 // Function to Load Admin Data with Search Filter
-function loadAdmins(status, page, search = '') {
+function loadLeaves(status, page, search = '') {
     var search = search || $(".search_contact").val();
     
     $.ajax({
@@ -241,12 +241,13 @@ function loadAdmins(status, page, search = '') {
             search: search // Search parameter send karna
         },
         success: function(data) {
-            let tbody = $("#adminTable tbody");
+            let tbody = $("#leaveTable tbody");
             let pagination = $("#pagination");
             tbody.empty();
             pagination.empty();
 
             if (data.data.length > 0) {
+                // Update leave counts in tabs
                 $("#all_leave").text(data.all_leave);
                 $("#pending_leave").text(data.pending_leave);
                 $("#approved_leave").text(data.approved_leave);
@@ -258,68 +259,80 @@ function loadAdmins(status, page, search = '') {
                 result = data.data;
                 
                 result.forEach((item, index) => {
+                    // Get status badge class
+                    let statusBadge = '';
+                    if(item.status == 'pending') {
+                        statusBadge = '<span class="badge badge-warning">Pending</span>';
+                    } else if(item.status == 'approved') {
+                        statusBadge = '<span class="badge badge-success">Approved</span>';
+                    } else if(item.status == 'rejected') {
+                        statusBadge = '<span class="badge badge-danger">Rejected</span>';
+                    }
+                    
+                    // Calculate leave duration
+                    const fromDate = new Date(item.from_date);
+                    const toDate = new Date(item.to_date);
+                    const diffTime = Math.abs(toDate - fromDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both days
                     
                     tbody.append(`
                         <tr>
-                            <td>${index + 1 + (data.current_page - 1) * data.per_page}</td>
-                            <td>${item.admin_id}</td>
-                            <td><img src="${item.image}" alt="" height="50px" width="50px" style="object-fit: cover; border-radius: 50%;"></td>
-                            <td><a href="{{ url('/employee-profile') }}/${item.id}">${item.name}</a></td>
-                            <td>${item.leave_type}</td>
+                            <td>
+                                <div class="custom-checkbox custom-control">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-${item.id}" value="${item.id}">
+                                    <label class="custom-control-label" for="checkbox-${item.id}"></label>
+                                </div>
+                            </td>
+                            <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
+                            <td>${diffDays} day${diffDays > 1 ? 's' : ''}</td>
+                            <td>${item.approved_by || '-'}</td>
+                            <td>${statusBadge}</td>
                         </tr>
                     `);
                 });
-                
-                
-                 // Status Switch Change Event
-               
-                // Status Switch End Here 
-                
-                
 
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
             } else {
-                tbody.append(`<tr><td colspan="12" class="text-center">No Data Found</td></tr>`);
+                tbody.append(`<tr><td colspan="7" class="text-center">No Leave Data Found</td></tr>`);
             }
         }
     });
 }
 
-// Generate Pagination with Search Parameter
+// Format date function
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    let date = new Date(dateString);
+    let day = date.getDate().toString().padStart(2, '0');
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+// Generate pagination links function
 function generatePaginationLinks(currentPage, lastPage, status, search = '') {
     let pagination = $("#pagination");
     pagination.html('');
 
     if (currentPage > 3) {
-        pagination.append(`<li><a href="javascript:void(0);" onclick="loadAdmins(${status}, 1, '${search}')">1</a></li>`);
+        pagination.append(`<li><a href="javascript:void(0);" onclick="loadLeaves('${status}', 1, '${search}')">1</a></li>`);
         pagination.append(`<li class="disabled"><a>...</a></li>`);
     }
 
     for (let i = Math.max(1, currentPage - 2); i <= Math.min(lastPage, currentPage + 2); i++) {
         pagination.append(`
             <li class="${i === currentPage ? 'active' : ''}">
-                <a href="javascript:void(0);" onclick="loadAdmins(${status}, ${i}, '${search}')">${i}</a>
+                <a href="javascript:void(0);" onclick="loadLeaves('${status}', ${i}, '${search}')">${i}</a>
             </li>
         `);
     }
 
     if (currentPage < lastPage - 2) {
         pagination.append(`<li class="disabled"><a>...</a></li>`);
-        pagination.append(`<li><a href="javascript:void(0);" onclick="loadAdmins(${status}, ${lastPage}, '${search}')">${lastPage}</a></li>`);
+        pagination.append(`<li><a href="javascript:void(0);" onclick="loadLeaves('${status}', ${lastPage}, '${search}')">${lastPage}</a></li>`);
     }
-}
-</script>
-
-<script>
-function formatDate(dateString) {
-    if (!dateString) return ''; // Handle empty date
-    let date = new Date(dateString);
-    let day = date.getDate().toString().padStart(2, '0');  // Ensure two digits
-    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
-    let year = date.getFullYear();
-    return `${day}/${month}/${year}`;
 }
 </script>
 
