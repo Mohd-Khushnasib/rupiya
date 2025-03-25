@@ -125,7 +125,6 @@
                     <!-- END Page Title -->
                     <!-- BEGIN Main Content -->
                     <div class="row">
-
                         @php
                             $adminId = $adminlogin->id; // Logged-in admin ki ID
                             // Warnings ko grouped karne ke liye query
@@ -149,7 +148,6 @@
                                     <div class="count">{{ $totalWarnings }}</div>
                                 </div>
                             </div>
-
                             @foreach($groupedWarnings as $warningTypeId => $warnings)
                                 <div class="col-md-3 d-flex justify-content-left align-items-left" style="height: 20vh;">
                                     <div class="warning-card">
@@ -206,66 +204,68 @@
                                             <div class="row">
                                                 <div class="col-md-12" style="margin-top: 20px;">
                                                     <div class="table-responsive" style="border:0">
-                                                        <table class="table table-advance" id="table1">
-                                                            <thead>
-                                                                <tr>
-                                                                    <!--<th style="width:18px"><input type="checkbox"></th>-->
-                                                                    <!--<th>Action</th>-->
-                                                                    @if ($adminlogin->role === 'Admin')
-                                                                        <th style="width:18px"><input type="checkbox"></th>
-                                                                        <th>Action</th>
-                                                                    @endif
-                                                                    <th>Created By</th>
-                                                                    <th>Ticket Status</th>
-                                                                    <th>Warning Type</th>
-                                                                    <th>Message</th>
-                                                                    <th>Assign To</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @if($warnings->isEmpty())
-                                                                @else
-                                                                @php
-                                                                    $sr = 1;
-                                                                @endphp
-                                                                @foreach($warnings as $item)
-                                                                                                                                                                                                            <tr class="table-flag-blue">
-                                                                                                                                                                                                                @if ($adminlogin->role === 'Admin')
-                                                                                                                                                                                                                    <td><input type="checkbox"></td>
-                                                                                                                                                                                                                    <td>
-                                                                                                                                                                                                                        <a href="javascript:void(0);"
-                                                                                                                                                                                                                            class="text-white btn btn-danger delete small-btn"
-                                                                                                                                                                                                                            data-id="{{ $item->id }}">
-                                                                                                                                                                                                                            Delete
-                                                                                                                                                                                                                        </a>
-                                                                                                                                                                                                                    </td>
-                                                                                                                                                                                                                @endif
-                                                                                                                                                                                                                <td>{{$item->createdby ?? ''}}</td>
-                                                                                                                                                                                                                <td>{{$item->task_status ?? ''}}</td>
-                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                    <a href="javascript:void(0);" class="edit"
-                                                                                                                                                                                                                        data-warningtype_id="{{$item->warningtype_id}}"
-                                                                                                                                                                                                                        data-message="{{$item->message}}"
-                                                                                                                                                                                                                        data-assign="{{ json_encode($item->assign) }}"
-                                                                                                                                                                                                                        data-id="{{ $item->id }}">
-                                                                                                                                                                                                                        {{$item->warning_name ?? ''}}
-                                                                                                                                                                                                                    </a>
-                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                    <a href="#" class="view-full-message"
-                                                                                                                                                                                                                        data-message="{{ $item->message }}">
-                                                                                                                                                                                                                        <i class="fas fa-eye"></i>
-                                                                                                                                                                                                                    </a>
-                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                <td>{{$item->warned_to ?? 'nothing' }}</td>
-                                                                                                                                                                                                            </tr>
-                                                                                                                                                                                                            @php
-                                                                                                                                                                                                                $sr++;
-                                                                                                                                                                                                            @endphp
-                                                            @endforeach
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
+                                                        <@if ($admin_role === 'admin' || $admin_role === 'hr')
+    <h3>All Warnings</h3>
+    <table class="table table-advance" id="allWarningsTable">
+        <thead>
+            <tr>
+                <th>Created By</th>
+                <th>Warning Given To</th>
+                <th>Ticket Status</th>
+                <th>Warning Type</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if($all_warnings->isEmpty())
+                <tr>
+                    <td colspan="5" class="text-center">No Warnings Found</td>
+                </tr>
+            @else
+                @foreach($all_warnings as $item)
+                    <tr class="table-flag-blue">
+                        <td>{{ $item->createdby ?? 'N/A' }}</td>
+                        <td>{{ $item->warned_to ?? 'N/A' }}</td>
+                        <td>{{ $item->task_status ?? 'Pending' }}</td>
+                        <td>{{ $item->warning_name ?? 'No Type' }}</td>
+                        <td>{{ $item->message }}</td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+@else
+    <h3>Team Warnings for: {{ implode(', ', $team_members) }}</h3>
+    <table class="table table-advance" id="teamWarningsTable">
+        <thead>
+            <tr>
+                <th>Created By</th>
+                <th>Warning Given To</th>
+                <th>Ticket Status</th>
+                <th>Warning Type</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if($team_warnings->isEmpty())
+                <tr>
+                    <td colspan="5" class="text-center">No Team Warnings Found</td>
+                </tr>
+            @else
+                @foreach($team_warnings as $item)
+                    <tr class="table-flag-blue">
+                        <td>{{ $item->createdby ?? 'N/A' }}</td>
+                        <td>{{ $item->warned_to ?? 'N/A' }}</td>
+                        <td>{{ $item->task_status ?? 'Pending' }}</td>
+                        <td>{{ $item->warning_name ?? 'No Type' }}</td>
+                        <td>{{ $item->message }}</td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+@endif
+
                                                     </div>
                                                 </div>
                                             </div>
