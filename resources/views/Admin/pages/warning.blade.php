@@ -8,7 +8,7 @@
     .disabled-div {
         pointer-events: none;
         opacity: 0.6;
-        background-color: #f5f5f5;
+        background-color:rgb(12, 11, 11);
     }
     .accordion-header {
         background: #333;
