@@ -292,11 +292,11 @@ function loadLeaves(status, page, search = '') {
                     // Get status badge class
                     let statusBadge = '';
                     if(item.status == 'pending') {
-                        statusBadge = '<span class="badge badge-warning">Pending</span>';
+                        statusBadge = '<span class="badge bg-warning text-dark" style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px;">Pending</span>';
                     } else if(item.status == 'approved') {
-                        statusBadge = '<span class="badge badge-success">Approved</span>';
+                        statusBadge = '<span class="badge bg-success text-white" style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span>';
                     } else if(item.status == 'rejected') {
-                        statusBadge = '<span class="badge badge-danger">Rejected</span>';
+                        statusBadge = '<span class="badge bg-danger text-white" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span>';
                     }
                     
                     // Calculate leave duration
