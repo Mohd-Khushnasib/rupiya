@@ -1,5 +1,5 @@
 @if(session()->get('admin_login'))
-@foreach(session()->get('admin_login') as $admin_login)
+@foreach(session()->get('admin_login') as $adminlogin)
 @extends('Admin.layouts.master')
 @section('main-content')
 @php
@@ -18,7 +18,7 @@ $total_user = DB::table('users')->count();
     }
 </style>
 <div class="container" id="main-container">
-<input type="hidden" name="admin_id" class="form-control admin_id" value="{{$admin_login->id}}">
+<input type="hidden" name="admin_id" class="form-control admin_id" value="{{$adminlogin->id}}">
     <!-- BEGIN Content -->
     <div id="main-content">
         <!-- BEGIN Page Title -->
