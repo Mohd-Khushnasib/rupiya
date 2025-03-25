@@ -103,6 +103,37 @@
         
         
 
+         .stats-container {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background-color: black;
+    margin-bottom: 16px;
+  }
+  
+  .stats-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 250px;
+    height: 64px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0 16px;
+  }
+  
+  .stats-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+  }
+  
+  .stats-count {
+    font-weight: bold;
+    font-size: 20px;
+    color: #0099ff;
+  }
 </style>
 
 <!-- Main Content Start Here  -->
@@ -125,6 +156,28 @@
                 <div class="row">
                     <div class="col-md-12">
                         
+                    <div class="stats-container">
+                        <div class="stats-card">
+                            <div class="stats-title">ALL LEAVES</div>
+                            <div class="stats-count" id="card_all_leave">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-title">APPROVED</div>
+                            <div class="stats-count" id="card_approved_leave">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-title">REJECTED</div>
+                            <div class="stats-count" id="card_rejected_leave">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-title">PENDING</div>
+                            <div class="stats-count" id="card_pending_leave">0</div>
+                        </div>
+                    </div>
+
                        <!-- Tab Start Here -->
                         <div class="tabbable">
                             <ul id="adminTabs" class="nav nav-tabs">
@@ -284,6 +337,12 @@ function loadLeaves(status, page, search = '') {
                 $("#approved_leave").text(data.counts.approved || 0);
                 $("#rejected_leave").text(data.counts.rejected || 0);
                 $("#all_leave").text(data.counts.all || 0);
+
+                // card count here 
+                $("#card_pending_leave").text(data.counts.pending || 0);
+                $("#card_approved_leave").text(data.counts.approved || 0);
+                $("#card_rejected_leave").text(data.counts.rejected || 0);
+                $("#card_all_leave").text(data.counts.all || 0);
             }
             
             if (data.data && data.data.length > 0) {
