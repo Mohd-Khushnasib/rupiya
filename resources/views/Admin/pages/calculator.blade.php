@@ -662,7 +662,7 @@
                                 <div id="emiCalculator" class="tab-content active">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <div class="input-group" style="display: grid;">
+                                            <div class="input-group" style="display: grid !impo; ">
                                                 <label>Loan Amount</label>
                                                 <input type="text" id="loanAmount" placeholder="₹">
                                             </div>
@@ -680,7 +680,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
-                                            <div class="input-group">
+                                            <div class="input-group" style="display: grid !impo; ">
                                                 <label>Annual Interest Rate</label>
                                                 <input type="text" id="interestRate" placeholder="Enter rate">
                                             </div>
