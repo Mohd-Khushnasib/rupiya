@@ -299,6 +299,9 @@ Route::post('/delete_warning', [AdminController::class, 'deleteWarning']);  // u
 // issuedtotalwaning 
 Route::post('/issuedtotalwaning', [AdminController::class, 'issuedTotalWarning']);
 
+// Get Filter Here
+Route::post('/get-filtered-warning-counts', [AdminController::class, 'getFilteredWarningCounts']);
+
 
 Route::get('/get-warning',[AdminController::class, 'Getwarning']);
 
