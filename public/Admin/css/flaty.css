@@ -8750,7 +8750,7 @@ table tbody tr td {
 }
 
 .leads_system_bg .underwritten {
-    background-color: #ffff00 !important;
+    background-color: yellow !important;
     color: #000;
 }
 
