@@ -589,6 +589,29 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 
 <script>
+    // Initialize DataTables with saving state
+var allWarningsTable = $('#allWarningsTable').DataTable({
+    "order": [[5, "desc"]], // Sort by date column
+    "pageLength": 10,
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "stateSave": true
+});
+
+var teamWarningsTable = $('#teamWarningsTable').DataTable({
+    "order": [[5, "desc"]], // Sort by date column
+    "pageLength": 10,
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "stateSave": true
+});
+
+// Add this to ensure tables work when tabs change
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    if ($.fn.dataTable) {
+        $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    }
+});
+</script>
+<script>
     $(document).ready(function() {
         // Initialize accordion for warning types
         $(".accordion-header").on("click", function() {
@@ -623,51 +646,81 @@
         });
         
         // Apply filter
-        $('#applyFilter').on('click', function() {
-            let selectedEmployees = $('#employee_filter').val();
-            alert(selectedEmployees);
-            let activeTab = $('.tab-pane.active').attr('id');
-            let tableToFilter;
-            
-            // Determine which table to filter based on active tab
-            if (activeTab === 'all') {
-                tableToFilter = allWarningsTable;
-            } else if (activeTab === 'teamwarning') {
-                tableToFilter = teamWarningsTable;
+       // Apply filter
+$('#applyFilter').on('click', function() {
+    let selectedEmployees = $('#employee_filter').val();
+    
+    // Find which table is currently visible
+    let tableId = "";
+    
+    if ($('#all').hasClass('active') || $('.tab-pane.active').attr('id') === 'all') {
+        tableId = "allWarningsTable";
+    } else if ($('#teamwarning').hasClass('active') || $('.tab-pane.active').attr('id') === 'teamwarning') {
+        tableId = "teamWarningsTable";
+    }
+    
+    if (!tableId) {
+        // If no table is identified, ask the user
+        swal({
+            title: "Which table?",
+            text: "Please select which warnings to filter",
+            icon: "info",
+            buttons: {
+                cancel: "Cancel",
+                all: {
+                    text: "All Warnings",
+                    value: "all",
+                },
+                team: {
+                    text: "Team Warnings",
+                    value: "team",
+                },
+            },
+        })
+        .then((value) => {
+            if (value === "all") {
+                applyFilterToTable("allWarningsTable", selectedEmployees);
+            } else if (value === "team") {
+                applyFilterToTable("teamWarningsTable", selectedEmployees);
             }
-            
-            if (!tableToFilter) {
-                swal("Select Table First", "Please select a warnings tab to filter", "info");
-                return;
-            }
-            
-            // If "All Employees" is selected or nothing is selected, show all
-            if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
-                tableToFilter.search('').columns().search('').draw();
-                updateDashboardCounts('all');
-                swal("Filter Cleared", "Showing all warnings", "success");
-            } else {
-                // Get the selected employee names for filtering
-                let employeeNames = [];
-                selectedEmployees.forEach(function(id) {
-                    let name = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0].trim();
-                    employeeNames.push(name);
-                });
-                
-                // Create a regex pattern for exact matches with word boundaries
-                let regexPattern = employeeNames.map(function(name) {
-                    return '\\b' + name + '\\b';
-                }).join('|');
-                
-                // Apply the filter to the "Warning Given To" column (index 1)
-                tableToFilter.column(1).search(regexPattern, true, false).draw();
-                updateDashboardCounts(selectedEmployees);
-                
-                swal("Filter Applied", "Showing warnings for selected employees", "success");
-            }
-            
-            $('#filterWarningModal').modal('hide');
         });
+        
+        return;
+    }
+    
+    // Apply the filter
+    applyFilterToTable(tableId, selectedEmployees);
+});
+
+// Add this helper function right after the above code
+function applyFilterToTable(tableId, selectedEmployees) {
+    var table = $('#' + tableId).DataTable();
+    
+    // If "All Employees" is selected or nothing is selected, show all
+    if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
+        table.search('').draw();
+        updateDashboardCounts('all');
+        swal("Filter Cleared", "Showing all warnings", "success");
+    } else {
+        // Get the selected employee names for filtering
+        let employeeNames = [];
+        selectedEmployees.forEach(function(id) {
+            let name = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0].trim();
+            employeeNames.push(name);
+        });
+        
+        // Create a simple search string
+        let searchString = employeeNames.join('|');
+        
+        // Apply the filter using the native search functionality
+        table.search(searchString).draw();
+        updateDashboardCounts(selectedEmployees);
+        
+        swal("Filter Applied", "Showing warnings for selected employees: " + employeeNames.join(", "), "success");
+    }
+    
+    $('#filterWarningModal').modal('hide');
+}
         
         // Clear filter
         $('#clearFilter').on('click', function() {
