@@ -5313,76 +5313,57 @@ class AdminController extends Controller
 
 
     public function warning()
-{
-    $adminSession = session()->get('admin_login'); // Get logged-in admin session
-    $admin_id     = $adminSession->id ?? null;
-    $admin_role   = strtolower($adminSession->role ?? '');
-
-    // Initialize array for IDs under the logged-in admin
-    $under_admin_ids = [$admin_id]; // Default: Logged-in admin ki ID add karni hai
-
-    // Check hierarchy
-    if (!empty($admin_id)) {
-        if ($admin_role === 'manager') {
-            // Get TLs under this Manager
-            $tl_ids = DB::table('admin')
-                ->where('manager', $admin_id)
-                ->where('role', 'TL')
+    {
+        $adminSession = session()->get('admin_login'); // Get logged-in admin session
+        $admin_id     = $adminSession->id ?? null;
+        $admin_role   = strtolower($adminSession->role ?? '');
+        $team_name    = $adminSession->team ?? null; // Team name fetch karein
+    
+        // Initialize array for team members
+        $team_member_ids = [$admin_id]; // Apni warning bhi dikhani hai
+    
+        if (!empty($team_name)) {
+            // Get all team members under the same team
+            $team_member_ids = DB::table('admin')
+                ->where('team', $team_name)
                 ->pluck('id')
                 ->toArray();
-
-            $under_admin_ids = array_merge($under_admin_ids, $tl_ids);
-
-            // Get Agents under these TLs
-            $agent_ids = DB::table('admin')
-                ->whereIn('team_leader', $tl_ids)
-                ->where('role', 'Agent')
-                ->pluck('id')
-                ->toArray();
-
-            $under_admin_ids = array_merge($under_admin_ids, $agent_ids);
-        } elseif ($admin_role === 'tl') {
-            // Get Agents under this Team Leader
-            $agent_ids = DB::table('admin')
-                ->where('team_leader', $admin_id)
-                ->where('role', 'Agent')
-                ->pluck('id')
-                ->toArray();
-
-            $under_admin_ids = array_merge($under_admin_ids, $agent_ids);
-        } elseif ($admin_role === 'agent') {
-            // Agent ke case me sirf apni warnings dikhni chahiye
-            $under_admin_ids = [$admin_id];
         }
-    }
-
-    // Fetch warnings for logged-in admin and those under them
-    $warnings = DB::table('tbl_warning')
-        ->leftJoin('admin', 'admin.id', '=', 'tbl_warning.admin_id')
-        ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
-        ->select('tbl_warning.*', 'admin.name as createdby', 'tbl_warning_type.warning_name')
-        ->whereIn('tbl_warning.admin_id', $under_admin_ids) // Fetch warnings for logged-in admin & under him
-        ->orderBy('tbl_warning.id', 'desc')
-        ->get();
-
-    // Assigning names to assigned admins
-    foreach ($warnings as $warning) {
-        if (!empty($warning->assign)) {
-            $adminNames = DB::table('admin')
-                ->whereIn('id', explode(',', $warning->assign))
-                ->pluck('name')
-                ->toArray();
-            $warning->assigned_names = implode(', ', $adminNames);
-        } else {
-            $warning->assigned_names = '';
+    
+        // Fetch warnings for the team
+        $warnings = DB::table('tbl_warning')
+            ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id') // Kisne warning di
+            ->leftJoin('admin as warned_user', 'warned_user.id', '=', 'tbl_warning.assign') // Jisko di gayi
+            ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
+            ->select(
+                'tbl_warning.*', 
+                'created_by.name as createdby', // Kisne warning di
+                'warned_user.name as warned_to', // Jisko warning di
+                'tbl_warning_type.warning_name'
+            )
+            ->whereIn('tbl_warning.admin_id', $team_member_ids) // Team members ki warnings filter karein
+            ->orderBy('tbl_warning.id', 'desc')
+            ->get();
+    
+        // Assign names to assigned admins
+        foreach ($warnings as $warning) {
+            if (!empty($warning->assign)) {
+                $adminNames = DB::table('admin')
+                    ->whereIn('id', explode(',', $warning->assign))
+                    ->pluck('name')
+                    ->toArray();
+                $warning->assigned_names = implode(', ', $adminNames);
+            } else {
+                $warning->assigned_names = '';
+            }
         }
+    
+        return view('Admin.pages.warning', [
+            'warnings' => $warnings,
+            'team_members' => $team_member_ids // Debugging ke liye
+        ]);
     }
-
-    return view('Admin.pages.warning', [
-        'warnings' => $warnings,
-        'under_admins' => $under_admin_ids // Debugging ke liye
-    ]);
-}
+    
 
 
 
