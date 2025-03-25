@@ -296,11 +296,11 @@ Route::post('/add_warning_comment', [AdminController::class, 'addWarningComment'
 Route::post('/update_warning', [AdminController::class, 'updateWarning']);             // updateWarning
 Route::post('/update-warning-status', [AdminController::class, 'updateWarningStatus']);  // updateWarningStatus
 Route::post('/delete_warning', [AdminController::class, 'deleteWarning']);  // updateWarningStatus
-
-
 // issuedtotalwaning 
 Route::post('/issuedtotalwaning', [AdminController::class, 'issuedTotalWarning']);
 
+
+Route::get('/getwarning',[AdminController::class, 'getwarning']);
 
 
 // Add Comment 

@@ -5307,6 +5307,33 @@ class AdminController extends Controller
 
 
 
+
+    public function getwarning()
+    {
+        $warnings = DB::table('tbl_warning')
+            ->leftJoin('admin', 'admin.id', '=', 'tbl_warning.admin_id')
+            ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
+            ->select('tbl_warning.*', 'admin.name as createdby', 'tbl_warning_type.warning_name')
+            ->orderBy('tbl_warning.id', 'desc')
+            ->get();
+        foreach ($warnings as $warning) {
+            if (!empty($warning->assign)) {
+                $adminNames = DB::table('admin')
+                    ->whereIn('id', explode(',', $warning->assign))
+                    ->pluck('name')
+                    ->toArray();
+                $warning->assigned_names = implode(', ', $adminNames);
+            } else {
+                $warning->assigned_names = '';
+            }
+        }
+        return view('Admin.pages.getwarning', [
+            'warnings' => $warnings,
+        ]);
+    }
+
+
+
     public function warning()
     {
        
