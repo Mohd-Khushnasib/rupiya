@@ -5309,77 +5309,108 @@ class AdminController extends Controller
 
     public function warning()
     {
-        $adminSession = collect(session()->get('admin_login'))->first(); // Get first record safely
-        $admin_id     = $adminSession->id ?? null;
-        $admin_role   = strtolower($adminSession->role ?? '');
-    
-        // **Admin & HR ko sab kuch dikhna chahiye**
+       
+        $adminSession = collect(session()->get('admin_login'))->first();
+        
+        if (!$adminSession) {
+            return redirect('/login');
+        }
+        
+        $admin_id = $adminSession->id;
+        $admin_role = strtolower($adminSession->role);
+        
+        // Get My Warnings (for all roles)
+        $myWarnings = DB::table('tbl_warning')
+            ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+            ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id')
+            ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
+            ->select(
+                'tbl_warning.*', 
+                'tbl_warning_type.warning_name', 
+                'admin.name as assign_name', 
+                'issued_admin.name as issued_by_name'
+            )
+            ->where('tbl_warning.assign', $admin_id)
+            ->get();
+            
+        // Get warnings by type for the user
+        $myWarningsByType = $myWarnings->groupBy('warningtype_id');
+        
+        // Initialize empty data for different tabs
+        $all_warnings = collect();
+        $team_warnings = collect();
+        $team_members = [];
+        $warning_types = DB::table('tbl_warning_type')->get();
+        
+        // Admin & HR get access to all warnings
         if ($admin_role === 'admin' || $admin_role === 'hr') {
             $all_warnings = DB::table('tbl_warning')
-                ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id')
-                ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
+                ->join('admin as warned_admin', 'tbl_warning.assign', '=', 'warned_admin.id')
+                ->join('admin as created_by', 'tbl_warning.admin_id', '=', 'created_by.id')
+                ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
                 ->select(
                     'tbl_warning.*',
                     'created_by.name as createdby',
+                    'warned_admin.name as warned_to',
                     'tbl_warning_type.warning_name'
                 )
                 ->orderBy('tbl_warning.id', 'desc')
                 ->get();
-    
-            return view('Admin.pages.warning', [
-                'all_warnings' => $all_warnings, // Admin & HR ke liye sab warnings
-                'admin_role' => $admin_role, // Admin & HR ke liye sab warnings
-                'team_warnings' => [], // Team ke warnings empty
-                'team_members' => [] // Team members empty
-            ]);
+                
+            // Get warning counts by type for dashboard
+            $warningCounts = DB::table('tbl_warning')
+                ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                ->select('tbl_warning_type.warning_name', DB::raw('count(*) as total'))
+                ->groupBy('tbl_warning_type.warning_name')
+                ->orderBy('total', 'desc')
+                ->limit(5)
+                ->get();
+                
+        } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
+            // Get team members
+            if ($admin_role === 'manager') {
+                $team_members_query = DB::table('admin')
+                    ->where('manager', $admin_id)
+                    ->pluck('name', 'id');
+            } else { // TL
+                $team_members_query = DB::table('admin')
+                    ->where('team_leader', $admin_id)
+                    ->pluck('name', 'id');
+            }
+            
+            $team_members = $team_members_query->toArray();
+            $team_member_ids = array_keys($team_members);
+            
+            // Get warnings for team members
+            if (!empty($team_member_ids)) {
+                $team_warnings = DB::table('tbl_warning')
+                    ->join('admin as warned_admin', 'tbl_warning.assign', '=', 'warned_admin.id')
+                    ->join('admin as created_by', 'tbl_warning.admin_id', '=', 'created_by.id')
+                    ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+                    ->select(
+                        'tbl_warning.*',
+                        'created_by.name as createdby',
+                        'warned_admin.name as warned_to',
+                        'tbl_warning_type.warning_name'
+                    )
+                    ->whereIn('tbl_warning.assign', $team_member_ids)
+                    ->orderBy('tbl_warning.id', 'desc')
+                    ->get();
+            }
         }
-    
-        // **Manager & TL ke Under Employees Fetch Karna**
-        $under_employee_ids = [$admin_id];
-        $under_employee_names = [];
-    
-        if ($admin_role === 'manager') {
-            $under_employee_ids = DB::table('admin')
-                ->where('manager', $admin_id)
-                ->pluck('id')
-                ->toArray();
-    
-            $under_employee_names = DB::table('admin')
-                ->where('manager', $admin_id)
-                ->pluck('name')
-                ->toArray();
-        } elseif ($admin_role === 'tl') {
-            $under_employee_ids = DB::table('admin')
-                ->where('team_leader', $admin_id)
-                ->pluck('id')
-                ->toArray();
-    
-            $under_employee_names = DB::table('admin')
-                ->where('team_leader', $admin_id)
-                ->pluck('name')
-                ->toArray();
-        }
-    
-        // **Manager / TL ko sirf apni team ki warnings dikhni chahiye**
-        $team_warnings = DB::table('tbl_warning')
-            ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id')
-            ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
-            ->select(
-                'tbl_warning.*',
-                'created_by.name as createdby',
-                'tbl_warning_type.warning_name'
-            )
-            ->whereIn('tbl_warning.admin_id', $under_employee_ids)
-            ->orderBy('tbl_warning.id', 'desc')
-            ->get();
-    
+        
+        // Format the data to be returned to the view
         return view('Admin.pages.warning', [
-            'all_warnings' => [], // Manager & TL ke liye all warnings empty
-            'team_warnings' => $team_warnings, // Manager & TL ke liye team warnings
-            'admin_role' => $admin_role, // Manager & TL ke liye team warnings
-            'team_members' => $under_employee_names // Manager & TL ke under members
+            'admin_login' => $adminSession,
+            'all_warnings' => $all_warnings,
+            'team_warnings' => $team_warnings,
+            'team_members' => $team_members,
+            'myWarnings' => $myWarningsByType,
+            'warning_types' => $warning_types,
+            'warningCounts' => $warningCounts ?? collect(), // For admin dashboard
         ]);
     }
+    
     
 
     
