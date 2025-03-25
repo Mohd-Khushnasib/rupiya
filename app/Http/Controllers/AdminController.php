@@ -5312,39 +5312,61 @@ class AdminController extends Controller
         $adminSession = collect(session()->get('admin_login'))->first(); // Get first record safely
         $admin_id     = $adminSession->id ?? null;
         $admin_role   = strtolower($adminSession->role ?? '');
-        $team_name    = $adminSession->team ?? null; // Team name fetch karein
 
-        // Initialize array for team members
-        $team_member_ids = [$admin_id]; // Apni warning bhi dikhani hai 
-    
-        if (!empty($team_name)) {
-            // Get all team members under the same team
-            $team_member_ids = DB::table('admin')
-                ->where('team', $team_name)
+        // **Employees under Manager or TL**
+        $under_employee_ids = [$admin_id];
+
+        if ($admin_role === 'manager') {
+            // **Find Employees under this Manager**
+            $under_employee_ids = DB::table('admin')
+                ->where('manager', $admin_id) // Manager wale employees
+                ->pluck('id')
+                ->toArray();
+        } 
+        elseif ($admin_role === 'tl') {
+            // **Find Employees under this TL**
+            $under_employee_ids = DB::table('admin')
+                ->where('team_leader', $admin_id) // TL ke under agents
                 ->pluck('id')
                 ->toArray();
         }
-    
-        // Fetch warnings for the team
+
+        // **Fetch Warnings where admin_id is logged-in user & assign column contains under employees**
         $warnings = DB::table('tbl_warning')
             ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id') // Kisne warning di
-            ->leftJoin('admin as warned_user', 'warned_user.id', '=', 'tbl_warning.assign') // Jisko di gayi
             ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
             ->select(
-                'tbl_warning.*', 
+                'tbl_warning.*',
                 'created_by.name as createdby', // Kisne warning di
-                'warned_user.name as warned_to', // Jisko warning di
                 'tbl_warning_type.warning_name'
             )
-            ->whereIn('tbl_warning.admin_id', $team_member_ids) // Team members ki warnings filter karein
+            ->where('tbl_warning.admin_id', $admin_id) // Warning logged-in admin ne di ho
+            ->where(function ($query) use ($under_employee_ids) {
+                foreach ($under_employee_ids as $emp_id) {
+                    $query->orWhereRaw("FIND_IN_SET(?, tbl_warning.assign)", [$emp_id]);
+                }
+            })
             ->orderBy('tbl_warning.id', 'desc')
             ->get();
 
+        // **Convert Assigned Employee IDs to Names for "Warning Given To"**
+        foreach ($warnings as $warning) {
+            if (!empty($warning->assign)) {
+                $warnedNames = DB::table('admin')
+                    ->whereIn('id', explode(',', $warning->assign))
+                    ->pluck('name')
+                    ->toArray();
+                $warning->warned_to = implode(', ', $warnedNames);
+            } else {
+                $warning->warned_to = 'N/A';
+            }
+        }
+
         return view('Admin.pages.warning', [
-            'warnings' => $warnings,
-            'team_members' => $team_member_ids // Debugging ke liye
+            'warnings' => $warnings
         ]);
     }
+
     
 
 

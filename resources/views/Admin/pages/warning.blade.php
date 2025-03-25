@@ -335,55 +335,52 @@
                                         <div class="row">
                                             <div class="col-md-12" style="margin-top: 20px;">
                                                 <div class="table-responsive" style="border:0">
-                                                    <table class="table table-advance" id="table1">
-                                                        <thead>
+                                                <table class="table table-advance" id="table1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Created By</th> <!-- Kisne warning di -->
+                                                            <th>Warning Given To</th> <!-- Jisko di gayi -->
+                                                            <th>Ticket Status</th>
+                                                            <th>Warning Type</th>
+                                                            <th>Message</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if($warnings->isEmpty())
                                                             <tr>
-                                                                <th>Created By</th> <!-- Kisne warning di -->
-                                                                <th>Warning Given To</th> <!-- Jisko di gayi -->
-                                                                <th>Ticket Status</th>
-                                                                <th>Warning Type</th>
-                                                                <th>Message</th>
-                                                                <th>Assign</th>
+                                                                <td colspan="5" class="text-center">No Team Warnings Found</td>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if($warnings->isEmpty())
-                                                                <tr>
-                                                                    <td colspan="6" class="text-center">No Team Warnings Found</td>
+                                                        @else
+                                                            @foreach($warnings as $item)
+                                                                <tr class="table-flag-blue">
+                                                                    <td>{{ $item->createdby ?? 'N/A' }}</td> <!-- Kisne warning di -->
+                                                                    <td>{{ $item->warned_to ?? 'N/A' }}</td> <!-- Jisko warning di -->
+                                                                    <td>{{ $item->task_status ?? 'Pending' }}</td>
+                                                                    <td>
+                                                                        <a href="javascript:void(0);" class="edit"
+                                                                            data-warningtype_id="{{ $item->warningtype_id }}"
+                                                                            data-message="{{ $item->message }}"
+                                                                            data-assign="{{ json_encode($item->assign) }}"
+                                                                            data-id="{{ $item->id }}">
+                                                                            {{ $item->warning_name ?? 'No Type' }}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="#" class="view-full-message" data-message="{{ $item->message }}">
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </a>
+                                                                    </td>
                                                                 </tr>
-                                                            @else
-                                                                @foreach($warnings as $item)
-                                                                    <tr class="table-flag-blue">
-                                                                        <td>{{ $item->createdby ?? 'N/A' }}</td> <!-- Kisne warning di -->
-                                                                        <td>{{ $item->warned_to ?? 'N/A' }}</td> <!-- Jisko warning di -->
-                                                                        <td>{{ $item->task_status ?? 'Pending' }}</td>
-                                                                        <td>
-                                                                            <a href="javascript:void(0);" class="edit"
-                                                                                data-warningtype_id="{{ $item->warningtype_id }}"
-                                                                                data-message="{{ $item->message }}"
-                                                                                data-assign="{{ json_encode($item->assign) }}"
-                                                                                data-id="{{ $item->id }}">
-                                                                                {{ $item->warning_name ?? 'No Type' }}
-                                                                            </a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="#" class="view-full-message" data-message="{{ $item->message }}">
-                                                                                <i class="fas fa-eye"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                        <td>{{ $item->assigned_names ?? 'Not Assigned' }}</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
+                                                            @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Team Warning End Here -->
-
                                 </div>
                             </div>
                         </div>
