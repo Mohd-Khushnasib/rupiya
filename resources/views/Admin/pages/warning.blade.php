@@ -11,7 +11,7 @@
         background-color:rgb(12, 11, 11);
     }
     .accordion-header {
-        background: #333;
+        background: rgb(12, 11, 11);;
         color: #fff;
         font-weight: bold;
         cursor: pointer;
@@ -22,13 +22,13 @@
     .accordion-body {
         display: none;
         padding: 10px;
-        background: #222;
+        background: rgb(12, 11, 11);;
         border-radius: 5px;
     }
     .inner-table {
         width: 100%;
         border-collapse: collapse;
-        background: #1a1a1a;
+        background: rgb(12, 11, 11);;
         color: #fff;
     }
     .inner-table th,
@@ -38,14 +38,14 @@
         text-align: left;
     }
     .inner-table th {
-        background: #333;
+        background: rgb(12, 11, 11);
     }
     .warning-card {
         width: 100%;
         max-width: 300px;
         padding: 20px;
         text-align: center;
-        background: linear-gradient(to bottom, #ffecb3, #ff9800);
+        background: rgb(12, 11, 11);
         color: #7b3f00;
         font-family: Arial, sans-serif;
         font-weight: bold;
