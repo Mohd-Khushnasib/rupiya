@@ -45,7 +45,7 @@
 
                     .calculator {
                         background: var(--card-dark);
-                        /* padding: 40px; */
+                        padding: 40px;
                         border-radius: 14px;
                         box-shadow: var(--shadow);
                         border: 1px solid rgba(0, 255, 127, 0.1);
@@ -649,7 +649,7 @@
             </head>
 
             <body>
-                <div class="main-content">
+                <div id="main-content">
                     <div class="row" style="display: flex; justify-content: center; background-color: #000000 !important">
                         <div class="col-sm-8">
                             <div class="calculator">
