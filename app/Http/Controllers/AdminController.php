@@ -6360,44 +6360,53 @@ class AdminController extends Controller
 
     // Show All Active Inactive Employee 
     public function fetchLeave(Request $request)
-    {
-        $search = $request->search; // Search keyword
-        
-        // Query Leave Data without status and role filters
-        $query = DB::table('tbl_leave');
-        
-        // Apply search filter if search keyword exists
-        if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('status', 'like', '%' . $search . '%')
-                ->orWhere('leave_type', 'like', '%' . $search . '%')
-                ->orWhere('from_date', 'like', '%' . $search . '%')
-                ->orWhere('to_date', 'like', '%' . $search . '%')
-                ->orWhere('note', 'like', '%' . $search . '%');
-            });
-        }
-        
-        // Get counts for stats (if you still need them)
-        $all_leave = DB::table('tbl_leave')->count();
-        $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
-        $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
-        $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
-        // Pagination
-        $leaves = $query->orderBy('id', 'desc')->paginate(2);
-        
-        return response()->json([
-            'data'          => $leaves->items(),
-            'current_page'  => $leaves->currentPage(),
-            'last_page'     => $leaves->lastPage(),
-            'per_page'      => $leaves->perPage(),
-            'total'         => $leaves->total(),
-            'total_pending'  => $total_pending,
-            'total_approved'  => $total_approved,
-            'total_rejected'  => $total_rejected,
-            'all_leave'=> $all_leave,
-            'success'       => 'success',
-        ]);
+{
+    $search = $request->search; // Search keyword
+    $status = $request->status; // Get status from request
+    
+    // Query Leave Data
+    $query = DB::table('tbl_leave');
+    
+    // Apply status filter if provided
+    if ($status && $status !== 'all') {
+        $query->where('status', $status);
     }
+    
+    // Apply search filter if search keyword exists
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('status', 'like', '%' . $search . '%')
+              ->orWhere('leave_type', 'like', '%' . $search . '%')
+              ->orWhere('from_date', 'like', '%' . $search . '%')
+              ->orWhere('to_date', 'like', '%' . $search . '%')
+              ->orWhere('note', 'like', '%' . $search . '%');
+        });
+    }
+    
+    // Get counts for stats
+    $all_leave = DB::table('tbl_leave')->count();
+    $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
+    $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
+    $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
+    
+    // Pagination
+    $leaves = $query->orderBy('id', 'desc')->paginate(10);
+    
+    return response()->json([
+        'data'           => $leaves->items(),
+        'current_page'   => $leaves->currentPage(),
+        'last_page'      => $leaves->lastPage(),
+        'per_page'       => $leaves->perPage(),
+        'total'          => $leaves->total(),
+        'counts'         => [
+            'pending'    => $total_pending,
+            'approved'   => $total_approved,
+            'rejected'   => $total_rejected,
+            'all'        => $all_leave
+        ],
+        'success'        => 'success',
+    ]);
+}
 
 
 
