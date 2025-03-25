@@ -149,9 +149,12 @@
                     <div style="display: flex; justify-content: space-between;">
                         <h3 class="theam_color_text"><i class="fa fa-list"></i> Employees</h3>
                         <div class="zxyzz">
-                            <a href="{{url('/add-employee')}}" type="button" class="btn btn-info">
+                            <!-- <a href="{{url('/add-employee')}}" type="button" class="btn btn-info">
                                 Add Employee
-                            </a>
+                            </a> -->
+                            <button type="button" class="btn btn-info" id="openModalBtn">
+                                Add Leave
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -244,6 +247,84 @@
             <!-- END Content -->
         </div>
 <!-- Main Content End Here  -->
+
+
+<!--
+-----------------------------------------------------------------------------------------------------------
+Add Leave Modal
+-----------------------------------------------------------------------------------------------------------
+-->
+<!-- modal  -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Add Leave</h4>
+            </div>
+            <div>
+                <div class="col-md-12">
+                    <form class="mail-compose form-horizontal" action="#">
+                        <div class="col-sm-12">
+                            <label class="control-label">Id</label>
+                            <input type="text" placeholder="Name" class="form-control" value="Emp01" readonly>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Name</label>
+                            <input type="text" placeholder="Name" class="form-control" value="Abhishek Kumar" readonly>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Leave Type</label>
+                            <div class="controls">
+                                <select class="form-control" data-placeholder="Choose a Leave Type" tabindex="1">
+                                    <option value="">Leave Type</option>
+                                    <option value="leave_type_1">type 1</option>
+                                    <option value="leave_type_2">type 2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label">From Date</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">To Date</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Leave Duration</label>
+                            <input type="number" placeholder="Enter Leave Duration ( in days )" class="form-control" >
+                        </div>
+
+                        <div class="col-sm-12" style="margin-top: 10px;">
+                            <textarea class="form-control wysihtml5" rows="6"><b>Write reason here ...</b></textarea>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-top: 10px;">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-rocket"></i>
+                                Add</button>
+                            <a type="button" class="btn">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 <!-- JS Links Start Here -->
 <script src="{{asset('Admin/assets/ajax/libs/jquery/2.1.1/jquery.min.js')}}"></script>
@@ -471,6 +552,33 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 }
 </script>
 
+
+<script>
+        $(document).ready(function () {
+            $('#openModalBtn').on('click', function () {
+                $('#myModal').modal('show');
+            });
+
+            $('.open-modal-btn-approve').on('click', function () {
+                $('#myModal1').modal('show');
+            });
+
+            $('.open-modal-btn-reject').on('click', function () {
+                $('#myModal2').modal('show');
+            });
+
+            $('#saveChangesBtn').on('click', function () {
+                alert('Your changes have been saved!');
+                $('#myModal').modal('hide');
+            });
+
+            $('#myModal').on('shown.bs.modal', function () {
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+            });
+        });
+    </script>
 @endsection
 @endforeach
 @else
