@@ -29,7 +29,7 @@ div.dataTables_info {
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
-                <select id="leadStatusFilter" class="form-control" tabindex="1">
+                <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Login Status --</option>
                     <option value="NEW FILE">NEW FILE</option>
                     <option value="SENT TO BANK">SENT TO BANK</option>
