@@ -100,6 +100,9 @@
         color: #fff;
         background-color: #007bff;
     }
+    .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #2d2929;
+}
 </style>
 
 <div class="container" id="main-container">
