@@ -204,7 +204,7 @@
                                             <div class="row">
                                                 <div class="col-md-12" style="margin-top: 20px;">
                                                     <div class="table-responsive" style="border:0">
-                                                        @if ($adminRole === 'Admin' || $adminRole === 'HR')
+                                                        @if ($admin_role === 'admin' || $admin_role === 'hr')
     <h3>All Warnings</h3>
     <table class="table table-advance" id="allWarningsTable">
         <thead>
