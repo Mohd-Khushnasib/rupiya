@@ -589,29 +589,6 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 
 <script>
-    // Initialize DataTables with saving state
-var allWarningsTable = $('#allWarningsTable').DataTable({
-    "order": [[5, "desc"]], // Sort by date column
-    "pageLength": 10,
-    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    "stateSave": true
-});
-
-var teamWarningsTable = $('#teamWarningsTable').DataTable({
-    "order": [[5, "desc"]], // Sort by date column
-    "pageLength": 10,
-    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    "stateSave": true
-});
-
-// Add this to ensure tables work when tabs change
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    if ($.fn.dataTable) {
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-    }
-});
-</script>
-<script>
     $(document).ready(function() {
         // Initialize accordion for warning types
         $(".accordion-header").on("click", function() {
@@ -626,121 +603,129 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         });
         
         // Initialize DataTables with saving state
-        let allWarningsTable = $('#allWarningsTable').DataTable({
-            "order": [[5, "desc"]], // Sort by date column
-            "pageLength": 10,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "stateSave": true
-        });
+        var allWarningsTable, teamWarningsTable;
         
-        let teamWarningsTable = $('#teamWarningsTable').DataTable({
-            "order": [[5, "desc"]], // Sort by date column
-            "pageLength": 10,
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "stateSave": true
-        });
+        if ($('#allWarningsTable').length) {
+            allWarningsTable = $('#allWarningsTable').DataTable({
+                "order": [[5, "desc"]], // Sort by date column
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "stateSave": true
+            });
+        }
+        
+        if ($('#teamWarningsTable').length) {
+            teamWarningsTable = $('#teamWarningsTable').DataTable({
+                "order": [[5, "desc"]], // Sort by date column
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "stateSave": true
+            });
+        }
         
         // Trigger filter modal
         $('#filterBtn, .filter-trigger').on('click', function() {
             $('#filterWarningModal').modal('show');
         });
         
-        // Apply filter
-       // Apply filter
-$('#applyFilter').on('click', function() {
-    let selectedEmployees = $('#employee_filter').val();
-    
-    // Find which table is currently visible
-    let tableId = "";
-    
-    if ($('#all').hasClass('active') || $('.tab-pane.active').attr('id') === 'all') {
-        tableId = "allWarningsTable";
-    } else if ($('#teamwarning').hasClass('active') || $('.tab-pane.active').attr('id') === 'teamwarning') {
-        tableId = "teamWarningsTable";
-    }
-    
-    if (!tableId) {
-        // If no table is identified, ask the user
-        swal({
-            title: "Which table?",
-            text: "Please select which warnings to filter",
-            icon: "info",
-            buttons: {
-                cancel: "Cancel",
-                all: {
-                    text: "All Warnings",
-                    value: "all",
-                },
-                team: {
-                    text: "Team Warnings",
-                    value: "team",
-                },
-            },
-        })
-        .then((value) => {
-            if (value === "all") {
-                applyFilterToTable("allWarningsTable", selectedEmployees);
-            } else if (value === "team") {
-                applyFilterToTable("teamWarningsTable", selectedEmployees);
+        // Apply filter with manual jQuery filtering (no DataTables API)
+        $('#applyFilter').on('click', function() {
+            let selectedEmployees = $('#employee_filter').val();
+            
+            // Determine which table to filter based on active tab
+            let activeTab = $('.tab-pane.active').attr('id');
+            let tableSelector = "";
+            
+            if (activeTab === 'all') {
+                tableSelector = "#allWarningsTable";
+            } else if (activeTab === 'teamwarning') {
+                tableSelector = "#teamWarningsTable";
+            } else {
+                // Show dialog to select a table
+                swal({
+                    title: "Which table?",
+                    text: "Please select which warnings to filter",
+                    icon: "info",
+                    buttons: {
+                        cancel: "Cancel",
+                        all: {
+                            text: "All Warnings",
+                            value: "all",
+                        },
+                        team: {
+                            text: "Team Warnings",
+                            value: "team",
+                        },
+                    },
+                })
+                .then((value) => {
+                    if (value === "all") {
+                        filterTable("#allWarningsTable", selectedEmployees);
+                    } else if (value === "team") {
+                        filterTable("#teamWarningsTable", selectedEmployees);
+                    }
+                });
+                return;
             }
+            
+            filterTable(tableSelector, selectedEmployees);
         });
         
-        return;
-    }
-    
-    // Apply the filter
-    applyFilterToTable(tableId, selectedEmployees);
-});
-
-// Add this helper function right after the above code
-function applyFilterToTable(tableId, selectedEmployees) {
-    var table = $('#' + tableId).DataTable();
-    
-    // If "All Employees" is selected or nothing is selected, show all
-    if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
-        table.search('').draw();
-        updateDashboardCounts('all');
-        swal("Filter Cleared", "Showing all warnings", "success");
-    } else {
-        // Get the selected employee names for filtering
-        let employeeNames = [];
-        selectedEmployees.forEach(function(id) {
-            let name = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0].trim();
-            employeeNames.push(name);
-        });
-        
-        // Create a simple search string
-        let searchString = employeeNames.join('|');
-        
-        // Apply the filter using the native search functionality
-        table.search(searchString).draw();
-        updateDashboardCounts(selectedEmployees);
-        
-        swal("Filter Applied", "Showing warnings for selected employees: " + employeeNames.join(", "), "success");
-    }
-    
-    $('#filterWarningModal').modal('hide');
-}
+        // Function to filter table using jQuery (no DataTables API)
+        function filterTable(tableSelector, selectedEmployees) {
+            // If All Employees selected or nothing selected, show all rows
+            if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
+                $(tableSelector + ' tbody tr').show();
+                updateDashboardCounts('all');
+                swal("Filter Cleared", "Showing all warnings", "success");
+            } else {
+                // Get employee names for filtering
+                let employeeNames = [];
+                selectedEmployees.forEach(function(id) {
+                    let name = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0].trim();
+                    employeeNames.push(name);
+                });
+                
+                // Hide all rows first
+                $(tableSelector + ' tbody tr').hide();
+                
+                // Show matching rows based on employee names
+                $(tableSelector + ' tbody tr').each(function() {
+                    let row = $(this);
+                    let warnedTo = row.find('td:eq(1)').text().trim(); // Warning Given To (second column)
+                    
+                    for (let i = 0; i < employeeNames.length; i++) {
+                        if (warnedTo.includes(employeeNames[i])) {
+                            row.show();
+                            break;
+                        }
+                    }
+                });
+                
+                updateDashboardCounts(selectedEmployees);
+                swal("Filter Applied", "Showing warnings for: " + employeeNames.join(", "), "success");
+            }
+            
+            $('#filterWarningModal').modal('hide');
+        }
         
         // Clear filter
         $('#clearFilter').on('click', function() {
             $('#employee_filter').val('').trigger('chosen:updated');
             
-            let activeTab = $('.tab-pane.active').attr('id');
-            let tableToFilter;
+            // Show all rows in all tables
+            $('#allWarningsTable tbody tr, #teamWarningsTable tbody tr').show();
             
-            if (activeTab === 'all') {
-                tableToFilter = allWarningsTable;
-            } else if (activeTab === 'teamwarning') {
-                tableToFilter = teamWarningsTable;
-            }
+            // Reload the page to reset all counts
+            swal({
+                title: "Filter Cleared",
+                text: "Showing all warnings",
+                icon: "success",
+                timer: 1500
+            }).then(function() {
+                window.location.reload();
+            });
             
-            if (tableToFilter) {
-                tableToFilter.search('').columns().search('').draw();
-            }
-            
-            updateDashboardCounts('all');
-            swal("Filter Cleared", "Showing all warnings", "success");
             $('#filterWarningModal').modal('hide');
         });
         
@@ -765,7 +750,43 @@ function applyFilterToTable(tableId, selectedEmployees) {
                 },
                 error: function(xhr, status, error) {
                     console.error("Filter error:", error);
-                    swal("Error", "Failed to update dashboard counts: " + error, "error");
+                    // If AJAX fails, update counts based on visible rows
+                    updateCountsFromVisibleRows();
+                }
+            });
+        }
+        
+        // Fallback function to count visible rows if AJAX fails
+        function updateCountsFromVisibleRows() {
+            let activeTab = $('.tab-pane.active').attr('id');
+            let tableSelector = "";
+            
+            if (activeTab === 'all') {
+                tableSelector = "#allWarningsTable";
+            } else if (activeTab === 'teamwarning') {
+                tableSelector = "#teamWarningsTable";
+            } else {
+                return; // No table to count from
+            }
+            
+            // Count visible rows
+            let visibleCount = $(tableSelector + ' tbody tr:visible').length;
+            $('.total-warnings-count').text(visibleCount);
+            
+            // Count by warning type
+            let typeCounts = {};
+            $(tableSelector + ' tbody tr:visible').each(function() {
+                let type = $(this).find('td:eq(2)').text().trim(); // Warning Type (third column)
+                typeCounts[type] = (typeCounts[type] || 0) + 1;
+            });
+            
+            // Update type counts
+            $('.warrinig_card_new_design').each(function() {
+                let typeName = $(this).find('h4').text().trim();
+                if (typeCounts[typeName]) {
+                    $(this).find('h2').text(typeCounts[typeName]);
+                } else if (typeName !== "Total Warnings" && typeName !== "Team Warnings" && typeName !== "My Warnings") {
+                    $(this).find('h2').text('0');
                 }
             });
         }
@@ -807,7 +828,7 @@ function applyFilterToTable(tableId, selectedEmployees) {
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX Error:", error);
-                    swal("Server Error", "Something went wrong. Please try again: " + error, "error");
+                    swal("Server Error", "Something went wrong. Please try again.", "error");
                 }
             });
         });
@@ -832,7 +853,7 @@ function applyFilterToTable(tableId, selectedEmployees) {
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX Error:", error);
-                    swal("Error", "Failed to load warning details: " + error, "error");
+                    swal("Error", "Failed to load warning details", "error");
                 }
             });
         });
@@ -862,7 +883,7 @@ function applyFilterToTable(tableId, selectedEmployees) {
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX Error:", error);
-                    swal("Server Error", "Something went wrong. Please try again: " + error, "error");
+                    swal("Server Error", "Something went wrong. Please try again.", "error");
                 }
             });
         });
@@ -898,7 +919,7 @@ function applyFilterToTable(tableId, selectedEmployees) {
                         },
                         error: function(xhr, status, error) {
                             console.error("AJAX Error:", error);
-                            swal("Server Error", "Something went wrong. Please try again: " + error, "error");
+                            swal("Server Error", "Something went wrong. Please try again.", "error");
                         }
                     });
                 }
@@ -908,16 +929,10 @@ function applyFilterToTable(tableId, selectedEmployees) {
         // Handle tab change to reset filters when changing tabs
         $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
             let targetTab = $(e.target).attr('href');
-            let tableToReset;
             
-            if (targetTab === '#all') {
-                tableToReset = allWarningsTable;
-            } else if (targetTab === '#teamwarning') {
-                tableToReset = teamWarningsTable;
-            }
-            
-            if (tableToReset) {
-                tableToReset.search('').columns().search('').draw();
+            // Adjust DataTables when tab changes
+            if ($.fn.dataTable) {
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
             }
         });
     });
