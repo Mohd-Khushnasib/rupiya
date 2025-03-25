@@ -32,16 +32,16 @@
                     }
 
                     /* body {
-                                                                                                                                                                        font-family: 'Poppins', sans-serif;
-                                                                                                                                                                        background-color: var(--bg-dark);
-                                                                                                                                                                        color: var(--text-light);
-                                                                                                                                                                        font-size: 20px;
-                                                                                                                                                                        line-height: 1.6;
-                                                                                                                                                                        padding: 20px;
-                                                                                                                                                                        max-width: 900px;
-                                                                                                                                                                        margin: 0 auto;
-                                                                                                                                                                        overflow-x: hidden;
-                                                                                                                                                                    } */
+                                                                                                                                                                                                            font-family: 'Poppins', sans-serif;
+                                                                                                                                                                                                            background-color: var(--bg-dark);
+                                                                                                                                                                                                            color: var(--text-light);
+                                                                                                                                                                                                            font-size: 20px;
+                                                                                                                                                                                                            line-height: 1.6;
+                                                                                                                                                                                                            padding: 20px;
+                                                                                                                                                                                                            max-width: 900px;
+                                                                                                                                                                                                            margin: 0 auto;
+                                                                                                                                                                                                            overflow-x: hidden;
+                                                                                                                                                                                                        } */
 
                     .calculator {
                         background: var(--card-dark);
@@ -685,22 +685,25 @@
                                                 <input type="text" id="interestRate" placeholder="Enter rate">
                                             </div>
                                         </div>
-                                       
+
                                     </div>
-                                    <div class="row" style="display: flex; justify-content: center;">
-                                        <div class="col-sm-8">
-                                        <div class="part-payments">
-                                                <div id="partPaymentEntries"></div>
-                                                <div style="display: grid;">
-                                                    <button onclick="addPartPaymentField()">Add Part Payment</button>
-                                                </div>
+                                    <div class="part-payments">
+                                        <div id="partPaymentEntries"></div>
+                                        <div class="row" style="display: flex; justify-content: center;">
+                                            <div class="col-sm-8">
+                                                <button onclick="addPartPaymentField()">Add Part Payment</button>
                                             </div>
                                         </div>
+
+
+
                                     </div>
-                                  
-                                        <div class="col-sm-6">
-                                            <button style="margin-top: 20px;" onclick="validateAndCalculateEMI()">Calculate EMI</button>
-                                        </div>
+
+                                 <div class="row" style="display: flex; justify-content: center">
+                                 <div class="col-sm-6">
+                                        <button style="margin-top: 20px;" onclick="validateAndCalculateEMI()">Calculate EMI</button>
+                                    </div>
+                                 </div>
 
 
 
@@ -1180,10 +1183,10 @@
                         const div = document.createElement('div');
                         div.className = 'part-payment';
                         div.innerHTML = `
-                                                                                                                                                                            <input type="text" placeholder="Month" class="partPaymentMonth">
-                                                                                                                                                                            <input type="text" placeholder="Amount" class="partPaymentAmount">
-                                                                                                                                                                            <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
-                                                                                                                                                                        `;
+                                                                                                                                                                                                                <input type="text" placeholder="Month" class="partPaymentMonth">
+                                                                                                                                                                                                                <input type="text" placeholder="Amount" class="partPaymentAmount">
+                                                                                                                                                                                                                <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+                                                                                                                                                                                                            `;
                         container.appendChild(div);
 
                         div.querySelector('.partPaymentMonth').addEventListener('input', function (e) {
@@ -1278,13 +1281,13 @@
                                 const row = document.createElement('tr');
                                 if (entry.partPayment > 0) row.classList.add('highlight-green');
                                 row.innerHTML = `
-                                                                                                                                                                                    <td>${entry.month}</td>
-                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.emi)}</td>
-                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.principal)}</td>
-                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.interest)}</td>
-                                                                                                                                                                                    <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
-                                                                                                                                                                                    <td>${formatCurrencyWithCommas(entry.balance)}</td>
-                                                                                                                                                                                `;
+                                                                                                                                                                                                                        <td>${entry.month}</td>
+                                                                                                                                                                                                                        <td>${formatCurrencyWithCommas(entry.emi)}</td>
+                                                                                                                                                                                                                        <td>${formatCurrencyWithCommas(entry.principal)}</td>
+                                                                                                                                                                                                                        <td>${formatCurrencyWithCommas(entry.interest)}</td>
+                                                                                                                                                                                                                        <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
+                                                                                                                                                                                                                        <td>${formatCurrencyWithCommas(entry.balance)}</td>
+                                                                                                                                                                                                                    `;
                                 scheduleBody.appendChild(row);
                             });
 
