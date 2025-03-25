@@ -5459,7 +5459,8 @@ class AdminController extends Controller
             'warningtype_id' => $request->warningtype_id,
             'penalty' => $request->penalty,
             'message' => $request->message,
-            'assign' => $request->assign
+            'assign' => $request->assign,
+            'date'       => $this->date
         ];
 
         if (! empty($data)) {
