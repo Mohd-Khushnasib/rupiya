@@ -138,7 +138,7 @@
                                 ->get()
                                 ->groupBy('warningtype_id');
 
-                            // Total warnings count nikalne ke liye 
+                            // Total warnings count nikalne ke liye
                             $totalWarnings = $groupedWarnings->sum(fn($warnings) => $warnings->count());
                         @endphp
                         <!-- Total Warnings Card -->
@@ -857,7 +857,7 @@
 
                                 // Chosen select ko disable karna
                                 $(".chosen").prop("disabled", true).trigger("chosen:updated");
-                                // $(".AddChosen").prop("disabled", true).trigger("chosen:updated"); 
+                                // $(".AddChosen").prop("disabled", true).trigger("chosen:updated");
 
                                 editButton.addEventListener("click", function () {
                                     fieldsToDisable.forEach(selector => {
@@ -870,7 +870,7 @@
 
                                     // Chosen selects ko enable karke refresh karna
                                     $(".chosen").prop("disabled", false).trigger("chosen:updated");
-                                    // $(".AddChosen").prop("disabled", false).trigger("chosen:updated"); 
+                                    // $(".AddChosen").prop("disabled", false).trigger("chosen:updated");
 
                                     editButton.style.display = "none";
                                     updateButton.style.display = "inline-block";
