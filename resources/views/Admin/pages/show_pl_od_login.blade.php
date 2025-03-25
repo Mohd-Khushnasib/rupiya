@@ -32,13 +32,10 @@ div.dataTables_info {
                 <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Login Status --</option>
                     <option class="newfile" value="NEW FILE">NEW FILE</option>
-                    <option  class="newfile" value="SENT TO BANK">SENT TO BANK</option>
-                    <option class=".leads_system_bg .newfile{
-    background-color: #00b1ef;
-    color: #000;
-}" value="UNDERWRITING">UNDERWRITING</option>
+                    <option class="newfile" value="SENT TO BANK">SENT TO BANK</option>
+                    <option class="under_written" value="UNDERWRITING">UNDERWRITING</option>
                     <option class="reelok" value="REELOK">REELOK</option>
-                    <option  class="reelok" value="REELOK-HIGH PRIORITY">REELOK-HIGH PRIORITY</option>
+                    <option class="reelok" value="REELOK-HIGH PRIORITY">REELOK-HIGH PRIORITY</option>
                     <option class="approved" value="APPROVED">APPROVED</option>
                     <option class="disbursed" value="DISBURSED">DISBURSED</option>
                     <option class="lost" value="DEAL LOST">DEAL LOST</option>
