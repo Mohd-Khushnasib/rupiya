@@ -241,6 +241,7 @@ function loadLeaves(status, page, search = '') {
             search: search // Search parameter send karna
         },
         success: function(data) {
+            console.log(data);
             let tbody = $("#leaveTable tbody");
             let pagination = $("#pagination");
             tbody.empty();
