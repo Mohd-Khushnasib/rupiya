@@ -347,9 +347,17 @@ function formatDate(dateString) {
     if (!dateString) return '-';
     let date = new Date(dateString);
     let day = date.getDate().toString().padStart(2, '0');
-    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    
+    // Array of month names
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    
+    let month = monthNames[date.getMonth()];
     let year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    
+    return `${day} ${month} ${year}`;
 }
 
 // Generate pagination links function
