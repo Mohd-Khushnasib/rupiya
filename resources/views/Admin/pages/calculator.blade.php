@@ -700,8 +700,8 @@
                                     </div>
 
                                     <div class="row" style="display: flex; justify-content: center">
-                                        <div class="col-sm-6">
-                                            <button style="margin-top: 20px;" onclick="validateAndCalculateEMI()">Calculate
+                                        <div class="col-sm-8" style="display: grid;">
+                                            <button style="margin-top: 10px;" onclick="validateAndCalculateEMI()">Calculate
                                                 EMI</button>
                                         </div>
                                     </div>
