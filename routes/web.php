@@ -384,5 +384,7 @@ Route::post('/employee_delete_attachment_single_file', [AdminController::class, 
 Route::get('/employee_download_zip/{id?}', [AdminController::class, 'EmployeeDownloadZip'])->name('EmployeeDownload.zip');
 
 
-
-
+################## Employee Leave Start Here ############################
+### show_leave ###
+Route::get('/show_leave', [AdminController::class, 'showLeave']);
+Route::post('/fetch_leave', [AdminController::class, 'fetchLeave']);

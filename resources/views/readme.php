@@ -549,7 +549,7 @@ Client Secret :- 5Ammm4USKIkbbiAVeGP8Ilx6A3dNBrPU
 
 
 ========================= Warning Panel Chanel Changes ===========================
-1=> filter me access ( jo jiske andar hai utne hi employee ka access mile)
+1=> filter me access (jo jiske andar hai utne hi employee ka access mile)
 ex:- tl ke under 2 agent ho to wahi dikhega 
 manager ke andar => tl and agent ka dikhe 
 total admin ko dikhna hai 
@@ -560,3 +560,11 @@ My Warnings me team1 ko filter kiya tb only total warning show ho rhi baki nhi h
 5=> edit krne ka 
 6=> ui warning me sahi krke dena hai 
 7=> warning category ka bhi filter rhega
+8=> punchin and punchout me full 
+9=> leaves add  / show 
+10=> attendance 
+11=> all ui 
+12=> all employee me status with modal 
+13=> Tickets me    Lead / Login me Customer Name  
+14=> name-designation and profile photo 
+15=> 

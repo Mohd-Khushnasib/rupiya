@@ -6354,6 +6354,55 @@ class AdminController extends Controller
 
 
 
+    ########### Leave Start Here ###########
+    ### showLeave ###
+    public function showLeave(Request $request)
+    {
+        return view('Admin.pages.show_leave');
+    }
+
+    // Show All Active Inactive Employee 
+    public function fetchLeave(Request $request)
+    {
+        $search = $request->search; // Search keyword
+        
+        // Query Leave Data without status and role filters
+        $query = DB::table('tbl_leave');
+        
+        // Apply search filter if search keyword exists
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('status', 'like', '%' . $search . '%')
+                ->orWhere('type', 'like', '%' . $search . '%')
+                ->orWhere('from_date', 'like', '%' . $search . '%')
+                ->orWhere('to_date', 'like', '%' . $search . '%')
+                ->orWhere('note', 'like', '%' . $search . '%');
+            });
+        }
+        
+        // Get counts for stats (if you still need them)
+        $all_leave = DB::table('tbl_leave')->count();
+        $total_pending = DB::table('tbl_leave')->where('status', 'Pending')->count();
+        $total_approved = DB::table('tbl_leave')->where('status', 'Approved')->count();
+        $total_rejected = DB::table('tbl_leave')->where('status', 'Rejectd')->count();
+        // Pagination
+        $leaves = $query->orderBy('id', 'desc')->paginate(2);
+        
+        return response()->json([
+            'data'          => $leaves->items(),
+            'current_page'  => $leaves->currentPage(),
+            'last_page'     => $leaves->lastPage(),
+            'per_page'      => $leaves->perPage(),
+            'total'         => $leaves->total(),
+            'total_pending'  => $total_pending,
+            'total_approved'  => $total_approved,
+            'total_rejected'  => $total_rejected,
+            'all_leave'=> $all_leave,
+            'success'       => 'success',
+        ]);
+    }
+
+
 
 
 
