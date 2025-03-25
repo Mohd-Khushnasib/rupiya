@@ -625,6 +625,7 @@
         // Apply filter
         $('#applyFilter').on('click', function() {
             let selectedEmployees = $('#employee_filter').val();
+            alert(selectedEmployees);
             let activeTab = $('.tab-pane.active').attr('id');
             let tableToFilter;
             
