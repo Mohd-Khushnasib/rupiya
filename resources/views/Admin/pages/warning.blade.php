@@ -264,7 +264,7 @@
                                                         <tr>
                                                             <th>Created By</th>
                                                             <th>Warning Given To</th>
-                                                            <th>Ticket Status</th>
+                                                            <!-- <th>Ticket Status</th> -->
                                                             <th>Warning Type</th>
                                                             <th>Penalty</th>
                                                             <th>Message</th>
@@ -282,11 +282,11 @@
                                                                 <tr>
                                                                     <td>{{ $item->createdby ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warned_to ?? 'N/A' }}</td>
-                                                                    <td>
+                                                                    <!-- <td>
                                                                         <span class="badge {{ $item->task_status == 'Pending' ? 'badge-warning' : 'badge-success' }}">
                                                                             {{ $item->task_status ?? 'Pending' }}
                                                                         </span>
-                                                                    </td>
+                                                                    </td> -->
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
                                                                     <td>₹{{ $item->penalty ?? '0' }}</td>
                                                                     <td>{{ $item->message }}</td>
