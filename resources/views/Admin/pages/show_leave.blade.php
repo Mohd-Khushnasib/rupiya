@@ -142,7 +142,6 @@
 
 <!-- Main Content Start Here  -->
 <div class="container" id="main-container">
-    <input type="text" id="admin_id" value="{{$adminlogin->id}}">
             <!-- BEGIN Content -->
             <div id="main-content">
                 <!-- BEGIN Page Title -->
