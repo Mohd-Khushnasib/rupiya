@@ -209,7 +209,6 @@ Route::get('/show_home_loan_login', [AdminController::class, 'show_Home_Loan_Log
 Route::post('/show_Home_Loan_loginapi', [AdminController::class, 'show_Home_Loan_LoginAPI']);
 
 
-
 Route::post('/update-obligation', [AdminController::class, 'updateobligation']);  // obligation 
 
 ### User Profile ### 

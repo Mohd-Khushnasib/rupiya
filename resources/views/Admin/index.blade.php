@@ -30,6 +30,10 @@ $total_user = DB::table('users')->count();
         </div>
         <!-- BEGIN Main Content -->
         <div class="row">
+            @if($adminlogin->role === "Admin")
+                <th style="width:18px"><input type="checkbox"></th>
+                <th>Action</th>
+            @endif
             <div class="col-md-12">
                 <!-- <form id="postForm"> -->
                 <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
@@ -53,94 +57,14 @@ $total_user = DB::table('users')->count();
                     </div>
                 </form>
             </div>
+
             <div class="col-md-12" style="margin-top: 15px;">
                 <h2 class="theam_color">Feeds</h2>
-                
-                <!-- Section Start Here -->
-                <!-- <div class="feed_card_section">
-                    <div class="row">
-                        <div class="col-md-12" style="display: flex; justify-content: space-between !important; ">
-                            <div class="profile_section_post">
-                                <div class="profile_post">
-                                    <img src="https://avatars.mds.yandex.net/i?id=0776231b03a42500ffe93a58496a86ddb08ab983-5252031-images-thumbs&n=13"
-                                        alt="">
-                                </div>
-                                <div class="all_text_withnaem">
-                                    <a href="#">Saurabh Singh</a>
-                                    <p>Dec 13 12:14 Pm</p>
-                                </div>
-                            </div>
-                            <div class="pin_feed_section">
-                                <i class="fa fa-thumb-tack"></i>
-                                <i class="fa fa-eye">10</i>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10">
-                            <img src="https://pravo-ros.ru/assets/img/bg/home02_i2.jpg" class="feed_post_img" alt="">
-                        </div>
-                        <div class="col-sm-1"></div>
-                    </div>
-                    <hr>
-                    <div class="tabbable">
-                        <ul id="myTab1" class="nav nav-tabs">
-                            <li class="active"><a href="#history" data-toggle="tab"><i class="fa fa-heart"></i>
-                                    Like</a></li>
-                            <li><a href="#comment" data-toggle="tab"><i class="fa fa-comment"></i>
-                                    Comments</a></li>
-                        </ul>
-                        <div id="myTabContent1" class="tab-content">
-                            <div class="tab-pane fade in active all_tabs_bg" id="history">
-                            </div>
-                            <div class="tab-pane fade  all_tabs_bg" id="comment">
-                                <div class="boligation_tabls">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <ul class="messages messages-stripped">
-                                                <li>
-                                                    <img src="img/demo/avatar/avatar2.jpg" alt="">
-                                                    <div>
-                                                        <div>
-                                                            <h5 class="theam_color">Saurabh</h5>
-                                                            <span class="time"><i class="fa fa-clock-o"></i> 26
-                                                                sec
-                                                                ago</span>
-                                                        </div>
-                                                        <p>Saurabh Make Same Changes</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="messages-input-form">
-                                                <form method="POST" action="#">
-                                                    <div class="input">
-                                                        <input type="text" name="text" placeholder="Write here..."
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="buttons">
-                                                        <button type="submit" class="btn btn-primary"><i
-                                                                class="fa fa-share"></i></button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- Section End Here -->
 
                 <!-- Feed Container -->
                 <div id="feedContainer"></div> 
                 <!-- Feed Container -->
-                 
-
             </div>
-
         </div>
         <!-- END Main Content -->
     </div>
