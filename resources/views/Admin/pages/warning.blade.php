@@ -219,7 +219,7 @@
                                                                     <th>Ticket Status</th>
                                                                     <th>Warning Type</th>
                                                                     <th>Message</th>
-                                                                    <th>Assign</th>
+                                                                    <th>Assign To</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -257,7 +257,7 @@
                                                                                                                                                                                                                         <i class="fas fa-eye"></i>
                                                                                                                                                                                                                     </a>
                                                                                                                                                                                                                 </td>
-                                                                                                                                                                                                                <td>{{$item->assigned_names ?? '' }}</td>
+                                                                                                                                                                                                                <td>{{$item->assigned_names ?? 'nothing' }}</td>
                                                                                                                                                                                                             </tr>
                                                                                                                                                                                                             @php
                                                                                                                                                                                                                 $sr++;
