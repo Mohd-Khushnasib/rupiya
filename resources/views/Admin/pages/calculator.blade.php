@@ -650,7 +650,7 @@
 
             <body>
                 <div class="main-content">
-                    <div class="row">
+                    <div class="row" style="display: flex; justify-content: center; background-color: #000000 !important">
                         <div class="col-sm-8">
                             <div class="calculator">
                                 <div class="tabs">
