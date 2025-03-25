@@ -161,18 +161,12 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Emp Id</th>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Number</th>
-                                            <th>Email</th>
-                                            <th>Gender</th>
+                                            <th>Leave Type</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Leave Duration</th>
+                                            <th>Approved By</th>
                                             <th>Status</th>
-                                            <th>Department</th>
-                                            <th>Designation</th>
-                                            <th>Date of Joining</th>
-                                            <th>CRM Access</th>
-                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
