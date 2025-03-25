@@ -157,7 +157,7 @@
                         <!-- Search End Here -->
                             
                             <div class="table-responsive">
-                                <table class="table table-advance" id="adminTable">
+                                <table class="table table-advance" id="leaveTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
