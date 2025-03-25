@@ -29,24 +29,27 @@ div.dataTables_info {
             </div>
             <!-- Lead Status Wise Filter Start Here  -->
             <div>
-                <select id="leadStatusFilter" class="form-control" tabindex="1">
+                <select id="leadStatusFilter" class="form-control leads_system_bg" tabindex="1">
                     <option value="" selected>-- Select Login Status --</option>
-                    <option value="NEW FILE">NEW FILE</option>
-                    <option value="SENT TO BANK">SENT TO BANK</option>
-                    <option value="UNDERWRITING">UNDERWRITING</option>
-                    <option value="REELOK">REELOK</option>
-                    <option value="REELOK-HIGH PRIORITY">REELOK-HIGH PRIORITY</option>
-                    <option value="APPROVED">APPROVED</option>
-                    <option value="DISBURSED">DISBURSED</option>
-                    <option value="DEAL LOST">DEAL LOST</option>
-                    <option value="DEAL LOST-CUSTOMER NI">DEAL LOST-CUSTOMER NI</option>
-                    <option value="DEAL LOST-ABND">DEAL LOST-ABND</option>
-                    <option value="DEAL LOST-OVERLEVRAGED">DEAL LOST-OVERLEVRAGED</option>
-                    <option value="DEAL LOST-CIBIL LOW">DEAL LOST-CIBIL LOW</option>
-                    <option value="DEAL LOST-BOUNCING">DEAL LOST-BOUNCING</option>
-                    <option value="DEAL LOST-LOCATION NOT MAPPED">DEAL LOST-LOCATION NOT MAPPED</option>
-                    <option value="DEAL LOST-DISBURSED BY OTHER">DEAL LOST-DISBURSED BY OTHER</option>
-                    <option value="DEAL LOST-MULTI LOGIN DISBURSED BY US">DEAL LOST-MULTI LOGIN DISBURSED BY US</option>
+                    <option class="newfile" value="NEW FILE">NEW FILE</option>
+                    <option  class="newfile" value="SENT TO BANK">SENT TO BANK</option>
+                    <option class=".leads_system_bg .newfile{
+    background-color: #00b1ef;
+    color: #000;
+}" value="UNDERWRITING">UNDERWRITING</option>
+                    <option class="reelok" value="REELOK">REELOK</option>
+                    <option  class="reelok" value="REELOK-HIGH PRIORITY">REELOK-HIGH PRIORITY</option>
+                    <option class="approved" value="APPROVED">APPROVED</option>
+                    <option class="disbursed" value="DISBURSED">DISBURSED</option>
+                    <option class="lost" value="DEAL LOST">DEAL LOST</option>
+                    <option class="lost" value="DEAL LOST-CUSTOMER NI">DEAL LOST-CUSTOMER NI</option>
+                    <option class="lost" value="DEAL LOST-ABND">DEAL LOST-ABND</option>
+                    <option class="lost" value="DEAL LOST-OVERLEVRAGED">DEAL LOST-OVERLEVRAGED</option>
+                    <option class="lost" value="DEAL LOST-CIBIL LOW">DEAL LOST-CIBIL LOW</option>
+                    <option class="lost" value="DEAL LOST-BOUNCING">DEAL LOST-BOUNCING</option>
+                    <option class="lost" value="DEAL LOST-LOCATION NOT MAPPED">DEAL LOST-LOCATION NOT MAPPED</option>
+                    <option class="lost" value="DEAL LOST-DISBURSED BY OTHER">DEAL LOST-DISBURSED BY OTHER</option>
+                    <option class="lost" value="DEAL LOST-MULTI LOGIN DISBURSED BY US">DEAL LOST-MULTI LOGIN DISBURSED BY US</option>
                 </select>
             </div>
             <!-- Lead Status Wise Filter End Here  -->
