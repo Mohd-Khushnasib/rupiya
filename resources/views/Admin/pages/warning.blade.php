@@ -329,8 +329,7 @@
                                     </div>
                                     <!-- My Warning End Here -->
 
-                                    <!-- Team Warning Start Here -->
-                                    <!-- Team Warning Start Here -->
+<!-- Team Warning Start Here -->
 <div class="tab-pane fade in all_tabs_bg" id="teamwarning">
     <div class="boligation_tabls">
         <div class="row">
@@ -339,8 +338,8 @@
                     <table class="table table-advance" id="table1">
                         <thead>
                             <tr>
-                                <th>Created By</th>
-                                <th>Warning Given To</th> <!-- New Column -->
+                                <th>Created By</th> <!-- Kisne warning di -->
+                                <th>Warning Given To</th> <!-- Jisko di gayi -->
                                 <th>Ticket Status</th>
                                 <th>Warning Type</th>
                                 <th>Message</th>
@@ -385,7 +384,6 @@
 </div>
 <!-- Team Warning End Here -->
 
-                                    <!-- Team Warning End Here -->
                                 </div>
                             </div>
                         </div>
