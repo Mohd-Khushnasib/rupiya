@@ -32,16 +32,16 @@
                     }
 
                     /* body {
-                                                                                                                        font-family: 'Poppins', sans-serif;
-                                                                                                                        background-color: var(--bg-dark);
-                                                                                                                        color: var(--text-light);
-                                                                                                                        font-size: 20px;
-                                                                                                                        line-height: 1.6;
-                                                                                                                        padding: 20px;
-                                                                                                                        max-width: 900px;
-                                                                                                                        margin: 0 auto;
-                                                                                                                        overflow-x: hidden;
-                                                                                                                    } */
+                                                                                                                                    font-family: 'Poppins', sans-serif;
+                                                                                                                                    background-color: var(--bg-dark);
+                                                                                                                                    color: var(--text-light);
+                                                                                                                                    font-size: 20px;
+                                                                                                                                    line-height: 1.6;
+                                                                                                                                    padding: 20px;
+                                                                                                                                    max-width: 900px;
+                                                                                                                                    margin: 0 auto;
+                                                                                                                                    overflow-x: hidden;
+                                                                                                                                } */
 
                     .calculator {
                         background: var(--card-dark);
@@ -664,21 +664,15 @@
                                         <label>Loan Amount</label>
                                         <input type="text" id="loanAmount" placeholder="₹">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="input-group">
-                                                <label>Tenure (Months)</label>
-                                                <input type="text" id="tenureMonths" placeholder="Enter months">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="input-group">
-                                                <label>Tenure (Years)</label>
-                                                <input type="text" id="tenureYears" placeholder="Years" readonly>
-                                            </div>
-                                        </div>
-
+                                    <div class="input-group">
+                                        <label>Tenure (Months)</label>
+                                        <input type="text" id="tenureMonths" placeholder="Enter months">
                                     </div>
+                                    <div class="input-group">
+                                        <label>Tenure (Years)</label>
+                                        <input type="text" id="tenureYears" placeholder="Years" readonly>
+                                    </div>
+
                                     <div class="input-group">
                                         <label>Annual Interest Rate</label>
                                         <input type="text" id="interestRate" placeholder="Enter rate">
@@ -1164,10 +1158,10 @@
                         const div = document.createElement('div');
                         div.className = 'part-payment';
                         div.innerHTML = `
-                                                                                                                            <input type="text" placeholder="Month" class="partPaymentMonth">
-                                                                                                                            <input type="text" placeholder="Amount" class="partPaymentAmount">
-                                                                                                                            <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
-                                                                                                                        `;
+                                                                                                                                        <input type="text" placeholder="Month" class="partPaymentMonth">
+                                                                                                                                        <input type="text" placeholder="Amount" class="partPaymentAmount">
+                                                                                                                                        <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+                                                                                                                                    `;
                         container.appendChild(div);
 
                         div.querySelector('.partPaymentMonth').addEventListener('input', function (e) {
@@ -1262,13 +1256,13 @@
                                 const row = document.createElement('tr');
                                 if (entry.partPayment > 0) row.classList.add('highlight-green');
                                 row.innerHTML = `
-                                                                                                                                    <td>${entry.month}</td>
-                                                                                                                                    <td>${formatCurrencyWithCommas(entry.emi)}</td>
-                                                                                                                                    <td>${formatCurrencyWithCommas(entry.principal)}</td>
-                                                                                                                                    <td>${formatCurrencyWithCommas(entry.interest)}</td>
-                                                                                                                                    <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
-                                                                                                                                    <td>${formatCurrencyWithCommas(entry.balance)}</td>
-                                                                                                                                `;
+                                                                                                                                                <td>${entry.month}</td>
+                                                                                                                                                <td>${formatCurrencyWithCommas(entry.emi)}</td>
+                                                                                                                                                <td>${formatCurrencyWithCommas(entry.principal)}</td>
+                                                                                                                                                <td>${formatCurrencyWithCommas(entry.interest)}</td>
+                                                                                                                                                <td>${entry.partPayment ? formatCurrencyWithCommas(entry.partPayment) : '-'}</td>
+                                                                                                                                                <td>${formatCurrencyWithCommas(entry.balance)}</td>
+                                                                                                                                            `;
                                 scheduleBody.appendChild(row);
                             });
 
