@@ -5328,6 +5328,7 @@ class AdminController extends Controller
     
             return view('Admin.pages.warning', [
                 'all_warnings' => $all_warnings, // Admin & HR ke liye sab warnings
+                'admin_role' => $admin_role, // Admin & HR ke liye sab warnings
                 'team_warnings' => [], // Team ke warnings empty
                 'team_members' => [] // Team members empty
             ]);
@@ -5375,6 +5376,7 @@ class AdminController extends Controller
         return view('Admin.pages.warning', [
             'all_warnings' => [], // Manager & TL ke liye all warnings empty
             'team_warnings' => $team_warnings, // Manager & TL ke liye team warnings
+            'admin_role' => $admin_role, // Manager & TL ke liye team warnings
             'team_members' => $under_employee_names // Manager & TL ke under members
         ]);
     }
