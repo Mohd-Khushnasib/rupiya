@@ -1,6 +1,6 @@
 @if(session()->get('admin_login'))
     @foreach(session()->get('admin_login') as $adminlogin)
-        @extends('Admin.layouts.master')
+        <!-- @extends('Admin.layouts.master') -->
         @section('main-content')
 
             <head>
@@ -9,6 +9,7 @@
                 <title>EMI and Loan Eligibility Calculator</title>
                 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
                 <style>
+
                     :root {
                         --bg-dark: #000000;
                         --card-dark: #0a0a0a;
