@@ -196,50 +196,45 @@ window.jQuery || document.write('<script src="assets/jquery/jquery-2.1.1.min.js"
 
 <script>
 $(document).ready(function() {
-    let currentStatus = 1; // Default: Active tab open
+    let currentStatus = 'pending'; // Default: Start with pending tab open
     let currentPage = 1;
-    let searchKeyword = ''; // Search filter ke liye variable
+    let searchKeyword = ''; // Search filter variable
 
-    // Changed loadAdmins to loadLeaves
+    // Initial load of leaves
     loadLeaves(currentStatus, currentPage, searchKeyword);
 
     // Handle tab click
-    $('.admin-tab').on('click', function() {
-        $('.admin-tab').parent().removeClass('active'); // Remove active class
+    $('.leave-tab').on('click', function() {
+        $('.leave-tab').parent().removeClass('active'); // Remove active class
         $(this).parent().addClass('active'); // Add active class
 
-        currentStatus = $(this).data('status'); // Get status (1 = Active, 0 = Inactive)
+        currentStatus = $(this).data('status'); // Get status (pending, approved, rejected, all)
         currentPage = 1; // Reset to first page
         searchKeyword = ''; // Tab change hone par search reset
-        $('.search_admin').val(''); // Input field clear karein
+        $('.search_leave').val(''); // Input field clear karein
         
-        // Changed loadAdmins to loadLeaves
         loadLeaves(currentStatus, currentPage, searchKeyword);
     });
 
     // Search functionality
-    $('.search_admin').keyup(function() {
+    $('.search_leave').keyup(function() {
         searchKeyword = $(this).val().trim();
         currentPage = 1; // Search hone par first page se start karein
-        
-        // Changed loadAdmins to loadLeaves
         loadLeaves(currentStatus, currentPage, searchKeyword);
     });
 });
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
-    // Changed .search_contact to .search_admin to match the above event handler
-    var search = search || $(".search_admin").val();
+    var search = search || $(".search_leave").val();
     
-    // Add debugging
     console.log('Loading leaves with status:', status, 'page:', page, 'search:', search);
     
     $.ajax({
         url: "{{ url('fetch_leave') }}",
         type: "POST",
         data: { 
-            status: status, 
+            status: status, // String status (pending, approved, rejected, all)
             page: page,
             search: search // Search parameter send karna
         },
@@ -251,24 +246,25 @@ function loadLeaves(status, page, search = '') {
 
             console.log('AJAX response:', data);
             
+            // Update leave counts in tabs regardless of data
+            if (data.counts) {
+                $("#pending_count").text(data.counts.pending || 0);
+                $("#approved_count").text(data.counts.approved || 0);
+                $("#rejected_count").text(data.counts.rejected || 0);
+                $("#all_count").text(data.counts.all || 0);
+            }
+            
             // Check if the table exists
             if($("#leaveTable").length === 0) {
                 console.error("Table with ID 'leaveTable' not found in the DOM");
             }
             
             if (data.data && data.data.length > 0) {
-                // Update leave counts in tabs
-                $("#all_leave").text(data.all_leave);
-                $("#pending_leave").text(data.pending_leave);
-                $("#approved_leave").text(data.approved_leave);
-                $("#rejected_leave").text(data.rejected_leave);
-
                 // Indexing 
-                var total_enquiries = data.total;
+                var total_leaves = data.total;
                 var per_page = data.per_page;
                 result = data.data;
                 
-                // Add debugging to see if data is coming through
                 console.log('Received data:', result);
                 
                 result.forEach((item, index) => {
@@ -288,9 +284,6 @@ function loadLeaves(status, page, search = '') {
                     const diffTime = Math.abs(toDate - fromDate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both days
                     
-                    // Debug individual item
-                    console.log('Processing item:', item);
-                    
                     // Create the row HTML first
                     const rowHtml = `
                         <tr>
@@ -304,23 +297,45 @@ function loadLeaves(status, page, search = '') {
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
                             <td>${diffDays} day${diffDays > 1 ? 's' : ''}</td>
+                            <td>${item.applied_by || ''}</td>
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${item.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${item.id}">
+                                        <a class="dropdown-item view-leave" href="javascript:void(0);" data-id="${item.id}">View</a>
+                                        ${item.status == 'pending' ? `
+                                        <a class="dropdown-item approve-leave" href="javascript:void(0);" data-id="${item.id}">Approve</a>
+                                        <a class="dropdown-item reject-leave" href="javascript:void(0);" data-id="${item.id}">Reject</a>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     `;
                     
                     // Append to tbody
                     tbody.append(rowHtml);
-                    
-                    // Check if row was added successfully
-                    console.log('Row added, current row count:', $('#leaveTable tbody tr').length);
                 });
 
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
             } else {
                 console.log('No data found or empty data array');
-                tbody.append(`<tr><td colspan="7" class="text-center">No Leave Data Found</td></tr>`);
+                tbody.append(`<tr><td colspan="9" class="text-center">No Leave Data Found</td></tr>`);
             }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", error);
+            console.log("Status:", status);
+            console.log("Response:", xhr.responseText);
+            
+            // Show error message to user
+            let tbody = $("#leaveTable tbody");
+            tbody.empty();
+            tbody.append(`<tr><td colspan="9" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
         }
     });
 }

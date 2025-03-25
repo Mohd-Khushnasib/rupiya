@@ -6288,9 +6288,6 @@ class AdminController extends Controller
         return response()->json(['success' => false, 'message' => 'Invalid request parameters.']);
     }
 
-
-
-
     // Employee Attachment image or pdf and all password folder ke andar file upload ho
     public function EmployeeDownloadZip($id)
     {
