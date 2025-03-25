@@ -1,7 +1,7 @@
-@if(session()->get('admin_login'))
+<!-- @if(session()->get('admin_login'))
     @foreach(session()->get('admin_login') as $adminlogin)
-        <!-- @extends('Admin.layouts.master') -->
-        @section('main-content')
+        @extends('Admin.layouts.master')
+        @section('main-content') -->
 
             <head>
                 <meta charset="UTF-8">
