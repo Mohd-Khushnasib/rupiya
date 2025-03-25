@@ -200,7 +200,8 @@ $(document).ready(function() {
     let currentPage = 1;
     let searchKeyword = ''; // Search filter ke liye variable
 
-    loadAdmins(currentStatus, currentPage, searchKeyword);
+    // Changed loadAdmins to loadLeaves
+    loadLeaves(currentStatus, currentPage, searchKeyword);
 
     // Handle tab click
     $('.admin-tab').on('click', function() {
@@ -211,20 +212,25 @@ $(document).ready(function() {
         currentPage = 1; // Reset to first page
         searchKeyword = ''; // Tab change hone par search reset
         $('.search_admin').val(''); // Input field clear karein
-        loadAdmins(currentStatus, currentPage, searchKeyword);
+        
+        // Changed loadAdmins to loadLeaves
+        loadLeaves(currentStatus, currentPage, searchKeyword);
     });
 
     // Search functionality
     $('.search_admin').keyup(function() {
         searchKeyword = $(this).val().trim();
         currentPage = 1; // Search hone par first page se start karein
-        loadAdmins(currentStatus, currentPage, searchKeyword);
+        
+        // Changed loadAdmins to loadLeaves
+        loadLeaves(currentStatus, currentPage, searchKeyword);
     });
 });
 
-// Function to Load Admin Data with Search Filter
+// Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
-    var search = search || $(".search_contact").val();
+    // Changed .search_contact to .search_admin to match the above event handler
+    var search = search || $(".search_admin").val();
     
     $.ajax({
         url: "{{ url('fetch_leave') }}",
