@@ -45,7 +45,7 @@
 
                     .calculator {
                         background: var(--card-dark);
-                        padding: 40px;
+                        /* padding: 40px; */
                         border-radius: 14px;
                         box-shadow: var(--shadow);
                         border: 1px solid rgba(0, 255, 127, 0.1);
