@@ -338,7 +338,6 @@
                                                         <table class="table table-advance" id="table1">
                                                             <thead>
                                                                 <tr>
-                                                                    <th style="width:18px"><input type="checkbox"></th>
                                                                     <th>Created By</th>
                                                                     <th>Ticket Status</th>
                                                                     <th>Warning Type</th>
@@ -354,7 +353,6 @@
                                                                 @endphp
                                                                 @foreach($warnings as $item)
                                                                                                                                                                                                             <tr class="table-flag-blue">
-                                                                                                                                                                                                                <td><input type="checkbox"></td>
                                                                                                                                                                                                                 <td>{{$item->createdby ?? ''}}</td>
                                                                                                                                                                                                                 <td>{{$item->task_status ?? ''}}</td>
                                                                                                                                                                                                                 <td>
