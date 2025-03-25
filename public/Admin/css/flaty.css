@@ -2086,7 +2086,7 @@ Bordered form layout
 
 
 /* Button ------------------------------------------ */
-.btn {
+/* .btn {
     background-image: none;
     filter: none;
     border: 0;
@@ -2094,7 +2094,18 @@ Bordered form layout
     -webkit-box-shadow: none;
     box-shadow: none;
     border-radius: 0 !important;
-}
+} */
+
+.btn {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;  
+  }
 
 .btn.active,
 .btn:active,
