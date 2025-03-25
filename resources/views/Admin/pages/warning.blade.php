@@ -111,6 +111,16 @@
         background-color: #2196F3;
         border: none;
     }
+    .section-title {
+        color: #03b0f5;
+        border-bottom: 1px solid #03b0f5;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    .section-container {
+        margin-bottom: 30px;
+    }
 </style>
 
 <div class="container" id="main-container">
@@ -129,9 +139,7 @@
                             <i class="fa fa-plus-circle"></i> Create Warning
                         </button>
                     @endif
-                    <button type="button" class="btn btn-primary" id="filterBtn">
-                        <i class="fa fa-filter"></i> Filter Warnings
-                    </button>
+                    <!-- Removed top filter button as per requirement -->
                 </div>
             </div>
         </div>
@@ -184,58 +192,135 @@
                         <!-- Dashboard Tab (Now for All Roles) -->
                         <div class="tab-pane fade in active all_tabs_bg" id="dashboard">
                             <div class="boligation_tabls">
-                                <div class="row">
-                                    @if($adminRole === 'admin')
+                                @if($adminRole === 'admin')
+                                    <!-- Admin Dashboard -->
+                                    <div class="row">
                                         <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
+                                            <div class="card warrinig_card_new_design" data-warning-type="total">
                                                 <h4>Total Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
                                             </div>
                                         </div>
-                                    @elseif($adminRole === 'hr')
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>Total Warnings</h4>
-                                                <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
+                                        
+                                        @foreach($warningCounts as $warningCount)
+                                            <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningCount->warning_name }}">
+                                                <div class="card warrinig_card_new_design">
+                                                    <h4>{{ $warningCount->warning_name }}</h4>
+                                                    <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>My Warnings</h4>
-                                                <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                        @endforeach
+                                    </div>
+                                @elseif($adminRole === 'hr')
+                                    <!-- HR Dashboard with clear sections -->
+                                    <div class="section-container">
+                                        <h3 class="section-title"><i class="fa fa-user"></i> My Warnings</h3>
+                                        <div class="row">
+                                            <div class="col-md-6" style="margin-top: 20px;">
+                                                <div class="card warrinig_card_new_design" data-warning-type="my-total">
+                                                    <h4>My Total Warnings</h4>
+                                                    <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                                </div>
                                             </div>
+                                            
+                                            @foreach($myWarnings as $warningTypeId => $warnings)
+                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
+                                                    <div class="card warrinig_card_new_design">
+                                                        <h4>{{ $warnings->first()->warning_name }}</h4>
+                                                        <h2>{{ $warnings->count() }}</h2>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @elseif($adminRole === 'manager' || $adminRole === 'tl')
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>Team Warnings</h4>
-                                                <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
+                                    </div>
+                                    
+                                    <div class="section-container">
+                                        <h3 class="section-title"><i class="fa fa-users"></i> All Warnings</h3>
+                                        <div class="row">
+                                            <div class="col-md-6" style="margin-top: 20px;">
+                                                <div class="card warrinig_card_new_design" data-warning-type="total">
+                                                    <h4>Total Warnings</h4>
+                                                    <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
+                                                </div>
                                             </div>
+                                            
+                                            @foreach($warningCounts as $warningCount)
+                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningCount->warning_name }}">
+                                                    <div class="card warrinig_card_new_design">
+                                                        <h4>{{ $warningCount->warning_name }}</h4>
+                                                        <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>My Warnings</h4>
-                                                <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                    </div>
+                                @elseif($adminRole === 'manager' || $adminRole === 'tl')
+                                    <!-- Manager/TL Dashboard with clear sections -->
+                                    <div class="section-container">
+                                        <h3 class="section-title"><i class="fa fa-user"></i> My Warnings</h3>
+                                        <div class="row">
+                                            <div class="col-md-6" style="margin-top: 20px;">
+                                                <div class="card warrinig_card_new_design" data-warning-type="my-total">
+                                                    <h4>My Total Warnings</h4>
+                                                    <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                                </div>
                                             </div>
+                                            
+                                            @foreach($myWarnings as $warningTypeId => $warnings)
+                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}" data-warning-section="my">
+                                                    <div class="card warrinig_card_new_design">
+                                                        <h4>{{ $warnings->first()->warning_name }}</h4>
+                                                        <h2>{{ $warnings->count() }}</h2>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @elseif($adminRole === 'agent')
+                                    </div>
+                                    
+                                    <div class="section-container">
+                                        <h3 class="section-title"><i class="fa fa-users"></i> Team Warnings</h3>
+                                        <div class="row">
+                                            <div class="col-md-6" style="margin-top: 20px;">
+                                                <div class="card warrinig_card_new_design" data-warning-type="team-total">
+                                                    <h4>Team Total Warnings</h4>
+                                                    <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
+                                                </div>
+                                            </div>
+                                            
+                                            @php
+                                                $teamWarningsByType = $team_warnings->groupBy('warning_name');
+                                            @endphp
+                                            
+                                            @foreach($teamWarningsByType as $warningName => $warnings)
+                                                <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warningName }}" data-warning-section="team">
+                                                    <div class="card warrinig_card_new_design">
+                                                        <h4>{{ $warningName }}</h4>
+                                                        <h2>{{ $warnings->count() }}</h2>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @elseif($adminRole === 'agent')
+                                    <!-- Agent Dashboard -->
+                                    <div class="row">
                                         <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>My Warnings</h4>
+                                            <div class="card warrinig_card_new_design" data-warning-type="my-total">
+                                                <h4>My Total Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
                                             </div>
                                         </div>
-                                    @endif
-                                    
-                                    @foreach($warningCounts as $warningCount)
-                                        <div class="col-md-6" style="margin-top: 20px;">
-                                            <div class="card warrinig_card_new_design">
-                                                <h4>{{ $warningCount->warning_name }}</h4>
-                                                <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
+                                        
+                                        @foreach($myWarnings as $warningTypeId => $warnings)
+                                            <div class="col-md-6 warning-type-card" style="margin-top: 20px;" data-warning-type="{{ $warnings->first()->warning_name }}">
+                                                <div class="card warrinig_card_new_design">
+                                                    <h4>{{ $warnings->first()->warning_name }}</h4>
+                                                    <h2>{{ $warnings->count() }}</h2>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -273,7 +358,7 @@
                                                             </tr>
                                                         @else
                                                             @foreach($all_warnings as $item)
-                                                                <tr>
+                                                                <tr data-warning-type="{{ $item->warning_name }}">
                                                                     <td>{{ $item->createdby ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warned_to ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
@@ -337,7 +422,7 @@
                                                             </tr>
                                                         @else
                                                             @foreach($team_warnings as $item)
-                                                                <tr>
+                                                                <tr data-warning-type="{{ $item->warning_name }}">
                                                                     <td>{{ $item->createdby ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warned_to ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
@@ -628,7 +713,7 @@
             $('#filterWarningModal').modal('show');
         });
         
-        // Apply filter with manual jQuery filtering (no DataTables API)
+        // Apply filter with improved dashboard updates
         $('#applyFilter').on('click', function() {
             let selectedEmployees = $('#employee_filter').val();
             
@@ -671,12 +756,15 @@
             filterTable(tableSelector, selectedEmployees);
         });
         
-        // Function to filter table using jQuery (no DataTables API)
+        // Function to filter table and update dashboard
         function filterTable(tableSelector, selectedEmployees) {
             // If All Employees selected or nothing selected, show all rows
             if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
                 $(tableSelector + ' tbody tr').show();
-                updateDashboardCounts('all');
+                
+                // Show all warning type cards in dashboard
+                $('.warning-type-card').show();
+                
                 swal("Filter Cleared", "Showing all warnings", "success");
             } else {
                 // Get employee names for filtering
@@ -689,20 +777,60 @@
                 // Hide all rows first
                 $(tableSelector + ' tbody tr').hide();
                 
+                // Collect warning types from matching rows
+                let filteredWarningTypes = [];
+                
                 // Show matching rows based on employee names
                 $(tableSelector + ' tbody tr').each(function() {
                     let row = $(this);
                     let warnedTo = row.find('td:eq(1)').text().trim(); // Warning Given To (second column)
+                    let warningType = row.find('td:eq(2)').text().trim(); // Warning Type (third column)
                     
                     for (let i = 0; i < employeeNames.length; i++) {
                         if (warnedTo.includes(employeeNames[i])) {
                             row.show();
+                            if (!filteredWarningTypes.includes(warningType)) {
+                                filteredWarningTypes.push(warningType);
+                            }
                             break;
                         }
                     }
                 });
                 
-                updateDashboardCounts(selectedEmployees);
+                // Update dashboard: hide warning type cards that don't match
+                $('.warning-type-card').each(function() {
+                    let card = $(this);
+                    let cardType = card.data('warning-type');
+                    if (filteredWarningTypes.includes(cardType)) {
+                        card.show();
+                    } else {
+                        card.hide();
+                    }
+                });
+                
+                // Count visible warnings
+                let visibleCount = $(tableSelector + ' tbody tr:visible').length;
+                $('.total-warnings-count').text(visibleCount);
+                
+                // Update filter counts for each visible warning type
+                let typeCounts = {};
+                $(tableSelector + ' tbody tr:visible').each(function() {
+                    let type = $(this).find('td:eq(2)').text().trim(); // Warning Type column
+                    typeCounts[type] = (typeCounts[type] || 0) + 1;
+                });
+                
+                // Update each warning type count in dashboard
+                $('.warning-type-card').each(function() {
+                    let card = $(this);
+                    let typeName = card.data('warning-type');
+                    
+                    if (typeCounts[typeName]) {
+                        card.find('h2').text(typeCounts[typeName]);
+                    } else if (typeName !== "total" && typeName !== "my-total" && typeName !== "team-total") {
+                        card.hide(); // Hide cards with 0 count
+                    }
+                });
+                
                 swal("Filter Applied", "Showing warnings for: " + employeeNames.join(", "), "success");
             }
             
@@ -716,6 +844,9 @@
             // Show all rows in all tables
             $('#allWarningsTable tbody tr, #teamWarningsTable tbody tr').show();
             
+            // Show all warning type cards
+            $('.warning-type-card').show();
+            
             // Reload the page to reset all counts
             swal({
                 title: "Filter Cleared",
@@ -728,68 +859,6 @@
             
             $('#filterWarningModal').modal('hide');
         });
-        
-        // Function to update dashboard counts based on filter
-        function updateDashboardCounts(filter) {
-            $.ajax({
-                type: "POST",
-                url: "{{url('/get-filtered-warning-counts')}}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "filter": filter
-                },
-                dataType: "json",
-                success: function(data) {
-                    // Update total warnings count
-                    $('.total-warnings-count').text(data.total);
-                    
-                    // Update warning type counts
-                    Object.keys(data.type_counts).forEach(function(typeId) {
-                        $('.warning-count-' + typeId).text(data.type_counts[typeId]);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Filter error:", error);
-                    // If AJAX fails, update counts based on visible rows
-                    updateCountsFromVisibleRows();
-                }
-            });
-        }
-        
-        // Fallback function to count visible rows if AJAX fails
-        function updateCountsFromVisibleRows() {
-            let activeTab = $('.tab-pane.active').attr('id');
-            let tableSelector = "";
-            
-            if (activeTab === 'all') {
-                tableSelector = "#allWarningsTable";
-            } else if (activeTab === 'teamwarning') {
-                tableSelector = "#teamWarningsTable";
-            } else {
-                return; // No table to count from
-            }
-            
-            // Count visible rows
-            let visibleCount = $(tableSelector + ' tbody tr:visible').length;
-            $('.total-warnings-count').text(visibleCount);
-            
-            // Count by warning type
-            let typeCounts = {};
-            $(tableSelector + ' tbody tr:visible').each(function() {
-                let type = $(this).find('td:eq(2)').text().trim(); // Warning Type (third column)
-                typeCounts[type] = (typeCounts[type] || 0) + 1;
-            });
-            
-            // Update type counts
-            $('.warrinig_card_new_design').each(function() {
-                let typeName = $(this).find('h4').text().trim();
-                if (typeCounts[typeName]) {
-                    $(this).find('h2').text(typeCounts[typeName]);
-                } else if (typeName !== "Total Warnings" && typeName !== "Team Warnings" && typeName !== "My Warnings") {
-                    $(this).find('h2').text('0');
-                }
-            });
-        }
         
         // Show add warning modal
         $('#openModalBtn').on('click', function() {
