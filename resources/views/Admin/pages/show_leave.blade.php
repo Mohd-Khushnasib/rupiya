@@ -142,6 +142,7 @@
 
 <!-- Main Content Start Here  -->
 <div class="container" id="main-container">
+    <input type="text" id="admin_id" value="{{$adminlogin->id}}">
             <!-- BEGIN Content -->
             <div id="main-content">
                 <!-- BEGIN Page Title -->
@@ -262,7 +263,7 @@
                     <form class="mail-compose form-horizontal" action="#">
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" name="employee_id" placeholder="Name" class="form-control" value="{{$adminlogin->id ?? ''}}">
+                            <input type="text" name="employee_id" placeholder="Name" class="form-control" value="{{$adminlogin->employee_id ?? ''}}">
                         </div>
 
                         <div class="col-sm-12">
