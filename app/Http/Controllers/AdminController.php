@@ -5312,60 +5312,73 @@ class AdminController extends Controller
         $adminSession = collect(session()->get('admin_login'))->first(); // Get first record safely
         $admin_id     = $adminSession->id ?? null;
         $admin_role   = strtolower($adminSession->role ?? '');
-
-        // **Employees under Manager or TL**
+    
+        // **Admin & HR ko sab kuch dikhna chahiye**
+        if ($admin_role === 'admin' || $admin_role === 'hr') {
+            $all_warnings = DB::table('tbl_warning')
+                ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id')
+                ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
+                ->select(
+                    'tbl_warning.*',
+                    'created_by.name as createdby',
+                    'tbl_warning_type.warning_name'
+                )
+                ->orderBy('tbl_warning.id', 'desc')
+                ->get();
+    
+            return view('Admin.pages.warning', [
+                'all_warnings' => $all_warnings, // Admin & HR ke liye sab warnings
+                'team_warnings' => [], // Team ke warnings empty
+                'team_members' => [] // Team members empty
+            ]);
+        }
+    
+        // **Manager & TL ke Under Employees Fetch Karna**
         $under_employee_ids = [$admin_id];
-
+        $under_employee_names = [];
+    
         if ($admin_role === 'manager') {
-            // **Find Employees under this Manager**
             $under_employee_ids = DB::table('admin')
-                ->where('manager', $admin_id) // Manager wale employees
+                ->where('manager', $admin_id)
                 ->pluck('id')
                 ->toArray();
-        } 
-        elseif ($admin_role === 'tl') {
-            // **Find Employees under this TL**
+    
+            $under_employee_names = DB::table('admin')
+                ->where('manager', $admin_id)
+                ->pluck('name')
+                ->toArray();
+        } elseif ($admin_role === 'tl') {
             $under_employee_ids = DB::table('admin')
-                ->where('team_leader', $admin_id) // TL ke under agents
+                ->where('team_leader', $admin_id)
                 ->pluck('id')
+                ->toArray();
+    
+            $under_employee_names = DB::table('admin')
+                ->where('team_leader', $admin_id)
+                ->pluck('name')
                 ->toArray();
         }
-
-        // **Fetch Warnings where admin_id is logged-in user & assign column contains under employees**
-        $warnings = DB::table('tbl_warning')
-            ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id') // Kisne warning di
+    
+        // **Manager / TL ko sirf apni team ki warnings dikhni chahiye**
+        $team_warnings = DB::table('tbl_warning')
+            ->leftJoin('admin as created_by', 'created_by.id', '=', 'tbl_warning.admin_id')
             ->leftJoin('tbl_warning_type', 'tbl_warning_type.id', '=', 'tbl_warning.warningtype_id')
             ->select(
                 'tbl_warning.*',
-                'created_by.name as createdby', // Kisne warning di
+                'created_by.name as createdby',
                 'tbl_warning_type.warning_name'
             )
-            ->where('tbl_warning.admin_id', $admin_id) // Warning logged-in admin ne di ho
-            ->where(function ($query) use ($under_employee_ids) {
-                foreach ($under_employee_ids as $emp_id) {
-                    $query->orWhereRaw("FIND_IN_SET(?, tbl_warning.assign)", [$emp_id]);
-                }
-            })
+            ->whereIn('tbl_warning.admin_id', $under_employee_ids)
             ->orderBy('tbl_warning.id', 'desc')
             ->get();
-
-        // **Convert Assigned Employee IDs to Names for "Warning Given To"**
-        foreach ($warnings as $warning) {
-            if (!empty($warning->assign)) {
-                $warnedNames = DB::table('admin')
-                    ->whereIn('id', explode(',', $warning->assign))
-                    ->pluck('name')
-                    ->toArray();
-                $warning->warned_to = implode(', ', $warnedNames);
-            } else {
-                $warning->warned_to = 'N/A';
-            }
-        }
-
+    
         return view('Admin.pages.warning', [
-            'warnings' => $warnings
+            'all_warnings' => [], // Manager & TL ke liye all warnings empty
+            'team_warnings' => $team_warnings, // Manager & TL ke liye team warnings
+            'team_members' => $under_employee_names // Manager & TL ke under members
         ]);
     }
+    
 
     
 
