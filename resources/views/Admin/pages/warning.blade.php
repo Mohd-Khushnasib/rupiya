@@ -66,7 +66,7 @@
         margin-top: 5px;
     }
     .warrinig_card_new_design {
-        background: #000;
+        background: black;
         padding: 20px;
         font-family: Arial, sans-serif;
         font-weight: bold;
@@ -91,7 +91,7 @@
         text-align: center;
     }
     .all_tabs_bg {
-        background: #f5f5f5;
+        background:rgb(10, 10, 10);
         padding: 15px;
         border-radius: 5px;
     }
