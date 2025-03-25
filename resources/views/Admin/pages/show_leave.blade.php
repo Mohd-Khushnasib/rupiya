@@ -103,36 +103,40 @@
         
         
 
+         /* card counting show here  */
          .stats-container {
     display: flex;
-    gap: 16px;
+    justify-content: space-between;
     padding: 16px;
     background-color: black;
     margin-bottom: 16px;
+    width: 100%;
   }
   
   .stats-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 250px;
+    width: 24%;
+    min-width: 220px;
     height: 64px;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 0 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 0 20px;
   }
   
   .stats-title {
     font-weight: bold;
     text-transform: uppercase;
-    color: #333;
+    color: #00A3EF;
+    font-size: 16px;
   }
   
   .stats-count {
     font-weight: bold;
     font-size: 20px;
-    color: #0099ff;
+    color: #00A3EF;
   }
 </style>
 
@@ -156,6 +160,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         
+                    <!-- card counting start here -->
                     <div class="stats-container">
                         <div class="stats-card">
                             <div class="stats-title">ALL LEAVES</div>
@@ -177,6 +182,7 @@
                             <div class="stats-count" id="card_pending_leave">0</div>
                         </div>
                     </div>
+                     <!-- card counting end here -->
 
                        <!-- Tab Start Here -->
                         <div class="tabbable">
