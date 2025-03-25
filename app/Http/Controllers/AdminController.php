@@ -5314,10 +5314,11 @@ class AdminController extends Controller
 
     public function warning()
     {
-        $adminSession = session()->get('admin_login'); // Get logged-in admin session
+        $adminSession = collect(session()->get('admin_login'))->first(); // Get first record safely
         $admin_id     = $adminSession->id ?? null;
         $admin_role   = strtolower($adminSession->role ?? '');
         $team_name    = $adminSession->team ?? null; // Team name fetch karein
+
     
         // Initialize array for team members
         $team_member_ids = [$admin_id]; // Apni warning bhi dikhani hai
