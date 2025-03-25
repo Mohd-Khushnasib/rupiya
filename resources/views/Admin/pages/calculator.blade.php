@@ -691,7 +691,9 @@
                                         <div class="col-sm-8">
                                         <div class="part-payments">
                                                 <div id="partPaymentEntries"></div>
-                                                <button onclick="addPartPaymentField()">Add Part Payment</button>
+                                                <div style="display: grid;">
+                                                    <button onclick="addPartPaymentField()">Add Part Payment</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
