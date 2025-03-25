@@ -4,6 +4,7 @@
 <!-- FontAwesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css">
 <style>
     .disabled-div {
         pointer-events: none;
@@ -122,18 +123,16 @@
                 @php
                     $adminRole = strtolower($admin_login->role);
                 @endphp
-                @if($adminRole !== 'agent')
-                    <div class="zxyzz">
+                <div class="zxyzz">
+                    @if($adminRole !== 'agent')
                         <button type="button" class="btn btn-info" id="openModalBtn">
                             <i class="fa fa-plus-circle"></i> Create Warning
                         </button>
-                        @if($adminRole === 'admin' || $adminRole === 'hr')
-                            <button type="button" class="btn btn-primary" id="filterBtn">
-                                <i class="fa fa-filter"></i> Filter Warnings
-                            </button>
-                        @endif
-                    </div>
-                @endif
+                    @endif
+                    <button type="button" class="btn btn-primary" id="filterBtn">
+                        <i class="fa fa-filter"></i> Filter Warnings
+                    </button>
+                </div>
             </div>
         </div>
         <!-- END Page Title -->
@@ -186,22 +185,41 @@
                         <div class="tab-pane fade in active all_tabs_bg" id="dashboard">
                             <div class="boligation_tabls">
                                 <div class="row">
-                                    @if($adminRole === 'admin' || $adminRole === 'hr')
-                                        <div class="col-md-4" style="margin-top: 20px;">
+                                    @if($adminRole === 'admin')
+                                        <div class="col-md-6" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>Total Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
                                             </div>
                                         </div>
+                                    @elseif($adminRole === 'hr')
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>Total Warnings</h4>
+                                                <h2 class="total-warnings-count">{{ $all_warnings->count() }}</h2>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>My Warnings</h4>
+                                                <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                            </div>
+                                        </div>
                                     @elseif($adminRole === 'manager' || $adminRole === 'tl')
-                                        <div class="col-md-4" style="margin-top: 20px;">
+                                        <div class="col-md-6" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>Team Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $team_warnings->count() }}</h2>
                                             </div>
                                         </div>
+                                        <div class="col-md-6" style="margin-top: 20px;">
+                                            <div class="card warrinig_card_new_design">
+                                                <h4>My Warnings</h4>
+                                                <h2>{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
+                                            </div>
+                                        </div>
                                     @elseif($adminRole === 'agent')
-                                        <div class="col-md-4" style="margin-top: 20px;">
+                                        <div class="col-md-6" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>My Warnings</h4>
                                                 <h2 class="total-warnings-count">{{ $myWarnings->sum(fn($warnings) => $warnings->count()) }}</h2>
@@ -210,7 +228,7 @@
                                     @endif
                                     
                                     @foreach($warningCounts as $warningCount)
-                                        <div class="col-md-4" style="margin-top: 20px;">
+                                        <div class="col-md-6" style="margin-top: 20px;">
                                             <div class="card warrinig_card_new_design">
                                                 <h4>{{ $warningCount->warning_name }}</h4>
                                                 <h2 class="warning-count-{{ $warningCount->id }}">{{ $warningCount->total }}</h2>
@@ -231,7 +249,7 @@
                                                 <h3><i class="fa fa-list"></i> All Warnings</h3>
                                                 <div class="filter-container">
                                                     <button type="button" class="btn btn-sm btn-primary filter-trigger">
-                                                        <i class="fa fa-filter"></i> Filter Employees
+                                                        <i class="fa fa-filter"></i> Filter By Employee
                                                     </button>
                                                 </div>
                                             </div>
@@ -599,31 +617,52 @@
             "stateSave": true
         });
         
-        // Filter button in all warnings section
-        $('.filter-trigger, #filterBtn').on('click', function() {
+        // Trigger filter modal
+        $('#filterBtn, .filter-trigger').on('click', function() {
             $('#filterWarningModal').modal('show');
         });
         
         // Apply filter
         $('#applyFilter').on('click', function() {
             let selectedEmployees = $('#employee_filter').val();
+            let activeTab = $('.tab-pane.active').attr('id');
+            let tableToFilter;
+            
+            // Determine which table to filter based on active tab
+            if (activeTab === 'all') {
+                tableToFilter = allWarningsTable;
+            } else if (activeTab === 'teamwarning') {
+                tableToFilter = teamWarningsTable;
+            }
+            
+            if (!tableToFilter) {
+                swal("Select Table First", "Please select a warnings tab to filter", "info");
+                return;
+            }
             
             // If "All Employees" is selected or nothing is selected, show all
             if (selectedEmployees.includes('all') || selectedEmployees.length === 0) {
-                allWarningsTable.column(1).search('').draw();
-                teamWarningsTable.column(1).search('').draw();
+                tableToFilter.search('').columns().search('').draw();
                 updateDashboardCounts('all');
+                swal("Filter Cleared", "Showing all warnings", "success");
             } else {
-                // Create regex pattern for filtering
-                let filterRegex = selectedEmployees.map(function(id) {
-                    let employeeName = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0];
-                    return '^' + employeeName + '$';
+                // Get the selected employee names for filtering
+                let employeeNames = [];
+                selectedEmployees.forEach(function(id) {
+                    let name = $('#employee_filter option[value="' + id + '"]').text().split(' (')[0].trim();
+                    employeeNames.push(name);
+                });
+                
+                // Create a regex pattern for exact matches with word boundaries
+                let regexPattern = employeeNames.map(function(name) {
+                    return '\\b' + name + '\\b';
                 }).join('|');
                 
-                // Apply filter using regex
-                allWarningsTable.column(1).search(filterRegex, true, false).draw();
-                teamWarningsTable.column(1).search(filterRegex, true, false).draw();
+                // Apply the filter to the "Warning Given To" column (index 1)
+                tableToFilter.column(1).search(regexPattern, true, false).draw();
                 updateDashboardCounts(selectedEmployees);
+                
+                swal("Filter Applied", "Showing warnings for selected employees", "success");
             }
             
             $('#filterWarningModal').modal('hide');
@@ -631,10 +670,23 @@
         
         // Clear filter
         $('#clearFilter').on('click', function() {
-            $('#employee_filter').val('all').trigger('chosen:updated');
-            allWarningsTable.column(1).search('').draw();
-            teamWarningsTable.column(1).search('').draw();
+            $('#employee_filter').val('').trigger('chosen:updated');
+            
+            let activeTab = $('.tab-pane.active').attr('id');
+            let tableToFilter;
+            
+            if (activeTab === 'all') {
+                tableToFilter = allWarningsTable;
+            } else if (activeTab === 'teamwarning') {
+                tableToFilter = teamWarningsTable;
+            }
+            
+            if (tableToFilter) {
+                tableToFilter.search('').columns().search('').draw();
+            }
+            
             updateDashboardCounts('all');
+            swal("Filter Cleared", "Showing all warnings", "success");
             $('#filterWarningModal').modal('hide');
         });
         
@@ -657,8 +709,9 @@
                         $('.warning-count-' + typeId).text(data.type_counts[typeId]);
                     });
                 },
-                error: function() {
-                    swal("Error", "Failed to update dashboard counts", "error");
+                error: function(xhr, status, error) {
+                    console.error("Filter error:", error);
+                    swal("Error", "Failed to update dashboard counts: " + error, "error");
                 }
             });
         }
@@ -698,8 +751,9 @@
                         swal("Error", "Failed to add warning", "error");
                     }
                 },
-                error: function() {
-                    swal("Server Error", "Something went wrong. Please try again.", "error");
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    swal("Server Error", "Something went wrong. Please try again: " + error, "error");
                 }
             });
         });
@@ -722,8 +776,9 @@
                     
                     $('#editwarningmodal').modal('show');
                 },
-                error: function() {
-                    swal("Error", "Failed to load warning details", "error");
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    swal("Error", "Failed to load warning details: " + error, "error");
                 }
             });
         });
@@ -751,8 +806,9 @@
                         swal("Error", "Failed to update warning", "error");
                     }
                 },
-                error: function() {
-                    swal("Server Error", "Something went wrong. Please try again.", "error");
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    swal("Server Error", "Something went wrong. Please try again: " + error, "error");
                 }
             });
         });
@@ -786,12 +842,29 @@
                                 swal("Error", "Failed to delete warning", "error");
                             }
                         },
-                        error: function() {
-                            swal("Server Error", "Something went wrong. Please try again.", "error");
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", error);
+                            swal("Server Error", "Something went wrong. Please try again: " + error, "error");
                         }
                     });
                 }
             });
+        });
+        
+        // Handle tab change to reset filters when changing tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+            let targetTab = $(e.target).attr('href');
+            let tableToReset;
+            
+            if (targetTab === '#all') {
+                tableToReset = allWarningsTable;
+            } else if (targetTab === '#teamwarning') {
+                tableToReset = teamWarningsTable;
+            }
+            
+            if (tableToReset) {
+                tableToReset.search('').columns().search('').draw();
+            }
         });
     });
 </script>
