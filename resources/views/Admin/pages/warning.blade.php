@@ -355,7 +355,7 @@
                                                                                                             @foreach($warnings as $item)
                                                                                                                                                     <tr class="table-flag-blue">
                                                                                                                                                         <td><input type="checkbox"></td>
-                                                                                                                                                        <td>{{$item->createdby ?? ''}}</td>
+                                                                                                                                                        <td>{{$item->name ?? ''}}</td>
                                                                                                                                                         <td>{{$item->task_status ?? ''}}</td>
                                                                                                                                                         <td>
                                                                                                                                                             <a href="javascript:void(0);" class="edit"
