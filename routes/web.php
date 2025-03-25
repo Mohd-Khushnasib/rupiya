@@ -300,7 +300,7 @@ Route::post('/delete_warning', [AdminController::class, 'deleteWarning']);  // u
 Route::post('/issuedtotalwaning', [AdminController::class, 'issuedTotalWarning']);
 
 
-Route::get('/getwarning',[AdminController::class, 'Getwarning']);
+Route::get('/get-warning',[AdminController::class, 'Getwarning']);
 
 
 // Add Comment 
