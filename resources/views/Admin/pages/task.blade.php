@@ -54,7 +54,7 @@
                                     <div class="tab-pane fade in active all_tabs_bg" id="all">
                                         <div class="boligation_tabls">
                                             <div class="row">
-                                                <div class="col-sm-2">
+                                                <!-- <div class="col-sm-2">
                                                     <div class="controls">
                                                         <select class="form-control" data-placeholder="Assignn" tabindex="1">
                                                             <option value="">Assignn</option>
@@ -71,7 +71,7 @@
                                                             <option value="1">Login</option>
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md-12" style="margin-top: 20px;">
                                                     <div class="table-responsive" style="border:0">
                                                         <table class="table table-advance" id="table1">
