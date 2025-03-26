@@ -6423,7 +6423,7 @@ class AdminController extends Controller
         $query = DB::table('tbl_leave')
         ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
         ->leftJoin('admin as approver', 'tbl_leave.approved_by', '=', 'approver.id')
-        ->select('tbl_leave.*',  'admin.name as admin_name', 'approver.name as approved_by');
+        ->select('tbl_leave.*',  'admin.name as admin_name' ,  'admin.role as role', 'approver.name as approved_by');
         
         // Apply role-based filtering
         if ($admin_role === 'admin' || $admin_role === 'hr') {
@@ -6529,7 +6529,7 @@ class AdminController extends Controller
             'rejected'   => $total_rejected,
             'all'        => $all_leave
             ],
-            'success'        => 'success',
+            'success' => 'success',
         ]);
     }
 
