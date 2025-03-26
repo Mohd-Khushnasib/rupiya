@@ -1807,7 +1807,8 @@ textarea[readonly] {
 }
 
 label {
-    font-weight: normal;
+    font-weight: 800 !important;
+    margin-top: 13px !important;
 }
 
 input[type="file"] {
