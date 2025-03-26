@@ -530,7 +530,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
                             <td>${item.duration || ''} </td>
-                            <td>${item.approved_by_name || '-'}</td>
+                            <td>${item.approved_by || '-'}</td>
                             ${statusCell}
                         </tr>
                     `;
