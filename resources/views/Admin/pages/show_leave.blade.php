@@ -571,15 +571,15 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         // Convert to days and add 1 to include both start and end days
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
         
-        // Update the duration input with the calculated days
-        durationInput.value = diffDays;
+        // Format the text with the day/days suffix
+        const durationText = diffDays === 1 ? `${diffDays} day` : `${diffDays} days`;
         
-        // Display the duration in the specified format "6 days" style
-        if (diffDays === 1) {
-            durationInput.placeholder = `${diffDays} day`;
-        } else {
-            durationInput.placeholder = `${diffDays} days`;
-        }
+        // Update the duration input with the formatted text
+        // First, change the input type from number to text
+        durationInput.type = 'text';
+        
+        // Then set the value with the formatted text
+        durationInput.value = durationText;
     }
 });
 </script>
