@@ -296,7 +296,7 @@
 
                         <div class="col-sm-12">
                             <label class="control-label">Leave Duration</label>
-                            <input type="number" name="duration" placeholder="Enter Leave Duration ( in days )" class="form-control" >
+                            <input type="text" name="duration" placeholder="Enter Leave Duration ( in days )" class="form-control" readonly>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
