@@ -380,7 +380,7 @@
                         <label class="control-label">Note</label>
                             <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
-                        <!-- Button layout similar to the screenshot -->
+                        <!-- Change Status Start Here -->
                         <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px; justify-content: space-between;">
                             <div>
                                 <div class="dropdown">
@@ -400,6 +400,8 @@
                                 <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
                             </div>
                         </div>
+                        <!-- Change Status End Here -->
+
                     </form>
                 </div>
             </div>
@@ -430,6 +432,8 @@ window.jQuery || document.write('<script src="assets/jquery/jquery-2.1.1.min.js"
         },
         success: function(response) {
             if(response.success) {
+                // dropdown here
+                updateStatusDropdown(newStatus);
                 swal(`Leave status updated to ${newStatus} successfully!`, "", "success");
                 // Reload current table
                 const currentStatus = $('.nav-link.active').data('status') || 'all';
@@ -473,6 +477,10 @@ $(document).ready(function() {
         let duration = $(this).data('duration');
         let note = $(this).data('note');
 
+        // dropdown here 
+        let status = $(this).data('status') || 'pending';
+        updateStatusDropdown(status);
+
         // Set values in the modal using class selectors
         $('.edit_leave_id').val(leaveId);
         $('.edit_admin_id').val("EMP" + adminId);
@@ -501,6 +509,17 @@ $(document).ready(function() {
         
         $('#editEmployeeModal').modal('show');
     });
+
+    // dropdown value start here 
+    function updateStatusDropdown(status) {
+        // Set the current status on the dropdown button
+        $('#statusDropdown').data('current-status', status);
+        // Update the button text
+        $('#statusDropdown').html(status.toUpperCase());
+        // Mark the current status as active in the dropdown
+        $('.status-option').removeClass('active');
+        $('.status-option[data-status="' + status + '"]').addClass('active');
+    }
 
     // Form submission for updating employee leave
     $("#edit_employee_form").submit(function(e) {
@@ -737,6 +756,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${(page-1)*data.per_page + index + 1}</td>
                             <td>
                                 <a href="javascript:void(0);" class="edit_employee"
+                                    data-status="${item.status || ''}"
                                     data-admin_id="${item.admin_id || ''}"
                                     data-admin_name="${item.admin_name || ''}"
                                     data-leave_type="${item.leave_type || ''}"
