@@ -530,7 +530,7 @@
                                         <textarea id="edit_message" name="message" class="form-control wysihtml5 edit_message"
                                             disabled></textarea>
                                     </div>
-                                    <!-- <div class="col-sm-12">
+                                    <div class="col-sm-12">
                                     <select name="task_type" id="edit_task_type" data-placeholder="Type Task"
                                         class="form-control chosen EditChoosen edit_task_type" tabindex="6" disabled>
                                         <option value="To Do">To Do</option>
@@ -549,7 +549,7 @@
                                             <option value="Login">Login</option>
                                         </select>
                                     </div>
-                                </div> -->
+                                </div>
 
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
                                         <label class="control-label">Customer Name </label>
