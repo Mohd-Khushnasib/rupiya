@@ -148,7 +148,7 @@
                 <!-- BEGIN Page Title -->
                 <div class="page-title">
                     <div style="display: flex; justify-content: space-between;">
-                        <h3 class="theam_color_text"><i class="fa fa-list"></i> Employees</h3>
+                        <h3 class="theam_color_text"><i class="fa fa-list"></i> Leave</h3>
                         <div class="zxyzz">
                             <!-- <a href="{{url('/add-employee')}}" type="button" class="btn btn-info">
                                 Add Employee
