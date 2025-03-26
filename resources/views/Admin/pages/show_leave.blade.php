@@ -583,7 +583,7 @@ function updateLeaveStatus(leaveId, newStatus)
         },
         success: function(response) {
             if(response.success) {
-                alert(`Leave status updated to ${newStatus} successfully!`);
+                swal(`Leave status updated to ${newStatus} successfully!`, "", "success");
                 // Reload current table
                 const currentStatus = $('.nav-link.active').data('status') || 'all';
                 const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
