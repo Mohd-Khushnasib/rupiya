@@ -389,3 +389,4 @@ Route::get('/employee_download_zip/{id?}', [AdminController::class, 'EmployeeDow
 Route::get('/show_leave', [AdminController::class, 'showLeave']);
 Route::post('/fetch_leave', [AdminController::class, 'fetchLeave']);
 Route::post('/add_leave', [AdminController::class, 'addLeave']);
+Route::post('/update_leave_status', [AdminController::class, 'updateLeaveStatus']);

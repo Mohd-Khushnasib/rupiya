@@ -6524,10 +6524,10 @@ class AdminController extends Controller
             'per_page'       => $leaves->perPage(),
             'total'          => $leaves->total(),
             'counts'         => [
-                'pending'    => $total_pending,
-                'approved'   => $total_approved,
-                'rejected'   => $total_rejected,
-                'all'        => $all_leave
+            'pending'    => $total_pending,
+            'approved'   => $total_approved,
+            'rejected'   => $total_rejected,
+            'all'        => $all_leave
             ],
             'success'        => 'success',
         ]);
@@ -6558,8 +6558,31 @@ class AdminController extends Controller
         }
     }
 
+    
 
-
+    public function updateLeaveStatus(Request $request)
+    {
+        // Get admin session
+        $adminSession = collect(session()->get('admin_login'))->first();
+        
+        $admin_id = $adminSession->id;
+        $leave_id = $request->leave_id;
+        $status = $request->status;
+        
+        $updated = DB::table('tbl_leave')
+            ->where('id', $leave_id)
+            ->update([
+                'status' => $status,
+                'approved_by' => $admin_id
+            ]);
+        
+        if ($updated) {
+            return response()->json([
+                'success' => 'success',
+            ]);
+        } else {
+        }
+    }
 
 
 

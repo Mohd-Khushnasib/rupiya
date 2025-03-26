@@ -572,8 +572,55 @@ function loadLeaves(status, page, search = '') {
 
 // Function to update leave status
 function updateLeaveStatus(leaveId, newStatus) {
-    alert(newStatus);
-   
+    // Use the older swal function for confirmation
+    swal({
+        title: "Are you sure?",
+        text: `Do you want to ${newStatus === 'approved' ? 'approved' : 'rejected'} this leave request?`,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: newStatus === 'approved' ? '#28a745' : '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: newStatus === 'approved' ? 'Yes, approve it!' : 'Yes, reject it!',
+        closeOnConfirm: false
+    }, function(isConfirmed) {
+        if (isConfirmed) {
+            // Send AJAX request to update status
+            $.ajax({
+                url: "{{ url('update_leave_status') }}",
+                type: "POST",
+                data: {
+                    leave_id: leaveId,
+                    status: newStatus,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if(response.success) {
+                        // Show success message with swal
+                        swal({
+                            title: "Updated!",
+                            text: `Leave request has been ${newStatus}.`,
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        
+                        // Reload current table
+                        const currentStatus = $('.nav-link.active').data('status') || 'all';
+                        const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
+                        const currentSearch = $('#searchInput').val() || '';
+                        
+                        loadLeaves(currentStatus, currentPage, currentSearch);
+                    } else {
+                        swal("Error!", response.message || 'Failed to update leave status', "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Status Update Error:", error);
+                    swal("Error!", "Failed to update leave status. Please try again.", "error");
+                }
+            });
+        }
+    });
 }
 
 // Format date function
