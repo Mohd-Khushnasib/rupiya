@@ -93,13 +93,15 @@
                         <div class="col-md-12">
                             <div class="box-content">
                                 <div class="btn-toolbar pull-right">
-                                    <div class="btn-group" style="gap: 10px;">
+                                    <div class="btn-group" style="display:flex;gap: 10px;">
 
                                         <!-- Excel Export Start Here -->
                                         <input type="text" class="search_data form-control" placeholder="Search Here">
                                         <!-- Search Data End Here -->
-                                        <a href="javascript:void(0);" class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip" id="exportButtonExcel">
-                                        <i class="fa fa-file-excel-o"></i>
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip"
+                                            id="exportButtonExcel">
+                                            <i class="fa fa-file-excel-o"></i>
                                         </a>
 
                                     </div>
@@ -299,7 +301,7 @@
                                 </div>
                                 <div class="form-group">
                                     <textarea id="taskMessage" name="message" class="form-control wysihtml5" rows="4">
-                                    </textarea>
+                                                </textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -386,7 +388,7 @@
                                 </div>
                                 <div class="form-group">
                                     <textarea name="message" class="form-control wysihtml5" rows="4">
-                                    </textarea>
+                                                </textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -633,54 +635,54 @@
                                     ).join('');
 
                                     const actionDropdown = `
-                                    <select class="form-control leads_system_bg action-dropdown" data-leadid="${item.id}">
-                                        <option selected disabled>Select</option>
-                                        <option value="remark">Remark</option>
-                                        <option value="task">Task</option>
-                                    </select>
-                                `;
+                                                <select class="form-control leads_system_bg action-dropdown" data-leadid="${item.id}">
+                                                    <option selected disabled>Select</option>
+                                                    <option value="remark">Remark</option>
+                                                    <option value="task">Task</option>
+                                                </select>
+                                            `;
 
                                     // Role in Admin Case 
                                     // **Show delete & checkbox only if role is Admin**
                                     var adminControls = data.role === "admin" ? `
-                                    <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
-                                    <td>
-                                        <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
-                                            title="Delete Lead" 
-                                            href="javascript:void(0);" 
-                                            data-id="${item.id}">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    </td>
-                                ` : '';
+                                                <td><input type="checkbox" class="checkbox" data-id="${item.id}"></td>
+                                                <td>
+                                                    <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
+                                                        title="Delete Lead" 
+                                                        href="javascript:void(0);" 
+                                                        data-id="${item.id}">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </td>
+                                            ` : '';
 
 
                                     var serial_number = start_serial_number + index + 1;  // for indexing 
                                     tbody.append(`
-                                    <tr>
-                                        <td>${serial_number}</td>
-                                        ${adminControls} 
-                                        <td>${data.team_name}</td>
-                                        <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
-                                        <td><a href="{{url('/user_profile/${item.id}')}}">${item.name ?? ''}</a></td>
-                                        <td>${item.date ?? ''}</td>
-                                        <td>
-                                            <div class="form-group">
-                                                <select class="form-control leads_system_bg filterleadStatusSelect"
-                                                    data-id="${item.id}" data-selected="${item.lead_status}"
-                                                    data-row="${index + 1}" tabindex="1">
-                                                    ${leadStatusOptions}
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td>${actionDropdown}</td>
-                                        <td>${item.product_name ?? ''}</td>
-                                        <td>${item.pincode ?? ''}</td>
-                                        <td>₹ ${new Intl.NumberFormat('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.loan_amount)}</td>
-                                        <td>${item.company_name ?? ''}</td>
-                                        <td>Financial Services</td>
-                                    </tr>
-                                `);
+                                                <tr>
+                                                    <td>${serial_number}</td>
+                                                    ${adminControls} 
+                                                    <td>${data.team_name}</td>
+                                                    <td style='width:50px'>${item.admin_name} - ${item.admin_role}</td>
+                                                    <td><a href="{{url('/user_profile/${item.id}')}}">${item.name ?? ''}</a></td>
+                                                    <td>${item.date ?? ''}</td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <select class="form-control leads_system_bg filterleadStatusSelect"
+                                                                data-id="${item.id}" data-selected="${item.lead_status}"
+                                                                data-row="${index + 1}" tabindex="1">
+                                                                ${leadStatusOptions}
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>${actionDropdown}</td>
+                                                    <td>${item.product_name ?? ''}</td>
+                                                    <td>${item.pincode ?? ''}</td>
+                                                    <td>₹ ${new Intl.NumberFormat('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.loan_amount)}</td>
+                                                    <td>${item.company_name ?? ''}</td>
+                                                    <td>Financial Services</td>
+                                                </tr>
+                                            `);
                                 });
 
                                 // Add event listener to action dropdown
@@ -779,34 +781,34 @@
 
                     if (currentPage > 3) {
                         pagination.append(`
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(1, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(2, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">2</a>
-                        </li>
-                        <li class="page-item disabled"><a class="page-link">...</a></li>
-                    `);
+                                    <li class="page-item">
+                                        <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(1, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(2, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">2</a>
+                                    </li>
+                                    <li class="page-item disabled"><a class="page-link">...</a></li>
+                                `);
                     }
 
                     for (let i = Math.max(1, currentPage - 2); i <= Math.min(lastPage, currentPage + 2); i++) {
                         pagination.append(`
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${i}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${i}</a>
-                        </li>
-                    `);
+                                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                                        <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${i}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${i}</a>
+                                    </li>
+                                `);
                     }
 
                     if (currentPage < lastPage - 2) {
                         pagination.append(`
-                        <li class="page-item disabled"><a class="page-link">...</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${lastPage - 1}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${lastPage - 1}</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${lastPage}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${lastPage}</a>
-                        </li>
-                    `);
+                                    <li class="page-item disabled"><a class="page-link">...</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${lastPage - 1}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${lastPage - 1}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="javascript:void(0);" onclick="view_enquiry_api(${lastPage}, '${searchKeyword}', '${lead_status}', '${fromDate}', '${toDate}','${activityfromDate}')">${lastPage}</a>
+                                    </li>
+                                `);
                     }
                 }
             </script>
