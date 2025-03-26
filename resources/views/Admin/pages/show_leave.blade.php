@@ -333,22 +333,23 @@
                 <div class="col-md-12">
                 <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                 @csrf
-                        <input type="hidden" name="employee_id" id="edit_emp_id" class="form-control">
+                        <!-- leave_id  -->
+                        <input type="text" name="id" id="edit_leave_id" class="form-control"> 
 
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" id="emp_display_id" class="form-control" readonly>
+                            <input type="text" class="form-control edit_emp_id" readonly>
                         </div>
 
                         <div class="col-sm-12">
                             <label class="control-label">Name</label>
-                            <input type="text" name="name" id="edit_admin_name" placeholder="Employee Name" class="form-control">
+                            <input type="text" class="form-control edit_admin_name" readonly>
                         </div>
 
                         <div class="col-sm-12">
                             <label class="control-label">Leave Type</label>
                             <div class="controls">
-                                <select name="leave_type" id="edit_leave_type" class="form-control" data-placeholder="Choose a Department" tabindex="1">
+                                <select name="leave_type" class="form-control edit_leave_type" data-placeholder="Choose a Department" tabindex="1">
                                     <option selected="true" disabled="true">Select Department</option>
                                     <option value="Paid Leave">Paid Leave</option>
                                     <option value="Casual Leave">Casual Leave</option>
@@ -359,22 +360,22 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label class="control-label">From Date</label>
-                                    <input type="date" name="from_date" id="edit_from_date" class="form-control">
+                                    <input type="date" name="from_date" class="form-control edit_from_date">
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="control-label">To Date</label>
-                                    <input type="date" name="to_date" id="edit_to_date" class="form-control">
+                                    <input type="date" name="to_date" class="form-control edit_to_date">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <label class="control-label">Leave Duration</label>
-                                <input type="text" name="duration" id="edit_duration" class="form-control">
+                                <input type="text" name="duration" class="form-control edit_duration">
                             </div>
                         </div>
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea name="note" id="edit_note" class="form-control wysihtml5" rows="4" placeholder="Address..."></textarea>
+                            <textarea name="note" class="form-control wysihtml5 edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
                         <div class="col-sm-12" style="margin-top: 10px;">
                             <button type="submit" class="btn btn-success update_employee_btn"><i class="fa fa-refresh"></i>
@@ -681,7 +682,6 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 // edit employee here 
 $(document).on('click', '.edit_employee', function() {
     let leaveId = $(this).data('id');
-    alert(leaveId);
     let adminId = $(this).data('admin_id');
     let admin_name = $(this).data('admin_name');
     let leaveType = $(this).data('leave_type');
@@ -695,7 +695,7 @@ $(document).on('click', '.edit_employee', function() {
     $('.edit_emp_id').val(adminId);
     $('.edit_admin_name').val(admin_name);
     // Alternative approach to set the dropdown value
-    $("#edit_leave_type option").each(function() {
+    $(".edit_leave_type option").each(function() {
         if($(this).val() == leaveType) {
             $(this).prop("selected", true);
         } else {
