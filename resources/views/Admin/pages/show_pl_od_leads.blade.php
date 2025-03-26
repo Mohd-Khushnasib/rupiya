@@ -99,7 +99,7 @@
                                         <input type="text" class="search_data form-control" placeholder="Search Here">
                                         <!-- Search Data End Here -->
                                         <a href="javascript:void(0);" class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip" id="exportButtonExcel">
-                                        <i class="bi bi-excel"></i>
+                                        <i class="fa fa-file-excel-o"></i>
                                         </a>
 
                                     </div>
