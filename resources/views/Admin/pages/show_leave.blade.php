@@ -400,9 +400,7 @@ $("#add_form").submit(function(e) {
     $(".add_btn").prop('disabled', true);
     e.preventDefault();
     let adminId = $(".admin_id").val();
-    
-    // Capture current state values BEFORE submitting
-    // This gets the current active tab to determine status
+
     let currentTabStatus = $('.nav-item.active .admin-tab').data('status');
     // Convert index to string status if needed
     let activeTabIndex = $('.nav-item.active').index();
@@ -443,8 +441,6 @@ $("#add_form").submit(function(e) {
                 
                 // Use the captured values to reload the leaves
                 loadLeaves(currentTabStatus, currentPageNumber, currentSearchText);
-                
-                // Also refresh counts since a new leave was added
                 loadCounts();
             } else if (data.success == 'error') {
                 $(".add_btn").prop('disabled', false);
@@ -530,7 +526,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
                             <td>${item.duration || ''} </td>
-                            <td>${item.approved_by_name || '-'}</td>
+                            <td>${item.approved_by || '-'}</td>
                             ${statusCell}
                         </tr>
                     `;
@@ -590,7 +586,6 @@ function updateLeaveStatus(leaveId, newStatus)
                 const currentSearch = $('#searchInput').val() || '';
                 loadLeaves(currentStatus, currentPage, currentSearch);
             } else {
-                // Optionally show error notification
                 console.error("Failed to update leave status");
             }
         },
