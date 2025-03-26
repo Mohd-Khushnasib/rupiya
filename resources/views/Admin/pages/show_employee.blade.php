@@ -289,46 +289,46 @@
                                     ];
 
                                     const statusDropdown = `
-                                                <div class="form-group">
-                                                    <select class="form-control leads_system_bg employeeStatusSelect"
-                                                        data-id="${item.id}" data-selected="${item.employee_status}"
-                                                        data-row="${index + 1}" tabindex="1">
-                                                        ${statusOptions.map(status =>
-                                        `<option value="${status}" ${item.employee_status === status ? 'selected' : ''}>${status}</option>`
-                                    ).join('')}
-                                                    </select>
-                                                </div>
-                                            `;
+                                        <div class="form-group">
+                                            <select class="form-control leads_system_bg employeeStatusSelect"
+                                                data-id="${item.id}" data-selected="${item.employee_status || 'NEW EMPLOYEE'}"
+                                                data-row="${index + 1}" tabindex="1">
+                                                ${statusOptions.map(status =>
+                                                                `<option value="${status}" ${(item.employee_status || 'NEW EMPLOYEE') === status ? 'selected' : ''}>${status}</option>`
+                                                            ).join('')}
+                                            </select>
+                                        </div>
+                                    `;
 
                                     let crmAccessSwitch = `
-                                                <label class='custom-switch'>
-                                                    <input type='checkbox' name='crm-switch-checkbox' class='custom-switch-input CrmAccessSwitch' value="${item.id}" ${crmAccessStatus}>
-                                                    <span class='custom-switch-indicator'></span>
-                                                </label>`;
+                                                            <label class='custom-switch'>
+                                                                <input type='checkbox' name='crm-switch-checkbox' class='custom-switch-input CrmAccessSwitch' value="${item.id}" ${crmAccessStatus}>
+                                                                <span class='custom-switch-indicator'></span>
+                                                            </label>`;
 
                                     let statusSwitch = `
-                                                <label class='custom-switch'>
-                                                    <input type='checkbox' name='custom-switch-checkbox' class='custom-switch-input StatusSwitch' value="${item.id}" ${switchStatus}>
-                                                    <span class='custom-switch-indicator'></span>
-                                                </label>`;
+                                                            <label class='custom-switch'>
+                                                                <input type='checkbox' name='custom-switch-checkbox' class='custom-switch-input StatusSwitch' value="${item.id}" ${switchStatus}>
+                                                                <span class='custom-switch-indicator'></span>
+                                                            </label>`;
 
                                     tbody.append(`
-                                                <tr>
-                                                    <td>${index + 1 + (data.current_page - 1) * data.per_page}</td>
-                                                    <td>${item.employee_id}</td>
-                                                    <td><img src="${item.image}" alt="" height="50px" width="50px" style="object-fit: cover; border-radius: 50%;"></td>
-                                                    <td><a href="{{ url('/employee-profile') }}/${item.id}">${item.name}</a></td>
-                                                    <td>${item.mobile}</td>
-                                                    <td>${item.email}</td>
-                                                    <td>${item.gender}</td>
-                                                    <td>${statusDropdown}</td>
-                                                    <td>${item.department}</td>
-                                                    <td>${item.role}</td>
-                                                    <td>${formatDate(item.joining_date)}</td>
-                                                    <td>${crmAccessSwitch}</td>
-                                                    <td>${statusSwitch}</td>
-                                                </tr>
-                                            `);
+                                                            <tr>
+                                                                <td>${index + 1 + (data.current_page - 1) * data.per_page}</td>
+                                                                <td>${item.employee_id}</td>
+                                                                <td><img src="${item.image}" alt="" height="50px" width="50px" style="object-fit: cover; border-radius: 50%;"></td>
+                                                                <td><a href="{{ url('/employee-profile') }}/${item.id}">${item.name}</a></td>
+                                                                <td>${item.mobile}</td>
+                                                                <td>${item.email}</td>
+                                                                <td>${item.gender}</td>
+                                                                <td>${statusDropdown}</td>
+                                                                <td>${item.department}</td>
+                                                                <td>${item.role}</td>
+                                                                <td>${formatDate(item.joining_date)}</td>
+                                                                <td>${crmAccessSwitch}</td>
+                                                                <td>${statusSwitch}</td>
+                                                            </tr>
+                                                        `);
                                 });
 
                                 // Employee Status Change Event
@@ -510,10 +510,10 @@
 
                     for (let i = Math.max(1, currentPage - 2); i <= Math.min(lastPage, currentPage + 2); i++) {
                         pagination.append(`
-                                    <li class="${i === currentPage ? 'active' : ''}">
-                                        <a href="javascript:void(0);" onclick="loadAdmins(${status}, ${i}, '${search}')">${i}</a>
-                                    </li>
-                                `);
+                                                <li class="${i === currentPage ? 'active' : ''}">
+                                                    <a href="javascript:void(0);" onclick="loadAdmins(${status}, ${i}, '${search}')">${i}</a>
+                                                </li>
+                                            `);
                     }
 
                     if (currentPage < lastPage - 2) {
