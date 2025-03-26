@@ -573,37 +573,7 @@ function loadLeaves(status, page, search = '') {
 // Function to update leave status
 function updateLeaveStatus(leaveId, newStatus) {
     alert(newStatus);
-    // Show confirmation dialog
-    if (confirm(`Are you sure you want to ${newStatus === 'approved' ? 'approved' : 'rejected'} this leave request?`)) {
-        $.ajax({
-            url: "{{ url('update_leave_status') }}",
-            type: "POST",
-            data: {
-                leave_id: leaveId,
-                status: newStatus,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                if(response.success) {
-                    // Show success message
-                    toastr.success('Leave status updated successfully');
-                    
-                    // Reload current table
-                    const currentStatus = $('.nav-link.active').data('status') || 'all';
-                    const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
-                    const currentSearch = $('#searchInput').val() || '';
-                    
-                    loadLeaves(currentStatus, currentPage, currentSearch);
-                } else {
-                    toastr.error(response.message || 'Failed to update leave status');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("Status Update Error:", error);
-                toastr.error('Failed to update leave status. Please try again.');
-            }
-        });
-    }
+   
 }
 
 // Format date function
