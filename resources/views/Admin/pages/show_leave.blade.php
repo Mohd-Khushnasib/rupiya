@@ -488,32 +488,9 @@ function loadLeaves(status, page, search = '') {
             if (data.data && data.data.length > 0) {
                 // Populate table rows
                 data.data.forEach((item, index) => {
-                    // Get status badge class
                     let statusCell = '';
                     if(item.status == 'pending') {
-                        statusCell = `
-                            <td>
-                                <div>
-                                    <span class="pending-badge" 
-                                        style="background-color: #ffc107; color: #212529; color: white; padding: 5px 10px; border-radius: 4px;"
-                                        data-id="${item.id}">
-                                        Pending
-                                    </span>
-                                    <div class="action-buttons" style="margin-top: 5px; display: none;" data-id="${item.id}">
-                                        <button class="approve-btn" 
-                                                style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 4px; border: none; margin-right: 5px; cursor: pointer; font-size: 14px;" 
-                                                data-id="${item.id}">
-                                            approved
-                                        </button>
-                                        <button class="reject-btn" 
-                                                style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 14px;" 
-                                                data-id="${item.id}">
-                                            rejected
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        `;
+                        statusCell = `<td><span style="background-color:rgb(167, 137, 40); color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'approved') {
                         statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'rejected') {
@@ -553,60 +530,6 @@ function loadLeaves(status, page, search = '') {
             let tbody = $("#leaveTable tbody");
             tbody.empty();
             tbody.append(`<tr><td colspan="8" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
-        }
-    });
-}
-
-// Add these event handlers OUTSIDE the loadLeaves function
-// This prevents duplicate handlers from being added
-$(document).ready(function() {
-    // Click event for pending badges
-    $(document).on('click', '.pending-badge', function() {
-        const leaveId = $(this).data('id');
-        // Hide the pending badge
-        $(this).hide();
-        // Show the action buttons for this specific leave
-        $(`.action-buttons[data-id="${leaveId}"]`).show();
-    });
-
-    // Click event for approve button
-    $(document).on('click', '.approve-btn', function() {
-        const leaveId = $(this).data('id');
-        updateLeaveStatus(leaveId, 'approved');
-    });
-
-    // Click event for reject button
-    $(document).on('click', '.reject-btn', function() {
-        const leaveId = $(this).data('id');
-        updateLeaveStatus(leaveId, 'rejected');
-    });
-});
-
-// Function to update leave status
-function updateLeaveStatus(leaveId, newStatus) 
-{
-    $.ajax({
-        url: "{{ url('update_leave_status') }}",
-        type: "POST",
-        data: {
-            leave_id: leaveId,
-            status: newStatus,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function(response) {
-            if(response.success) {
-                swal(`Leave status updated to ${newStatus} successfully!`, "", "success");
-                // Reload current table
-                const currentStatus = $('.nav-link.active').data('status') || 'all';
-                const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
-                const currentSearch = $('#searchInput').val() || '';
-                loadLeaves(currentStatus, currentPage, currentSearch);
-            } else {
-                console.error("Failed to update leave status");
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Status Update Error:", error);
         }
     });
 }
