@@ -8849,3 +8849,21 @@ table tbody tr td {
     transition: 0.5s;
     cursor: pointer;
 }
+
+.modal-title {
+    font-weight: 700 !important;
+    color: #03b0f5 !important;
+}
+
+select option {
+    font-weight: 800 !important;
+    background: linear-gradient(to bottom, #f5f5f5, #e1e1e1);
+    color: #333;
+    border: 1px solid #999;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 
+                inset 0 1px 0 rgba(255,255,255,0.7);
+    text-shadow: 0 1px 0 #fff;
+  }
