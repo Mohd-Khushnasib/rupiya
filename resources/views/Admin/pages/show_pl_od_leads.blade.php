@@ -96,14 +96,13 @@
                                     <div class="btn-group">
 
                                         <!-- Excel Export Start Here -->
-                                        <a href="javascript:void(0);" class="" id="exportButtonExcel">
-                                            <img width="30" height="30" src="https://img.icons8.com/color/30/export-excel.png"
-                                                alt="ms-excel" />
-                                        </a>
-                                        <!-- Excel Export Start Here -->
-                                        <!-- Search Data Start Here -->
+                                      
+                                       
                                         <input type="text" class="search_data form-control" placeholder="Search Here">
                                         <!-- Search Data End Here -->
+                                        <a href="javascript:void(0);" class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip" id="exportButtonExcel">
+                                        <i class="fa fa-excel"></i>
+                                        </a>
 
                                     </div>
                                     <div class="btn-group">
