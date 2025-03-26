@@ -8848,7 +8848,7 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
 input[type="month"],
-input[type="week"], {
+input[type="week"]{
     border-radius: 17px !important;
     box-shadow: 3px 4px 2px #bebebe !important;
     font-weight: 800;
