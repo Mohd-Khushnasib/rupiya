@@ -6409,8 +6409,30 @@ class AdminController extends Controller
 }
 
 
+    // addLeave
+    public function addLeave(Request $request)
+    {
+        $data = [
+            'admin_id' => $request->admin_id,
+            'status' => 'pending',
+            'leave_type' => $request->leave_type,
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'duration' => $request->duration,
+            'note' => $request->note,
+            'date' => date('Y-m-d',strtotime($this->date)),
+            'time' => date('h:i A',strtotime($this->date)),
+        ];
 
-
+        if (!empty($data)) {
+                DB::table('tbl_leave')->insert($historyData);
+                return response()->json([
+                    'success' => 'success',
+                ]);
+            }
+         else {
+        }
+    }
 
 
 

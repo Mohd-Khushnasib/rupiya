@@ -142,6 +142,7 @@
 
 <!-- Main Content Start Here  -->
 <div class="container" id="main-container">
+    <input type="text" name="id" id="admin_id" value="{{$adminlogin->id ?? ''}}" class="admin_id" hidden>
             <!-- BEGIN Content -->
             <div id="main-content">
                 <!-- BEGIN Page Title -->
@@ -263,7 +264,7 @@
                 @csrf
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" name="id" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
+                            <input type="text" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
                         </div>
 
                         <div class="col-sm-12">
@@ -301,7 +302,7 @@
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea name="note" class="form-control wysihtml5" rows="6"><b>Write reason here ...</b></textarea>
+                            <textarea name="note" class="form-control wysihtml5" rows="6" placeholder="Write reason here ..."></textarea>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
@@ -393,6 +394,40 @@ function loadCounts() {
     });
 }
 
+// add leave here 
+$("#add_form").submit(function(e) 
+    {
+        $(".add_btn").prop('disabled', true);
+        e.preventDefault();
+        let adminId = $(".admin_id").val();
+        alert(adminId);
+        var formdata = new FormData(this);
+        formdata.append("admin_id", adminId);
+
+        $.ajax({
+            type: "post",
+            url: "{{url('/add_leave')}}",
+            data: formdata,
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType: "json",
+            encode: true,
+            success: function(data) {
+                $(".add_btn").prop("disabled", false);
+                if (data.success == 'success') {
+                    document.getElementById("add_form").reset();
+                    $("#myModal").modal("hide");
+                    swal("Leave Request Successfully", "", "success");
+                    loadLeaves(currentPage);
+                } else if (data.success == 'error') {
+                    $(".add_btn").prop('disabled', false);
+                    swal("Error", data.message, "error");
+                }
+            },
+            error: function() {}
+        });
+    });
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
