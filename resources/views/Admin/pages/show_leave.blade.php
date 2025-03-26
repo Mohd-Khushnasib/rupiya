@@ -334,13 +334,13 @@
                 <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                 @csrf
                         <!-- leave_id  -->
-                        <input type="text" name="id" class="form-control edit_leave_id" readonly> 
-
+                        <input type="hidden" name="id" class="form-control edit_leave_id" readonly> 
+                        <!-- admin_id -->
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
                             <input type="text" class="form-control edit_admin_id" readonly>
                         </div>
-
+                        <!-- admin name like employee name -->
                         <div class="col-sm-12">
                             <label class="control-label">Name</label>
                             <input type="text" class="form-control edit_admin_name" readonly>
@@ -367,13 +367,14 @@
                                     <input type="date" name="to_date" class="form-control edit_to_date">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
+                            <div class="row">
+                            <div class="col-sm-12">
                                 <label class="control-label">Leave Duration</label>
                                 <input type="text" name="duration" class="form-control edit_duration">
                             </div>
                         </div>
+                        </div>
+                        
                         <div class="col-sm-12" style="margin-top: 10px;">
                             <textarea name="note" class="form-control wysihtml5 edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
