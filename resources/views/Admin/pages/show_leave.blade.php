@@ -574,7 +574,7 @@ $(document).ready(function() {
                     var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
                         .fromNow();
                     console.log("Formatted Date:", formattedDate); // Debugging ke liye
-                    var commentHTML = `
+                    var commentHTML + = `
                         <li>
                             <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
                             <div>
@@ -588,8 +588,9 @@ $(document).ready(function() {
                             </div>
                         </li>
                     `;
-                    $('#get_comment').append(commentHTML);
+                    // $('#get_comment').append(commentHTML);
                 });
+                $('#get_comment').html(commentHTML);
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
