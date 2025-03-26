@@ -6617,7 +6617,7 @@ class AdminController extends Controller
             ->where('leave_id', $leaveId)
             ->leftJoin('admin', 'tbl_leave_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
             ->select('tbl_leave_comment.*', 'admin.name as createdby')
-            ->orderBy('tbl_leave_comment.id', 'asc')
+            ->orderBy('tbl_leave_comment.id', 'desc')
             ->get();
         return response()->json($comments);
     }
