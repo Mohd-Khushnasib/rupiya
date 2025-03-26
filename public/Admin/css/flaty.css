@@ -8834,6 +8834,12 @@ table tbody tr td {
     box-shadow: 3px 4px 2px #bebebe !important;
     font-weight: 800;
 }
-.stats-card{
+
+.stats-card {
     box-shadow: 6px 6px 1px #bebebe !important;
+}
+
+.stats-card:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
 }
