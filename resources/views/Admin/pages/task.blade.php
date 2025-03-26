@@ -520,7 +520,7 @@
                         <input type="text" id="created_by" class="form-control created_by" readonly>
                     </div>
 
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" style="margin-bottom: 10px">
                         <label for="subject">Subject</label>
                         <input type="text" name="subject" id="edit_subject" class="form-control edit_subject" disabled>
                     </div>
@@ -536,7 +536,7 @@
                         </select>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" style="margin-bottom: 10px;">
                         <div class="controls">
                             <label for="">Lead / Login</label>
                             <select id="edit_lead_type" name="lead_type" class="form-control edit_lead_type"
@@ -548,7 +548,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" style="margin-bottom: 10px;">
                         <label class="control-label">Customer Name </label>
                         <div class="controls">
                             <select id="edit_lead_id" name="lead_id" class="form-control edit_lead_id">
@@ -569,7 +569,7 @@
                         <input type="time" name="time" id="edit_time" class="form-control edit_time" disabled>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" style="margin-top: 10px;">
                         @php
                             $admins = DB::table('admin')->orderBy('id', 'desc')->get();
                         @endphp

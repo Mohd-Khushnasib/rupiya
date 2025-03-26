@@ -3850,7 +3850,7 @@ a.tile:hover {
 
 .messages-input-form {
     position: relative;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     margin-top: 10px;
 }
 
@@ -3861,8 +3861,9 @@ a.tile:hover {
 .messages-input-form .input input[type="text"] {
     border: 0;
     margin-bottom: 0;
+    margin-left: 10px;
     display: block;
-    padding: 4px 6px;
+    /* padding: 4px 6px; */
     height: 30px;
 }
 
