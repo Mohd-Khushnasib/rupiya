@@ -497,19 +497,21 @@ function loadLeaves(status, page, search = '') {
     statusCell = `
         <td>
             <div>
-                <span style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; margin-bottom: 5px; display: block;">
+                <span class="pending-badge" 
+                      style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; display: block; cursor: pointer;"
+                      data-id="${item.id}">
                     Pending
                 </span>
-                <div class="action-buttons" style="margin-top: 5px;">
+                <div class="action-buttons-${item.id}" style="margin-top: 5px; display: none;">
                     <button class="approve-btn" 
                             style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px; border: none; margin-right: 5px; cursor: pointer; font-size: 14px;" 
                             data-id="${item.id}">
-                        <i class="fas fa-check"></i> approved
+                         approved
                     </button>
                     <button class="reject-btn" 
                             style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 14px;" 
                             data-id="${item.id}">
-                        <i class="fas fa-times"></i> rejected
+                       rejected
                     </button>
                 </div>
             </div>
@@ -542,15 +544,22 @@ function loadLeaves(status, page, search = '') {
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
                 
                 // Attach event handlers for approve and reject buttons
-                $('button.approve-btn').on('click', function() {
-                    const leaveId = $(this).data('id');
-                    updateLeaveStatus(leaveId, 'approved');
-                });
-                
-                $('button.reject-btn').on('click', function() {
-                    const leaveId = $(this).data('id');
-                    updateLeaveStatus(leaveId, 'rejected');
-                });
+                // Add click event for pending badges to show/hide action buttons
+$('.pending-badge').on('click', function() {
+    const leaveId = $(this).data('id');
+    $(`.action-buttons-${leaveId}`).toggle(); // Toggle visibility of buttons
+});
+
+// Add click events for approve and reject buttons
+$('.approve-btn').on('click', function() {
+    const leaveId = $(this).data('id');
+    updateLeaveStatus(leaveId, 'approved');
+});
+
+$('.reject-btn').on('click', function() {
+    const leaveId = $(this).data('id');
+    updateLeaveStatus(leaveId, 'rejected');
+});
             } else {
                 console.log('No data found or empty data array');
                 tbody.append(`<tr><td colspan="8" class="text-center">No Leave Data Found</td></tr>`);
