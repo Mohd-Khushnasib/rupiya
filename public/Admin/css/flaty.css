@@ -8840,6 +8840,21 @@ table tbody tr td {
     font-weight: 800;
 }
 
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"]{
+    border-radius: 17px !important;
+    box-shadow: 3px 4px 2px #bebebe !important;
+    font-weight: 800;
+    border: none !important;
+}
+
 .stats-card {
     box-shadow: 6px 6px 1px #bebebe !important;
 }
@@ -8863,7 +8878,11 @@ select option {
     border-radius: 4px;
     padding: 8px 12px;
     margin: 2px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 
-                inset 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
     text-shadow: 0 1px 0 #fff;
-  }
+}
+
+.btn-group {
+    display: flex !important;
+}
