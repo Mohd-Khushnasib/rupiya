@@ -565,6 +565,5 @@ My Warnings me team1 ko filter kiya tb only total warning show ho rhi baki nhi h
 10=> attendance 
 11=> all ui 
 12=> all employee me status with modal 
-13=> Tickets me    Lead / Login me Customer Name  
+13=> Tickets me  Lead / Login me Customer Name  
 14=> name-designation and profile photo 
-15=> 

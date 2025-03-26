@@ -259,7 +259,8 @@
             </div>
             <div>
                 <div class="col-md-12">
-                    <form class="mail-compose form-horizontal" action="#">
+                <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                @csrf
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
                             <input type="text" name="id" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
@@ -296,7 +297,7 @@
 
                         <div class="col-sm-12">
                             <label class="control-label">Leave Duration</label>
-                            <input type="number" name="duration" placeholder="Enter Leave Duration ( in days )" class="form-control" >
+                            <input type="text" name="duration" placeholder="Enter Leave Duration ( in days )" class="form-control" readonly>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
@@ -304,7 +305,7 @@
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-rocket"></i>
+                            <button type="submit" class="btn btn-primary add_btn"><i class="fa fa-rocket"></i>
                                 Add</button>
                             <a type="button" class="btn">Cancel</a>
                         </div>
@@ -392,6 +393,7 @@ function loadCounts() {
     });
 }
 
+
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
     console.log('Loading leaves with status:', status, 'page:', page, 'search:', search);
@@ -443,9 +445,6 @@ function loadLeaves(status, page, search = '') {
                     // Calculate leave duration
                     const fromDate = new Date(item.from_date);
                     const toDate = new Date(item.to_date);
-                    const diffTime = Math.abs(toDate - fromDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both days
-                    
                     // Create the row HTML
                     const rowHtml = `
                         <tr>
@@ -453,7 +452,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
-                            <td>${diffDays} day${diffDays > 1 ? 's' : ''}</td>
+                            <td>${item.duration || ''} days</td>
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
                         </tr>
@@ -545,6 +544,31 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         `);
     }
 }
+</script>
+
+<!-- Days Count from_date to to_date -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get the input elements
+    const fromDateInput = document.querySelector('input[name="from_date"]');
+    const toDateInput = document.querySelector('input[name="to_date"]');
+    const durationInput = document.querySelector('input[name="duration"]');
+
+    fromDateInput.addEventListener('change', calculateDuration);
+    toDateInput.addEventListener('change', calculateDuration);
+    function calculateDuration() {
+        const fromDate = new Date(fromDateInput.value);
+        const toDate = new Date(toDateInput.value);
+        if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+            return;
+        }
+        const diffTime = Math.abs(toDate - fromDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const durationText = diffDays === 1 ? `${diffDays} day` : `${diffDays} days`;
+        durationInput.type = 'text';
+        durationInput.value = durationText;
+    }
+});
 </script>
 
 
