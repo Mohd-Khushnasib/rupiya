@@ -2111,48 +2111,48 @@ Bordered form layout
 
 /* CSS */
 .btn {
-  align-items: center;
-  appearance: none;
-  background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
-  border: 0;
-  border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
-  height: 48px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
-  font-size: 18px;
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5064fc 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
 }
 
 .btn:focus {
-  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
 }
 
 .btn:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-  transform: translateY(-2px);
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
 }
 
 .btn:active {
-  box-shadow: #3c4fe0 0 3px 7px inset;
-  transform: translateY(2px);
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
 }
 
 .btn.active,
@@ -8746,159 +8746,62 @@ table tbody tr td {
 
 .leads_system_bg option {
     font-weight: 800 !important;
-}/* Base 3D styling for the select element */
-.form-control.leads_system_bg {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: #f8f8f8;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px 15px;
-    font-weight: 500;
-    width: 100%;
-    cursor: pointer;
-    
-    /* 3D effect with shadows */
-    box-shadow: 
-      0 3px 5px rgba(0,0,0,0.2),
-      inset 0 1px 0 rgba(255,255,255,0.8);
-    
-    /* Gradient background for 3D effect */
-    background-image: 
-      linear-gradient(to bottom, #ffffff, #f0f0f0),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-    background-position: center left, center right 10px;
-    background-repeat: no-repeat;
-    background-size: 100%, 12px;
-    padding-right: 30px;
-    
-    /* Text effects */
-    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
-    
-    /* Smooth transition for interactions */
-    transition: all 0.2s ease;
-  }
-  
-  /* Hover state */
-  .form-control.leads_system_bg:hover {
-    border-color: #999;
-    background-image: 
-      linear-gradient(to bottom, #ffffff, #e8e8e8),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-    box-shadow: 
-      0 4px 8px rgba(0,0,0,0.15),
-      inset 0 1px 0 rgba(255,255,255,0.8);
-    transform: translateY(-1px);
-  }
-  
-  /* Focus state */
-  .form-control.leads_system_bg:focus {
-    outline: none;
-    border-color: #4d90fe;
-    box-shadow: 
-      0 4px 8px rgba(0,0,0,0.15),
-      inset 0 1px 0 rgba(255,255,255,0.8),
-      0 0 0 3px rgba(77, 144, 254, 0.25);
-  }
-  
-  /* Active/pressed state */
-  .form-control.leads_system_bg:active {
-    box-shadow: 
-      0 1px 2px rgba(0,0,0,0.1),
-      inset 0 1px 3px rgba(0,0,0,0.2);
-    background-image: 
-      linear-gradient(to top, #f7f7f7, #eaeaea),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-    transform: translateY(1px);
-  }
-  
-  /* Base styling for all options */
-  .form-control.leads_system_bg option {
-    padding: 10px;
-    border-radius: 4px;
-    margin: 2px 0;
-    font-weight: normal;
-    box-shadow: 
-      inset 0 1px 0 rgba(255,255,255,0.4),
-      inset 0 -1px 0 rgba(0,0,0,0.1);
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(0,0,0,0.05));
-    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
-  }
-  
-  /* Keep the original color classes with 3D enhancements */
-  .leads_system_bg .newlead {
+}
+
+.leads_system_bg .newlead {
     background-color: #00b1f2;
     color: black;
-  }
-  
-  .leads_system_bg .inprogress {
+}
+
+.leads_system_bg .inprogress {
     background-color: yellow;
     color: black;
-  }
-  
-  .leads_system_bg .followup {
+}
+
+.leads_system_bg .followup {
     background-color: #00b1f2;
     color: black;
-  }
-  
-  .leads_system_bg .callback {
+}
+
+.leads_system_bg .callback {
     background-color: #ec7e30;
     color: black;
-  }
-  
-  .leads_system_bg .implead {
+}
+
+.leads_system_bg .implead {
     background-color: #fd0000;
     color: black;
-  }
-  
-  .leads_system_bg .longfollowup {
+}
+
+.leads_system_bg .longfollowup {
     background-color: #00b1f2;
     color: black;
-  }
-  
-  .leads_system_bg .indoct {
+}
+
+.leads_system_bg .indoct {
     background-color: #00af50;
     color: black;
-  }
-  
-  .leads_system_bg .filecomp {
+}
+
+.leads_system_bg .filecomp {
     background-color: #000;
     color: #fff;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-  }
-  
-  .leads_system_bg .notint {
+}
+
+.leads_system_bg .notint {
     background-color: red;
     color: black;
-  }
-  
-  .leads_system_bg .fakelead {
+}
+
+.leads_system_bg .fakelead {
     background-color: #fd0000;
     color: black;
-  }
-  
-  .leads_system_bg .lost {
+}
+
+.leads_system_bg .lost {
     background-color: #fd0000;
     color: #000;
-  }
-  
-  /* Hover effect for options */
-  .form-control.leads_system_bg option:hover {
-    box-shadow: 
-      inset 0 1px 0 rgba(255,255,255,0.6),
-      inset 0 -1px 0 rgba(0,0,0,0.2),
-      0 0 5px rgba(0,0,0,0.1);
-  }
-  
-  /* First option (placeholder) styling */
-  .form-control.leads_system_bg option:first-child {
-    font-style: italic;
-    color: #666;
-    background-color: #f8f8f8;
-    background-image: linear-gradient(to bottom, #ffffff, #f0f0f0);
-  }
+}
 
 .leads_system_bg .newfile {
     background-color: #00b1ef;
