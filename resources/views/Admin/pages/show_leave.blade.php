@@ -421,11 +421,11 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="messages-input-form">
-                                                <form class="employee_add_comment_task" method="POST" action="javascript:void(0);">
+                                                <form class="add_comment_leave" method="POST" action="javascript:void(0);">
                                                     @csrf
                                                     <div class="input">
-                                                        <input type="text" name="leave_id" id="comment_leave_id" class="comment_leave_id" value="">
-                                                        <input type="text" name="admin_id" value="{{$adminlogin->id ?? ''}}">
+                                                        <input type="hidden" name="leave_id" id="comment_leave_id" class="comment_leave_id" value="">
+                                                        <input type="hidden" name="admin_id" value="{{$adminlogin->id ?? ''}}">
                                                         <input type="text" name="comment" placeholder="Write here..."
                                                             class="form-control">
                                                     </div>
@@ -797,6 +797,43 @@ $("#add_form").submit(function(e) {
         }
     });
 });
+// add comment in leave 
+$(".add_comment_leave").submit(function(e) {
+    e.preventDefault();
+    // Disable submit button
+    $(".comment_btn").prop('disabled', true);
+    var formData = new FormData(this);
+    
+    $.ajax({
+        type: "post",
+        url: "{{url('/add_leave_comment')}}",
+        data: formData,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function(data) {
+            // Re-enable button
+            $(".comment_btn").prop('disabled', false);
+            if (data.success == 'success') {
+                // Reset form
+                document.getElementsByClassName("add_comment_leave")[0].reset();
+                
+                swal("Comment Added Successfully", "", "success");
+                loadComments();
+            } else {
+                swal("Comment Not Added", "", "error");
+            }
+        },
+        error: function() {
+            // Re-enable button on error
+            $(".comment_btn").prop('disabled', false);
+            swal("Error", "Something went wrong", "error");
+        }
+    });
+});
+
+
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {

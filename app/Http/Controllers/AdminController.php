@@ -6623,6 +6623,30 @@ class AdminController extends Controller
     }
 
 
+    public function addLeaveComment(Request $request)
+    {
+        $task = DB::table('tbl_leave')->where('id', $request->leave_id)->first();
+        if ($task) {
+            $data = [
+                'admin_id' => $request->admin_id,
+                'leave_id'  => $request->leave_id,
+                'comment'  => $request->comment,
+                'date'     => $this->date
+            ];
+            // Insert comment into tbl_task_comment
+            DB::table('tbl_leave_comment')->insert($data);
+            // Insert into tbl_lead_status after adding the comment
+            DB::table('tbl_employee_status')->insert([
+                'admin_id'    => $request->admin_id,
+                'lead_status' => 'Change Comment Added Section',
+                'date'        => $this->date,
+            ]);
+            return response()->json([
+                'success' => 'success',
+            ]);
+        } else {
+        }
+    }
 
 
     // end here
