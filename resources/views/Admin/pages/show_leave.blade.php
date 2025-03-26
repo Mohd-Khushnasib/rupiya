@@ -334,7 +334,7 @@
                 <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                 @csrf
                         <!-- leave_id  -->
-                        <input type="hidden" name="id" class="form-control edit_leave_id" readonly> 
+                        <input type="hidden" name="leave_id" class="form-control edit_leave_id" readonly> 
                         <!-- admin_id -->
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
@@ -402,6 +402,122 @@ window.jQuery || document.write('<script src="assets/jquery/jquery-2.1.1.min.js"
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+// Handle form submission for employee leave update
+$(document).ready(function() {
+    // Edit button click event
+    $(document).on('click', '.edit_button', function() {
+        // Enable all form fields except ID and Name
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', false);
+        
+        // Hide Edit button and show Update button
+        $('.edit_button').hide();
+        $('.update_employee_btn').show();
+    });
+
+    // Click event for Edit Employee in the table
+    $(document).on('click', '.edit_employee', function() {
+        let leaveId = $(this).data('id');
+        let adminId = $(this).data('admin_id');
+        let admin_name = $(this).data('admin_name');
+        let leaveType = $(this).data('leave_type');
+        let fromDate = $(this).data('from_date');
+        let toDate = $(this).data('to_date');
+        let duration = $(this).data('duration');
+        let note = $(this).data('note');
+
+        // Set values in the modal using class selectors
+        $('.edit_leave_id').val(leaveId);
+        $('.edit_admin_id').val("EMP" + adminId);
+        $('.edit_admin_name').val(admin_name);
+        
+        // Set dropdown value
+        $('.edit_leave_type option').each(function() {
+            if($(this).val() == leaveType) {
+                $(this).prop("selected", true);
+            } else {
+                $(this).prop("selected", false);
+            }
+        });
+        
+        $('.edit_from_date').val(fromDate);
+        $('.edit_to_date').val(toDate);
+        $('.edit_duration').val(duration);
+        $('.edit_note').val(note);
+        
+        // Make sure all fields are disabled initially
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', true);
+        
+        // Show the Edit button and hide the Update button
+        $('.edit_button').show();
+        $('.update_employee_btn').hide();
+        
+        $('#editEmployeeModal').modal('show');
+    });
+
+    // Form submission for updating employee leave
+    $("#edit_employee_form").submit(function(e) {
+        e.preventDefault();
+        // Disable the update button to prevent multiple submissions
+        $(".update_employee_btn").prop('disabled', true);
+        
+        // Get current tab status
+        let currentTabStatus = $('.nav-item.active .admin-tab').data('status');
+        // Convert index to string status if needed
+        let activeTabIndex = $('.nav-item.active').index();
+        if (activeTabIndex === 0) {
+            currentTabStatus = 'all';
+        } else if (activeTabIndex === 1) {
+            currentTabStatus = 'pending';
+        } else if (activeTabIndex === 2) {
+            currentTabStatus = 'approved';
+        } else if (activeTabIndex === 3) {
+            currentTabStatus = 'rejected';
+        }
+        
+        // Get current page from pagination active link
+        let currentPageNumber = parseInt($("#pagination .active a").text()) || 1;
+        
+        // Get current search keyword
+        let currentSearchText = $('.search_admin').val().trim();
+        
+        var formData = new FormData(this);
+        
+        $.ajax({
+            type: "POST",
+            url: "{{url('/update_employee_leave')}}",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            cache: false,
+            encode: true,
+            success: function(data) {
+                // Re-enable the update button
+                $(".update_employee_btn").prop("disabled", false);
+                
+                if (data.success == 'success') {
+                    $("#edit_employee_form")[0].reset();
+                    $("#editEmployeeModal").modal("hide");
+                    swal("Leave Updated Successfully", "", "success");
+                    
+                    // Use the captured values to reload the leaves
+                    loadLeaves(currentTabStatus, currentPageNumber, currentSearchText);
+                    loadCounts();
+                } else {
+                    swal("Leave Update Failed!", "", "error");
+                }
+            },
+            error: function(errResponse) {
+                // Re-enable the update button
+                $(".update_employee_btn").prop("disabled", false);
+                swal("Something Went Wrong!", "", "error");
+            }
+        });
+    });
+    
+});
+</script>
 
 <script>
 $(document).ready(function() {
@@ -680,63 +796,7 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
     }
 }
 
-// edit employee here 
-$(document).ready(function() {
-    // Click event for Edit Employee button
-    $(document).on('click', '.edit_employee', function() {
-        let leaveId = $(this).data('id');
-        let adminId = $(this).data('admin_id');
-        let admin_name = $(this).data('admin_name');
-        let leaveType = $(this).data('leave_type');
-        let fromDate = $(this).data('from_date');
-        let toDate = $(this).data('to_date');
-        let duration = $(this).data('duration');
-        let note = $(this).data('note');
 
-        // Set values in the modal using class selectors
-        $('.edit_leave_id').val(leaveId);
-        $('.edit_admin_id').val("EMP" + adminId);
-        $('.edit_admin_name').val(admin_name);
-        
-        // Set dropdown value
-        $('.edit_leave_type option').each(function() {
-            if($(this).val() == leaveType) {
-                $(this).prop("selected", true);
-            } else {
-                $(this).prop("selected", false);
-            }
-        });
-        
-        $('.edit_from_date').val(fromDate);
-        $('.edit_to_date').val(toDate);
-        $('.edit_duration').val(duration);
-        $('.edit_note').val(note);
-        
-        // Make sure all fields are disabled initially
-        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', true);
-        
-        // Show the Edit button and hide the Update button
-        $('#edit_button').show();
-        $('#update_button').hide();
-        
-        $('#editEmployeeModal').modal('show');
-    });
-    
-    // Edit button click event
-    $(document).on('click', '#edit_button', function() {
-        // Enable all form fields except ID and Name
-        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', false);
-        
-        // Hide Edit button and show Update button
-        $('#edit_button').hide();
-        $('#update_button').show();
-    });
-    
-    // Update button click event
-    $(document).on('click', '.update_employee_btn', function() {
-        $('#editEmployeeModal').modal('hide');
-    });
-});
 </script>
 
 

@@ -6584,6 +6584,31 @@ class AdminController extends Controller
         }
     }
 
+    // update employee 
+    public function updateEmployeeLeave(Request $request)
+    {
+        $data = [
+            'id'   => $request->leave_id,
+            'leave_type'  => $request->leave_type,
+            'from_date'   => $request->from_date,
+            'to_date'   => $request->to_date,
+            'duration' => $request->duration,
+            'note' => $request->note,
+            'date'      => date('Y-m-d', strtotime($request->date)),
+            'time'      => date('h:i A', strtotime($request->time))
+        ];
+
+        if (!empty($data)) {
+            $res = DB::table('tbl_leave')->where('id', $request->leave_id)->update($data);
+            if ($res) {
+                return response()->json([
+                    'success' => 'success',
+                ]);
+            }
+        } else {
+        }
+    }
+
 
 
 
