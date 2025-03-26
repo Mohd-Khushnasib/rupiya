@@ -490,34 +490,35 @@ function loadLeaves(status, page, search = '') {
                 data.data.forEach((item, index) => {
                     // Get status badge class
                     let statusCell = '';
-                    
-                    if(item.status == 'pending') {
+                    let userRole = "<?= $adminlogin->role ?>";
+                    if (item.status == 'pending') {
                         statusCell = `
                             <td>
                                 <div>
                                     <span class="pending-badge" 
-                                        style="background-color: #ffc107; color: #212529; color: white; padding: 5px 10px; border-radius: 4px;"
+                                        style="background-color: #ffc107; color: white; padding: 5px 10px; border-radius: 4px;"
                                         data-id="${item.id}">
                                         Pending
                                     </span>
+                                    ${userRole === 'Admin' || userRole === 'HR' ? `
                                     <div class="action-buttons" style="margin-top: 5px; display: none;" data-id="${item.id}">
                                         <button class="approve-btn" 
                                                 style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 4px; border: none; margin-right: 5px; cursor: pointer; font-size: 14px;" 
                                                 data-id="${item.id}">
-                                            approved
+                                            Approved
                                         </button>
                                         <button class="reject-btn" 
                                                 style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 14px;" 
                                                 data-id="${item.id}">
-                                            rejected
+                                            Rejected
                                         </button>
-                                    </div>
+                                    </div>` : ''}
                                 </div>
                             </td>
                         `;
-                    } else if(item.status == 'approved') {
+                    } else if (item.status == 'approved') {
                         statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
-                    } else if(item.status == 'rejected') {
+                    } else if (item.status == 'rejected') {
                         statusCell = `<td><span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
                     }
                     
