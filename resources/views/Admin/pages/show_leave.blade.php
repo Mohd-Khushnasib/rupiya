@@ -501,13 +501,13 @@ function loadLeaves(status, page, search = '') {
                     Pending
                 </span>
                 <div class="action-buttons" style="margin-top: 5px;">
-                    <button class="btn btn-success btn-sm approve-btn" 
-                            style="margin-right: 5px; padding: 5px 10px; border-radius: 4px;" 
+                    <button class="approve-btn" 
+                            style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px; border: none; margin-right: 5px; cursor: pointer; font-size: 14px;" 
                             data-id="${item.id}">
                         <i class="fas fa-check"></i> approved
                     </button>
-                    <button class="btn btn-danger btn-sm reject-btn" 
-                            style="padding: 5px 10px; border-radius: 4px;" 
+                    <button class="reject-btn" 
+                            style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 14px;" 
                             data-id="${item.id}">
                         <i class="fas fa-times"></i> rejected
                     </button>
