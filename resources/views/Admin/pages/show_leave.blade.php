@@ -304,7 +304,7 @@
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea name="note" class="form-control wysihtml5" rows="6" placeholder="Write reason here ..."></textarea>
+                            <textarea name="note" class="form-control" rows="6" placeholder="Write reason here ..."></textarea>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
