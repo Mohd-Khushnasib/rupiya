@@ -8849,3 +8849,8 @@ table tbody tr td {
     transition: 0.5s;
     cursor: pointer;
 }
+
+.modal-title {
+    font-weight: 700 !important;
+    color: #03b0f5 !important;
+}
