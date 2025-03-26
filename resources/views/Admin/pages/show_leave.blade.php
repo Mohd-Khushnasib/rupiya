@@ -475,6 +475,8 @@ $(document).ready(function() {
         let duration = $(this).data('duration');
         let note = $(this).data('note');
 
+        let status = $(this).data('status') || 'pending';
+        updateStatusDropdown(status);
 
         // Set values in the modal using class selectors
         $('.edit_leave_id').val(leaveId);
@@ -505,7 +507,16 @@ $(document).ready(function() {
         $('#editEmployeeModal').modal('show');
     });
 
-
+    // dropdown value start here 
+    function updateStatusDropdown(status) {
+        // Set the current status on the dropdown button
+        $('#statusDropdown').data('current-status', status);
+        // Update the button text
+        $('#statusDropdown').html(status.toUpperCase());
+        // Mark the current status as active in the dropdown
+        $('.status-option').removeClass('active');
+        $('.status-option[data-status="' + status + '"]').addClass('active');
+    }
 
     // Form submission for updating employee leave
     $("#edit_employee_form").submit(function(e) {
@@ -848,8 +859,6 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         `);
     }
 }
-
-
 </script>
 
 
