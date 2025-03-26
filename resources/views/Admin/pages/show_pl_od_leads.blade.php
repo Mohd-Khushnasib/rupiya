@@ -93,15 +93,13 @@
                         <div class="col-md-12">
                             <div class="box-content">
                                 <div class="btn-toolbar pull-right">
-                                    <div class="btn-group">
+                                    <div class="btn-group" style="gap: 10px;">
 
                                         <!-- Excel Export Start Here -->
-                                      
-                                       
                                         <input type="text" class="search_data form-control" placeholder="Search Here">
                                         <!-- Search Data End Here -->
                                         <a href="javascript:void(0);" class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip" id="exportButtonExcel">
-                                        <i class="fa fa-excel"></i>
+                                        <i class="bi bi-excel"></i>
                                         </a>
 
                                     </div>
