@@ -531,6 +531,6 @@ $(function () {
 
 document.querySelectorAll('input[type="date"]').forEach(function (dateInput) {
     dateInput.addEventListener("focus", function () {
-        this.showPicker(); // Opens the date picker when the field is focused
+        this.showPicker(); 
     });
 });
