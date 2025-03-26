@@ -681,6 +681,7 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 // edit employee here 
 $(document).on('click', '.edit_employee', function() {
     let leaveId = $(this).data('id');
+    alert(leaveId);
     let adminId = $(this).data('admin_id');
     let admin_name = $(this).data('admin_name');
     let leaveType = $(this).data('leave_type');
