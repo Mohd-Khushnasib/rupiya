@@ -8898,3 +8898,7 @@ div.dataTables_filter input::placeholder {
     color: #0090ff !important;
 }
 
+button i {
+    margin-right: 4px !important;
+}
+
