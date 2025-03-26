@@ -573,7 +573,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${(page-1)*data.per_page + index + 1}</td>
                             <td>
                                 <a href="javascript:void(0);" class="edit_employee"
-                                    data-admin_id="${item.id || ''}"
+                                    data-admin_id="${item.admin_id || ''}"
                                     data-admin_name="${item.admin_name || ''}"
                                     data-leave_type="${item.leave_type || ''}"
                                     data-from_date="${item.from_date || ''}"
