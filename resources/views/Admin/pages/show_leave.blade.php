@@ -560,7 +560,13 @@ function loadLeaves(status, page, search = '') {
 }
 
 // Add these event handlers OUTSIDE the loadLeaves function
-// This prevents duplicate handlers from being added
+$(document).on("click", ".pending-badge", function () {
+    let role = "<?= $adminlogin->role ?>"; // Get the role again inside click event
+    if (role === "Admin" || role === "HR") {
+        let id = $(this).data("id");
+        $(`.action-buttons[data-id="${id}"]`).toggle(); // Toggle buttons for Admin & HR
+    }
+});
 $(document).ready(function() {
     // Click event for pending badges
     $(document).on('click', '.pending-badge', function() {
