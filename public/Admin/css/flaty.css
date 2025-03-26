@@ -8855,7 +8855,7 @@ table tbody tr td {
     color: #03b0f5 !important;
 }
 
-option {
+select option {
     font-weight: 800 !important;
     background: linear-gradient(to bottom, #f5f5f5, #e1e1e1);
     color: #333;
