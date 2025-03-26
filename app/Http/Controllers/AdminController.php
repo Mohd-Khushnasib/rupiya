@@ -6425,7 +6425,7 @@ class AdminController extends Controller
         ];
 
         if (!empty($data)) {
-                DB::table('tbl_leave')->insert($historyData);
+                DB::table('tbl_leave')->insert($data);
                 return response()->json([
                     'success' => 'success',
                 ]);
