@@ -569,7 +569,7 @@
                         <input type="time" name="time" id="edit_time" class="form-control edit_time" disabled>
                     </div>
 
-                    <div class="col-sm-6" style="margin-bottom: 10px;">
+                    <div class="col-sm-6" style="margin-top: 10px;">
                         @php
                             $admins = DB::table('admin')->orderBy('id', 'desc')->get();
                         @endphp
