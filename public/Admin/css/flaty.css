@@ -8827,3 +8827,9 @@ table tbody tr td {
     background-color: #00af50;
     color: #000;
 }
+
+.form-control {
+    border-radius: 17px !important;
+    box-shadow: 20px 20px 60px #bebebe,
+        -20px -20px 60px #ffffff !important;
+}
