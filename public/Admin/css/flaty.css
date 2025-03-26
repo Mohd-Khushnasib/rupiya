@@ -8888,6 +8888,12 @@ select option {
     text-shadow: 0 1px 0 #fff;
 }
 
-/* .btn-group {
-    display: flex !important;
-} */
+div.dataTables_length select,
+div.dataTables_filter input {
+    padding: 16px 11px !important;
+}
+
+div.dataTables_length select,
+div.dataTables_filter input::placeholder {
+    color: #0090ff !important;
+}
