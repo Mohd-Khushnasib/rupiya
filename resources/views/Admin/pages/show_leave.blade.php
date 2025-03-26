@@ -496,7 +496,7 @@ function loadLeaves(status, page, search = '') {
                             <td>
                                 <div>
                                     <span class="pending-badge" 
-                                        style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; cursor: pointer;"
+                                        style="background-color: #ffc107; color: #212529; color: white; padding: 5px 10px; border-radius: 4px;"
                                         data-id="${item.id}">
                                         Pending
                                     </span>
