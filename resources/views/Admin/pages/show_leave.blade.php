@@ -401,8 +401,58 @@
                             </div>
                         </div>
                         <!-- Change Status End Here -->
-
                     </form>
+
+                    <!-- Remark Start Here  -->
+
+                    <!-- Add Comment And History Start Here -->
+                <div class="col-sm-12">
+                    <p>
+                    <div class="tabbable">
+                        <ul id="myTab1" class="nav nav-tabs">
+                            <li class="active"><a href="#comment1" data-toggle="tab"><i class="fa fa-home"></i>
+                                    Add Comments</a></li>
+                            <!-- <li><a href="#history1" data-toggle="tab"><i class="fa fa-user"></i>
+                                    History</a></li> -->
+                        </ul>
+                        <div id="myTabContent1" class="tab-content">
+                            <div class="tab-pane fade in active all_tabs_bg" id="comment1">
+                                <div class="boligation_tabls">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="messages-input-form">
+                                                <form class="employee_add_comment_task" method="POST" action="javascript:void(0);">
+                                                    @csrf
+                                                    <div class="input">
+                                                        <input type="text" name="leave_id" id="comment_leave_id" class="comment_leave_id" value="">
+                                                        <input type="text" name="admin_id" value="{{$adminlogin->id ?? ''}}">
+                                                        <input type="text" name="comment" placeholder="Write here..."
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="buttons">
+                                                        <button type="submit" class="btn btn-primary"><i
+                                                                class="fa fa-share"></i></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Data Load From Ajax  -->
+                                            <ul class="messages messages-stripped" id="get_comment">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    </p>
+                </div>
+                <!-- Add Comment And History End Here -->
+
+                    <!-- Remark End Here  -->
+
+
                 </div>
             </div>
             <div class="modal-footer"></div>
@@ -503,6 +553,46 @@ $(document).ready(function() {
         // Show the Edit button and hide the Update button
         $('.edit_button').show();
         $('.update_employee_btn').hide();
+
+
+        // leave comment show start here
+        $.ajax({
+            url: "{{url('/get-leave-comments')}}",
+            method: 'GET',
+            data: {
+                leave_id: leaveId
+            },
+            success: function(response) {
+                console.log(response);
+                $('#get_comment').empty();
+                response.forEach(function(item) {
+                    console.log("Raw Date:", item.date);
+                    var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
+                        .fromNow();
+                    console.log("Formatted Date:", formattedDate); // Debugging ke liye
+                    var commentHTML = `
+                        <li>
+                            <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
+                            <div>
+                                <div>
+                                    <h5 class="theam_color">${item.createdby}</h5>
+                                    <span class="time"><i class="fa fa-clock-o"></i>
+                                        ${formattedDate}
+                                    </span>
+                                </div>
+                                <p>${item.comment}</p>
+                            </div>
+                        </li>
+                    `;
+                    $('#get_comment').html(commentHTML);
+                    
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+        // leave comment end here
         
         $('#editEmployeeModal').modal('show');
     });
