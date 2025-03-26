@@ -569,12 +569,18 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 $('#get_comment').empty();
+                
+                // Initialize commentHTML before the loop
+                var commentHTML = '';
+                
                 response.forEach(function(item) {
                     console.log("Raw Date:", item.date);
                     var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
                         .fromNow();
                     console.log("Formatted Date:", formattedDate); // Debugging ke liye
-                    var commentHTML + = `
+                    
+                    // Corrected += operator (removed space)
+                    commentHTML += `
                         <li>
                             <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
                             <div>
@@ -588,8 +594,10 @@ $(document).ready(function() {
                             </div>
                         </li>
                     `;
-                    // $('#get_comment').append(commentHTML);
+                    // No append inside the loop
                 });
+                
+                // Set all HTML at once after the loop
                 $('#get_comment').html(commentHTML);
             },
             error: function(xhr, status, error) {
