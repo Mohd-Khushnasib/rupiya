@@ -6562,7 +6562,7 @@ class AdminController extends Controller
 
     public function updateLeaveStatus(Request $request)
     {
-        // Get admin session
+        // Get admin session 
         $adminSession = collect(session()->get('admin_login'))->first();
         
         $admin_id = $adminSession->id;
