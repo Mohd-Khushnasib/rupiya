@@ -3,27 +3,7 @@
 @extends('Admin.layouts.master')
 @section('main-content')
 <style>
-    .btn-primary.edit_button {
-    background-color: #4e73f8;
-    border-color: #4e73f8;
-    color: white;
-    border-radius: 5px;
-    padding: 8px 20px;
-    font-weight: bold;
-}
-
-.dropdown-toggle {
-    background-color: #4e73f8;
-    border-color: #4e73f8;
-    color: white;
-    border-radius: 5px;
-    padding: 8px 20px;
-    font-weight: bold;
-}
-
-.dropdown-item:hover {
-    background-color: #f0f0f0;
-}
+    
 
     .nav-tabs {
         border-bottom: none;
