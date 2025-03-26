@@ -8874,3 +8874,7 @@ select option {
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
     text-shadow: 0 1px 0 #fff;
 }
+
+.btn-group {
+    display: flex !important;
+}
