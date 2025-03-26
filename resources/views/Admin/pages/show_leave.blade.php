@@ -265,7 +265,7 @@
                 @csrf
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
-                            <input type="text" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
+                            <input type="text" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}" readonly>
                         </div>
 
                         <div class="col-sm-12">
