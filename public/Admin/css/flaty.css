@@ -2182,7 +2182,7 @@ a.btn {
 
 /* Circle Buttons */
 .btn-circle {
-    padding: 5px;
+    /* padding: 5px; */
     line-height: 15px;
     border-radius: 100% !important;
 }
@@ -2197,11 +2197,11 @@ a.btn {
 }
 
 .btn-circle.btn-bordered {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
 }
 
 .btn-circle.btn-bordered.thick {
-    border-width: 2px;
+    /* border-width: 2px; */
 }
 
 .btn-circle.btn-xxlarge {
