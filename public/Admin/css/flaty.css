@@ -8854,3 +8854,7 @@ table tbody tr td {
     font-weight: 700 !important;
     color: #03b0f5 !important;
 }
+
+select option {
+    font-weight: 800 !important;
+}
