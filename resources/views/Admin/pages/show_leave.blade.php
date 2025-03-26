@@ -304,7 +304,7 @@
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea name="note" class="form-control wysihtml5" rows="6" placeholder="Write reason here ..."></textarea>
+                            <textarea name="note" class="form-control" rows="6" placeholder="Write reason here ..."></textarea>
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
@@ -328,7 +328,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Employee</h4>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Leave</h4>
             </div>
             <div>
                 <div class="col-md-12">
@@ -421,11 +421,11 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="messages-input-form">
-                                                <form class="employee_add_comment_task" method="POST" action="javascript:void(0);">
+                                                <form class="add_comment_leave" method="POST" action="javascript:void(0);">
                                                     @csrf
                                                     <div class="input">
-                                                        <input type="text" name="leave_id" id="comment_leave_id" class="comment_leave_id" value="">
-                                                        <input type="text" name="admin_id" value="{{$adminlogin->id ?? ''}}">
+                                                        <input type="hidden" name="leave_id" id="comment_leave_id" class="comment_leave_id" value="">
+                                                        <input type="hidden" name="admin_id" value="{{$adminlogin->id ?? ''}}">
                                                         <input type="text" name="comment" placeholder="Write here..."
                                                             class="form-control">
                                                     </div>
@@ -569,12 +569,18 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 $('#get_comment').empty();
+                
+                // Initialize commentHTML before the loop
+                var commentHTML = '';
+                
                 response.forEach(function(item) {
                     console.log("Raw Date:", item.date);
                     var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
                         .fromNow();
                     console.log("Formatted Date:", formattedDate); // Debugging ke liye
-                    var commentHTML = `
+                    
+                    // Corrected += operator (removed space)
+                    commentHTML += `
                         <li>
                             <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
                             <div>
@@ -588,9 +594,11 @@ $(document).ready(function() {
                             </div>
                         </li>
                     `;
-                    $('#get_comment').html(commentHTML);
-                    
+                    // No append inside the loop
                 });
+                
+                // Set all HTML at once after the loop
+                $('#get_comment').html(commentHTML);
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -600,6 +608,7 @@ $(document).ready(function() {
         
         $('#editEmployeeModal').modal('show');
     });
+
 
     // dropdown value start here 
     function updateStatusDropdown(status) {
@@ -797,6 +806,52 @@ $("#add_form").submit(function(e) {
         }
     });
 });
+// add comment in leave 
+$(".add_comment_leave").submit(function(e) {
+    e.preventDefault();
+    // Disable submit button
+    $(".comment_btn").prop('disabled', true);
+    
+    // Capture current state before submission
+    let currentStatus = $('.nav-item.active .admin-tab').data('status') || 'all';
+    let currentPage = parseInt($("#pagination .active a").text()) || 1;
+    let currentSearch = $('.search_admin').val().trim();
+    
+    var formData = new FormData(this);
+    
+    $.ajax({
+        type: "post",
+        url: "{{url('/add_leave_comment')}}",
+        data: formData,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function(data) {
+            // Re-enable button
+            $(".comment_btn").prop('disabled', false);
+            if (data.success == 'success') {
+                // Reset form and close modal at this exact point
+                document.getElementsByClassName("add_comment_leave")[0].reset();
+                $("#editEmployeeModal").modal('hide');
+                
+                swal("Comment Added Successfully", "", "success");
+                
+                // Call loadLeaves with parameters
+                loadLeaves(currentStatus, currentPage, currentSearch);
+            } else {
+                swal("Comment Not Added", "", "error");
+            }
+        },
+        error: function() {
+            // Re-enable button on error
+            $(".comment_btn").prop('disabled', false);
+            swal("Error", "Something went wrong", "error");
+        }
+    });
+});
+
+
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {

@@ -392,3 +392,4 @@ Route::post('/add_leave', [AdminController::class, 'addLeave']);
 Route::post('/update_leave_status', [AdminController::class, 'updateLeaveStatus']);
 Route::post('/update_employee_leave', [AdminController::class, 'updateEmployeeLeave']);
 Route::get('/get-leave-comments', [AdminController::class, 'getLeaveComments']);
+Route::post('/add_leave_comment', [AdminController::class, 'addLeaveComment']);

@@ -664,23 +664,23 @@
                                                             <!-- get History data for task related -->
                                                             <tbody class="get_history">
 
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    </p>
                                 </div>
-                                <!-- Add Comment And History End Here -->
-
                             </div>
                         </div>
                     </div>
+                    </p>
+                </div>
+                <!-- Add Comment And History End Here -->
+
                 </div>
             </div>
-            <!-- Edit Task End Here -->
+        </div>
+    </div>
+</div>
+<!-- Edit Task End Here -->
 
             <!-- Message Show -->
             <div id="messageModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -934,44 +934,43 @@
                     });
                     // Task Status Fetch End
 
-                    // task comment show start here
-                    $.ajax({
-                        url: "{{url('/get-task-comments')}}",
-                        method: 'GET',
-                        data: {
-                            task_id: id
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            $('#get_comment').empty();
-                            response.forEach(function (item) {
-                                console.log("Raw Date:", item.date);
-                                var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
-                                    .fromNow();
-                                console.log("Formatted Date:", formattedDate); // Debugging ke liye
-                                var commentHTML = `
-                                <li>
-                                    <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
-                                    <div>
-                                        <div>
-                                            <h5 class="theam_color">${item.createdby}</h5>
-                                            <span class="time"><i class="fa fa-clock-o"></i>
-                                                ${formattedDate}
-                                            </span>
-                                        </div>
-                                        <p>${item.comment}</p>
-                                    </div>
-                                </li>
-                            `;
-                                $('#get_comment').html(commentHTML);
-
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Error:", error);
-                        }
-                    });
-                    // task comment end here
+    // task comment show start here
+    $.ajax({
+        url: "{{url('/get-task-comments')}}",
+        method: 'GET',
+        data: {
+            task_id: id
+        },
+        success: function(response) {
+            console.log(response);
+            $('#get_comment').empty();
+            response.forEach(function(item) {
+                console.log("Raw Date:", item.date);
+                var formattedDate = moment(item.date, "YYYY-MM-DD hh:mm A").locale('en')
+                    .fromNow();
+                console.log("Formatted Date:", formattedDate); // Debugging ke liye
+                var commentHTML = `
+                    <li>
+                        <img src="{{asset('Admin/img/demo/avatar/avatar2.jpg')}}" alt="">
+                        <div>
+                            <div>
+                                <h5 class="theam_color">${item.createdby}</h5>
+                                <span class="time"><i class="fa fa-clock-o"></i>
+                                    ${formattedDate}
+                                </span>
+                            </div>
+                            <p>${item.comment}</p>
+                        </div>
+                    </li>
+                `;
+                $('#get_comment').html(commentHTML);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+    // task comment end here
 
                     // Task History Data show here
                     $.ajax({
