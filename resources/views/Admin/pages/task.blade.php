@@ -667,7 +667,7 @@
                     </p>
                 </div>
                 <!-- Add Comment And History End Here -->
-                 
+
                 </div>
             </div>
         </div>
@@ -958,7 +958,6 @@ $(document).on('click', '.edit', function() {
                     </li>
                 `;
                 $('#get_comment').html(commentHTML);
-                
             });
         },
         error: function(xhr, status, error) {

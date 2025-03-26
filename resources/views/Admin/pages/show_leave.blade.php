@@ -588,8 +588,7 @@ $(document).ready(function() {
                             </div>
                         </li>
                     `;
-                    $('#get_comment').html(commentHTML);
-                    
+                    $('#get_comment').append(commentHTML);
                 });
             },
             error: function(xhr, status, error) {
@@ -600,6 +599,7 @@ $(document).ready(function() {
         
         $('#editEmployeeModal').modal('show');
     });
+
 
     // dropdown value start here 
     function updateStatusDropdown(status) {
