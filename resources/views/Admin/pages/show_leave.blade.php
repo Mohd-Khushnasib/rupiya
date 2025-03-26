@@ -384,9 +384,9 @@
                         <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px; justify-content: space-between;">
                             <div>
                                 <div class="dropdown">
-                                    <!-- <button class="btn btn-info dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-info dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         CHANGE STATUS
-                                    </button> -->
+                                    </button>
                                     <div class="dropdown-menu" aria-labelledby="statusDropdown">
                                         <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'pending')">Pending</a>
                                         <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'approved')">Approved</a>
@@ -479,6 +479,7 @@ $(document).ready(function() {
 
         // dropdown here 
         let status = $(this).data('status') || 'pending';
+        alert(status);
         updateStatusDropdown(status);
 
         // Set values in the modal using class selectors
