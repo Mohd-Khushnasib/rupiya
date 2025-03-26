@@ -820,15 +820,6 @@ $(document).on('click', '.edit', function() {
     });
     $(".edit_assign").trigger("chosen:updated"); // Chosen select update karo
 
-
-
-
-
-
-
-
-
-
     // Start Here Admin-2025-02-10 CREATED BY ME
     var createdBy = $("#admin_name").val(); // Admin name
     var created_date = date; // Date

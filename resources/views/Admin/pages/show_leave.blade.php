@@ -321,6 +321,77 @@
 </div>
 <!-- Add Leave Modal -->
 
+<!-- Edit Employee Modal Here  -->
+<div id="editEmployeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Employee</h4>
+            </div>
+            <div>
+                <div class="col-md-12">
+                <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                @csrf
+                        <!-- leave_id  -->
+                        <input type="hidden" name="id" class="form-control edit_leave_id" readonly> 
+                        <!-- admin_id -->
+                        <div class="col-sm-12">
+                            <label class="control-label">Id</label>
+                            <input type="text" class="form-control edit_admin_id" readonly>
+                        </div>
+                        <!-- admin name like employee name -->
+                        <div class="col-sm-12">
+                            <label class="control-label">Name</label>
+                            <input type="text" class="form-control edit_admin_name" readonly>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Leave Type</label>
+                            <div class="controls">
+                                <select name="leave_type" class="form-control edit_leave_type" data-placeholder="Choose a Department" tabindex="1">
+                                    <option selected="true" disabled="true">Select Department</option>
+                                    <option value="Paid Leave">Paid Leave</option>
+                                    <option value="Casual Leave">Casual Leave</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label">From Date</label>
+                                    <input type="date" name="from_date" class="form-control edit_from_date">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">To Date</label>
+                                    <input type="date" name="to_date" class="form-control edit_to_date">
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-sm-12">
+                                <label class="control-label">Leave Duration</label>
+                                <input type="text" name="duration" class="form-control edit_duration">
+                            </div>
+                        </div>
+                        </div>
+                        
+                        <div class="col-sm-12" style="margin-top: 10px;">
+                        <label class="control-label">Note</label>
+                            <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button id="edit_button" class="btn btn-primary edit_button" type="button">Edit</button>
+                            <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
+                            <a type="button" class="btn" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<!-- Edit Employee Modal Here  -->
 
 
 
@@ -501,7 +572,19 @@ function loadLeaves(status, page, search = '') {
                     const rowHtml = `
                         <tr>
                             <td>${(page-1)*data.per_page + index + 1}</td>
-                            <td>${item.admin_name || ''} - ${item.role || ''}</td>
+                            <td>
+                                <a href="javascript:void(0);" class="edit_employee"
+                                    data-admin_id="${item.admin_id || ''}"
+                                    data-admin_name="${item.admin_name || ''}"
+                                    data-leave_type="${item.leave_type || ''}"
+                                    data-from_date="${item.from_date || ''}"
+                                    data-to_date="${item.to_date || ''}"
+                                    data-duration="${item.duration || ''}"
+                                    data-note="${item.note || ''}"
+                                    data-id="${item.id || ''}">
+                                    ${item.admin_name || ''} - ${item.role || ''}
+                                </a>
+                            </td>
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
@@ -596,7 +679,68 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         `);
     }
 }
+
+// edit employee here 
+$(document).ready(function() {
+    // Click event for Edit Employee button
+    $(document).on('click', '.edit_employee', function() {
+        let leaveId = $(this).data('id');
+        let adminId = $(this).data('admin_id');
+        let admin_name = $(this).data('admin_name');
+        let leaveType = $(this).data('leave_type');
+        let fromDate = $(this).data('from_date');
+        let toDate = $(this).data('to_date');
+        let duration = $(this).data('duration');
+        let note = $(this).data('note');
+
+        // Set values in the modal using class selectors
+        $('.edit_leave_id').val(leaveId);
+        $('.edit_admin_id').val("EMP" + adminId);
+        $('.edit_admin_name').val(admin_name);
+        
+        // Set dropdown value
+        $('.edit_leave_type option').each(function() {
+            if($(this).val() == leaveType) {
+                $(this).prop("selected", true);
+            } else {
+                $(this).prop("selected", false);
+            }
+        });
+        
+        $('.edit_from_date').val(fromDate);
+        $('.edit_to_date').val(toDate);
+        $('.edit_duration').val(duration);
+        $('.edit_note').val(note);
+        
+        // Make sure all fields are disabled initially
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', true);
+        
+        // Show the Edit button and hide the Update button
+        $('#edit_button').show();
+        $('#update_button').hide();
+        
+        $('#editEmployeeModal').modal('show');
+    });
+    
+    // Edit button click event
+    $(document).on('click', '#edit_button', function() {
+        // Enable all form fields except ID and Name
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', false);
+        
+        // Hide Edit button and show Update button
+        $('#edit_button').hide();
+        $('#update_button').show();
+    });
+    
+    // Update button click event
+    $(document).on('click', '.update_employee_btn', function() {
+        $('#editEmployeeModal').modal('hide');
+    });
+});
 </script>
+
+
+
 
 <!-- Days Count from_date to to_date -->
 <script>
