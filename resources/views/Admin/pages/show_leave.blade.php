@@ -498,7 +498,6 @@ function loadLeaves(status, page, search = '') {
                     let statusCell = '';
                     
                     if(item.status == 'pending') {
-                        // Custom solution with direct action buttons instead of dropdown
                         statusCell = `
                             <td>
                                 <div>
@@ -573,6 +572,7 @@ function loadLeaves(status, page, search = '') {
 
 // Function to update leave status
 function updateLeaveStatus(leaveId, newStatus) {
+    alert(newStatus);
     // Show confirmation dialog
     if (confirm(`Are you sure you want to ${newStatus === 'approved' ? 'approved' : 'rejected'} this leave request?`)) {
         $.ajax({
