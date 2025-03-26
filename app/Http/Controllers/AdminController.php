@@ -5576,6 +5576,7 @@ class AdminController extends Controller
             'all_employees' => $all_employees,
         ]);
     }
+
     public function getFilteredWarningCounts(Request $request)
     {
         $filter = $request->filter;
@@ -6359,55 +6360,177 @@ class AdminController extends Controller
     }
 
     // Show All Active Inactive Employee 
-    public function fetchLeave(Request $request)
-{
-    $search = $request->search; // Search keyword
-    $status = $request->status; // Get status from request
-    
-    // Query Leave Data
-    $query = DB::table('tbl_leave');
-    
-    // Apply status filter if provided
-    if ($status && $status !== 'all') {
-        $query->where('status', $status);
-    }
-    
-    // Apply search filter if search keyword exists
-    if (!empty($search)) {
-        $query->where(function ($q) use ($search) {
-            $q->where('status', 'like', '%' . $search . '%')
-              ->orWhere('leave_type', 'like', '%' . $search . '%')
-              ->orWhere('from_date', 'like', '%' . $search . '%')
-              ->orWhere('to_date', 'like', '%' . $search . '%')
-              ->orWhere('note', 'like', '%' . $search . '%');
-        });
-    }
-    
-    // Get counts for stats
-    $all_leave = DB::table('tbl_leave')->count();
-    $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
-    $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
-    $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
-    
-    // Pagination
-    $leaves = $query->orderBy('id', 'desc')->paginate(10);
-    
-    return response()->json([
-        'data'           => $leaves->items(),
-        'current_page'   => $leaves->currentPage(),
-        'last_page'      => $leaves->lastPage(),
-        'per_page'       => $leaves->perPage(),
-        'total'          => $leaves->total(),
-        'counts'         => [
+    public function fetchLeave1(Request $request)
+    {
+        $search = $request->search; // Search keyword
+        $status = $request->status; // Get status from request
+        // Query Leave Data
+        $query = DB::table('tbl_leave');
+        // Apply status filter if provided
+        if ($status && $status !== 'all') {
+            $query->where('status', $status);
+        }
+        
+        // Apply search filter if search keyword exists
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('status', 'like', '%' . $search . '%')
+                ->orWhere('leave_type', 'like', '%' . $search . '%')
+                ->orWhere('from_date', 'like', '%' . $search . '%')
+                ->orWhere('to_date', 'like', '%' . $search . '%')
+                ->orWhere('note', 'like', '%' . $search . '%');
+            });
+        }
+        // Get counts for stats
+        $all_leave = DB::table('tbl_leave')->count();
+        $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
+        $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
+        $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
+        // Pagination
+        $leaves = $query->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'data'           => $leaves->items(),
+            'current_page'   => $leaves->currentPage(),
+            'last_page'      => $leaves->lastPage(),
+            'per_page'       => $leaves->perPage(),
+            'total'          => $leaves->total(),
+            'counts'         => [
             'pending'    => $total_pending,
             'approved'   => $total_approved,
             'rejected'   => $total_rejected,
             'all'        => $all_leave
-        ],
-        'success'        => 'success',
-    ]);
-}
+            ],
+            'success'        => 'success',
+        ]);
+    }
 
+    public function fetchLeave(Request $request)
+    {
+        // Get admin session
+        $adminSession = collect(session()->get('admin_login'))->first();
+        
+        if (!$adminSession) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        
+        $admin_id = $adminSession->id;
+        $admin_role = strtolower($adminSession->role);
+        
+        $search = $request->search; // Search keyword
+        $status = $request->status; // Get status from request
+        
+        // Query Leave Data with admin names
+        $query = DB::table('tbl_leave')
+            ->join('admin', 'tbl_leave.admin_id', '=', 'admin.id')
+            ->select('tbl_leave.*', 'admin.name as admin_name');
+        
+        // Apply role-based filtering
+        if ($admin_role === 'admin' || $admin_role === 'hr') {
+            // Admin & HR see all leave requests
+            // No additional filters needed
+        } elseif ($admin_role === 'manager') {
+            // Managers see their own leaves and leaves of team members they manage
+            $team_member_ids = DB::table('admin')
+                ->where('manager', $admin_id)
+                ->pluck('id')
+                ->toArray();
+                
+            $query->where(function($q) use ($team_member_ids, $admin_id) {
+                $q->whereIn('tbl_leave.admin_id', $team_member_ids)
+                ->orWhere('tbl_leave.admin_id', $admin_id);
+            });
+        } elseif ($admin_role === 'tl') {
+            // Team Leaders see their own leaves and leaves of team members they lead
+            $team_member_ids = DB::table('admin')
+                ->where('team_leader', $admin_id)
+                ->pluck('id')
+                ->toArray();
+                
+            $query->where(function($q) use ($team_member_ids, $admin_id) {
+                $q->whereIn('tbl_leave.admin_id', $team_member_ids)
+                ->orWhere('tbl_leave.admin_id', $admin_id);
+            });
+        } else {
+            // Agent or other roles only see their own leave requests
+            $query->where('tbl_leave.admin_id', $admin_id);
+        }
+        
+        // Apply status filter if provided
+        if ($status && $status !== 'all') {
+            $query->where('tbl_leave.status', $status);
+        }
+        
+        // Apply search filter if search keyword exists
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_leave.status', 'like', '%' . $search . '%')
+                ->orWhere('tbl_leave.leave_type', 'like', '%' . $search . '%')
+                ->orWhere('tbl_leave.from_date', 'like', '%' . $search . '%')
+                ->orWhere('tbl_leave.to_date', 'like', '%' . $search . '%')
+                ->orWhere('tbl_leave.note', 'like', '%' . $search . '%')
+                ->orWhere('admin.name', 'like', '%' . $search . '%'); // Also search by admin name
+            });
+        }
+        
+        // Get counts for stats based on role filters
+        if ($admin_role === 'admin' || $admin_role === 'hr') {
+            // For admin/HR, show counts of all leaves
+            $all_leave = DB::table('tbl_leave')->count();
+            $total_pending = DB::table('tbl_leave')->where('status', 'pending')->count();
+            $total_approved = DB::table('tbl_leave')->where('status', 'approved')->count();
+            $total_rejected = DB::table('tbl_leave')->where('status', 'rejected')->count();
+        } else {
+            // For other roles, show counts of relevant leaves only
+            $roleFilterQuery = DB::table('tbl_leave');
+            
+            if ($admin_role === 'manager') {
+                $team_member_ids = DB::table('admin')
+                    ->where('manager', $admin_id)
+                    ->pluck('id')
+                    ->toArray();
+                    
+                $roleFilterQuery->where(function($q) use ($team_member_ids, $admin_id) {
+                    $q->whereIn('admin_id', $team_member_ids)
+                    ->orWhere('admin_id', $admin_id);
+                });
+            } elseif ($admin_role === 'tl') {
+                $team_member_ids = DB::table('admin')
+                    ->where('team_leader', $admin_id)
+                    ->pluck('id')
+                    ->toArray();
+                    
+                $roleFilterQuery->where(function($q) use ($team_member_ids, $admin_id) {
+                    $q->whereIn('admin_id', $team_member_ids)
+                    ->orWhere('admin_id', $admin_id);
+                });
+            } else {
+                $roleFilterQuery->where('admin_id', $admin_id);
+            }
+            
+            $all_leave = $roleFilterQuery->count();
+            $total_pending = $roleFilterQuery->clone()->where('status', 'pending')->count();
+            $total_approved = $roleFilterQuery->clone()->where('status', 'approved')->count();
+            $total_rejected = $roleFilterQuery->clone()->where('status', 'rejected')->count();
+        }
+        
+        // Pagination
+        $leaves = $query->orderBy('tbl_leave.id', 'desc')->paginate(10);
+        
+        return response()->json([
+            'data'           => $leaves->items(),
+            'current_page'   => $leaves->currentPage(),
+            'last_page'      => $leaves->lastPage(),
+            'per_page'       => $leaves->perPage(),
+            'total'          => $leaves->total(),
+            'counts'         => [
+                'pending'    => $total_pending,
+                'approved'   => $total_approved,
+                'rejected'   => $total_rejected,
+                'all'        => $all_leave
+            ],
+            'success'        => 'success',
+        ]);
+    }
 
     // addLeave
     public function addLeave(Request $request)

@@ -515,7 +515,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
-                            <td>${item.duration || ''} days</td>
+                            <td>${item.duration || ''} </td>
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
                         </tr>
