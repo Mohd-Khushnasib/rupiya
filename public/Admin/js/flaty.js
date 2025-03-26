@@ -529,7 +529,8 @@ $(function () {
     }
 });
 
-document.getElementById("date").addEventListener("focus", function() {
-    this.showPicker(); // Ensures the calendar opens when clicked
+document.querySelectorAll('input[type="date"]').forEach(function (dateInput) {
+    dateInput.addEventListener("focus", function () {
+        this.showPicker(); // Opens the date picker when the field is focused
+    });
 });
-
