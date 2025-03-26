@@ -6420,10 +6420,6 @@ class AdminController extends Controller
         $status = $request->status; // Get status from request
         
         // Query Leave Data with admin names
-        // $query = DB::table('tbl_leave')
-        //     ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
-        //     ->select('tbl_leave.*', 'admin.name as admin_name');
-
         $query = DB::table('tbl_leave')
         ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
         ->leftJoin('admin as approver', 'tbl_leave.approved_by', '=', 'approver.id')
