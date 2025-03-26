@@ -400,9 +400,7 @@ $("#add_form").submit(function(e) {
     $(".add_btn").prop('disabled', true);
     e.preventDefault();
     let adminId = $(".admin_id").val();
-    
-    // Capture current state values BEFORE submitting
-    // This gets the current active tab to determine status
+
     let currentTabStatus = $('.nav-item.active .admin-tab').data('status');
     // Convert index to string status if needed
     let activeTabIndex = $('.nav-item.active').index();
@@ -443,8 +441,6 @@ $("#add_form").submit(function(e) {
                 
                 // Use the captured values to reload the leaves
                 loadLeaves(currentTabStatus, currentPageNumber, currentSearchText);
-                
-                // Also refresh counts since a new leave was added
                 loadCounts();
             } else if (data.success == 'error') {
                 $(".add_btn").prop('disabled', false);
@@ -460,24 +456,20 @@ $("#add_form").submit(function(e) {
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
-    console.log('Loading leaves with status:', status, 'page:', page, 'search:', search);
-    
     $.ajax({
         url: "{{ url('fetch_leave') }}",
         type: "POST",
         data: { 
-            status: status, // String status (pending, approved, rejected, all)
+            status: status,
             page: page,
-            search: search, // Search parameter send karna
-            _token: "{{ csrf_token() }}" // Add CSRF token for Laravel
+            search: search,
+            _token: "{{ csrf_token() }}"
         },
         success: function(data) {
             let tbody = $("#leaveTable tbody");
             let pagination = $("#pagination");
             tbody.empty();
             pagination.empty();
-
-            console.log('AJAX response:', data);
             
             // Update leave counts in tabs
             if (data.counts) {
@@ -496,33 +488,28 @@ function loadLeaves(status, page, search = '') {
             if (data.data && data.data.length > 0) {
                 // Populate table rows
                 data.data.forEach((item, index) => {
-                    // Get status badge class
-                    let statusBadge = '';
+                    let statusCell = '';
                     if(item.status == 'pending') {
-                        statusBadge = '<span class="badge bg-warning text-dark" style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px;">Pending</span>';
+                        statusCell = `<td><span style="background-color:rgb(167, 137, 40); color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'approved') {
-                        statusBadge = '<span class="badge bg-success text-white" style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span>';
+                        statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'rejected') {
-                        statusBadge = '<span class="badge bg-danger text-white" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span>';
+                        statusCell = `<td><span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
                     }
                     
-                    // Calculate leave duration
-                    const fromDate = new Date(item.from_date);
-                    const toDate = new Date(item.to_date);
                     // Create the row HTML
                     const rowHtml = `
                         <tr>
                             <td>${(page-1)*data.per_page + index + 1}</td>
-                            <td>${item.admin_name || ''}</td>
+                            <td>${item.admin_name || ''} - ${item.role || ''}</td>
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
                             <td>${item.duration || ''} </td>
                             <td>${item.approved_by || '-'}</td>
-                            <td>${statusBadge}</td>
+                            ${statusCell}
                         </tr>
                     `;
-                    
                     // Append to tbody
                     tbody.append(rowHtml);
                 });
@@ -531,7 +518,7 @@ function loadLeaves(status, page, search = '') {
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
             } else {
                 console.log('No data found or empty data array');
-                tbody.append(`<tr><td colspan="7" class="text-center">No Leave Data Found</td></tr>`);
+                tbody.append(`<tr><td colspan="8" class="text-center">No Leave Data Found</td></tr>`);
             }
         },
         error: function(xhr, status, error) {
@@ -542,7 +529,7 @@ function loadLeaves(status, page, search = '') {
             // Show error message to user
             let tbody = $("#leaveTable tbody");
             tbody.empty();
-            tbody.append(`<tr><td colspan="7" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
+            tbody.append(`<tr><td colspan="8" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
         }
     });
 }
