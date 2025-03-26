@@ -3,6 +3,27 @@
 @extends('Admin.layouts.master')
 @section('main-content')
 <style>
+    .btn-primary.edit_button {
+    background-color: #4e73f8;
+    border-color: #4e73f8;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+.dropdown-toggle {
+    background-color: #4e73f8;
+    border-color: #4e73f8;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
 
     .nav-tabs {
         border-bottom: none;
@@ -379,11 +400,34 @@
                         <label class="control-label">Note</label>
                             <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
-                        <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px;">
+                        <!-- <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px;">
                             <button id="edit_button" class="btn btn-primary edit_button" type="button">Edit</button>
                             <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
                             <a type="button" class="btn" data-dismiss="modal">Cancel</a>
-                        </div>
+                        </div> -->
+
+                        <!-- Button layout similar to the screenshot -->
+<div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px; justify-content: space-between;">
+    <div>
+        <div class="dropdown">
+            <button class="btn btn-info dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                CHANGE STATUS
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown">
+                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'pending')">Pending</a>
+                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'approved')">Approved</a>
+                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'rejected')">Rejected</a>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+        <button id="edit_button" class="btn btn-primary edit_button" type="button" style="background-color: #4e73f8; border-color: #4e73f8;">EDIT</button>
+        <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
+    </div>
+</div>
+
+
                     </form>
                 </div>
             </div>
@@ -402,6 +446,38 @@ window.jQuery || document.write('<script src="assets/jquery/jquery-2.1.1.min.js"
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    function updateLeaveStatus(leaveId, newStatus) {
+    $.ajax({
+        url: "{{ url('update_leave_status') }}",
+        type: "POST",
+        data: {
+            leave_id: leaveId,
+            status: newStatus,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response) {
+            if(response.success) {
+                swal(`Leave status updated to ${newStatus} successfully!`, "", "success");
+                // Reload current table
+                const currentStatus = $('.nav-link.active').data('status') || 'all';
+                const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
+                const currentSearch = $('#searchInput').val() || '';
+                loadLeaves(currentStatus, currentPage, currentSearch);
+                
+                // Close the modal
+                $('#editEmployeeModal').modal('hide');
+            } else {
+                swal("Failed to update status", "", "error");
+            }
+        },
+        error: function(xhr, status, error) {
+            swal("Something went wrong", "", "error");
+            console.error("Status Update Error:", error);
+        }
+    });
+}
+</script>
 <script>
 // Handle form submission for employee leave update
 $(document).ready(function() {
@@ -515,7 +591,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
 });
 </script>
 
