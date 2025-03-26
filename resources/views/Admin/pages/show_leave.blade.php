@@ -154,7 +154,7 @@
                                 Add Employee
                             </a> -->
                             <button type="button" class="btn btn-info" id="openModalBtn">
-                                Add Leave
+                                Apply Leave
                             </button>
                         </div>
                     </div>
@@ -257,7 +257,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color: black;" id="modalTitle">Add Leave</h4>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Apply Leave</h4>
             </div>
             <div>
                 <div class="col-md-12">
