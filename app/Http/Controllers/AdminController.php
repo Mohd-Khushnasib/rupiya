@@ -6609,6 +6609,18 @@ class AdminController extends Controller
         }
     }
 
+    // Leave Comment Here in Task Tab
+    public function getLeaveComments(Request $request)
+    {
+        $leaveId   = $request->leave_id;
+        $comments = DB::table('tbl_leave_comment')
+            ->where('leave_id', $leaveId)
+            ->leftJoin('admin', 'tbl_leave_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
+            ->select('tbl_leave_comment.*', 'admin.name as createdby')
+            ->orderBy('tbl_leave_comment.id', 'asc')
+            ->get();
+        return response()->json($comments);
+    }
 
 
 
