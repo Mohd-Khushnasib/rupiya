@@ -494,28 +494,32 @@ function loadLeaves(status, page, search = '') {
                     let statusCell = '';
                     
                     if(item.status == 'pending') {
-                        statusCell = `
-                            <td>
-                                <div>
-                                    <span style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; margin-bottom: 5px; display: block;">
-                                        Pending
-                                    </span>
-                                    <div class="action-buttons" style="margin-top: 5px;">
-                                        <button class="btn btn-success btn-sm approve-btn" style="margin-right: 5px;" data-id="${item.id}">
-                                            <i class="fas fa-check"></i> approved
-                                        </button>
-                                        <button class="btn btn-danger btn-sm reject-btn" data-id="${item.id}">
-                                            <i class="fas fa-times"></i> rejected
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        `;
-                    } else if(item.status == 'approved') {
-                        statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
-                    } else if(item.status == 'rejected') {
-                        statusCell = `<td><span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
-                    }
+    statusCell = `
+        <td>
+            <div>
+                <span style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; margin-bottom: 5px; display: block;">
+                    Pending
+                </span>
+                <div class="action-buttons" style="margin-top: 5px;">
+                    <button class="btn btn-success btn-sm approve-btn" 
+                            style="margin-right: 5px; padding: 5px 10px; border-radius: 4px;" 
+                            data-id="${item.id}">
+                        <i class="fas fa-check"></i> approved
+                    </button>
+                    <button class="btn btn-danger btn-sm reject-btn" 
+                            style="padding: 5px 10px; border-radius: 4px;" 
+                            data-id="${item.id}">
+                        <i class="fas fa-times"></i> rejected
+                    </button>
+                </div>
+            </div>
+        </td>
+    `;
+} else if(item.status == 'approved') {
+    statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
+} else if(item.status == 'rejected') {
+    statusCell = `<td><span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
+}
                     
                     // Create the row HTML
                     const rowHtml = `
@@ -530,7 +534,6 @@ function loadLeaves(status, page, search = '') {
                             ${statusCell}
                         </tr>
                     `;
-                    
                     // Append to tbody
                     tbody.append(rowHtml);
                 });
