@@ -259,7 +259,8 @@
             </div>
             <div>
                 <div class="col-md-12">
-                    <form class="mail-compose form-horizontal" action="#">
+                <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                @csrf
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
                             <input type="text" name="id" placeholder="Name" class="form-control" value="EMP{{$adminlogin->id ?? ''}}">
@@ -304,7 +305,7 @@
                         </div>
 
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-rocket"></i>
+                            <button type="submit" class="btn btn-primary add_btn"><i class="fa fa-rocket"></i>
                                 Add</button>
                             <a type="button" class="btn">Cancel</a>
                         </div>
@@ -391,6 +392,7 @@ function loadCounts() {
         }
     });
 }
+
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
@@ -544,41 +546,26 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 }
 </script>
 
+<!-- Days Count from_date to to_date -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     // Get the input elements
     const fromDateInput = document.querySelector('input[name="from_date"]');
     const toDateInput = document.querySelector('input[name="to_date"]');
     const durationInput = document.querySelector('input[name="duration"]');
-    
-    // Add event listeners to both date inputs
+
     fromDateInput.addEventListener('change', calculateDuration);
     toDateInput.addEventListener('change', calculateDuration);
-    
-    // Function to calculate the duration between two dates
     function calculateDuration() {
         const fromDate = new Date(fromDateInput.value);
         const toDate = new Date(toDateInput.value);
-        
-        // Check if both dates are valid
         if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
             return;
         }
-        
-        // Calculate the difference in milliseconds
         const diffTime = Math.abs(toDate - fromDate);
-        
-        // Convert to days and add 1 to include both start and end days
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-        
-        // Format the text with the day/days suffix
         const durationText = diffDays === 1 ? `${diffDays} day` : `${diffDays} days`;
-        
-        // Update the duration input with the formatted text
-        // First, change the input type from number to text
         durationInput.type = 'text';
-        
-        // Then set the value with the formatted text
         durationInput.value = durationText;
     }
 });
