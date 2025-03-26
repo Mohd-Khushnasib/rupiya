@@ -692,7 +692,7 @@ $(document).on('click', '.edit_employee', function() {
 
     // Set values in the modal
     $('.edit_leave_id').val(leaveId);
-    $('#edit_emp_id').val("EMP" + adminId);
+    $('#edit_admin_id').val("EMP" + adminId);
     $('.edit_admin_name').val(admin_name);
     // Alternative approach to set the dropdown value
     $(".edit_leave_type option").each(function() {
