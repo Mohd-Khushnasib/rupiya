@@ -394,40 +394,68 @@ function loadCounts() {
     });
 }
 
-// add leave here 
-     $("#add_form").submit(function(e) 
-    {
-        $(".add_btn").prop('disabled', true);
-        e.preventDefault();
-        let adminId = $(".admin_id").val();
-        alert(adminId);
-        var formdata = new FormData(this);
-        formdata.append("admin_id", adminId);
+// Add leave form submission handler with fix
+$("#add_form").submit(function(e) {
+    $(".add_btn").prop('disabled', true);
+    e.preventDefault();
+    let adminId = $(".admin_id").val();
+    
+    // Capture current state values BEFORE submitting
+    // This gets the current active tab to determine status
+    let currentTabStatus = $('.nav-item.active .admin-tab').data('status');
+    // Convert index to string status if needed
+    let activeTabIndex = $('.nav-item.active').index();
+    if (activeTabIndex === 0) {
+        currentTabStatus = 'all';
+    } else if (activeTabIndex === 1) {
+        currentTabStatus = 'pending';
+    } else if (activeTabIndex === 2) {
+        currentTabStatus = 'approved';
+    } else if (activeTabIndex === 3) {
+        currentTabStatus = 'rejected';
+    }
+    
+    // Get current page from pagination active link
+    let currentPageNumber = parseInt($("#pagination .active a").text()) || 1;
+    
+    // Get current search keyword
+    let currentSearchText = $('.search_admin').val().trim();
+    
+    var formdata = new FormData(this);
+    formdata.append("admin_id", adminId);
 
-        $.ajax({
-            type: "post",
-            url: "{{url('/add_leave')}}",
-            data: formdata,
-            contentType: false,
-            cache: false,
-            processData: false,
-            dataType: "json",
-            encode: true,
-            success: function(data) {
-                $(".add_btn").prop("disabled", false);
-                if (data.success == 'success') {
-                    document.getElementById("add_form").reset();
-                    $("#myModal").modal("hide");
-                    swal("Leave Request Successfully", "", "success");
-                    loadLeaves(currentStatus, currentPage, searchKeyword);
-                } else if (data.success == 'error') {
-                    $(".add_btn").prop('disabled', false);
-                    swal("Error", data.message, "error");
-                }
-            },
-            error: function() {}
-        });
+    $.ajax({
+        type: "post",
+        url: "{{url('/add_leave')}}",
+        data: formdata,
+        contentType: false,
+        cache: false,
+        processData: false,
+        dataType: "json",
+        encode: true,
+        success: function(data) {
+            $(".add_btn").prop("disabled", false);
+            if (data.success == 'success') {
+                document.getElementById("add_form").reset();
+                $("#myModal").modal("hide");
+                swal("Leave Request Successfully", "", "success");
+                
+                // Use the captured values to reload the leaves
+                loadLeaves(currentTabStatus, currentPageNumber, currentSearchText);
+                
+                // Also refresh counts since a new leave was added
+                loadCounts();
+            } else if (data.success == 'error') {
+                $(".add_btn").prop('disabled', false);
+                swal("Error", data.message, "error");
+            }
+        },
+        error: function() {
+            $(".add_btn").prop('disabled', false);
+            swal("Error", "An unexpected error occurred", "error");
+        }
     });
+});
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
