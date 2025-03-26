@@ -529,43 +529,7 @@ $(function () {
     }
 });
 
-// Function to make date inputs clickable across their entire surface
-function makeEntireDateInputClickable() {
-    // Find all date inputs on the page
-    const dateInputs = document.querySelectorAll('input[type="date"]');
+document.getElementById("date").addEventListener("focus", function() {
+    this.showPicker(); // Ensures the calendar opens when clicked
+});
 
-    // Process each date input
-    dateInputs.forEach(function (dateInput) {
-        // Create a wrapper div (without CSS)
-        const wrapper = document.createElement("div");
-
-        // Replace the date input with the wrapper
-        const parent = dateInput.parentNode;
-        parent.replaceChild(wrapper, dateInput);
-
-        // Add the date input back inside the wrapper
-        wrapper.appendChild(dateInput);
-
-        // Add click event to the wrapper
-        wrapper.addEventListener("click", function (e) {
-            // If the click is not directly on the input
-            if (e.target !== dateInput) {
-                e.preventDefault();
-
-                // Try the modern way first
-                if (typeof dateInput.showPicker === "function") {
-                    dateInput.showPicker();
-                } else {
-                    // Fallback method for older browsers
-                    dateInput.focus();
-                }
-            }
-        });
-    });
-}
-
-// Call the function when the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", makeEntireDateInputClickable);
-
-// Example usage:
-// <input type="date" />
