@@ -224,6 +224,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Employee Name</th>
                                             <th>Leave Type</th>
                                             <th>From</th>
                                             <th>To</th>
@@ -512,10 +513,11 @@ function loadLeaves(status, page, search = '') {
                     const rowHtml = `
                         <tr>
                             <td>${(page-1)*data.per_page + index + 1}</td>
+                            <td>${item.admin_name || ''}</td>
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
-                            <td>${item.duration || ''} days</td>
+                            <td>${item.duration || ''} </td>
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
                         </tr>
