@@ -501,7 +501,7 @@ function loadLeaves(status, page, search = '') {
                     const rowHtml = `
                         <tr>
                             <td>${(page-1)*data.per_page + index + 1}</td>
-                            <td>${item.admin_name || ''}</td>
+                            <td>${item.admin_name || ''} - ${item.role || ''}</td>
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
