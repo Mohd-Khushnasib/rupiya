@@ -1807,7 +1807,8 @@ textarea[readonly] {
 }
 
 label {
-    font-weight: normal;
+    font-weight: 800 !important;
+    margin-top: 13px !important;
 }
 
 input[type="file"] {
@@ -8826,4 +8827,13 @@ table tbody tr td {
 .leads_system_bg .disbursed {
     background-color: #00af50;
     color: #000;
+}
+
+.form-control {
+    border-radius: 17px !important;
+    box-shadow: 3px 4px 2px #bebebe !important;
+    font-weight: 800;
+}
+.stats-card{
+    box-shadow: 3px 4px 2px #bebebe !important;
 }
