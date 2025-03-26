@@ -380,34 +380,26 @@
                         <label class="control-label">Note</label>
                             <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
-                        <!-- <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px;">
-                            <button id="edit_button" class="btn btn-primary edit_button" type="button">Edit</button>
-                            <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
-                            <a type="button" class="btn" data-dismiss="modal">Cancel</a>
-                        </div> -->
-
                         <!-- Button layout similar to the screenshot -->
-<div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px; justify-content: space-between;">
-    <div>
-        <div class="dropdown">
-            <button class="btn btn-info dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                CHANGE STATUS
-            </button>
-            <div class="dropdown-menu" aria-labelledby="statusDropdown">
-                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'pending')">Pending</a>
-                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'approved')">Approved</a>
-                <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'rejected')">Rejected</a>
-            </div>
-        </div>
-    </div>
-    
-    <div style="display: flex; gap: 10px;">
-        <button id="edit_button" class="btn btn-primary edit_button" type="button" style="background-color: #4e73f8; border-color: #4e73f8;">EDIT</button>
-        <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
-    </div>
-</div>
-
-
+                        <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px; justify-content: space-between;">
+                            <div>
+                                <div class="dropdown">
+                                    <button class="btn btn-info dropdown-toggle" type="button" id="statusDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        CHANGE STATUS
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="statusDropdown">
+                                        <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'pending')">Pending</a>
+                                        <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'approved')">Approved</a>
+                                        <a class="dropdown-item status-option" href="javascript:void(0);" onclick="updateLeaveStatus($('.edit_leave_id').val(), 'rejected')">Rejected</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px;">
+                                <button id="edit_button" class="btn btn-primary edit_button" type="button" style="background-color: #4e73f8; border-color: #4e73f8;">EDIT</button>
+                                <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -444,7 +436,6 @@ window.jQuery || document.write('<script src="assets/jquery/jquery-2.1.1.min.js"
                 const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
                 const currentSearch = $('#searchInput').val() || '';
                 loadLeaves(currentStatus, currentPage, currentSearch);
-                
                 // Close the modal
                 $('#editEmployeeModal').modal('hide');
             } else {
@@ -733,7 +724,7 @@ function loadLeaves(status, page, search = '') {
                 data.data.forEach((item, index) => {
                     let statusCell = '';
                     if(item.status == 'pending') {
-                        statusCell = `<td><span style="background-color:rgb(167, 137, 40); color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
+                        statusCell = `<td><span style="background-color:rgb(167, 137, 40); color: white; padding: 5px 10px; border-radius: 4px;">Pending</span></td>`;
                     } else if(item.status == 'approved') {
                         statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'rejected') {
