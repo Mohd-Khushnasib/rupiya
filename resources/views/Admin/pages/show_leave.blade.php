@@ -321,6 +321,75 @@
 </div>
 <!-- Add Leave Modal -->
 
+<!-- Edit Employee Modal Here  -->
+<div id="editEmployeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Employee</h4>
+            </div>
+            <div>
+                <div class="col-md-12">
+                <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                @csrf
+                        <input type="hidden" name="employee_id" id="edit_emp_id" class="form-control">
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Id</label>
+                            <input type="text" id="emp_display_id" class="form-control" readonly>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Name</label>
+                            <input type="text" name="name" id="edit_admin_name" placeholder="Employee Name" class="form-control">
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Leave Type</label>
+                            <div class="controls">
+                                <select name="leave_type" id="edit_leave_type" class="form-control" data-placeholder="Choose a Department" tabindex="1">
+                                    <option selected="true" disabled="true">Select Department</option>
+                                    <option value="Paid Leave">Paid Leave</option>
+                                    <option value="Casual Leave">Casual Leave</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label">From Date</label>
+                                    <input type="date" name="from_date" id="edit_from_date" class="form-control">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">To Date</label>
+                                    <input type="date" name="to_date" id="edit_to_date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Leave Duration</label>
+                                <input type="text" name="duration" id="edit_duration" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px;">
+                            <textarea name="note" id="edit_note" class="form-control wysihtml5" rows="4" placeholder="Address..."></textarea>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 10px;">
+                            <button type="submit" class="btn btn-success update_employee_btn"><i class="fa fa-refresh"></i>
+                                Update</button>
+                            <a type="button" class="btn" data-dismiss="modal">Cancel</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<!-- Edit Employee Modal Here  -->
 
 
 
@@ -501,7 +570,19 @@ function loadLeaves(status, page, search = '') {
                     const rowHtml = `
                         <tr>
                             <td>${(page-1)*data.per_page + index + 1}</td>
-                            <td>${item.admin_name || ''} - ${item.role || ''}</td>
+                            <td>
+                                <a href="javascript:void(0);" class="edit_employee"
+                                    data-admin_id="${item.id || ''}"
+                                    data-admin_name="${item.admin_name || ''}"
+                                    data-leave_type="${item.leave_type || ''}"
+                                    data-from_date="${item.from_date || ''}"
+                                    data-to_date="${item.to_date || ''}"
+                                    data-duration="${item.duration || ''}"
+                                    data-note="${item.note || ''}"
+                                    data-id="${item.id || ''}">
+                                    ${item.admin_name || ''} - ${item.role || ''}
+                                </a>
+                            </td>
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
@@ -596,7 +677,40 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         `);
     }
 }
+
+// edit employee here 
+$(document).on('click', '.edit_employee', function() {
+    let leaveId = $(this).data('id');
+    let adminId = $(this).data('admin_id');
+    let admin_name = $(this).data('admin_name');
+    let leaveType = $(this).data('leave_type');
+    let fromDate = $(this).data('from_date');
+    let toDate = $(this).data('to_date');
+    let duration = $(this).data('duration');
+    let note = $(this).data('note');
+
+    // Set values in the modal
+    $('.edit_leave_id').val(leaveId);
+    $('.edit_emp_id').val(adminId);
+    $('.edit_admin_name').val(admin_name);
+    // Alternative approach to set the dropdown value
+    $("#edit_leave_type option").each(function() {
+        if($(this).val() == leaveType) {
+            $(this).prop("selected", true);
+        } else {
+            $(this).prop("selected", false);
+        }
+    });
+    $('.edit_from_date').val(fromDate);
+    $('.edit_to_date').val(toDate);
+    $('.edit_duration').val(duration);
+    $('.edit_note').val(note);
+    $('#editemployeemodal').modal('show');
+});
 </script>
+
+
+
 
 <!-- Days Count from_date to to_date -->
 <script>
