@@ -318,7 +318,7 @@
         </div>
     </div>
 </div>
-
+<!-- Add Leave Modal -->
 
 
 
@@ -395,7 +395,7 @@ function loadCounts() {
 }
 
 // add leave here 
-$("#add_form").submit(function(e) 
+     $("#add_form").submit(function(e) 
     {
         $(".add_btn").prop('disabled', true);
         e.preventDefault();
@@ -419,7 +419,7 @@ $("#add_form").submit(function(e)
                     document.getElementById("add_form").reset();
                     $("#myModal").modal("hide");
                     swal("Leave Request Successfully", "", "success");
-                    loadLeaves(currentPage);
+                    loadLeaves(currentStatus, currentPage, searchKeyword);
                 } else if (data.success == 'error') {
                     $(".add_btn").prop('disabled', false);
                     swal("Error", data.message, "error");
