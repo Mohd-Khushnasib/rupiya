@@ -527,6 +527,7 @@ $(document).ready(function() {
         let duration = $(this).data('duration');
         let note = $(this).data('note');
 
+        // dropdown status on edit employee
         let status = $(this).data('status') || 'pending';
         updateStatusDropdown(status);
 
@@ -557,6 +558,7 @@ $(document).ready(function() {
         $('.update_employee_btn').hide();
 
 
+        $(".comment_leave_id").val(leaveId);
         // leave comment show start here
         $.ajax({
             url: "{{url('/get-leave-comments')}}",
