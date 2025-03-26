@@ -6420,9 +6420,14 @@ class AdminController extends Controller
         $status = $request->status; // Get status from request
         
         // Query Leave Data with admin names
+        // $query = DB::table('tbl_leave')
+        //     ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
+        //     ->select('tbl_leave.*', 'admin.name as admin_name');
+
         $query = DB::table('tbl_leave')
-            ->join('admin', 'tbl_leave.admin_id', '=', 'admin.id')
-            ->select('tbl_leave.*', 'admin.name as admin_name');
+        ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
+        ->leftJoin('admin as approver', 'tbl_leave.approved_by', '=', 'approver.id')
+        ->select('tbl_leave.*',  'admin.name as admin_name', 'approver.name as approved_by');
         
         // Apply role-based filtering
         if ($admin_role === 'admin' || $admin_role === 'hr') {
