@@ -390,3 +390,4 @@ Route::get('/show_leave', [AdminController::class, 'showLeave']);
 Route::post('/fetch_leave', [AdminController::class, 'fetchLeave']);
 Route::post('/add_leave', [AdminController::class, 'addLeave']);
 Route::post('/update_leave_status', [AdminController::class, 'updateLeaveStatus']);
+Route::post('/update_employee_leave', [AdminController::class, 'updateEmployeeLeave']);
