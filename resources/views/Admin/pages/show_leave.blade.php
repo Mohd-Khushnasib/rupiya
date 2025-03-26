@@ -466,10 +466,10 @@ function loadLeaves(status, page, search = '') {
         url: "{{ url('fetch_leave') }}",
         type: "POST",
         data: { 
-            status: status, // String status (pending, approved, rejected, all)
+            status: status,
             page: page,
-            search: search, // Search parameter send karna
-            _token: "{{ csrf_token() }}" // Add CSRF token for Laravel
+            search: search,
+            _token: "{{ csrf_token() }}"
         },
         success: function(data) {
             let tbody = $("#leaveTable tbody");
@@ -498,17 +498,36 @@ function loadLeaves(status, page, search = '') {
                 data.data.forEach((item, index) => {
                     // Get status badge class
                     let statusBadge = '';
+                    let statusCell = '';
+                    
                     if(item.status == 'pending') {
                         statusBadge = '<span class="badge bg-warning text-dark" style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px;">Pending</span>';
+                        // Add dropdown for pending status
+                        statusCell = `
+                            <td class="status-cell" data-leave-id="${item.id}">
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ${statusBadge}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item status-action" href="#" data-status="approved" data-leave-id="${item.id}">Approve</a></li>
+                                        <li><a class="dropdown-item status-action" href="#" data-status="rejected" data-leave-id="${item.id}">Reject</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        `;
                     } else if(item.status == 'approved') {
                         statusBadge = '<span class="badge bg-success text-white" style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span>';
+                        statusCell = `<td>${statusBadge}</td>`;
                     } else if(item.status == 'rejected') {
                         statusBadge = '<span class="badge bg-danger text-white" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span>';
+                        statusCell = `<td>${statusBadge}</td>`;
                     }
                     
                     // Calculate leave duration
                     const fromDate = new Date(item.from_date);
                     const toDate = new Date(item.to_date);
+                    
                     // Create the row HTML
                     const rowHtml = `
                         <tr>
@@ -518,8 +537,8 @@ function loadLeaves(status, page, search = '') {
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
                             <td>${item.duration || ''} </td>
-                            <td>${item.approved_by || '-'}</td>
-                            <td>${statusBadge}</td>
+                            <td>${item.approved_by_name || '-'}</td>
+                            ${statusCell}
                         </tr>
                     `;
                     
@@ -529,9 +548,19 @@ function loadLeaves(status, page, search = '') {
 
                 // Generate pagination links
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
+                
+                // Add event listeners for status actions
+                $('.status-action').click(function(e) {
+                    e.preventDefault();
+                    const leaveId = $(this).data('leave-id');
+                    const newStatus = $(this).data('status');
+                    
+                    // Send AJAX request to update status
+                    updateLeaveStatus(leaveId, newStatus);
+                });
             } else {
                 console.log('No data found or empty data array');
-                tbody.append(`<tr><td colspan="7" class="text-center">No Leave Data Found</td></tr>`);
+                tbody.append(`<tr><td colspan="8" class="text-center">No Leave Data Found</td></tr>`);
             }
         },
         error: function(xhr, status, error) {
@@ -542,7 +571,39 @@ function loadLeaves(status, page, search = '') {
             // Show error message to user
             let tbody = $("#leaveTable tbody");
             tbody.empty();
-            tbody.append(`<tr><td colspan="7" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
+            tbody.append(`<tr><td colspan="8" class="text-center text-danger">Error loading data. Please try again.</td></tr>`);
+        }
+    });
+}
+
+// Function to update leave status
+function updateLeaveStatus(leaveId, newStatus) {
+    $.ajax({
+        url: "{{ url('update_leave_status') }}",
+        type: "POST",
+        data: {
+            leave_id: leaveId,
+            status: newStatus,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response) {
+            if(response.success) {
+                // Show success message
+                toastr.success('Leave status updated successfully');
+                
+                // Reload current table
+                const currentStatus = $('.nav-link.active').data('status') || 'all';
+                const currentPage = parseInt($('.page-item.active .page-link').text()) || 1;
+                const currentSearch = $('#searchInput').val() || '';
+                
+                loadLeaves(currentStatus, currentPage, currentSearch);
+            } else {
+                toastr.error(response.message || 'Failed to update leave status');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Status Update Error:", error);
+            toastr.error('Failed to update leave status. Please try again.');
         }
     });
 }
