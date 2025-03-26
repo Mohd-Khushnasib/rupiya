@@ -443,9 +443,6 @@ function loadLeaves(status, page, search = '') {
                     // Calculate leave duration
                     const fromDate = new Date(item.from_date);
                     const toDate = new Date(item.to_date);
-                    const diffTime = Math.abs(toDate - fromDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both days
-                    
                     // Create the row HTML
                     const rowHtml = `
                         <tr>
@@ -453,7 +450,7 @@ function loadLeaves(status, page, search = '') {
                             <td>${item.leave_type || ''}</td>
                             <td>${formatDate(item.from_date)}</td>
                             <td>${formatDate(item.to_date)}</td>
-                            <td>${diffDays} day${diffDays > 1 ? 's' : ''}</td>
+                            <td>${item.duration || ''} days</td>
                             <td>${item.approved_by || '-'}</td>
                             <td>${statusBadge}</td>
                         </tr>
@@ -545,6 +542,46 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
         `);
     }
 }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get the input elements
+    const fromDateInput = document.querySelector('input[name="from_date"]');
+    const toDateInput = document.querySelector('input[name="to_date"]');
+    const durationInput = document.querySelector('input[name="duration"]');
+    
+    // Add event listeners to both date inputs
+    fromDateInput.addEventListener('change', calculateDuration);
+    toDateInput.addEventListener('change', calculateDuration);
+    
+    // Function to calculate the duration between two dates
+    function calculateDuration() {
+        const fromDate = new Date(fromDateInput.value);
+        const toDate = new Date(toDateInput.value);
+        
+        // Check if both dates are valid
+        if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+            return;
+        }
+        
+        // Calculate the difference in milliseconds
+        const diffTime = Math.abs(toDate - fromDate);
+        
+        // Convert to days and add 1 to include both start and end days
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        
+        // Update the duration input with the calculated days
+        durationInput.value = diffDays;
+        
+        // Display the duration in the specified format "6 days" style
+        if (diffDays === 1) {
+            durationInput.placeholder = `${diffDays} day`;
+        } else {
+            durationInput.placeholder = `${diffDays} days`;
+        }
+    }
+});
 </script>
 
 
