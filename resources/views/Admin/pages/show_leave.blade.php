@@ -334,7 +334,7 @@
                 <form id="edit_employee_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                 @csrf
                         <!-- leave_id  -->
-                        <input type="text" name="id" id="edit_leave_id" class="form-control"> 
+                        <input type="text" name="id" class="form-control edit_leave_id" readonly> 
 
                         <div class="col-sm-12">
                             <label class="control-label">Id</label>
