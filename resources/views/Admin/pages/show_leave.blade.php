@@ -1038,6 +1038,35 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the input elements by their class names
+        const fromDateInput = document.querySelector('.edit_from_date');
+        const toDateInput = document.querySelector('.edit_to_date');
+        const durationInput = document.querySelector('.edit_duration');
+
+        // Add event listeners
+        fromDateInput.addEventListener('change', calculateDuration);
+        toDateInput.addEventListener('change', calculateDuration);
+
+        function calculateDuration() {
+            const fromDate = new Date(fromDateInput.value);
+            const toDate = new Date(toDateInput.value);
+            
+            // Check if both dates are valid before calculating
+            if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+                return;
+            }
+            
+            const diffTime = Math.abs(toDate - fromDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            const durationText = diffDays === 1 ? `${diffDays} day` : `${diffDays} days`;
+            
+            durationInput.type = 'text';
+            durationInput.value = durationText;
+        }
+    });
+</script>
 
 <script>
         $(document).ready(function () {
