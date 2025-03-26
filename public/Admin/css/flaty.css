@@ -8830,6 +8830,5 @@ table tbody tr td {
 
 .form-control {
     border-radius: 17px !important;
-    box-shadow: 20px 20px 60px #bebebe,
-        -20px -20px 60px #ffffff !important;
+    box-shadow: 4px 6px 2px #bebebe !important;
 }
