@@ -328,7 +328,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Employee</h4>
+                <h4 class="modal-title" style="color: black;" id="modalTitle">Edit Leave</h4>
             </div>
             <div>
                 <div class="col-md-12">
@@ -802,6 +802,12 @@ $(".add_comment_leave").submit(function(e) {
     e.preventDefault();
     // Disable submit button
     $(".comment_btn").prop('disabled', true);
+    
+    // Capture current state before submission
+    let currentStatus = $('.nav-item.active .admin-tab').data('status') || 'all';
+    let currentPage = parseInt($("#pagination .active a").text()) || 1;
+    let currentSearch = $('.search_admin').val().trim();
+    
     var formData = new FormData(this);
     
     $.ajax({
@@ -816,11 +822,14 @@ $(".add_comment_leave").submit(function(e) {
             // Re-enable button
             $(".comment_btn").prop('disabled', false);
             if (data.success == 'success') {
-                // Reset form
+                // Reset form and close modal at this exact point
                 document.getElementsByClassName("add_comment_leave")[0].reset();
+                $("#editEmployeeModal").modal('hide');
                 
                 swal("Comment Added Successfully", "", "success");
-                loadComments();
+                
+                // Call loadLeaves with parameters
+                loadLeaves(currentStatus, currentPage, currentSearch);
             } else {
                 swal("Comment Not Added", "", "error");
             }
