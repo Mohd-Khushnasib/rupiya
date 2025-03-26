@@ -376,7 +376,7 @@
                         </div>
                         
                         <div class="col-sm-12" style="margin-top: 10px;">
-                            <textarea name="note" class="form-control wysihtml5 edit_note" rows="4" placeholder="Address..."></textarea>
+                            <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
                         <div class="col-sm-12" style="margin-top: 10px;">
                             <button type="submit" class="btn btn-success update_employee_btn"><i class="fa fa-refresh"></i>
@@ -706,7 +706,7 @@ $(document).on('click', '.edit_employee', function() {
     $('.edit_from_date').val(fromDate);
     $('.edit_to_date').val(toDate);
     $('.edit_duration').val(duration);
-    $('.edit_note').val(note);
+    $('.edit_note').text(note);
     $('#editEmployeeModal').modal('show');
 });
 </script>
