@@ -8839,10 +8839,12 @@ table tbody tr td {
     box-shadow: 3px 4px 2px #bebebe !important;
     font-weight: 800;
 }
+
 input {
     border-radius: 17px !important;
     box-shadow: 3px 4px 2px #bebebe !important;
     font-weight: 800;
+    border: none !important;
 }
 
 .stats-card {
@@ -8868,7 +8870,7 @@ select option {
     border-radius: 4px;
     padding: 8px 12px;
     margin: 2px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 
-                inset 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
     text-shadow: 0 1px 0 #fff;
-  }
+}
