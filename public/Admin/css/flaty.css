@@ -2124,7 +2124,7 @@ Bordered form layout
     color: #fff !important;
     cursor: pointer;
     display: inline-flex;
-    font-family: "JetBrains Mono", monospace;
+    /* font-family: "JetBrains Mono", monospace; */
     height: 48px;
     justify-content: center;
     line-height: 1;
