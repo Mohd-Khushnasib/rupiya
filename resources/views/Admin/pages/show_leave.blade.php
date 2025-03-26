@@ -706,7 +706,7 @@ $(document).on('click', '.edit_employee', function() {
     $('.edit_to_date').val(toDate);
     $('.edit_duration').val(duration);
     $('.edit_note').val(note);
-    $('#editemployeemodal').modal('show');
+    $('#editEmployeeModal').modal('show');
 });
 </script>
 
