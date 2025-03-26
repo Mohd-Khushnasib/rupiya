@@ -376,14 +376,14 @@
                         </div>
                         
                         <div class="col-sm-12" style="margin-top: 10px;">
+                        <label class="control-label">Note</label>
                             <textarea name="note" class="form-control edit_note" rows="4" placeholder="Address..."></textarea>
                         </div>
-                        <div class="col-sm-12" style="margin-top: 10px;">
-                            <button type="submit" class="btn btn-success update_employee_btn"><i class="fa fa-refresh"></i>
-                                Update</button>
+                        <div class="col-sm-12" style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button id="edit_button" class="btn btn-primary edit_button" type="button">Edit</button>
+                            <button id="update_button" class="btn btn-success update_employee_btn" style="display: none;" type="submit"><i class="fa fa-refresh"></i> Update</button>
                             <a type="button" class="btn" data-dismiss="modal">Cancel</a>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -681,33 +681,61 @@ function generatePaginationLinks(currentPage, lastPage, status, search = '') {
 }
 
 // edit employee here 
-$(document).on('click', '.edit_employee', function() {
-    let leaveId = $(this).data('id');
-    let adminId = $(this).data('admin_id');
-    let admin_name = $(this).data('admin_name');
-    let leaveType = $(this).data('leave_type');
-    let fromDate = $(this).data('from_date');
-    let toDate = $(this).data('to_date');
-    let duration = $(this).data('duration');
-    let note = $(this).data('note');
+$(document).ready(function() {
+    // Click event for Edit Employee button
+    $(document).on('click', '.edit_employee', function() {
+        let leaveId = $(this).data('id');
+        let adminId = $(this).data('admin_id');
+        let admin_name = $(this).data('admin_name');
+        let leaveType = $(this).data('leave_type');
+        let fromDate = $(this).data('from_date');
+        let toDate = $(this).data('to_date');
+        let duration = $(this).data('duration');
+        let note = $(this).data('note');
 
-    // Set values in the modal
-    $('.edit_leave_id').val(leaveId);
-    $('.edit_admin_id').val("EMP" + adminId);
-    $('.edit_admin_name').val(admin_name);
-    // Alternative approach to set the dropdown value
-    $(".edit_leave_type option").each(function() {
-        if($(this).val() == leaveType) {
-            $(this).prop("selected", true);
-        } else {
-            $(this).prop("selected", false);
-        }
+        // Set values in the modal using class selectors
+        $('.edit_leave_id').val(leaveId);
+        $('.edit_admin_id').val("EMP" + adminId);
+        $('.edit_admin_name').val(admin_name);
+        
+        // Set dropdown value
+        $('.edit_leave_type option').each(function() {
+            if($(this).val() == leaveType) {
+                $(this).prop("selected", true);
+            } else {
+                $(this).prop("selected", false);
+            }
+        });
+        
+        $('.edit_from_date').val(fromDate);
+        $('.edit_to_date').val(toDate);
+        $('.edit_duration').val(duration);
+        $('.edit_note').val(note);
+        
+        // Make sure all fields are disabled initially
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', true);
+        
+        // Show the Edit button and hide the Update button
+        $('#edit_button').show();
+        $('#update_button').hide();
+        
+        $('#editEmployeeModal').modal('show');
     });
-    $('.edit_from_date').val(fromDate);
-    $('.edit_to_date').val(toDate);
-    $('.edit_duration').val(duration);
-    $('.edit_note').text(note);
-    $('#editEmployeeModal').modal('show');
+    
+    // Edit button click event
+    $(document).on('click', '#edit_button', function() {
+        // Enable all form fields except ID and Name
+        $('.edit_leave_type, .edit_from_date, .edit_to_date, .edit_duration, .edit_note').prop('disabled', false);
+        
+        // Hide Edit button and show Update button
+        $('#edit_button').hide();
+        $('#update_button').show();
+    });
+    
+    // Update button click event
+    $(document).on('click', '.update_employee_btn', function() {
+        $('#editEmployeeModal').modal('hide');
+    });
 });
 </script>
 
