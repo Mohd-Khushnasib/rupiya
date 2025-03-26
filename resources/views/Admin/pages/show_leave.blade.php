@@ -460,8 +460,6 @@ $("#add_form").submit(function(e) {
 
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
-    console.log('Loading leaves with status:', status, 'page:', page, 'search:', search);
-    
     $.ajax({
         url: "{{ url('fetch_leave') }}",
         type: "POST",
@@ -500,26 +498,28 @@ function loadLeaves(status, page, search = '') {
                     let statusCell = '';
                     
                     if(item.status == 'pending') {
-                        // Completely revised dropdown approach for pending status
+                        // Custom solution with direct action buttons instead of dropdown
                         statusCell = `
                             <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" 
-                                            data-bs-toggle="dropdown" aria-expanded="false" 
-                                            style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px;">
+                                <div>
+                                    <span style="background-color: #ffc107; color: #212529; padding: 5px 10px; border-radius: 4px; margin-bottom: 5px; display: block;">
                                         Pending
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item approve-btn" href="javascript:void(0);" data-id="${item.id}">Approve</a></li>
-                                        <li><a class="dropdown-item reject-btn" href="javascript:void(0);" data-id="${item.id}">Reject</a></li>
-                                    </ul>
+                                    </span>
+                                    <div class="action-buttons" style="margin-top: 5px;">
+                                        <button class="btn btn-success btn-sm approve-btn" style="margin-right: 5px;" data-id="${item.id}">
+                                            <i class="fas fa-check"></i> approved
+                                        </button>
+                                        <button class="btn btn-danger btn-sm reject-btn" data-id="${item.id}">
+                                            <i class="fas fa-times"></i> rejected
+                                        </button>
+                                    </div>
                                 </div>
                             </td>
                         `;
                     } else if(item.status == 'approved') {
-                        statusCell = `<td><span class="badge bg-success" style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
+                        statusCell = `<td><span style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 4px;">Approved</span></td>`;
                     } else if(item.status == 'rejected') {
-                        statusCell = `<td><span class="badge bg-danger" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
+                        statusCell = `<td><span style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 4px;">Rejected</span></td>`;
                     }
                     
                     // Create the row HTML
@@ -544,8 +544,15 @@ function loadLeaves(status, page, search = '') {
                 generatePaginationLinks(data.current_page, data.last_page, status, search);
                 
                 // Attach event handlers for approve and reject buttons
-                // Done outside the loop for better performance
-                attachActionHandlers();
+                $('button.approve-btn').on('click', function() {
+                    const leaveId = $(this).data('id');
+                    updateLeaveStatus(leaveId, 'approved');
+                });
+                
+                $('button.reject-btn').on('click', function() {
+                    const leaveId = $(this).data('id');
+                    updateLeaveStatus(leaveId, 'rejected');
+                });
             } else {
                 console.log('No data found or empty data array');
                 tbody.append(`<tr><td colspan="8" class="text-center">No Leave Data Found</td></tr>`);
@@ -564,25 +571,10 @@ function loadLeaves(status, page, search = '') {
     });
 }
 
-// Function to attach event handlers to approve/reject buttons
-function attachActionHandlers() {
-    // Handle approve button click
-    $('.approve-btn').on('click', function() {
-        const leaveId = $(this).data('id');
-        updateLeaveStatus(leaveId, 'approved');
-    });
-    
-    // Handle reject button click
-    $('.reject-btn').on('click', function() {
-        const leaveId = $(this).data('id');
-        updateLeaveStatus(leaveId, 'rejected');
-    });
-}
-
 // Function to update leave status
 function updateLeaveStatus(leaveId, newStatus) {
     // Show confirmation dialog
-    if (confirm(`Are you sure you want to ${newStatus === 'approved' ? 'approve' : 'reject'} this leave request?`)) {
+    if (confirm(`Are you sure you want to ${newStatus === 'approved' ? 'approved' : 'rejected'} this leave request?`)) {
         $.ajax({
             url: "{{ url('update_leave_status') }}",
             type: "POST",
