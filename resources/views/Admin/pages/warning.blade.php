@@ -1050,41 +1050,35 @@
 </script>
 
 <script>
-                $(document).on('click', '.delete', function () {
-                    var id = $(this).data("id");
-                    $("#delete_id").val(id);
-                    $("#deletemodal").modal("show");
-                });
-                // delete here
-                $("#delete_form").submit(function (e) {
-                    e.preventDefault();
-                    var formData = new FormData(this);
-                    $.ajax({
-                        type: "POST",
-                        url: "{{url('/delete_warning_id')}}",
-                        data: formData,
-                        dataType: "json",
-                        contentType: false,
-                        processData: false,
-                        cache: false,
-                        encode: true,
-                        success: function (data) {
-                            if (data.success == 'success') {
-                                $("#deletemodal").modal("hide");
-                                // $("#delete_form")[0].reset();
-                                swal("Lead Delete Successfully! ", "", "success");
-                                // setTimeout(function () {
-                                //     window.location.reload();
-                                // }, 1000);
-                            } else {
-                                swal('Lead Not Added', '', 'error');
-                            }
-                        },
-                        error: function (error) {
-                            swal('Something Went Wrong!', '', 'error');
-                        }
-                    });
-                });
-
-            </script>
+    $("#delete_form").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    
+    $.ajax({
+        type: "POST",
+        url: "{{url('/delete_warning_id')}}",
+        data: formData,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        cache: false,
+        encode: true,
+        success: function (data) {
+            if (data.success == 'success') {
+                $("#deletemodal").modal("hide");
+                swal("Lead Delete Successfully!", "", "success");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                swal('Failed to delete lead', data.message || '', 'error');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error details:", xhr.responseText);
+            swal('Something Went Wrong!', 'Please try again or contact support.', 'error');
+        }
+    });
+});
+</script>
 @endsection
