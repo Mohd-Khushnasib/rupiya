@@ -508,7 +508,7 @@
 
         document.getElementById("monthPicker").value = currentMonth;
     </script>
-    
+
 <!-- modal  -->
 
 <!-- leave modal -->
@@ -1363,6 +1363,14 @@ add multiple boxes for add your work time
     });
 </script>
 
+<!-- td modal js -->
+<script>
+    $(document).ready(function () {
+        $(".opentdModal").click(function () {
+            $("#tdModal").modal("show");
+        });
+    });
+</script>
 
 <!--
 -----------------------------------------------------------------------------------------------------------
@@ -1446,14 +1454,7 @@ Attendance Details Modal
     </div>
 </div>
 
-<!-- td modal js -->
-<script>
-    $(document).ready(function () {
-        $(".opentdModal").click(function () {
-            $("#tdModal").modal("show");
-        });
-    });
-</script>
+
 
 
 
