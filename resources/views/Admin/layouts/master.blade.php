@@ -8,10 +8,10 @@
         $role = $admin->role ?? '';
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
-        $totalLeads = DB::table('tbl_lead')->count(); // Total leads count fix
-        $today = Carbon::now()->format('m/d/Y');
+        $totalLeads = DB::table('tbl_lead')->count();
+        $today = Carbon::now()->format('m/d/Y'); // Today's date in required format
 
-        // Attendance data fetch
+        // Fetch today's attendance record
         $attendance = DB::table('tbl_attendance')
             ->where('admin_id', $admin_id)
             ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
@@ -21,10 +21,12 @@
         $showPunchOut = true;
 
         if ($attendance) {
-            if ($attendance->punchin_status == 'true') {
+            // If Punch In exists and is true, hide Punch In button
+            if (!empty($attendance->punchin_datetime) && $attendance->punchin_status == 'true') {
                 $showPunchIn = false;
             }
-            if ($attendance->punchout_status == 'true') {
+            // If Punch Out exists and is true, hide Punch Out button
+            if (!empty($attendance->punchout_datetime) && $attendance->punchout_status == 'true') {
                 $showPunchOut = false;
             }
         }
@@ -89,6 +91,7 @@
 
             <!-- BEGIN Navbar Buttons -->
             <ul class="nav flaty-nav pull-right">
+
 
                 <li>
                     <div class="dropdown">
