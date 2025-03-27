@@ -5,15 +5,11 @@
             date_default_timezone_set('Asia/Kolkata');
             $currentMonthYear = date('F Y');
 
-            $today = date('n/j/Y'); // '3/27/2025' format (without time)
-
-            // Fetch attendance data
+            $today = date('n/j/Y'); 
             $attendance = DB::table('tbl_attendance')
                 ->where('admin_id', $adminlogin->id)
                 ->whereRaw("DATE_FORMAT(STR_TO_DATE(punchin_datetime, '%c/%e/%Y, %h:%i:%s %p'), '%c/%e/%Y') = ?", [$today])
                 ->first();
-
-                dd($attendance);
         @endphp
 
 
@@ -981,7 +977,7 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput1">Your punch in datetime</label>
-                                        <input type="text" id="dateInput1" class="form-control mt-3" placeholder="Punch In Date"
+                                        <input type="text" value="{{ $attendance->punchin_datetime }}" class="form-control mt-3" placeholder="Punch In Date"
                                             readonly="">
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
