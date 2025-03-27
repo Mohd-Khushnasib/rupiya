@@ -8902,3 +8902,16 @@ button i {
     margin-right: 4px !important;
 }
 
+.punch_card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    color: black;
+}
+
+.punch_card_text {
+    color: #03b0f5 !important;
+    font-weight: bold;
+}
