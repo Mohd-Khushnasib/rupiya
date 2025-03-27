@@ -27,9 +27,9 @@ class AdminController extends Controller
     {
         $path1 = "";
         if ($request->hasFile('image')) {
-            $file   = $request->file("image");
+            $file = $request->file("image");
             $uniqid = uniqid();
-            $name   = $uniqid . "." . $file->getClientOriginalExtension();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
             $request->image->move(public_path('storage/Admin/feed/'), $name);
             $path1 = "https://rupiyamaker.m-bit.org.in//storage/Admin/feed/$name";
         } else {
@@ -38,10 +38,10 @@ class AdminController extends Controller
             'admin_id' => $request->admin_id,
             'message' => $request->message,
             'image' => $path1,
-            'permition' => implode(',',$request->permition),
+            'permition' => implode(',', $request->permition),
             'date' => $this->date
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_feed')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -144,7 +144,7 @@ class AdminController extends Controller
         return response()->json(['status' => 1, 'message' => 'Pinned Updated', 'pinned' => $newPinnedStatus]);
     }
 
-    
+
 
 
     // Feed Add Comment Here 
@@ -424,9 +424,9 @@ class AdminController extends Controller
     // checkMobileExistence
     public function checkMobileExistence(Request $request)
     {
-        $mobile           = $request->mobile;
+        $mobile = $request->mobile;
         $alternate_mobile = $request->alternate_mobile;
-        $product_id       = $request->product_id;
+        $product_id = $request->product_id;
 
         $existingMobile = DB::table('tbl_lead')
             ->where('product_id', $product_id)
@@ -471,7 +471,7 @@ class AdminController extends Controller
     public function downloadZipnew($id)
     {
         $item = DB::table('tbl_lead')->where('id', $id)->first();
-        if (! $item) {
+        if (!$item) {
             return response()->json(['error' => 'Record not found'], 404);
         }
         $imageFields = [
@@ -490,7 +490,7 @@ class AdminController extends Controller
         // Files ko collect karein (jo null ya missing nahi hain)
         $files = [];
         foreach ($imageFields as $field) {
-            if (! empty($item->$field)) {
+            if (!empty($item->$field)) {
                 $filePath = public_path(parse_url($item->$field, PHP_URL_PATH));
                 if (File::exists($filePath)) {
                     $files[$field] = $filePath;
@@ -501,7 +501,7 @@ class AdminController extends Controller
             return response()->json(['error' => 'No files found to download'], 404);
         }
         $zipFileName = 'attachments-' . $id . '.zip';
-        $zipPath     = storage_path($zipFileName);
+        $zipPath = storage_path($zipFileName);
 
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -519,7 +519,7 @@ class AdminController extends Controller
     public function downloadZipWithPdf($id)
     {
         $item = DB::table('tbl_lead')->where('id', $id)->first();
-        if (! $item) {
+        if (!$item) {
             return response()->json(['error' => 'Record not found'], 404);
         }
 
@@ -540,7 +540,7 @@ class AdminController extends Controller
         // Collect files (that are not null or missing)
         $files = [];
         foreach ($imageFields as $field) {
-            if (! empty($item->$field)) {
+            if (!empty($item->$field)) {
                 $filePath = public_path(parse_url($item->$field, PHP_URL_PATH));
                 if (File::exists($filePath)) {
                     $files[$field] = $filePath;
@@ -554,14 +554,14 @@ class AdminController extends Controller
 
         // Add the `all_file_password` field as a text file if it exists
         $passwordFilePath = null;
-        if (! empty($item->all_file_password)) {
+        if (!empty($item->all_file_password)) {
             $passwordFileName = 'all_file_password.txt';
             $passwordFilePath = storage_path($passwordFileName);
             File::put($passwordFilePath, $item->all_file_password);
         }
 
         $zipFileName = 'attachments-' . $id . '.zip';
-        $zipPath     = storage_path($zipFileName);
+        $zipPath = storage_path($zipFileName);
 
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -591,7 +591,7 @@ class AdminController extends Controller
     public function downloadZip($id)
     {
         $item = DB::table('tbl_lead')->where('id', $id)->first();
-        if (! $item) {
+        if (!$item) {
             return response()->json(['error' => 'Record not found'], 404);
         }
         $imageFields = [
@@ -609,7 +609,7 @@ class AdminController extends Controller
         ];
         $files = [];
         foreach ($imageFields as $field) {
-            if (! empty($item->$field)) {
+            if (!empty($item->$field)) {
                 $filePath = public_path(parse_url($item->$field, PHP_URL_PATH));
                 if (File::exists($filePath)) {
                     $files[$field] = $filePath;
@@ -620,7 +620,7 @@ class AdminController extends Controller
             return response()->json(['error' => 'No files found to download'], 404);
         }
         $passwordFilePath = null;
-        if (! empty($item->all_file_password)) {
+        if (!empty($item->all_file_password)) {
             $passwordFileName = 'all_file_password.txt';
             $passwordFilePath = storage_path($passwordFileName);
             File::put($passwordFilePath, $item->all_file_password);
@@ -629,7 +629,7 @@ class AdminController extends Controller
         $zipFileName = $item->name . '-' . $item->mobile . '.zip';
 
         $zipPath = storage_path($zipFileName);
-        $zip     = new ZipArchive;
+        $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
             foreach ($files as $field => $filePath) {
                 $folderName = str_replace('_image', '', $field);
@@ -652,7 +652,7 @@ class AdminController extends Controller
     public function admin_login(Request $request)
     {
         // dd($request->all());
-        $email    = $request->email;
+        $email = $request->email;
         $password = $request->password;
 
         $login = DB::table('admin')->where(['email' => $email, 'password' => $password, 'status' => '1'])->first();
@@ -662,7 +662,7 @@ class AdminController extends Controller
             $data = DB::table('admin')->where(['email' => $email, 'password' => $password, 'status' => '1'])->get();
             session()->put("admin_login", $data);
             return response()->json([
-                'data'    => $data,
+                'data' => $data,
                 'success' => '1',
             ]);
         }
@@ -672,9 +672,9 @@ class AdminController extends Controller
     public function changepasswordset(Request $request)
     {
         $admin_id = $request->admin_id;
-        $opass    = $request->opass;
-        $npass    = $request->npass;
-        $cpass    = $request->cpass;
+        $opass = $request->opass;
+        $npass = $request->npass;
+        $cpass = $request->cpass;
 
         $updatedata = [
             'password' => $npass,
@@ -701,15 +701,15 @@ class AdminController extends Controller
     // update profile
     public function updateprofile(Request $request)
     {
-        $admin_id   = $request->admin_id;
+        $admin_id = $request->admin_id;
         $updatedata = [
-            'name'   => $request->name,
-            'email'  => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'mobile' => $request->mobile,
         ];
 
         if ($admin_id) {
-            $up   = DB::table("admin")->where('id', $admin_id)->update($updatedata);
+            $up = DB::table("admin")->where('id', $admin_id)->update($updatedata);
             $data = DB::table('admin')->where('id', $admin_id)->get();
             session()->forget('admin_login');
             session()->put('admin_login', $data);
@@ -731,37 +731,37 @@ class AdminController extends Controller
     {
         $id = $request->id;
         $status = $request->status;
-        
+
         if (!empty($id)) {
             $data = [
                 'status' => $status,
                 'crm_status' => $status
             ];
-            
+
             $update = DB::table($tableName)->where('id', $id)->update($data);
             return response()->json([
-                'data'    => $update,
+                'data' => $update,
                 'success' => 'success',
             ]);
         }
     }
 
 
-    
-    
+
+
     // this code is switch status update
     public function switch_status_update(Request $request, $tableName)
     {
 
-        $id             = $request->id;
-        $data           = [];
+        $id = $request->id;
+        $data = [];
         $data['status'] = $request->status;
-        if (! empty($id)) {
+        if (!empty($id)) {
 
             $update = DB::table($tableName)->where('id', $id)->update($data);
 
             return response()->json([
-                'data'    => $update,
+                'data' => $update,
                 'success' => 'success',
             ]);
         }
@@ -770,13 +770,13 @@ class AdminController extends Controller
     public function switch_crm_access_update(Request $request, $tableName)
     {
 
-        $id             = $request->id;
-        $data           = [];
+        $id = $request->id;
+        $data = [];
         $data['crm_status'] = $request->crm_status;
         if (!empty($id)) {
             $update = DB::table($tableName)->where('id', $id)->update($data);
             return response()->json([
-                'data'    => $update,
+                'data' => $update,
                 'success' => 'success',
             ]);
         }
@@ -792,8 +792,8 @@ class AdminController extends Controller
     // user delete here
     public function delete_user(Request $request)
     {
-        $imagedata   = DB::table('users')->where('id', $request->id)->first();
-        $url1        = $imagedata->image;
+        $imagedata = DB::table('users')->where('id', $request->id)->first();
+        $url1 = $imagedata->image;
         $image_name1 = basename($url1);
         if ($image_name1) {
             $image_path1 = public_path("storage/Admin/user/" . $image_name1);
@@ -801,7 +801,7 @@ class AdminController extends Controller
                 unlink($image_path1);
             }
         }
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("users")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -824,11 +824,11 @@ class AdminController extends Controller
     public function add_product(Request $request)
     {
         $data = [
-            'status'       => '1',
+            'status' => '1',
             'product_name' => $request->product_name,
-            'date'         => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_product')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -839,7 +839,7 @@ class AdminController extends Controller
     // product delete here
     public function delete_product(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_product")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -849,11 +849,11 @@ class AdminController extends Controller
     public function update_product(Request $request)
     {
         $data = [
-            'id'           => $request->id,
+            'id' => $request->id,
             'product_name' => $request->product_name,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_product')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -884,22 +884,22 @@ class AdminController extends Controller
     {
         $path1 = "";
         if ($request->hasFile('audio')) {
-            $file   = $request->file("audio");
+            $file = $request->file("audio");
             $uniqid = uniqid();
-            $name   = $uniqid . "." . $file->getClientOriginalExtension();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
             $request->audio->move(public_path('storage/Admin/audio/'), $name);
             $path1 = "https://rupiyamaker.m-bit.org.in//storage/Admin/audio/$name";
         } else {
         }
 
         $data = [
-            'product_id'        => $request->product_id,
+            'product_id' => $request->product_id,
             'imp_question_name' => $request->imp_question_name,
-            'audio'             => $path1,
-            'date'              => $this->date,
+            'audio' => $path1,
+            'date' => $this->date,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_imp_question')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -911,8 +911,8 @@ class AdminController extends Controller
     // bank delete here
     public function delete_imp_question(Request $request)
     {
-        $audiodata   = DB::table('tbl_imp_question')->where('id', $request->id)->first();
-        $url1        = $audiodata->audio;
+        $audiodata = DB::table('tbl_imp_question')->where('id', $request->id)->first();
+        $url1 = $audiodata->audio;
         $audio_name1 = basename($url1);
         if ($audio_name1) {
             $audio_path1 = public_path("storage/Admin/audio/" . $audio_name1);
@@ -920,7 +920,7 @@ class AdminController extends Controller
                 unlink($audio_path1);
             }
         }
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_imp_question")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -941,23 +941,23 @@ class AdminController extends Controller
                     unlink($audio_path);
                 }
             }
-            $file      = $request->file('audio');
+            $file = $request->file('audio');
             $unique_id = uniqid();
-            $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+            $name = $unique_id . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/Admin/audio/'), $name);
             $path = "https://rupiyamaker.m-bit.org.in//storage/Admin/audio/$name";
         } else {
             $path = $imagedata->audio;
         }
         $data = [
-            'id'                => $request->id,
-            'product_id'        => $request->product_id,
+            'id' => $request->id,
+            'product_id' => $request->product_id,
             'imp_question_name' => $request->imp_question_name,
         ];
         if ($path !== "") {
             $data['audio'] = $path;
         }
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_imp_question')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -979,11 +979,11 @@ class AdminController extends Controller
     public function add_campaign(Request $request)
     {
         $data = [
-            'status'        => '1',
+            'status' => '1',
             'campaign_name' => $request->campaign_name,
-            'date'          => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_campaign')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -994,7 +994,7 @@ class AdminController extends Controller
     // campaign delete here
     public function delete_campaign(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_campaign")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1004,11 +1004,11 @@ class AdminController extends Controller
     public function update_campaign(Request $request)
     {
         $data = [
-            'id'            => $request->id,
+            'id' => $request->id,
             'campaign_name' => $request->campaign_name,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_campaign')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1032,22 +1032,22 @@ class AdminController extends Controller
     {
         $path1 = "";
         if ($request->hasFile('image')) {
-            $file   = $request->file("image");
+            $file = $request->file("image");
             $uniqid = uniqid();
-            $name   = $uniqid . "." . $file->getClientOriginalExtension();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
             $request->image->move(public_path('storage/Admin/bank/'), $name);
             $path1 = "https://rupiyamaker.m-bit.org.in//storage/Admin/bank/$name";
         } else {
         }
 
         $data = [
-            'status'    => '1',
+            'status' => '1',
             'bank_name' => $request->bank_name,
-            'image'     => $path1,
-            'date'      => $this->date,
+            'image' => $path1,
+            'date' => $this->date,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_bank')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1059,8 +1059,8 @@ class AdminController extends Controller
     // bank delete here
     public function delete_bank(Request $request)
     {
-        $imagedata   = DB::table('tbl_bank')->where('id', $request->id)->first();
-        $url1        = $imagedata->image;
+        $imagedata = DB::table('tbl_bank')->where('id', $request->id)->first();
+        $url1 = $imagedata->image;
         $image_name1 = basename($url1);
         if ($image_name1) {
             $image_path1 = public_path("storage/Admin/bank/" . $image_name1);
@@ -1068,7 +1068,7 @@ class AdminController extends Controller
                 unlink($image_path1);
             }
         }
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_bank")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1091,9 +1091,9 @@ class AdminController extends Controller
                 }
             }
 
-            $file      = $request->file('image');
+            $file = $request->file('image');
             $unique_id = uniqid();
-            $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+            $name = $unique_id . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/Admin/bank/'), $name);
 
             $path = "https://rupiyamaker.m-bit.org.in//storage/Admin/bank/$name";
@@ -1102,7 +1102,7 @@ class AdminController extends Controller
         }
 
         $data = [
-            'id'        => $request->id,
+            'id' => $request->id,
             'bank_name' => $request->bank_name,
         ];
 
@@ -1110,7 +1110,7 @@ class AdminController extends Controller
             $data['image'] = $path;
         }
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_bank')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1132,11 +1132,11 @@ class AdminController extends Controller
     public function add_product_need(Request $request)
     {
         $data = [
-            'status'       => '1',
+            'status' => '1',
             'product_need' => $request->product_need,
-            'date'         => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_product_need')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1147,7 +1147,7 @@ class AdminController extends Controller
     // product_need delete here
     public function delete_product_need(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_product_need")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1157,11 +1157,11 @@ class AdminController extends Controller
     public function update_product_need(Request $request)
     {
         $data = [
-            'id'           => $request->id,
+            'id' => $request->id,
             'product_need' => $request->product_need,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_product_need')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1183,11 +1183,11 @@ class AdminController extends Controller
     public function add_casetype(Request $request)
     {
         $data = [
-            'status'   => '1',
+            'status' => '1',
             'casetype' => $request->casetype,
-            'date'     => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_casetype')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1198,7 +1198,7 @@ class AdminController extends Controller
     // casetype delete here
     public function delete_casetype(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_casetype")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1208,11 +1208,11 @@ class AdminController extends Controller
     public function update_casetype(Request $request)
     {
         $data = [
-            'id'       => $request->id,
+            'id' => $request->id,
             'casetype' => $request->casetype,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_casetype')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1235,9 +1235,9 @@ class AdminController extends Controller
     {
         $data = [
             'datacode_name' => $request->datacode_name,
-            'date'          => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_datacode')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1248,7 +1248,7 @@ class AdminController extends Controller
     // datacode delete here
     public function delete_datacode(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_datacode")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1285,9 +1285,9 @@ class AdminController extends Controller
     {
         $data = [
             'warning_name' => $request->warning_name,
-            'date'         => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_warning_type')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1298,7 +1298,7 @@ class AdminController extends Controller
     // warning_type delete here
     public function delete_warning_type(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_warning_type")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1308,11 +1308,11 @@ class AdminController extends Controller
     public function update_warning_type(Request $request)
     {
         $data = [
-            'id'           => $request->id,
+            'id' => $request->id,
             'warning_name' => $request->warning_name,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_warning_type')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1335,9 +1335,9 @@ class AdminController extends Controller
     {
         $data = [
             'channel_name' => $request->channel_name,
-            'date'         => $this->date,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_channel_name')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1348,7 +1348,7 @@ class AdminController extends Controller
     // channelname delete here
     public function delete_channel_name(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_channel_name")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1358,11 +1358,11 @@ class AdminController extends Controller
     public function update_channel_name(Request $request)
     {
         $data = [
-            'id'           => $request->id,
+            'id' => $request->id,
             'channel_name' => $request->channel_name,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $update = DB::table('tbl_channel_name')->where('id', $request->id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -1389,7 +1389,7 @@ class AdminController extends Controller
     public function leads(Request $request)
     {
         $selectedProductId = $request->get('product_id');
-        $mobileNumber      = $request->get('mobile');
+        $mobileNumber = $request->get('mobile');
         return view('Admin.pages.leads', compact('selectedProductId', 'mobileNumber'));
     }
 
@@ -1405,26 +1405,26 @@ class AdminController extends Controller
         }
 
         $data = [
-            'status'           => '1',
-            'lead_status'      => 'NEW LEAD',
-            'admin_id'         => $request->admin_id,
-            'product_id'       => $request->product_id,
-            'campaign_id'      => $request->campaign_id,
-            'data_code'        => $request->data_code,
-            'name'             => $request->name,
-            'mobile'           => $request->mobile,
+            'status' => '1',
+            'lead_status' => 'NEW LEAD',
+            'admin_id' => $request->admin_id,
+            'product_id' => $request->product_id,
+            'campaign_id' => $request->campaign_id,
+            'data_code' => $request->data_code,
+            'name' => $request->name,
+            'mobile' => $request->mobile,
             'alternate_mobile' => $request->alternate_mobile,
-            'pincode'          => $request->pincode,
-            'bank_id'          => $request->bank_id,
-            'product_need_id'  => $request->product_need_id,
-            'casetype_id'      => $request->casetype_id,
-            'loan_amount'      => $request->loan_amount,
-            'tenure'           => $request->tenure,
-            'year'             => $request->year,
-            'process'          => $request->process,
-            'date'             => $this->date,
+            'pincode' => $request->pincode,
+            'bank_id' => $request->bank_id,
+            'product_need_id' => $request->product_need_id,
+            'casetype_id' => $request->casetype_id,
+            'loan_amount' => $request->loan_amount,
+            'tenure' => $request->tenure,
+            'year' => $request->year,
+            'process' => $request->process,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_lead')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -1436,7 +1436,7 @@ class AdminController extends Controller
     // Delete Lead
     public function DeleteLead(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_lead")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1447,8 +1447,8 @@ class AdminController extends Controller
     public function MultipleDeleteLead(Request $request)
     {
 
-        if (! empty($request->id)) {
-            $ids         = explode(",", $request->id);
+        if (!empty($request->id)) {
+            $ids = explode(",", $request->id);
             $delete_data = DB::table("tbl_lead")->whereIn("id", $ids)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -1470,28 +1470,28 @@ class AdminController extends Controller
         $admin_id = $request->admin_id;
 
         $data = [
-            'status'            => '1',
+            'status' => '1',
             'lead_login_status' => 'Lead',
-            'lead_status'       => 'NEW LEAD',
-            'admin_id'          => $admin_id,
-            'product_id'        => $request->product_id,
-            'campaign_id'       => $request->campaign_id,
-            'data_code'         => $request->data_code,
-            'name'              => $request->name,
-            'mobile'            => $request->mobile,
-            'alternate_mobile'  => $request->alternate_mobile,
-            'pincode'           => $request->pincode,
-            'bank_id'           => $request->bank_id,
-            'product_need_id'   => $request->product_need_id,
-            'casetype_id'       => $request->casetype_id,
-            'loan_amount'       => $request->loan_amount,
-            'tenure'            => $request->tenure,
-            'year'              => $request->year,
-            'process'           => $request->process,
-            'date'              => $this->date,
+            'lead_status' => 'NEW LEAD',
+            'admin_id' => $admin_id,
+            'product_id' => $request->product_id,
+            'campaign_id' => $request->campaign_id,
+            'data_code' => $request->data_code,
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'alternate_mobile' => $request->alternate_mobile,
+            'pincode' => $request->pincode,
+            'bank_id' => $request->bank_id,
+            'product_need_id' => $request->product_need_id,
+            'casetype_id' => $request->casetype_id,
+            'loan_amount' => $request->loan_amount,
+            'tenure' => $request->tenure,
+            'year' => $request->year,
+            'process' => $request->process,
+            'date' => $this->date,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             // Insert into tbl_lead and get the last inserted ID
             $leadId = DB::table('tbl_lead')->insertGetId($data);
 
@@ -1501,10 +1501,10 @@ class AdminController extends Controller
 
             // Insert into tbl_lead_status using the retrieved leadId
             $leadStatusData = [
-                'admin_id'    => $admin_id,
-                'lead_id'     => $leadId,
+                'admin_id' => $admin_id,
+                'lead_id' => $leadId,
                 'lead_status' => 'NEW LEAD',
-                'date'        => $this->date,
+                'date' => $this->date,
             ];
             DB::table('tbl_lead_status')->insert($leadStatusData);
             return response()->json([
@@ -1518,16 +1518,16 @@ class AdminController extends Controller
     {
         // Check if lead already exists
         $existingLead = DB::table('tbl_lead')->where('mobile', $request->mobile)->first();
-    
+
         if ($existingLead) {
             return response()->json([
                 'success' => 'exists',
                 'message' => 'Mobile number already exists for this Lead',
             ]);
         }
-    
+
         $admin_id = $request->admin_id;
-    
+
         // Sanitize numeric fields
         $obligation = preg_replace('/[^0-9]/', '', $request->obligation);
         $pos = preg_replace('/[^0-9]/', '', $request->pos);
@@ -1535,7 +1535,7 @@ class AdminController extends Controller
         $loan_amount = preg_replace('/[^0-9]/', '', $request->loan_amount);
         $salary = preg_replace('/[^0-9]/', '', $request->salary);
         $yearly_bonus = preg_replace('/[^0-9]/', '', $request->yearly_bonus);
-    
+
         // Ensure single values are stored properly
         $data = [
             'status' => '1',
@@ -1557,66 +1557,66 @@ class AdminController extends Controller
             'process' => $request->process,
             'date' => $request->date,
             'salary' => $salary,
-            'yearly_bonus' => $yearly_bonus, 
-            'company_name' => $request->company_name, 
-            'company_type' => $request->company_type, 
-            'company_category_id' => $request->company_category_id, 
-            'obligation' => $obligation, 
-            'pos' => $pos, 
-            'cibil_score' => $request->cibil_score, 
-            'date' => $this->date 
+            'yearly_bonus' => $yearly_bonus,
+            'company_name' => $request->company_name,
+            'company_type' => $request->company_type,
+            'company_category_id' => $request->company_category_id,
+            'obligation' => $obligation,
+            'pos' => $pos,
+            'cibil_score' => $request->cibil_score,
+            'date' => $this->date
         ];
-    
+
         // Insert lead and get lead ID
         $leadId = DB::table('tbl_lead')->insertGetId($data);
-    
+
         // Generate lead ID with 'PL' prefix
         $leadIdWithPrefix = 'PL' . $leadId;
         DB::table('tbl_lead')->where('id', $leadId)->update(['leadid' => $leadIdWithPrefix]);
-    
+
         // Insert lead status
         DB::table('tbl_lead_status')->insert([
-            'admin_id'    => $admin_id,
-            'lead_id'     => $leadId,
+            'admin_id' => $admin_id,
+            'lead_id' => $leadId,
             'lead_status' => 'NEW LEAD',
-            'date'        => $this->date,
+            'date' => $this->date,
         ]);
-    
+
         // ✅ Insert into tbl_obligation (For multiple products)
         if (!empty($request->product_idd) && is_array($request->product_idd)) {
             $obligationData = [];
-    
+
             foreach ($request->product_idd as $index => $productId) {
                 $obligationData[] = [
-                    'admin_id'          => $admin_id, 
-                    'lead_id'           => $leadId, 
-                    'product_id'        => $productId,
-                    'bank_id'           => $request->bank_id[$index] ?? null,
+                    'admin_id' => $admin_id,
+                    'lead_id' => $leadId,
+                    'product_id' => $productId,
+                    'bank_id' => $request->bank_id[$index] ?? null,
                     'total_loan_amount' => preg_replace('/[^0-9]/', '', $request->total_loan_amount[$index] ?? null),
-                    'bt_pos'            => preg_replace('/[^0-9]/', '', $request->bt_pos[$index] ?? null),
-                    'bt_emi'            => preg_replace('/[^0-9]/', '', $request->bt_emi[$index] ?? null),
-                    'bt_obligation'     => $request->bt_obligation[$index] ?? null,
-                    'date'              => $this->date,
+                    'bt_pos' => preg_replace('/[^0-9]/', '', $request->bt_pos[$index] ?? null),
+                    'bt_emi' => preg_replace('/[^0-9]/', '', $request->bt_emi[$index] ?? null),
+                    'bt_obligation' => $request->bt_obligation[$index] ?? null,
+                    'date' => $this->date,
                 ];
             }
-    
+
             DB::table('tbl_obligation')->insert($obligationData);
         }
-    
+
         return response()->json([
             'success' => 'success',
         ]);
     }
-    
-    
+
+
 
 
 
     ### Check Lead Already Exist ###
     public function checkLeadOLD(Request $request)
     {
-        $admin_id  = $request->input('admin_id');
-        $mobile    = $request->input('mobile');
+        $admin_id = $request->input('admin_id');
+        $mobile = $request->input('mobile');
         $productId = $request->input('product_id');
 
         $existingLead = DB::table('tbl_lead')
@@ -1638,8 +1638,8 @@ class AdminController extends Controller
 
     public function checkLead1(Request $request)
     {
-        $admin_id  = $request->input('admin_id');
-        $mobile    = $request->input('mobile');
+        $admin_id = $request->input('admin_id');
+        $mobile = $request->input('mobile');
         $productId = $request->input('product_id');
 
         $existingLead = DB::table('tbl_lead')
@@ -1653,8 +1653,8 @@ class AdminController extends Controller
             return response()->json([
                 'success' => 'exists',
                 'existing_lead' => $existingLead,
-                'lead_status'   => $existingLead->lead_status,  // addon key
-                'date'   => $existingLead->date                //  addon key 
+                'lead_status' => $existingLead->lead_status,  // addon key
+                'date' => $existingLead->date                //  addon key 
             ]);
         } else {
             return response()->json(['success' => 'not_found']);
@@ -1714,13 +1714,13 @@ class AdminController extends Controller
 
     public function checkLead(Request $request)
     {
-        $admin_id  = $request->input('admin_id');
-        $mobile    = $request->input('mobile');
+        $admin_id = $request->input('admin_id');
+        $mobile = $request->input('mobile');
         $productId = $request->input('product_id');
-        
+
         $existingLead = DB::table('tbl_lead')
             ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-            ->leftJoin('tbl_reassignment_lead', 'tbl_reassignment_lead.lead_id', '=', 'tbl_lead.id') 
+            ->leftJoin('tbl_reassignment_lead', 'tbl_reassignment_lead.lead_id', '=', 'tbl_lead.id')
             // ->where('tbl_lead.admin_id', $admin_id)
             ->where(function ($query) use ($mobile) {
                 $query->where('tbl_lead.mobile', $mobile)
@@ -1729,10 +1729,9 @@ class AdminController extends Controller
             ->where('tbl_lead.product_id', $productId)
             ->select('tbl_lead.*', 'tbl_product.product_name', 'tbl_reassignment_lead.lead_request_status')
             ->first();
-            // dd($existingLead);
+        // dd($existingLead);
 
-        if ($existingLead) 
-        {
+        if ($existingLead) {
             $kolkataDateTime = \Carbon\Carbon::now('Asia/Kolkata')->format('Y-m-d h:i A');
 
             $lostlead = [
@@ -1752,7 +1751,7 @@ class AdminController extends Controller
                 'existing_lead' => $existingLead,
                 'lead_status' => $existingLead->lead_status,
                 'date' => $existingLead->date,
-                'remaining_day' => 0, 
+                'remaining_day' => 0,
                 'morethan_15days' => false,
                 'lead_request_status' => $existingLead->lead_request_status
             ];
@@ -1764,7 +1763,7 @@ class AdminController extends Controller
             if (!empty($existingLead->date)) {
                 $leadDate = \Carbon\Carbon::createFromFormat('Y-m-d h:i A', $existingLead->date, 'Asia/Kolkata');
                 $currentDate = \Carbon\Carbon::createFromFormat('Y-m-d h:i A', $kolkataDateTime, 'Asia/Kolkata');
-                $remainingDays = abs($currentDate->diffInDays($leadDate, false)); 
+                $remainingDays = abs($currentDate->diffInDays($leadDate, false));
                 $response['remaining_day'] = $remainingDays;
                 $response['morethan_15days'] = ($remainingDays > 15);
             }
@@ -1838,17 +1837,17 @@ class AdminController extends Controller
             ->where('lead_id', $request->lead_id)
             ->where('sender_id', $request->sender_id)
             ->update([
-                'lead_request_status' => $request->action // Accept or Reject
-            ]);
+                    'lead_request_status' => $request->action // Accept or Reject
+                ]);
 
         // ✅ Agar "Accept" hai tabhi `tbl_lead` update hoga 
         if ($request->action === "Accept") {
             $updateLead = DB::table('tbl_lead')
                 ->where('id', $request->lead_id)
                 ->update([
-                    'admin_id' => $request->sender_id, 
-                    'date' => $this->date
-                ]);
+                        'admin_id' => $request->sender_id,
+                        'date' => $this->date
+                    ]);
         }
 
         // ✅ Response based on updates
@@ -1862,7 +1861,7 @@ class AdminController extends Controller
 
 
 
-    
+
 
 
 
@@ -1952,14 +1951,14 @@ class AdminController extends Controller
     public function updateobligation(Request $request)
     {
         $obligations = $request->input('obligations');
-        $leadTotals  = [];
+        $leadTotals = [];
 
         foreach ($obligations as $obligation) {
             $oldObligation = DB::table('tbl_obligation')
                 ->where('id', $obligation['obligation_id'])
                 ->first();
 
-            if (! $oldObligation) {
+            if (!$oldObligation) {
                 continue; // Skip if not found
             }
 
@@ -1985,18 +1984,18 @@ class AdminController extends Controller
             DB::table('tbl_obligation')
                 ->where('id', $obligation['obligation_id'])
                 ->update([
-                    'admin_id'          => $obligation['admin_id'],
-                    'lead_id'           => $obligation['lead_id'],
-                    'product_id'        => $obligation['product_id'],
-                    'bank_id'           => $obligation['bank_id'],
-                    'total_loan_amount' => $obligation['total_loan_amount'],
-                    'bt_pos'            => $obligation['bt_pos'],
-                    'bt_emi'            => $obligation['bt_emi'],
-                    'bt_obligation'     => $obligation['bt_obligation'],
-                ]);
+                        'admin_id' => $obligation['admin_id'],
+                        'lead_id' => $obligation['lead_id'],
+                        'product_id' => $obligation['product_id'],
+                        'bank_id' => $obligation['bank_id'],
+                        'total_loan_amount' => $obligation['total_loan_amount'],
+                        'bt_pos' => $obligation['bt_pos'],
+                        'bt_emi' => $obligation['bt_emi'],
+                        'bt_obligation' => $obligation['bt_obligation'],
+                    ]);
 
             // Store lead-wise total changes
-            if (! isset($leadTotals[$obligation['lead_id']])) {
+            if (!isset($leadTotals[$obligation['lead_id']])) {
                 $leadTotals[$obligation['lead_id']] = [
                     'bt_pos_change' => 0,
                     'bt_emi_change' => 0,
@@ -2013,9 +2012,9 @@ class AdminController extends Controller
                 DB::table('tbl_lead')
                     ->where('id', $lead_id)
                     ->update([
-                        'pos'        => DB::raw("pos + {$totals['bt_pos_change']}"),
-                        'obligation' => DB::raw("obligation + {$totals['bt_emi_change']}"),
-                    ]);
+                            'pos' => DB::raw("pos + {$totals['bt_pos_change']}"),
+                            'obligation' => DB::raw("obligation + {$totals['bt_emi_change']}"),
+                        ]);
             }
         }
 
@@ -2025,9 +2024,9 @@ class AdminController extends Controller
     ### For Pagination show_Pl_Od_LeadAPI ###
     public function show_Pl_Od_LeadAPIOLD(Request $request)
     {
-        $search      = $request->search;      // for searching
-        $from_date   = $request->from_date;   //  for fromdate
-        $to_date     = $request->to_date;     //  for todate
+        $search = $request->search;      // for searching
+        $from_date = $request->from_date;   //  for fromdate
+        $to_date = $request->to_date;     //  for todate
         $lead_status = $request->lead_status; //  for leadstatus
 
         $query = DB::table('tbl_lead')
@@ -2038,7 +2037,7 @@ class AdminController extends Controller
             ->orderBy('tbl_lead.id', 'desc');
 
         // Apply filters fields here for searching
-        if (! empty($search) && ($search != 'undefined')) {
+        if (!empty($search) && ($search != 'undefined')) {
             $query->where(function ($q) use ($search) {
                 $q->where('tbl_lead.name', 'like', '%' . $search . '%')
                     ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%');
@@ -2068,12 +2067,12 @@ class AdminController extends Controller
         $leads = $query->paginate(8);
         // return response
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
-            'success'      => 'success',
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
         ]);
     }
 
@@ -2090,7 +2089,7 @@ class AdminController extends Controller
         // Check if fromdate and todate are provided in the request
         if ($request->has('fromdate') && $request->has('todate')) {
             $fromdate = $request->input('fromdate');
-            $todate   = $request->input('todate');
+            $todate = $request->input('todate');
             // Filter using both 'date' and 'disbursment_date'
             $query->where(function ($q) use ($fromdate, $todate) {
                 $q->whereRaw('DATE(tbl_lead.date) BETWEEN ? AND ?', [$fromdate, $todate])
@@ -2100,7 +2099,7 @@ class AdminController extends Controller
         // Add condition to check for lead_login_status being 'Login'
         $query->where('tbl_lead.lead_login_status', 'Login');
         $data["fromdatenew"] = $request->input('fromdate', '');
-        $data["enddatenew"]  = $request->input('todate', '');
+        $data["enddatenew"] = $request->input('todate', '');
         $data['pl_od_login'] = $query->get();
         return view('Admin.pages.show_pl_od_login', $data);
     }
@@ -2114,15 +2113,21 @@ class AdminController extends Controller
     // today 2025-03-21
     public function show_Pl_Od_LeadAPINEW(Request $request)
     {
-        $search             = $request->search;
-        $lead_status        = $request->lead_status;
-        $from_date          = $request->from_date;
-        $to_date            = $request->to_date;
+        $search = $request->search;
+        $lead_status = $request->lead_status;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
         $activity_from_date = $request->activity_from_date;
 
         $valid_statuses = [
-            'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-            'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
         ];
 
         // Base Query
@@ -2179,7 +2184,7 @@ class AdminController extends Controller
         if (!empty($activity_from_date)) {
             $current_date = date('Y-m-d');
             $activity_from_date = date('Y-m-d', strtotime($activity_from_date));
-        
+
             // Fetch all unique lead IDs that have any activity in the given date range
             $leads_with_activity = DB::table('tbl_lead_status')
                 ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
@@ -2195,39 +2200,45 @@ class AdminController extends Controller
                 $query->whereIn('tbl_lead.lead_status', $valid_statuses);
             }
         }
-        
+
         // Pagination
         $leads = $query->paginate(8);
-        
+
         // Return JSON Response
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
-            'success'      => 'success',
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
         ]);
     }
-    
-    
+
+
     public function show_Pl_Od_LeadAPINEW2(Request $request)
     {
         // get session admin login 
         $adminSession = collect(session()->get('admin_login'))->first();
         $admin_team = $adminSession->team ?? '';
-        
-        $search             = $request->search;
-        $lead_status        = $request->lead_status;
-        $from_date          = $request->from_date;
-        $to_date            = $request->to_date;
+
+        $search = $request->search;
+        $lead_status = $request->lead_status;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
         $activity_from_date = $request->activity_from_date;
-    
+
         $valid_statuses = [
-            'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-            'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
         ];
-    
+
         // Base Query
         $query = DB::table('tbl_lead')
             ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
@@ -2246,7 +2257,7 @@ class AdminController extends Controller
                     ->orWhereNull('tbl_reassignment_lead.lead_id'); // Include leads not reassigned
             })
             ->orderBy('tbl_lead.id', 'desc');
-    
+
         // Search Filter
         if (!empty($search) && $search != 'undefined') {
             $query->where(function ($q) use ($search) {
@@ -2259,12 +2270,12 @@ class AdminController extends Controller
                     ->orWhere('tbl_lead.loan_amount', 'like', "%$search%");
             });
         }
-    
+
         // Lead Status Filter
         if (!empty($lead_status)) {
             $query->where('tbl_lead.lead_status', $lead_status);
         }
-    
+
         // Date Filters
         if (!empty($from_date) && !empty($to_date)) {
             if ($from_date == $to_date) {
@@ -2277,12 +2288,12 @@ class AdminController extends Controller
         } elseif (!empty($to_date)) {
             $query->whereDate('tbl_lead.date', '<=', $to_date);
         }
-    
+
         // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
         if (!empty($activity_from_date)) {
             $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
             $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
-    
+
             // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
             $leads_with_activity = DB::table('tbl_lead_status')
                 ->whereBetween(
@@ -2292,52 +2303,58 @@ class AdminController extends Controller
                 ->distinct()
                 ->pluck('lead_id')
                 ->toArray();
-    
+
             // Exclude leads that have activity in the given range
             if (!empty($leads_with_activity)) {
                 $query->whereNotIn('tbl_lead.id', $leads_with_activity);
             }
-    
+
             // Apply lead status filter if valid statuses are provided
             if (!empty($valid_statuses)) {
                 $query->whereIn('tbl_lead.lead_status', $valid_statuses);
             }
         }
-    
+
         // Pagination
         $leads = $query->paginate(8);
-    
+
         // Return JSON Response
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
-            'success'      => 'success',
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
         ]);
     }
-        
-    
+
+
     public function show_Pl_Od_LeadAPI(Request $request)
     {
         // Get session admin login 
         $adminSession = collect(session()->get('admin_login'))->first();
-        $team_name     = $adminSession->team ?? null; 
-        $admin_id     = $adminSession->id ?? null; 
-        $admin_role   = strtolower($adminSession->role ?? ''); 
-    
-        $search      = $request->search;
+        $team_name = $adminSession->team ?? null;
+        $admin_id = $adminSession->id ?? null;
+        $admin_role = strtolower($adminSession->role ?? '');
+
+        $search = $request->search;
         $lead_status = $request->lead_status;
-        $from_date   = $request->from_date;
-        $to_date     = $request->to_date;
-        $activity_from_date     = $request->activity_from_date;
-        
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $activity_from_date = $request->activity_from_date;
+
         $valid_statuses = [
-            'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-            'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
         ];
-        
+
         // Start query to fetch leads
         $query = DB::table('tbl_lead')
             ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
@@ -2358,30 +2375,30 @@ class AdminController extends Controller
             )
             // ->where('assigned_admin.department', 'Sales')
             ->where('tbl_lead.lead_login_status', 'PL & OD LEADS');
-    
+
         // **Case: If logged-in user is a Manager**
         if ($admin_role === 'manager' && !empty($admin_id)) {
             $query->where(function ($q) use ($admin_id) {
                 $q->where('tbl_lead.admin_id', $admin_id); // Manager's own leads
-                
+
                 // Fetch all TLs where this Manager is assigned as their Manager
                 $tl_ids = DB::table('admin')
                     ->where('manager', $admin_id)
                     ->where('role', 'TL') // Only TL roles
                     ->pluck('id')
                     ->toArray();
-    
+
                 if (!empty($tl_ids)) {
                     // Get leads where TL's ID is in admin_id
                     $q->orWhereIn('tbl_lead.admin_id', $tl_ids);
-    
+
                     // Fetch all Agents under these TLs
                     $agent_ids = DB::table('admin')
                         ->whereIn('team_leader', $tl_ids)
                         ->where('role', 'Agent') // Only Agent roles
                         ->pluck('id')
                         ->toArray();
-    
+
                     if (!empty($agent_ids)) {
                         // Get leads where Agent's ID is in admin_id
                         $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
@@ -2389,19 +2406,19 @@ class AdminController extends Controller
                 }
             });
         }
-    
+
         // **Case: If logged-in user is a TL**
         elseif ($admin_role === 'tl' && !empty($admin_id)) {
             $query->where(function ($q) use ($admin_id) {
                 $q->where('tbl_lead.admin_id', $admin_id); // TL's own leads
-    
+
                 // Fetch all Agents where this TL is assigned as their Team Leader
                 $agent_ids = DB::table('admin')
                     ->where('team_leader', $admin_id)
                     ->where('role', 'Agent') // Only Agent roles
                     ->pluck('id')
                     ->toArray();
-    
+
                 if (!empty($agent_ids)) {
                     // Get leads where Agent's ID is in admin_id
                     $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
@@ -2413,10 +2430,10 @@ class AdminController extends Controller
         elseif ($admin_role === 'agent' && !empty($admin_id)) {
             $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
         }
-    
+
         // Order by latest leads
         $query->orderBy('tbl_lead.id', 'desc');
-    
+
         // **Search Filter**
         if (!empty($search) && $search != 'undefined') {
             $query->where(function ($q) use ($search) {
@@ -2429,12 +2446,12 @@ class AdminController extends Controller
                     ->orWhere('tbl_lead.loan_amount', 'like', "%$search%");
             });
         }
-    
+
         // **Lead Status Filter**
         if (!empty($lead_status)) {
             $query->where('tbl_lead.lead_status', $lead_status);
         }
-    
+
         // **Date Filters**
         if (!empty($from_date) && !empty($to_date)) {
             if ($from_date == $to_date) {
@@ -2447,13 +2464,13 @@ class AdminController extends Controller
         } elseif (!empty($to_date)) {
             $query->whereDate('tbl_lead.date', '<=', $to_date);
         }
-    
-    
+
+
         // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
         if (!empty($activity_from_date)) {
             $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
             $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
-    
+
             // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
             $leads_with_activity = DB::table('tbl_lead_status')
                 ->whereBetween(
@@ -2466,33 +2483,33 @@ class AdminController extends Controller
             // Exclude leads that have activity in the given range
             if (!empty($leads_with_activity)) {
                 $query->whereNotIn('tbl_lead.id', $leads_with_activity);
-            }  
+            }
         }
         // Apply lead status filter if valid statuses are provided
         // if (!empty($valid_statuses)) {
         //     $query->whereIn('tbl_lead.lead_status', $valid_statuses);
         // }
-        
+
         // **Get Leads with Pagination**
         $leads = $query->paginate(8);
-    
+
         // **Return JSON Response**
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
             'team_name' => $team_name,
             'role' => $admin_role,
-            'success'      => 'success',
+            'success' => 'success',
         ]);
     }
 
 
-    
-    
-    
+
+
+
 
     // Pl Od Login
     public function show_Pl_Od_Login(Request $request)
@@ -2501,15 +2518,20 @@ class AdminController extends Controller
     }
     public function show_Pl_Od_LoginAPI000(Request $request)
     {
-        $search             = $request->search;             // for searching
-        $from_date          = $request->from_date;          // for fromdate
-        $to_date            = $request->to_date;            // for todate
-        $login_status       = $request->login_status;       // for leadstatus
+        $search = $request->search;             // for searching
+        $from_date = $request->from_date;          // for fromdate
+        $to_date = $request->to_date;            // for todate
+        $login_status = $request->login_status;       // for leadstatus
         $activity_from_date = $request->activity_from_date; // for activity_from_date
 
         $valid_statuses = [
-            'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
-            'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
+            'NEW FILE',
+            'SENT TO BANK',
+            'UNDERWRITING',
+            'REELOK',
+            'REELOK-HIGH PRIORITY',
+            'APPROVED',
+            'DISBURSED',
         ];
 
         // Base query
@@ -2523,7 +2545,7 @@ class AdminController extends Controller
             ->orderBy('tbl_lead.move_login_date', 'desc');
 
         // Apply search filter (works independently)
-        if (! empty($search) && ($search != 'undefined')) {
+        if (!empty($search) && ($search != 'undefined')) {
             $query->where(function ($q) use ($search) {
                 $q->where('tbl_lead.name', 'like', '%' . $search . '%')
                     ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%');
@@ -2563,30 +2585,30 @@ class AdminController extends Controller
             });
         }
 
-            // Apply Activity Date Filter only for specific lead statuses
-            // if ($activity_from_date) {
-            //     $current_date = date('Y-m-d h:i A');
-            //     $excluded_leads = DB::table('tbl_lead_status')
-            //         ->whereBetween('date', [$activity_from_date, $current_date])
-            //         ->pluck('lead_id')
-            //         ->toArray();
-            //     if (!empty($excluded_leads)) {
-            //         $query->whereNotIn('tbl_lead.id', $excluded_leads);
-            //     } else {
-            //         $query->whereDate('tbl_lead.date', '<=', $current_date);
-            //     }
-            //    // lead_status show only 'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK', 'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED'
-            //     $query->whereIn('tbl_lead.login_status', $valid_statuses);
-            // }
+        // Apply Activity Date Filter only for specific lead statuses
+        // if ($activity_from_date) {
+        //     $current_date = date('Y-m-d h:i A');
+        //     $excluded_leads = DB::table('tbl_lead_status')
+        //         ->whereBetween('date', [$activity_from_date, $current_date])
+        //         ->pluck('lead_id')
+        //         ->toArray();
+        //     if (!empty($excluded_leads)) {
+        //         $query->whereNotIn('tbl_lead.id', $excluded_leads);
+        //     } else {
+        //         $query->whereDate('tbl_lead.date', '<=', $current_date);
+        //     }
+        //    // lead_status show only 'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK', 'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED'
+        //     $query->whereIn('tbl_lead.login_status', $valid_statuses);
+        // }
 
         if ($activity_from_date) {
-            $current_date       = date('Y-m-d h:i A');
+            $current_date = date('Y-m-d h:i A');
             $activity_from_date = date('Y-m-d h:i A', strtotime($activity_from_date));
-            $excluded_leads     = DB::table('tbl_lead_status')
+            $excluded_leads = DB::table('tbl_lead_status')
                 ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
                 ->pluck('lead_id')
                 ->toArray();
-            if (! empty($excluded_leads)) {
+            if (!empty($excluded_leads)) {
                 $query->whereNotIn('tbl_lead.id', $excluded_leads);
             } else {
                 $query->whereDate(DB::raw("STR_TO_DATE(tbl_lead.date, '%Y-%m-%d %h:%i %p')"), '<=', $current_date);
@@ -2600,33 +2622,38 @@ class AdminController extends Controller
 
         // Return response
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
-            'success'      => 'success',
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
         ]);
     }
-    
+
     public function show_Pl_Od_LoginAPI(Request $request)
     {
         // Get session admin login 
         $adminSession = collect(session()->get('admin_login'))->first();
-        $team_name    = $adminSession->team ?? null; 
-        $admin_id     = $adminSession->id ?? null; 
-        $admin_role   = strtolower($adminSession->role ?? ''); 
+        $team_name = $adminSession->team ?? null;
+        $admin_id = $adminSession->id ?? null;
+        $admin_role = strtolower($adminSession->role ?? '');
 
         // Request parameters
-        $search             = $request->search;
-        $from_date          = $request->from_date;
-        $to_date            = $request->to_date;
-        $login_status       = $request->login_status;
+        $search = $request->search;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $login_status = $request->login_status;
         $activity_from_date = $request->activity_from_date;
 
         $valid_statuses = [
-            'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
-            'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
+            'NEW FILE',
+            'SENT TO BANK',
+            'UNDERWRITING',
+            'REELOK',
+            'REELOK-HIGH PRIORITY',
+            'APPROVED',
+            'DISBURSED',
         ];
 
         // Base query
@@ -2663,11 +2690,11 @@ class AdminController extends Controller
                                 DB::table('admin')
                                     ->select('admin.id')
                                     ->whereIn('team_leader', function ($tlQuery) use ($admin_id) {
-                                        $tlQuery->select('id')
-                                            ->from('admin')
-                                            ->where('manager', $admin_id)
-                                            ->where('role', 'TL');
-                                    })
+                                    $tlQuery->select('id')
+                                        ->from('admin')
+                                        ->where('manager', $admin_id)
+                                        ->where('role', 'TL');
+                                })
                                     ->where('role', 'Agent')
                             );
                     });
@@ -2751,61 +2778,67 @@ class AdminController extends Controller
 
         // Return JSON Response
         return response()->json([
-            'data'         => $leads->items(),
+            'data' => $leads->items(),
             'current_page' => $leads->currentPage(),
-            'last_page'    => $leads->lastPage(),
-            'per_page'     => $leads->perPage(),
-            'total'        => $leads->total(),
-            'team_name'    => $team_name,
-            'role'         => $admin_role,
-            'success'      => 'success',
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'team_name' => $team_name,
+            'role' => $admin_role,
+            'success' => 'success',
         ]);
     }
 
-    
-    
-    
-    
+
+
+
+
 
     // ExcelExportPlOdLead
     public function ExcelExportPlOdLead(Request $request)
     {
-        $search             = $request->search;             // for search
-        $lead_status        = $request->lead_status;        // for lead_status
-        $from_date          = $request->from_date;          // for from_date
-        $to_date            = $request->to_date;            // for to_date
+        $search = $request->search;             // for search
+        $lead_status = $request->lead_status;        // for lead_status
+        $from_date = $request->from_date;          // for from_date
+        $to_date = $request->to_date;            // for to_date
         $activity_from_date = $request->activity_from_date; // for activity_from_date
-        $valid_statuses     = [
-            'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-            'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
+        $valid_statuses = [
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
         ];
 
         // Base query with required joins 
         $query = DB::table('tbl_lead')
-        ->leftJoin('admin', 'admin.id', '=', 'tbl_lead.admin_id')
-        ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-        ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-        ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-        ->leftJoin('tbl_datacode', 'tbl_datacode.id', '=', 'tbl_lead.data_code')
-        ->leftJoin('tbl_bank', 'tbl_bank.id', '=', 'tbl_lead.bank_id')
-        ->leftJoin('tbl_casetype', 'tbl_casetype.id', '=', 'tbl_lead.casetype_id')
-        ->leftJoin('tbl_channel_name', 'tbl_channel_name.id', '=', 'tbl_lead.channel_id')
-        ->select([
-            'tbl_lead.*', 
-        'admin.name as admin_name',  
-        'tbl_product.product_name as product_name',  
-        'tbl_campaign.campaign_name as campaign_name',  
-        'tbl_product_need.product_need as product_need',  
-        'tbl_datacode.datacode_name as datacode_name',  
-        'tbl_bank.bank_name as bank_name',  
-        'tbl_casetype.casetype as casetype',  
-        'tbl_channel_name.channel_name as channel_name'  
-        ])
-        ->where('tbl_lead.lead_login_status', 'Lead') 
-        ->orderBy('tbl_lead.id', 'desc');
+            ->leftJoin('admin', 'admin.id', '=', 'tbl_lead.admin_id')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('tbl_datacode', 'tbl_datacode.id', '=', 'tbl_lead.data_code')
+            ->leftJoin('tbl_bank', 'tbl_bank.id', '=', 'tbl_lead.bank_id')
+            ->leftJoin('tbl_casetype', 'tbl_casetype.id', '=', 'tbl_lead.casetype_id')
+            ->leftJoin('tbl_channel_name', 'tbl_channel_name.id', '=', 'tbl_lead.channel_id')
+            ->select([
+                'tbl_lead.*',
+                'admin.name as admin_name',
+                'tbl_product.product_name as product_name',
+                'tbl_campaign.campaign_name as campaign_name',
+                'tbl_product_need.product_need as product_need',
+                'tbl_datacode.datacode_name as datacode_name',
+                'tbl_bank.bank_name as bank_name',
+                'tbl_casetype.casetype as casetype',
+                'tbl_channel_name.channel_name as channel_name'
+            ])
+            ->where('tbl_lead.lead_login_status', 'Lead')
+            ->orderBy('tbl_lead.id', 'desc');
 
         // Apply search filter
-        if (! empty($search) && ($search != 'undefined')) {
+        if (!empty($search) && ($search != 'undefined')) {
             $query->where(function ($q) use ($search) {
                 $q->where('tbl_lead.name', 'like', '%' . $search . '%')
                     ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%')
@@ -2839,13 +2872,13 @@ class AdminController extends Controller
 
         // Apply Activity Date Filter only for specific lead statuses
         if ($activity_from_date) {
-            $current_date       = date('Y-m-d h:i A');
+            $current_date = date('Y-m-d h:i A');
             $activity_from_date = date('Y-m-d h:i A', strtotime($activity_from_date));
-            $excluded_leads     = DB::table('tbl_lead_status')
+            $excluded_leads = DB::table('tbl_lead_status')
                 ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
                 ->pluck('lead_id')
                 ->toArray();
-            if (! empty($excluded_leads)) {
+            if (!empty($excluded_leads)) {
                 $query->whereNotIn('tbl_lead.id', $excluded_leads);
             } else {
                 $query->whereDate(DB::raw("STR_TO_DATE(tbl_lead.date, '%Y-%m-%d %h:%i %p')"), '<=', $current_date);
@@ -2876,43 +2909,48 @@ class AdminController extends Controller
     // ExcelExportPlOdLogin
     public function ExcelExportPlOdLogin(Request $request)
     {
-        $search             = $request->search;             // for searching
-        $from_date          = $request->from_date;          // for fromdate
-        $to_date            = $request->to_date;            // for todate
-        $login_status       = $request->login_status;       // for leadstatus
+        $search = $request->search;             // for searching
+        $from_date = $request->from_date;          // for fromdate
+        $to_date = $request->to_date;            // for todate
+        $login_status = $request->login_status;       // for leadstatus
         $activity_from_date = $request->activity_from_date; // for activity_from_date
 
         $valid_statuses = [
-            'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
-            'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
+            'NEW FILE',
+            'SENT TO BANK',
+            'UNDERWRITING',
+            'REELOK',
+            'REELOK-HIGH PRIORITY',
+            'APPROVED',
+            'DISBURSED',
         ];
 
         // Base query with required joins
         $query = DB::table('tbl_lead')
-        ->leftJoin('admin', 'admin.id', '=', 'tbl_lead.admin_id')
-        ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-        ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-        ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-        ->leftJoin('tbl_datacode', 'tbl_datacode.id', '=', 'tbl_lead.data_code')
-        ->leftJoin('tbl_bank', 'tbl_bank.id', '=', 'tbl_lead.bank_id')
-        ->leftJoin('tbl_casetype', 'tbl_casetype.id', '=', 'tbl_lead.casetype_id')
-        ->leftJoin('tbl_channel_name', 'tbl_channel_name.id', '=', 'tbl_lead.channel_id')
-        ->select([
-            'tbl_lead.*', 
-        'admin.name as admin_name',  
-        'tbl_product.product_name as product_name',  
-        'tbl_campaign.campaign_name as campaign_name',  
-        'tbl_product_need.product_need as product_need',  
-        'tbl_datacode.datacode_name as datacode_name',  
-        'tbl_bank.bank_name as bank_name',  
-        'tbl_casetype.casetype as casetype',  
-        'tbl_channel_name.channel_name as channel_name'  
-        ])
-        ->where('tbl_lead.lead_login_status', 'Login') 
-        ->orderBy('tbl_lead.id', 'desc');
+            ->leftJoin('admin', 'admin.id', '=', 'tbl_lead.admin_id')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('tbl_datacode', 'tbl_datacode.id', '=', 'tbl_lead.data_code')
+            ->leftJoin('tbl_bank', 'tbl_bank.id', '=', 'tbl_lead.bank_id')
+            ->leftJoin('tbl_casetype', 'tbl_casetype.id', '=', 'tbl_lead.casetype_id')
+            ->leftJoin('tbl_channel_name', 'tbl_channel_name.id', '=', 'tbl_lead.channel_id')
+            ->select([
+                'tbl_lead.*',
+                'admin.name as admin_name',
+                'tbl_product.product_name as product_name',
+                'tbl_campaign.campaign_name as campaign_name',
+                'tbl_product_need.product_need as product_need',
+                'tbl_datacode.datacode_name as datacode_name',
+                'tbl_bank.bank_name as bank_name',
+                'tbl_casetype.casetype as casetype',
+                'tbl_channel_name.channel_name as channel_name'
+            ])
+            ->where('tbl_lead.lead_login_status', 'Login')
+            ->orderBy('tbl_lead.id', 'desc');
 
         // Apply search filter
-        if (! empty($search) && ($search != 'undefined')) {
+        if (!empty($search) && ($search != 'undefined')) {
             $query->where(function ($q) use ($search) {
                 $q->where('tbl_lead.name', 'like', '%' . $search . '%')
                     ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%')
@@ -2959,13 +2997,13 @@ class AdminController extends Controller
 
         // Apply Activity Date Filter only for specific lead status
         if ($activity_from_date) {
-            $current_date       = date('Y-m-d h:i A');
+            $current_date = date('Y-m-d h:i A');
             $activity_from_date = date('Y-m-d h:i A', strtotime($activity_from_date));
-            $excluded_leads     = DB::table('tbl_lead_status')
+            $excluded_leads = DB::table('tbl_lead_status')
                 ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
                 ->pluck('lead_id')
                 ->toArray();
-            if (! empty($excluded_leads)) {
+            if (!empty($excluded_leads)) {
                 $query->whereNotIn('tbl_lead.id', $excluded_leads);
             } else {
                 $query->whereDate(DB::raw("STR_TO_DATE(tbl_lead.date, '%Y-%m-%d %h:%i %p')"), '<=', $current_date);
@@ -2996,278 +3034,290 @@ class AdminController extends Controller
 
 
     ################# HOME LOAN LEADS START HERE #################
-        ### show_Home_Loan_Lead ###
-        public function show_Home_Loan_Lead(Request $request)
-        {
-            return view('Admin.pages.show_home_loan_leads');
-        }
-    
-        public function show_Home_Loan_LeadAPI000(Request $request)
-        {
-            $search             = $request->search;             // for search
-            $lead_status        = $request->lead_status;        // for lead_status
-            $from_date          = $request->from_date;          // for from_date
-            $to_date            = $request->to_date;            // for to_date
-            $activity_from_date = $request->activity_from_date; // for activity_from_date
-            $valid_statuses     = [
-                'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-                'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
-            ];
+    ### show_Home_Loan_Lead ###
+    public function show_Home_Loan_Lead(Request $request)
+    {
+        return view('Admin.pages.show_home_loan_leads');
+    }
 
-            // Base query
-            $query = DB::table('tbl_lead')
-                ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-                ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-                ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-                ->leftJoin('tbl_reassignment_lead', 'tbl_reassignment_lead.lead_id', '=', 'tbl_lead.id')
-                ->select(
-                    'tbl_lead.*', 
-                    'tbl_product.product_name', 
-                    'tbl_campaign.campaign_name', 
-                    'tbl_product_need.product_need'
-                )
-                // ->where('tbl_lead.lead_login_status', 'Lead') // Show only 'Lead' status leads
-                ->where('tbl_lead.lead_login_status', 'HOME LOAN LEADS') // Show only 'HOME LEADS' status leads
-                ->where(function ($query) {
-                    $query->where('tbl_reassignment_lead.lead_request_status', 'Accept')   // Lead Request Status 'Accept'
-                        ->orWhereNull('tbl_reassignment_lead.lead_id'); // Lead ID jo insert nahi hui ho
-                })
-                ->orderBy('tbl_lead.id', 'desc');
-    
-    
-            // Apply search filter
-            if (! empty($search) && ($search != 'undefined')) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('tbl_lead.name', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_product.product_name', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.lead_status', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.pincode', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.company_name', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.loan_amount', 'like', '%' . $search . '%');
-                });
+    public function show_Home_Loan_LeadAPI000(Request $request)
+    {
+        $search = $request->search;             // for search
+        $lead_status = $request->lead_status;        // for lead_status
+        $from_date = $request->from_date;          // for from_date
+        $to_date = $request->to_date;            // for to_date
+        $activity_from_date = $request->activity_from_date; // for activity_from_date
+        $valid_statuses = [
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
+        ];
+
+        // Base query
+        $query = DB::table('tbl_lead')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('tbl_reassignment_lead', 'tbl_reassignment_lead.lead_id', '=', 'tbl_lead.id')
+            ->select(
+                'tbl_lead.*',
+                'tbl_product.product_name',
+                'tbl_campaign.campaign_name',
+                'tbl_product_need.product_need'
+            )
+            // ->where('tbl_lead.lead_login_status', 'Lead') // Show only 'Lead' status leads
+            ->where('tbl_lead.lead_login_status', 'HOME LOAN LEADS') // Show only 'HOME LEADS' status leads
+            ->where(function ($query) {
+                $query->where('tbl_reassignment_lead.lead_request_status', 'Accept')   // Lead Request Status 'Accept'
+                    ->orWhereNull('tbl_reassignment_lead.lead_id'); // Lead ID jo insert nahi hui ho
+            })
+            ->orderBy('tbl_lead.id', 'desc');
+
+
+        // Apply search filter
+        if (!empty($search) && ($search != 'undefined')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_lead.name', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_product.product_name', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.lead_status', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.pincode', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.company_name', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.loan_amount', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply lead_status filter (if provided)
+        if ($lead_status) {
+            $query->where('tbl_lead.lead_status', $lead_status);
+        }
+
+        // Apply date filters (if provided)
+        if ($from_date && $to_date) {
+            if ($from_date == $to_date) {
+                // Fetch records for a single date
+                $query->whereDate('tbl_lead.date', '=', $from_date);
+            } else {
+                // Adjust `to_date` to include the entire day
+                $query->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
             }
-    
-            // Apply lead_status filter (if provided)
-            if ($lead_status) {
-                $query->where('tbl_lead.lead_status', $lead_status);
+        } elseif ($from_date) {
+            $query->whereDate('tbl_lead.date', '>=', $from_date);
+        } elseif ($to_date) {
+            $query->whereDate('tbl_lead.date', '<=', $to_date);
+        }
+
+        // Apply Activity Date Filter only for specific lead statuses
+        if ($activity_from_date) {
+            $current_date = date('Y-m-d h:i A');
+            $activity_from_date = date('Y-m-d h:i A', strtotime($activity_from_date));
+            $excluded_leads = DB::table('tbl_lead_status')
+                ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
+                ->pluck('lead_id')
+                ->toArray();
+            if (!empty($excluded_leads)) {
+                $query->whereNotIn('tbl_lead.id', $excluded_leads);
+            } else {
+                $query->whereDate(DB::raw("STR_TO_DATE(tbl_lead.date, '%Y-%m-%d %h:%i %p')"), '<=', $current_date);
             }
-    
-            // Apply date filters (if provided)
-            if ($from_date && $to_date) {
-                if ($from_date == $to_date) {
-                    // Fetch records for a single date
-                    $query->whereDate('tbl_lead.date', '=', $from_date);
-                } else {
-                    // Adjust `to_date` to include the entire day
-                    $query->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
-                }
-            } elseif ($from_date) {
-                $query->whereDate('tbl_lead.date', '>=', $from_date);
-            } elseif ($to_date) {
-                $query->whereDate('tbl_lead.date', '<=', $to_date);
-            }
-    
-            // Apply Activity Date Filter only for specific lead statuses
-            if ($activity_from_date) {
-                $current_date       = date('Y-m-d h:i A');
-                $activity_from_date = date('Y-m-d h:i A', strtotime($activity_from_date));
-                $excluded_leads     = DB::table('tbl_lead_status')
-                    ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [$activity_from_date, $current_date])
-                    ->pluck('lead_id')
+            // lead_status show only 'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK','IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED'
+            $query->whereIn('tbl_lead.lead_status', $valid_statuses);
+        }
+
+        // Apply pagination
+        $leads = $query->paginate(2);
+
+        // Return response
+        return response()->json([
+            'data' => $leads->items(),
+            'current_page' => $leads->currentPage(),
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
+        ]);
+    }
+
+
+    public function show_Home_Loan_LeadAPI(Request $request)
+    {
+        // Get session admin login 
+        $adminSession = collect(session()->get('admin_login'))->first();
+        $team_name = $adminSession->team ?? null;
+        $admin_id = $adminSession->id ?? null;
+        $admin_role = strtolower($adminSession->role ?? '');
+
+        $search = $request->search;
+        $lead_status = $request->lead_status;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $activity_from_date = $request->activity_from_date;
+
+        $valid_statuses = [
+            'NEW LEAD',
+            'IN PROGRESS',
+            'FOLLOW UP',
+            'CALLBACK',
+            'IMPORTANT LEAD',
+            'LONG FOLLOW UP',
+            'IN DOCUMENTATION',
+            'FILE COMPLETED',
+        ];
+
+        // Start query to fetch leads
+        $query = DB::table('tbl_lead')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id') // Assigned Admin
+            ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager') // Manager Name
+            ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader') // Team Leader Name
+            ->select(
+                'tbl_lead.*',
+                'tbl_product.product_name',
+                'tbl_campaign.campaign_name',
+                'tbl_product_need.product_need',
+                'assigned_admin.name AS admin_name', // Assigned Admin Name
+                'assigned_admin.role AS admin_role',
+                'manager_admin.name AS manager_name', // Manager Name
+                'team_leader_admin.name AS team_leader_name' // Team Leader Name
+            )
+            ->where('tbl_lead.lead_login_status', 'HOME LOAN LEADS');
+
+        // **Case: If logged-in user is a Manager**
+        if ($admin_role === 'manager' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id); // Manager's own leads
+
+                // Fetch all TLs where this Manager is assigned as their Manager
+                $tl_ids = DB::table('admin')
+                    ->where('manager', $admin_id)
+                    ->where('role', 'TL') // Only TL roles
+                    ->pluck('id')
                     ->toArray();
-                if (! empty($excluded_leads)) {
-                    $query->whereNotIn('tbl_lead.id', $excluded_leads);
-                } else {
-                    $query->whereDate(DB::raw("STR_TO_DATE(tbl_lead.date, '%Y-%m-%d %h:%i %p')"), '<=', $current_date);
-                }
-                // lead_status show only 'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK','IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED'
-                $query->whereIn('tbl_lead.lead_status', $valid_statuses);
-            }
-    
-            // Apply pagination
-            $leads = $query->paginate(2);
-    
-            // Return response
-            return response()->json([
-                'data'         => $leads->items(),
-                'current_page' => $leads->currentPage(),
-                'last_page'    => $leads->lastPage(),
-                'per_page'     => $leads->perPage(),
-                'total'        => $leads->total(),
-                'success'      => 'success',
-            ]);
-        }
 
+                if (!empty($tl_ids)) {
+                    // Get leads where TL's ID is in admin_id
+                    $q->orWhereIn('tbl_lead.admin_id', $tl_ids);
 
-        public function show_Home_Loan_LeadAPI(Request $request)
-        {
-            // Get session admin login 
-            $adminSession = collect(session()->get('admin_login'))->first();
-            $team_name     = $adminSession->team ?? null; 
-            $admin_id     = $adminSession->id ?? null; 
-            $admin_role   = strtolower($adminSession->role ?? ''); 
-        
-            $search      = $request->search;
-            $lead_status = $request->lead_status;
-            $from_date   = $request->from_date;
-            $to_date     = $request->to_date;
-            $activity_from_date     = $request->activity_from_date;
-            
-            $valid_statuses = [
-                'NEW LEAD', 'IN PROGRESS', 'FOLLOW UP', 'CALLBACK',
-                'IMPORTANT LEAD', 'LONG FOLLOW UP', 'IN DOCUMENTATION', 'FILE COMPLETED',
-            ];
-            
-            // Start query to fetch leads
-            $query = DB::table('tbl_lead')
-                ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-                ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-                ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-                ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id') // Assigned Admin
-                ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager') // Manager Name
-                ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader') // Team Leader Name
-                ->select(
-                    'tbl_lead.*',
-                    'tbl_product.product_name',
-                    'tbl_campaign.campaign_name',
-                    'tbl_product_need.product_need',
-                    'assigned_admin.name AS admin_name', // Assigned Admin Name
-                    'assigned_admin.role AS admin_role',
-                    'manager_admin.name AS manager_name', // Manager Name
-                    'team_leader_admin.name AS team_leader_name' // Team Leader Name
-                )
-                ->where('tbl_lead.lead_login_status', 'HOME LOAN LEADS');
-        
-            // **Case: If logged-in user is a Manager**
-            if ($admin_role === 'manager' && !empty($admin_id)) {
-                $query->where(function ($q) use ($admin_id) {
-                    $q->where('tbl_lead.admin_id', $admin_id); // Manager's own leads
-                    
-                    // Fetch all TLs where this Manager is assigned as their Manager
-                    $tl_ids = DB::table('admin')
-                        ->where('manager', $admin_id)
-                        ->where('role', 'TL') // Only TL roles
-                        ->pluck('id')
-                        ->toArray();
-        
-                    if (!empty($tl_ids)) {
-                        // Get leads where TL's ID is in admin_id
-                        $q->orWhereIn('tbl_lead.admin_id', $tl_ids);
-        
-                        // Fetch all Agents under these TLs
-                        $agent_ids = DB::table('admin')
-                            ->whereIn('team_leader', $tl_ids)
-                            ->where('role', 'Agent') // Only Agent roles
-                            ->pluck('id')
-                            ->toArray();
-        
-                        if (!empty($agent_ids)) {
-                            // Get leads where Agent's ID is in admin_id
-                            $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
-                        }
-                    }
-                });
-            }
-        
-            // **Case: If logged-in user is a TL**
-            elseif ($admin_role === 'tl' && !empty($admin_id)) {
-                $query->where(function ($q) use ($admin_id) {
-                    $q->where('tbl_lead.admin_id', $admin_id); // TL's own leads
-        
-                    // Fetch all Agents where this TL is assigned as their Team Leader
+                    // Fetch all Agents under these TLs
                     $agent_ids = DB::table('admin')
-                        ->where('team_leader', $admin_id)
+                        ->whereIn('team_leader', $tl_ids)
                         ->where('role', 'Agent') // Only Agent roles
                         ->pluck('id')
                         ->toArray();
-        
+
                     if (!empty($agent_ids)) {
                         // Get leads where Agent's ID is in admin_id
                         $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
                     }
-                });
-            }
-
-            // **Case: If logged-in user is an Agent**
-            elseif ($admin_role === 'agent' && !empty($admin_id)) {
-                $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
-            }
-        
-            // Order by latest leads
-            $query->orderBy('tbl_lead.id', 'desc');
-        
-            // **Search Filter**
-            if (!empty($search) && $search != 'undefined') {
-                $query->where(function ($q) use ($search) {
-                    $q->where('tbl_lead.name', 'like', "%$search%")
-                        ->orWhere('tbl_lead.mobile', 'like', "%$search%")
-                        ->orWhere('tbl_product.product_name', 'like', "%$search%")
-                        ->orWhere('tbl_lead.lead_status', 'like', "%$search%")
-                        ->orWhere('tbl_lead.pincode', 'like', "%$search%")
-                        ->orWhere('tbl_lead.company_name', 'like', "%$search%")
-                        ->orWhere('tbl_lead.loan_amount', 'like', "%$search%");
-                });
-            }
-        
-            // **Lead Status Filter**
-            if (!empty($lead_status)) {
-                $query->where('tbl_lead.lead_status', $lead_status);
-            }
-        
-            // **Date Filters**
-            if (!empty($from_date) && !empty($to_date)) {
-                if ($from_date == $to_date) {
-                    $query->whereDate('tbl_lead.date', '=', $from_date);
-                } else {
-                    $query->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
                 }
-            } elseif (!empty($from_date)) {
-                $query->whereDate('tbl_lead.date', '>=', $from_date);
-            } elseif (!empty($to_date)) {
-                $query->whereDate('tbl_lead.date', '<=', $to_date);
-            }
-        
-        
-            // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
-            if (!empty($activity_from_date)) {
-                $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
-                $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
-        
-                // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
-                $leads_with_activity = DB::table('tbl_lead_status')
-                    ->whereBetween(
-                        DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
-                        [$activity_from_date, $current_date]
-                    )
-                    ->distinct()
-                    ->pluck('lead_id')
-                    ->toArray();
-                // Exclude leads that have activity in the given range
-                if (!empty($leads_with_activity)) {
-                    $query->whereNotIn('tbl_lead.id', $leads_with_activity);
-                }  
-            }
-            // Apply lead status filter if valid statuses are provided
-            // if (!empty($valid_statuses)) {
-            //     $query->whereIn('tbl_lead.lead_status', $valid_statuses);
-            // }
-            
-            // **Get Leads with Pagination**
-            $leads = $query->paginate(8);
-        
-            // **Return JSON Response**
-            return response()->json([
-                'data'         => $leads->items(),
-                'current_page' => $leads->currentPage(),
-                'last_page'    => $leads->lastPage(),
-                'per_page'     => $leads->perPage(),
-                'total'        => $leads->total(),
-                'team_name' => $team_name,
-                'role' => $admin_role,
-                'success'      => 'success',
-            ]);
+            });
         }
+
+        // **Case: If logged-in user is a TL**
+        elseif ($admin_role === 'tl' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id); // TL's own leads
+
+                // Fetch all Agents where this TL is assigned as their Team Leader
+                $agent_ids = DB::table('admin')
+                    ->where('team_leader', $admin_id)
+                    ->where('role', 'Agent') // Only Agent roles
+                    ->pluck('id')
+                    ->toArray();
+
+                if (!empty($agent_ids)) {
+                    // Get leads where Agent's ID is in admin_id
+                    $q->orWhereIn('tbl_lead.admin_id', $agent_ids);
+                }
+            });
+        }
+
+        // **Case: If logged-in user is an Agent**
+        elseif ($admin_role === 'agent' && !empty($admin_id)) {
+            $query->where('tbl_lead.admin_id', $admin_id); // Agent's own leads
+        }
+
+        // Order by latest leads
+        $query->orderBy('tbl_lead.id', 'desc');
+
+        // **Search Filter**
+        if (!empty($search) && $search != 'undefined') {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_lead.name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.mobile', 'like', "%$search%")
+                    ->orWhere('tbl_product.product_name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.lead_status', 'like', "%$search%")
+                    ->orWhere('tbl_lead.pincode', 'like', "%$search%")
+                    ->orWhere('tbl_lead.company_name', 'like', "%$search%")
+                    ->orWhere('tbl_lead.loan_amount', 'like', "%$search%");
+            });
+        }
+
+        // **Lead Status Filter**
+        if (!empty($lead_status)) {
+            $query->where('tbl_lead.lead_status', $lead_status);
+        }
+
+        // **Date Filters**
+        if (!empty($from_date) && !empty($to_date)) {
+            if ($from_date == $to_date) {
+                $query->whereDate('tbl_lead.date', '=', $from_date);
+            } else {
+                $query->whereBetween('tbl_lead.date', [$from_date, date('Y-m-d', strtotime($to_date . ' +1 day'))]);
+            }
+        } elseif (!empty($from_date)) {
+            $query->whereDate('tbl_lead.date', '>=', $from_date);
+        } elseif (!empty($to_date)) {
+            $query->whereDate('tbl_lead.date', '<=', $to_date);
+        }
+
+
+        // Activity Date Filter (Check only Y-m-d, exclude leads with activity in range)
+        if (!empty($activity_from_date)) {
+            $current_date = date('Y-m-d'); // Current date in 'Y-m-d' format
+            $activity_from_date = date('Y-m-d', strtotime($activity_from_date)); // Selected date in 'Y-m-d' format
+
+            // Fetch all unique lead IDs that have activity between $activity_from_date and now (date only)
+            $leads_with_activity = DB::table('tbl_lead_status')
+                ->whereBetween(
+                    DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
+                    [$activity_from_date, $current_date]
+                )
+                ->distinct()
+                ->pluck('lead_id')
+                ->toArray();
+            // Exclude leads that have activity in the given range
+            if (!empty($leads_with_activity)) {
+                $query->whereNotIn('tbl_lead.id', $leads_with_activity);
+            }
+        }
+        // Apply lead status filter if valid statuses are provided
+        // if (!empty($valid_statuses)) {
+        //     $query->whereIn('tbl_lead.lead_status', $valid_statuses);
+        // }
+
+        // **Get Leads with Pagination**
+        $leads = $query->paginate(8);
+
+        // **Return JSON Response**
+        return response()->json([
+            'data' => $leads->items(),
+            'current_page' => $leads->currentPage(),
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'team_name' => $team_name,
+            'role' => $admin_role,
+            'success' => 'success',
+        ]);
+    }
 
 
 
@@ -3276,259 +3326,269 @@ class AdminController extends Controller
 
 
     ################# Home Loan Login Start Here #################
-        // Pl Od Login
-        public function show_Home_Loan_Login(Request $request)
-        {
-            return view('Admin.pages.show_home_loan_login');
+    // Pl Od Login
+    public function show_Home_Loan_Login(Request $request)
+    {
+        return view('Admin.pages.show_home_loan_login');
+    }
+    public function show_Home_Loan_LoginAPI000(Request $request)
+    {
+        $search = $request->search;             // for searching
+        $from_date = $request->from_date;          // for fromdate
+        $to_date = $request->to_date;            // for todate
+        $login_status = $request->login_status;       // for leadstatus
+        $activity_from_date = $request->activity_from_date; // for activity_from_date
+
+        $valid_statuses = [
+            'NEW FILE',
+            'SENT TO BANK',
+            'UNDERWRITING',
+            'REELOK',
+            'REELOK-HIGH PRIORITY',
+            'APPROVED',
+            'DISBURSED',
+        ];
+
+        // Base query
+        $query = DB::table('tbl_lead')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->select('tbl_lead.*', 'tbl_product.product_name', 'tbl_campaign.campaign_name', 'tbl_product_need.product_need')
+            ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN') // Show only 'Login' status leads
+            ->orderBy('tbl_lead.move_login_date', 'desc');
+
+        // Apply search filter (works independently)
+        if (!empty($search) && ($search != 'undefined')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_lead.name', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%');
+            });
         }
-        public function show_Home_Loan_LoginAPI000(Request $request)
-        {
-            $search             = $request->search;             // for searching
-            $from_date          = $request->from_date;          // for fromdate
-            $to_date            = $request->to_date;            // for todate
-            $login_status       = $request->login_status;       // for leadstatus
-            $activity_from_date = $request->activity_from_date; // for activity_from_date
-    
-            $valid_statuses = [
-                'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
-                'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
-            ];
-    
-            // Base query
-            $query = DB::table('tbl_lead')
-                ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-                ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-                ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-                ->select('tbl_lead.*', 'tbl_product.product_name', 'tbl_campaign.campaign_name', 'tbl_product_need.product_need')
-                ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN') // Show only 'Login' status leads
-                ->orderBy('tbl_lead.move_login_date', 'desc');
-    
-            // Apply search filter (works independently)
-            if (! empty($search) && ($search != 'undefined')) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('tbl_lead.name', 'like', '%' . $search . '%')
-                        ->orWhere('tbl_lead.mobile', 'like', '%' . $search . '%');
-                });
-            }
-    
-            // Apply login_status filter (if provided)
-            if ($login_status) {
-                $query->where('tbl_lead.login_status', $login_status);
-            }
-    
-            // Apply date filters (if provided)
-            if ($from_date && $to_date) {
-                if ($from_date == $to_date) {
-                    // Single date ke liye records fetch kare
-                    $query->where(function ($q) use ($from_date) {
-                        $q->whereDate('tbl_lead.date', '=', $from_date)
-                            ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
-                    });
-                } else {
-                    // `to_date` ko ek din badhaya gaya taaki poora din consider ho
-                    $adjusted_to_date = date('Y-m-d', strtotime($to_date . ' +1 day'));
-                    $query->where(function ($q) use ($from_date, $adjusted_to_date) {
-                        $q->whereBetween('tbl_lead.date', [$from_date, $adjusted_to_date])
-                            ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $adjusted_to_date]);
-                    });
-                }
-            } elseif ($from_date) {
+
+        // Apply login_status filter (if provided)
+        if ($login_status) {
+            $query->where('tbl_lead.login_status', $login_status);
+        }
+
+        // Apply date filters (if provided)
+        if ($from_date && $to_date) {
+            if ($from_date == $to_date) {
+                // Single date ke liye records fetch kare
                 $query->where(function ($q) use ($from_date) {
-                    $q->whereDate('tbl_lead.date', '>=', $from_date)
-                        ->orWhereDate('tbl_lead.disbursment_date', '>=', $from_date);
+                    $q->whereDate('tbl_lead.date', '=', $from_date)
+                        ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
                 });
-            } elseif ($to_date) {
-                $query->where(function ($q) use ($to_date) {
-                    $q->whereDate('tbl_lead.date', '<=', $to_date)
-                        ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
+            } else {
+                // `to_date` ko ek din badhaya gaya taaki poora din consider ho
+                $adjusted_to_date = date('Y-m-d', strtotime($to_date . ' +1 day'));
+                $query->where(function ($q) use ($from_date, $adjusted_to_date) {
+                    $q->whereBetween('tbl_lead.date', [$from_date, $adjusted_to_date])
+                        ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $adjusted_to_date]);
                 });
             }
-    
-                // Apply Activity Date Filter only for specific lead statuses
-                if ($activity_from_date) {
-                    $current_date = date('Y-m-d h:i A'); 
-                    $excluded_leads = DB::table('tbl_lead_status')
-                        ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [
-                            DB::raw("STR_TO_DATE('$activity_from_date', '%Y-%m-%d %h:%i %p')"),
-                            DB::raw("STR_TO_DATE('$current_date', '%Y-%m-%d %h:%i %p')")
-                        ])
-                        ->pluck('lead_id')
-                        ->toArray();
-                    // Show only leads that had NO activity in the given period
-                    if (!empty($excluded_leads)) {
-                        $query->whereNotIn('tbl_lead.id', $excluded_leads);
-                    }
-                    $query->whereIn('tbl_lead.login_status', $valid_statuses);
-                }
-                
-                
-            // Apply pagination
-            $leads = $query->paginate(5);
-            // Return response
-            return response()->json([
-                'data'         => $leads->items(),
-                'current_page' => $leads->currentPage(),
-                'last_page'    => $leads->lastPage(),
-                'per_page'     => $leads->perPage(),
-                'total'        => $leads->total(),
-                'success'      => 'success',
-            ]);
+        } elseif ($from_date) {
+            $query->where(function ($q) use ($from_date) {
+                $q->whereDate('tbl_lead.date', '>=', $from_date)
+                    ->orWhereDate('tbl_lead.disbursment_date', '>=', $from_date);
+            });
+        } elseif ($to_date) {
+            $query->where(function ($q) use ($to_date) {
+                $q->whereDate('tbl_lead.date', '<=', $to_date)
+                    ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
+            });
+        }
+
+        // Apply Activity Date Filter only for specific lead statuses
+        if ($activity_from_date) {
+            $current_date = date('Y-m-d h:i A');
+            $excluded_leads = DB::table('tbl_lead_status')
+                ->whereBetween(DB::raw("STR_TO_DATE(date, '%Y-%m-%d %h:%i %p')"), [
+                    DB::raw("STR_TO_DATE('$activity_from_date', '%Y-%m-%d %h:%i %p')"),
+                    DB::raw("STR_TO_DATE('$current_date', '%Y-%m-%d %h:%i %p')")
+                ])
+                ->pluck('lead_id')
+                ->toArray();
+            // Show only leads that had NO activity in the given period
+            if (!empty($excluded_leads)) {
+                $query->whereNotIn('tbl_lead.id', $excluded_leads);
+            }
+            $query->whereIn('tbl_lead.login_status', $valid_statuses);
         }
 
 
-        public function show_Home_Loan_LoginAPI(Request $request)
-        {
-            // Get session admin login 
-            $adminSession = collect(session()->get('admin_login'))->first();
-            $team_name    = $adminSession->team ?? null; 
-            $admin_id     = $adminSession->id ?? null; 
-            $admin_role   = strtolower($adminSession->role ?? ''); 
+        // Apply pagination
+        $leads = $query->paginate(5);
+        // Return response
+        return response()->json([
+            'data' => $leads->items(),
+            'current_page' => $leads->currentPage(),
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'success' => 'success',
+        ]);
+    }
 
-            // Request parameters
-            $search             = $request->search;
-            $from_date          = $request->from_date;
-            $to_date            = $request->to_date;
-            $login_status       = $request->login_status;
-            $activity_from_date = $request->activity_from_date;
 
-            $valid_statuses = [
-                'NEW FILE', 'SENT TO BANK', 'UNDERWRITING', 'REELOK',
-                'REELOK-HIGH PRIORITY', 'APPROVED', 'DISBURSED',
-            ];
+    public function show_Home_Loan_LoginAPI(Request $request)
+    {
+        // Get session admin login 
+        $adminSession = collect(session()->get('admin_login'))->first();
+        $team_name = $adminSession->team ?? null;
+        $admin_id = $adminSession->id ?? null;
+        $admin_role = strtolower($adminSession->role ?? '');
 
-            // Base query
-            $query = DB::table('tbl_lead')
-                ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
-                ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
-                ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
-                ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id')
-                ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager')
-                ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader')
-                ->select(
-                    'tbl_lead.*',
-                    'tbl_product.product_name',
-                    'tbl_campaign.campaign_name',
-                    'tbl_product_need.product_need',
-                    'assigned_admin.name AS admin_name',
-                    'assigned_admin.role AS admin_role',
-                    'manager_admin.name AS manager_name',
-                    'team_leader_admin.name AS team_leader_name'
+        // Request parameters
+        $search = $request->search;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $login_status = $request->login_status;
+        $activity_from_date = $request->activity_from_date;
+
+        $valid_statuses = [
+            'NEW FILE',
+            'SENT TO BANK',
+            'UNDERWRITING',
+            'REELOK',
+            'REELOK-HIGH PRIORITY',
+            'APPROVED',
+            'DISBURSED',
+        ];
+
+        // Base query
+        $query = DB::table('tbl_lead')
+            ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
+            ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
+            ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
+            ->leftJoin('admin AS assigned_admin', 'assigned_admin.id', '=', 'tbl_lead.admin_id')
+            ->leftJoin('admin AS manager_admin', 'manager_admin.id', '=', 'assigned_admin.manager')
+            ->leftJoin('admin AS team_leader_admin', 'team_leader_admin.id', '=', 'assigned_admin.team_leader')
+            ->select(
+                'tbl_lead.*',
+                'tbl_product.product_name',
+                'tbl_campaign.campaign_name',
+                'tbl_product_need.product_need',
+                'assigned_admin.name AS admin_name',
+                'assigned_admin.role AS admin_role',
+                'manager_admin.name AS manager_name',
+                'team_leader_admin.name AS team_leader_name'
+            )
+            ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN');
+
+        // Role-Based Filtering
+        if ($admin_role === 'manager' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id)
+                    ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                        // Fetch TLs under this Manager
+                        $subQuery->select('id')
+                            ->from('admin')
+                            ->where('manager', $admin_id)
+                            ->where('role', 'TL')
+                            ->union(
+                                DB::table('admin')
+                                    ->select('admin.id')
+                                    ->whereIn('team_leader', function ($tlQuery) use ($admin_id) {
+                                    $tlQuery->select('id')
+                                        ->from('admin')
+                                        ->where('manager', $admin_id)
+                                        ->where('role', 'TL');
+                                })
+                                    ->where('role', 'Agent')
+                            );
+                    });
+            });
+        } elseif ($admin_role === 'tl' && !empty($admin_id)) {
+            $query->where(function ($q) use ($admin_id) {
+                $q->where('tbl_lead.admin_id', $admin_id)
+                    ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
+                        $subQuery->select('id')
+                            ->from('admin')
+                            ->where('team_leader', $admin_id)
+                            ->where('role', 'Agent');
+                    });
+            });
+        } elseif ($admin_role === 'agent' && !empty($admin_id)) {
+            $query->where('tbl_lead.admin_id', $admin_id);
+        }
+
+        // $query->orderBy('tbl_lead.move_homeloan_login_date', 'desc');
+        $query->orderByRaw("STR_TO_DATE(tbl_lead.move_homeloan_login_date, '%Y-%m-%d %h:%i %p') DESC");
+
+        // Search Filter
+        if (!empty($search) && $search !== 'undefined') {
+            $query->where(function ($q) use ($search) {
+                $q->where('tbl_lead.name', 'like', "%{$search}%")
+                    ->orWhere('tbl_lead.mobile', 'like', "%{$search}%");
+            });
+        }
+
+        // Login Status Filter
+        if (!empty($login_status)) {
+            $query->where('tbl_lead.login_status', $login_status);
+        }
+
+        // Date Filters
+        if (!empty($from_date) && !empty($to_date)) {
+            if ($from_date === $to_date) {
+                $query->where(function ($q) use ($from_date) {
+                    $q->whereDate('tbl_lead.date', '=', $from_date)
+                        ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
+                });
+            } else {
+                $to_date_plus_one = date('Y-m-d', strtotime($to_date . ' +1 day'));
+                $query->where(function ($q) use ($from_date, $to_date_plus_one) {
+                    $q->whereBetween('tbl_lead.date', [$from_date, $to_date_plus_one])
+                        ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $to_date_plus_one]);
+                });
+            }
+        } elseif (!empty($from_date)) {
+            $query->where(function ($q) use ($from_date) {
+                $q->whereDate('tbl_lead.date', '>=', $from_date)
+                    ->orWhereDate('tbl_lead.disbursment_date', '>=', $from_date);
+            });
+        } elseif (!empty($to_date)) {
+            $query->where(function ($q) use ($to_date) {
+                $q->whereDate('tbl_lead.date', '<=', $to_date)
+                    ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
+            });
+        }
+
+        // Activity Date Filter
+        if (!empty($activity_from_date)) {
+            $current_date = date('Y-m-d');
+            $activity_from_date = date('Y-m-d', strtotime($activity_from_date));
+
+            $leads_with_activity = DB::table('tbl_lead_status')
+                ->whereBetween(
+                    DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
+                    [$activity_from_date, $current_date]
                 )
-                ->where('tbl_lead.lead_login_status', 'HOME LOAN LOGIN');
+                ->distinct()
+                ->pluck('lead_id')
+                ->toArray();
 
-            // Role-Based Filtering
-            if ($admin_role === 'manager' && !empty($admin_id)) {
-                $query->where(function ($q) use ($admin_id) {
-                    $q->where('tbl_lead.admin_id', $admin_id)
-                        ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
-                            // Fetch TLs under this Manager
-                            $subQuery->select('id')
-                                ->from('admin')
-                                ->where('manager', $admin_id)
-                                ->where('role', 'TL')
-                                ->union(
-                                    DB::table('admin')
-                                        ->select('admin.id')
-                                        ->whereIn('team_leader', function ($tlQuery) use ($admin_id) {
-                                            $tlQuery->select('id')
-                                                ->from('admin')
-                                                ->where('manager', $admin_id)
-                                                ->where('role', 'TL');
-                                        })
-                                        ->where('role', 'Agent')
-                                );
-                        });
-                });
-            } elseif ($admin_role === 'tl' && !empty($admin_id)) {
-                $query->where(function ($q) use ($admin_id) {
-                    $q->where('tbl_lead.admin_id', $admin_id)
-                        ->orWhereIn('tbl_lead.admin_id', function ($subQuery) use ($admin_id) {
-                            $subQuery->select('id')
-                                ->from('admin')
-                                ->where('team_leader', $admin_id)
-                                ->where('role', 'Agent');
-                        });
-                });
-            } elseif ($admin_role === 'agent' && !empty($admin_id)) {
-                $query->where('tbl_lead.admin_id', $admin_id);
+            if (!empty($leads_with_activity)) {
+                $query->whereNotIn('tbl_lead.id', $leads_with_activity);
             }
-
-            // $query->orderBy('tbl_lead.move_homeloan_login_date', 'desc');
-            $query->orderByRaw("STR_TO_DATE(tbl_lead.move_homeloan_login_date, '%Y-%m-%d %h:%i %p') DESC");
-
-            // Search Filter
-            if (!empty($search) && $search !== 'undefined') {
-                $query->where(function ($q) use ($search) {
-                    $q->where('tbl_lead.name', 'like', "%{$search}%")
-                        ->orWhere('tbl_lead.mobile', 'like', "%{$search}%");
-                });
-            }
-
-            // Login Status Filter
-            if (!empty($login_status)) {
-                $query->where('tbl_lead.login_status', $login_status);
-            }
-
-            // Date Filters
-            if (!empty($from_date) && !empty($to_date)) {
-                if ($from_date === $to_date) {
-                    $query->where(function ($q) use ($from_date) {
-                        $q->whereDate('tbl_lead.date', '=', $from_date)
-                            ->orWhereDate('tbl_lead.disbursment_date', '=', $from_date);
-                    });
-                } else {
-                    $to_date_plus_one = date('Y-m-d', strtotime($to_date . ' +1 day'));
-                    $query->where(function ($q) use ($from_date, $to_date_plus_one) {
-                        $q->whereBetween('tbl_lead.date', [$from_date, $to_date_plus_one])
-                            ->orWhereBetween('tbl_lead.disbursment_date', [$from_date, $to_date_plus_one]);
-                    });
-                }
-            } elseif (!empty($from_date)) {
-                $query->where(function ($q) use ($from_date) {
-                    $q->whereDate('tbl_lead.date', '>=', $from_date)
-                        ->orWhereDate('tbl_lead.disbursment_date', '>=', $from_date);
-                });
-            } elseif (!empty($to_date)) {
-                $query->where(function ($q) use ($to_date) {
-                    $q->whereDate('tbl_lead.date', '<=', $to_date)
-                        ->orWhereDate('tbl_lead.disbursment_date', '<=', $to_date);
-                });
-            }
-
-            // Activity Date Filter
-            if (!empty($activity_from_date)) {
-                $current_date = date('Y-m-d');
-                $activity_from_date = date('Y-m-d', strtotime($activity_from_date));
-
-                $leads_with_activity = DB::table('tbl_lead_status')
-                    ->whereBetween(
-                        DB::raw("DATE(STR_TO_DATE(date, '%Y-%m-%d %h:%i %p'))"),
-                        [$activity_from_date, $current_date]
-                    )
-                    ->distinct()
-                    ->pluck('lead_id')
-                    ->toArray();
-
-                if (!empty($leads_with_activity)) {
-                    $query->whereNotIn('tbl_lead.id', $leads_with_activity);
-                }
-            }
-
-            // Pagination
-            $leads = $query->paginate(5);
-
-            // Return JSON Response
-            return response()->json([
-                'data'         => $leads->items(),
-                'current_page' => $leads->currentPage(),
-                'last_page'    => $leads->lastPage(),
-                'per_page'     => $leads->perPage(),
-                'total'        => $leads->total(),
-                'team_name'    => $team_name,
-                'role'         => $admin_role,
-                'success'      => 'success',
-            ]);
         }
+
+        // Pagination
+        $leads = $query->paginate(5);
+
+        // Return JSON Response
+        return response()->json([
+            'data' => $leads->items(),
+            'current_page' => $leads->currentPage(),
+            'last_page' => $leads->lastPage(),
+            'per_page' => $leads->perPage(),
+            'total' => $leads->total(),
+            'team_name' => $team_name,
+            'role' => $admin_role,
+            'success' => 'success',
+        ]);
+    }
 
 
 
@@ -3544,20 +3604,20 @@ class AdminController extends Controller
     public function updateFileSenttoLoginOLD(Request $request)
     {
         $leadId = $request->input('lead_id');
-        $lead   = DB::table('tbl_lead')->where('id', $leadId)->first();
+        $lead = DB::table('tbl_lead')->where('id', $leadId)->first();
         if ($lead && $lead->imp_question == 1) { // Check if imp_question is 1
             DB::table('tbl_lead')
                 ->where('id', $leadId)
                 ->update([
-                    'lead_status'       => 'FILE SENT TO LOGIN',
+                    'lead_status' => 'FILE SENT TO LOGIN',
                     'lead_login_status' => 'Login', // Lead to Login
                 ]);
             // Insert into tbl_lead_status after updating the task status
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $lead->admin_id, // Assuming logged-in admin
-                'lead_id'     => $leadId,
+                'admin_id' => $lead->admin_id, // Assuming logged-in admin
+                'lead_id' => $leadId,
                 'lead_status' => 'Change FILE SENT TO LOGIN',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json(['status' => 'success', 'message' => 'Lead status and login status updated successfully']);
         } else {
@@ -3568,29 +3628,29 @@ class AdminController extends Controller
     // File Sent to PlOdLogin
     public function updateFileSenttoLogin(Request $request)
     {
-        $leadId   = $request->input('lead_id');
+        $leadId = $request->input('lead_id');
         $adminIds = $request->input('admin_ids'); // Array of Admin IDs
 
-        if (! $leadId || empty($adminIds)) {
+        if (!$leadId || empty($adminIds)) {
             return response()->json(['status' => 'error', 'message' => 'Please select at least one admin.']);
         }
 
         // Update Lead Status
         DB::table('tbl_lead')->where('id', $leadId)->update([
-            'lead_status'       => 'FILE SENT TO LOGIN',
+            'lead_status' => 'FILE SENT TO LOGIN',
             'lead_login_status' => 'PL & OD LOGIN',
-            'login_status'      => 'NEW FILE',
-            'assign_operation'  => implode(',', $adminIds),
-            'move_login_date'  => $this->date,
+            'login_status' => 'NEW FILE',
+            'assign_operation' => implode(',', $adminIds),
+            'move_login_date' => $this->date,
         ]);
 
         // Assign Admins to Lead in tbl_lead_status
         foreach ($adminIds as $adminId) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $adminId,
-                'lead_id'     => $leadId,
+                'admin_id' => $adminId,
+                'lead_id' => $leadId,
                 'lead_status' => 'Assigned FILE SENT TO LOGIN',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
         }
         return response()->json(['status' => 'success', 'message' => 'Lead Moved to Login Assigned By Operations Department Successfully']);
@@ -3599,29 +3659,29 @@ class AdminController extends Controller
     // updateFileSenttoHomeLogin
     public function updateFileSenttoHomeLogin(Request $request)
     {
-        $leadId   = $request->input('lead_id');
+        $leadId = $request->input('lead_id');
         $adminIds = $request->input('admin_ids'); // Array of Admin IDs
 
-        if (! $leadId || empty($adminIds)) {
+        if (!$leadId || empty($adminIds)) {
             return response()->json(['status' => 'error', 'message' => 'Please select at least one admin.']);
         }
 
         // Update Lead Status
         DB::table('tbl_lead')->where('id', $leadId)->update([
-            'lead_status'       => 'FILE SENT TO HOME LOAN LOGIN',
+            'lead_status' => 'FILE SENT TO HOME LOAN LOGIN',
             'lead_login_status' => 'HOME LOAN LOGIN',
-            'login_status'      => 'NEW FILE',
-            'assign_operation'  => implode(',', $adminIds),
-            'move_homeloan_login_date'  => $this->date,
+            'login_status' => 'NEW FILE',
+            'assign_operation' => implode(',', $adminIds),
+            'move_homeloan_login_date' => $this->date,
         ]);
 
         // Assign Admins to Lead in tbl_lead_status
         foreach ($adminIds as $adminId) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $adminId,
-                'lead_id'     => $leadId,
+                'admin_id' => $adminId,
+                'lead_id' => $leadId,
                 'lead_status' => 'Assigned FILE SENT TO HOME LOAN LOGIN',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
         }
         return response()->json(['status' => 'success', 'message' => 'Lead Moved to Login Assigned By Operations Department Successfully']);
@@ -3697,7 +3757,7 @@ class AdminController extends Controller
     // Task Comment Here in Task Tab
     public function getTaskComments(Request $request)
     {
-        $taskId   = $request->task_id;
+        $taskId = $request->task_id;
         $comments = DB::table('tbl_task_comment')
             ->where('task_id', $taskId)
             ->leftJoin('admin', 'tbl_task_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
@@ -3710,7 +3770,7 @@ class AdminController extends Controller
     // Task History Here in Task Tab
     public function getTaskHistory(Request $request)
     {
-        $taskId  = $request->task_id;
+        $taskId = $request->task_id;
         $history = DB::table('tbl_task_history')
             ->where('task_id', $taskId)
             ->leftJoin('admin', 'tbl_task_history.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
@@ -3731,24 +3791,24 @@ class AdminController extends Controller
     // update Task Status
     public function updateTaskStatusOLD(Request $request)
     {
-        $task_id    = $request->task_id;
-        $admin_id   = $request->admin_id;
+        $task_id = $request->task_id;
+        $admin_id = $request->admin_id;
         $new_status = $request->task_status;
 
-        $task    = DB::table('tbl_task')->where('id', $task_id)->first();
+        $task = DB::table('tbl_task')->where('id', $task_id)->first();
         $lead_id = $task->lead_id;
-        $data    = [
+        $data = [
             'task_status' => $new_status,
-            'admin_id'    => $admin_id,
+            'admin_id' => $admin_id,
         ];
 
-        if (! empty($data)) {
-            $update      = DB::table('tbl_task')->where('id', $task->id)->update($data);
+        if (!empty($data)) {
+            $update = DB::table('tbl_task')->where('id', $task->id)->update($data);
             $historyData = [
                 'admin_id' => $admin_id,
-                'lead_id'  => $lead_id,
-                'changes'  => $new_status,
-                'date'     => $this->date,
+                'lead_id' => $lead_id,
+                'changes' => $new_status,
+                'date' => $this->date,
             ];
             DB::table('tbl_task_history')->insert($historyData);
             return response()->json([
@@ -3763,42 +3823,42 @@ class AdminController extends Controller
 
     public function updateTaskStatus(Request $request)
     {
-        $task_id    = $request->task_id;
-        $admin_id   = $request->admin_id;
+        $task_id = $request->task_id;
+        $admin_id = $request->admin_id;
         $new_status = $request->task_status;
 
         if ($new_status === 'Close Task') {
-            $task_status         = 'Close Task';
+            $task_status = 'Close Task';
             $task_history_status = 'Task Closed';
         } else {
-            $task_status         = 'Open Task';
+            $task_status = 'Open Task';
             $task_history_status = 'Reopen';
         }
 
-        $task    = DB::table('tbl_task')->where('id', $task_id)->first();
+        $task = DB::table('tbl_task')->where('id', $task_id)->first();
         $lead_id = $task->lead_id;
-        $data    = [
+        $data = [
             'task_status' => $task_status,
-            'admin_id'    => $admin_id,
+            'admin_id' => $admin_id,
         ];
 
-        if (! empty($data)) {
-            $update      = DB::table('tbl_task')->where('id', $task->id)->update($data);
+        if (!empty($data)) {
+            $update = DB::table('tbl_task')->where('id', $task->id)->update($data);
             $historyData = [
                 'admin_id' => $admin_id,
-                'lead_id'  => $lead_id,
-                'task_id'  => $task_id,
-                'changes'  => $task_history_status,
-                'date'     => $this->date,
+                'lead_id' => $lead_id,
+                'task_id' => $task_id,
+                'changes' => $task_history_status,
+                'date' => $this->date,
             ];
             DB::table('tbl_task_history')->insert($historyData);
 
             // Insert into tbl_lead_status after updating the task status
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $lead_id,
+                'admin_id' => $admin_id,
+                'lead_id' => $lead_id,
                 'lead_status' => 'Change Task Status',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
 
             return response()->json([
@@ -3815,10 +3875,10 @@ class AdminController extends Controller
     public function update_aboutsectionOLD(Request $request)
     {
         $data = [
-            'id'        => $request->id,
+            'id' => $request->id,
             'data_code' => $request->data_code,
-            'name'      => $request->name,
-            'pincode'   => $request->pincode,
+            'name' => $request->name,
+            'pincode' => $request->pincode,
         ];
         $update = DB::table('tbl_lead')->where('id', $request->id)->update($data);
         if ($update) {
@@ -3834,22 +3894,22 @@ class AdminController extends Controller
 
     public function update_aboutsection(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
-        $data     = [
-            'id'        => $id,
+        $data = [
+            'id' => $id,
             'data_code' => $request->data_code,
-            'name'      => $request->name,
-            'pincode'   => $request->pincode,
+            'name' => $request->name,
+            'pincode' => $request->pincode,
         ];
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
         if ($update) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change About Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -3864,37 +3924,37 @@ class AdminController extends Controller
     // Update Operation Section Here
     public function updateOperationSection(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // ₹ aur comma ko remove karke sirf numeric value rakhna
-        $amount_approved      = preg_replace('/[^0-9]/', '', $request->amount_approved);
-        $amount_disbursed     = preg_replace('/[^0-9]/', '', $request->amount_disbursed);
-        $internal_top         = preg_replace('/[^0-9]/', '', $request->internal_top);
+        $amount_approved = preg_replace('/[^0-9]/', '', $request->amount_approved);
+        $amount_disbursed = preg_replace('/[^0-9]/', '', $request->amount_disbursed);
+        $internal_top = preg_replace('/[^0-9]/', '', $request->internal_top);
         $cashback_to_customer = preg_replace('/[^0-9]/', '', $request->cashback_to_customer);
 
         $data = [
-            'id'                   => $id,
-            'channel_id'           => $request->channel_id,
-            'los_number'           => $request->los_number,
-            'amount_approved'      => $amount_approved,
-            'rate'                 => $request->rate,
-            'pf_insurance'         => $request->pf_insurance,
-            'tenure_given'         => $request->tenure_given,
-            'tenure_year'          => $request->tenure_year,
-            'amount_disbursed'     => $amount_disbursed,
-            'internal_top'         => $internal_top,
+            'id' => $id,
+            'channel_id' => $request->channel_id,
+            'los_number' => $request->los_number,
+            'amount_approved' => $amount_approved,
+            'rate' => $request->rate,
+            'pf_insurance' => $request->pf_insurance,
+            'tenure_given' => $request->tenure_given,
+            'tenure_year' => $request->tenure_year,
+            'amount_disbursed' => $amount_disbursed,
+            'internal_top' => $internal_top,
             'cashback_to_customer' => $cashback_to_customer,
-            'disbursment_date'     => $request->disbursment_date,
+            'disbursment_date' => $request->disbursment_date,
         ];
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
         if ($update) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change Operation Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -3909,16 +3969,16 @@ class AdminController extends Controller
     // update_process
     public function update_processOLD(Request $request)
     {
-        $id   = $request->id;
+        $id = $request->id;
         $data = [
-            'id'              => $id,
-            'loan_amount'     => $request->loan_amount,
-            'process'         => $request->process,
-            'bank_id'         => $request->bank_id,
+            'id' => $id,
+            'loan_amount' => $request->loan_amount,
+            'process' => $request->process,
+            'bank_id' => $request->bank_id,
             'product_need_id' => $request->product_need_id,
-            'casetype_id'     => $request->casetype_id,
-            'tenure'          => $request->tenure,
-            'year'            => $request->year,
+            'casetype_id' => $request->casetype_id,
+            'tenure' => $request->tenure,
+            'year' => $request->year,
         ];
 
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
@@ -3935,30 +3995,30 @@ class AdminController extends Controller
 
     public function update_process(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // ₹ aur comma ko remove karke sirf numeric value rakhna
         $loan_amount = preg_replace('/[^0-9]/', '', $request->loan_amount);
 
         $data = [
-            'id'              => $id,
-            'loan_amount'     => $loan_amount,
-            'process'         => $request->process,
-            'bank_id'         => $request->bank_id,
+            'id' => $id,
+            'loan_amount' => $loan_amount,
+            'process' => $request->process,
+            'bank_id' => $request->bank_id,
             'product_need_id' => $request->product_need_id,
-            'casetype_id'     => $request->casetype_id,
-            'tenure'          => $request->tenure,
-            'year'            => $request->year,
+            'casetype_id' => $request->casetype_id,
+            'tenure' => $request->tenure,
+            'year' => $request->year,
         ];
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
         if ($update) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change How To Process Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -3973,8 +4033,8 @@ class AdminController extends Controller
     // update Checkebox Start Here
     public function updateImpQuestionNEW(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // Update imp_question
@@ -3984,10 +4044,10 @@ class AdminController extends Controller
 
         if ($updated) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change Important Question Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json(['success' => 'success']);
         }
@@ -3996,8 +4056,8 @@ class AdminController extends Controller
 
     public function updateImpQuestion(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // Check if imp_que exists
@@ -4008,15 +4068,15 @@ class AdminController extends Controller
             ->where('id', $id)
             ->update([
                 'imp_question' => $request->imp_question,
-                'imp_que'      => $impQueValue, // Updating imp_que with selected IDs
+                'imp_que' => $impQueValue, // Updating imp_que with selected IDs
             ]);
 
         if ($updated) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change Important Question Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json(['success' => 'success']);
         }
@@ -4026,13 +4086,13 @@ class AdminController extends Controller
     // Delete deleteObligation From History
     public function deleteObligation(Request $request)
     {
-        $id         = $request->id;
+        $id = $request->id;
         $obligation = DB::table('tbl_obligation')->where('id', $id)->first();
         if ($obligation) {
-            $lead_id       = $obligation->lead_id;
+            $lead_id = $obligation->lead_id;
             $bt_obligation = $obligation->bt_obligation;
-            $bt_pos        = $obligation->bt_pos;
-            $bt_emi        = $obligation->bt_emi;
+            $bt_pos = $obligation->bt_pos;
+            $bt_emi = $obligation->bt_emi;
 
             $lead = DB::table('tbl_lead')->where('id', $lead_id)->first();
 
@@ -4064,13 +4124,13 @@ class AdminController extends Controller
     // update_obligationsection
     public function update_obligationsection(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // Update the `tbl_lead` table
         $obligation = preg_replace('/[^0-9]/', '', $request->obligation);
-        $pos        = preg_replace('/[^0-9]/', '', $request->pos);
+        $pos = preg_replace('/[^0-9]/', '', $request->pos);
 
         $data = [
             'id' => $id,
@@ -4096,25 +4156,25 @@ class AdminController extends Controller
             if (is_array($request->product_id) && count($request->product_id) > 0) {
                 foreach ($request->product_id as $index => $productId) {
                     DB::table('tbl_obligation')->insert([
-                        'admin_id'          => $admin_id, // From tbl_lead
-                        'lead_id'           => $id,
-                        'product_id'        => $productId,
-                        'bank_id'           => $request->bank_id[$index] ?? null,
+                        'admin_id' => $admin_id, // From tbl_lead
+                        'lead_id' => $id,
+                        'product_id' => $productId,
+                        'bank_id' => $request->bank_id[$index] ?? null,
                         'total_loan_amount' => $request->total_loan_amount[$index] ?? null,
-                        'bt_pos'            => $request->bt_pos[$index] ?? null,
-                        'bt_emi'            => $request->bt_emi[$index] ?? null,
-                        'bt_obligation'     => $request->bt_obligation[$index] ?? null,
-                        'date'              => $this->date,
+                        'bt_pos' => $request->bt_pos[$index] ?? null,
+                        'bt_emi' => $request->bt_emi[$index] ?? null,
+                        'bt_obligation' => $request->bt_obligation[$index] ?? null,
+                        'date' => $this->date,
                     ]);
                 }
             }
 
             // Insert into tbl_lead_status after the update
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change Obligation Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
 
             return response()->json([
@@ -4130,65 +4190,65 @@ class AdminController extends Controller
     // update_loginform
     public function update_loginform(Request $request)
     {
-        $id       = $request->id;
-        $lead     = DB::table('tbl_lead')->where('id', $id)->first();
+        $id = $request->id;
+        $lead = DB::table('tbl_lead')->where('id', $id)->first();
         $admin_id = $lead->admin_id ?? '';
 
         // Prepare data to update the tbl_lead table
         $data = [
-            'id'                          => $id,
-            'reference_name'              => $request->reference_name,
-            'aadhar_no'                   => $request->aadhar_no,
-            'qualification'               => $request->qualification,
-            'name'                        => $request->name,
-            'pan_card_no'                 => $request->pan_card_no,
-            'product_id'                  => $request->product_id,
-            'mobile'                      => $request->mobile,
-            'dob'                         => $request->dob,
-            'account_no'                  => $request->account_no,
-            'alternate_mobile'            => $request->alternate_mobile,
-            'father_name'                 => $request->father_name,
-            'ifsc_code'                   => $request->ifsc_code,
-            'mother_name'                 => $request->mother_name,
-            'marital_status'              => $request->marital_status,
-            'spouse_name'                 => $request->spouse_name,
-            'spouse_dob'                  => $request->spouse_dob,
-            'current_address'             => $request->current_address,
-            'current_address_landmark'    => $request->current_address_landmark,
-            'current_address_type'        => $request->current_address_type,
-            'current_address_proof'       => $request->current_address_proof,
+            'id' => $id,
+            'reference_name' => $request->reference_name,
+            'aadhar_no' => $request->aadhar_no,
+            'qualification' => $request->qualification,
+            'name' => $request->name,
+            'pan_card_no' => $request->pan_card_no,
+            'product_id' => $request->product_id,
+            'mobile' => $request->mobile,
+            'dob' => $request->dob,
+            'account_no' => $request->account_no,
+            'alternate_mobile' => $request->alternate_mobile,
+            'father_name' => $request->father_name,
+            'ifsc_code' => $request->ifsc_code,
+            'mother_name' => $request->mother_name,
+            'marital_status' => $request->marital_status,
+            'spouse_name' => $request->spouse_name,
+            'spouse_dob' => $request->spouse_dob,
+            'current_address' => $request->current_address,
+            'current_address_landmark' => $request->current_address_landmark,
+            'current_address_type' => $request->current_address_type,
+            'current_address_proof' => $request->current_address_proof,
             'living_current_address_year' => $request->living_current_address_year,
-            'living_current_city_year'    => $request->living_current_city_year,
-            'permanent_address'           => $request->permanent_address,
-            'permanent_address_landmark'  => $request->permanent_address_landmark,
-            'company_name'                => $request->company_name,
-            'designation'                 => $request->designation,
-            'department'                  => $request->department,
-            'current_company'             => $request->current_company,
-            'current_work_experience'     => $request->current_work_experience,
-            'total_work_experience'       => $request->total_work_experience,
-            'personal_email'              => $request->personal_email,
-            'work_email'                  => $request->work_email,
-            'office_address'              => $request->office_address,
-            'office_address_landmark'     => $request->office_address_landmark,
-            'reference_name1'             => $request->reference_name1,
-            'reference_mobile1'           => $request->reference_mobile1,
-            'reference_relation1'         => $request->reference_relation1,
-            'reference_address1'          => $request->reference_address1,
-            'reference_name2'             => $request->reference_name2,
-            'reference_mobile2'           => $request->reference_mobile2,
-            'reference_relation2'         => $request->reference_relation2,
-            'reference_address2'          => $request->reference_address2,
+            'living_current_city_year' => $request->living_current_city_year,
+            'permanent_address' => $request->permanent_address,
+            'permanent_address_landmark' => $request->permanent_address_landmark,
+            'company_name' => $request->company_name,
+            'designation' => $request->designation,
+            'department' => $request->department,
+            'current_company' => $request->current_company,
+            'current_work_experience' => $request->current_work_experience,
+            'total_work_experience' => $request->total_work_experience,
+            'personal_email' => $request->personal_email,
+            'work_email' => $request->work_email,
+            'office_address' => $request->office_address,
+            'office_address_landmark' => $request->office_address_landmark,
+            'reference_name1' => $request->reference_name1,
+            'reference_mobile1' => $request->reference_mobile1,
+            'reference_relation1' => $request->reference_relation1,
+            'reference_address1' => $request->reference_address1,
+            'reference_name2' => $request->reference_name2,
+            'reference_mobile2' => $request->reference_mobile2,
+            'reference_relation2' => $request->reference_relation2,
+            'reference_address2' => $request->reference_address2,
         ];
 
         // Update the tbl_lead table
         $update = DB::table('tbl_lead')->where('id', $id)->update($data);
         if ($update) {
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => 'Change Login Form Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -4203,7 +4263,7 @@ class AdminController extends Controller
     // update Attachment
     public function update_attachmentOLD(Request $request)
     {
-        $imagedata   = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
+        $imagedata = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
         $imageFields = [
             'cibil_report_image',
             'passport_image',
@@ -4227,7 +4287,7 @@ class AdminController extends Controller
             // Check if the request contains a file for the current field
             if ($request->hasFile($field)) {
                 // Remove the old image if it exists and is not null
-                if ($imagedata && ! empty($imagedata->$field)) {
+                if ($imagedata && !empty($imagedata->$field)) {
                     $oldImagePath = public_path("storage/Admin/$field/" . basename($imagedata->$field));
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
@@ -4235,9 +4295,9 @@ class AdminController extends Controller
                 }
 
                 // Save the new image
-                $file      = $request->file($field);
+                $file = $request->file($field);
                 $unique_id = uniqid();
-                $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+                $name = $unique_id . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path("storage/Admin/$field/"), $name);
 
                 // Update the data array with the new image URL
@@ -4259,7 +4319,7 @@ class AdminController extends Controller
     // latest
     public function update_attachmentOLDNEW(Request $request)
     {
-        $imagedata   = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
+        $imagedata = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
         $imageFields = [
             'cibil_report_image',
             'passport_image',
@@ -4283,7 +4343,7 @@ class AdminController extends Controller
             // Check if the request contains a file for the current field
             if ($request->hasFile($field)) {
                 // Remove the old image if it exists and is not null
-                if ($imagedata && ! empty($imagedata->$field)) {
+                if ($imagedata && !empty($imagedata->$field)) {
                     $oldImagePath = public_path("storage/Admin/$field/" . basename($imagedata->$field));
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
@@ -4291,9 +4351,9 @@ class AdminController extends Controller
                 }
 
                 // Save the new image
-                $file      = $request->file($field);
+                $file = $request->file($field);
                 $unique_id = uniqid();
-                $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+                $name = $unique_id . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path("storage/Admin/$field/"), $name);
 
                 // Update the data array with the new image URL
@@ -4309,10 +4369,10 @@ class AdminController extends Controller
 
         // Insert into tbl_lead_status after updating the attachment
         DB::table('tbl_lead_status')->insert([
-            'admin_id'    => $request->admin_id,
-            'lead_id'     => $request->lead_id,
+            'admin_id' => $request->admin_id,
+            'lead_id' => $request->lead_id,
             'lead_status' => 'Change Attachment Section', // You can adjust this message as needed
-            'date'        => $this->date,
+            'date' => $this->date,
         ]);
 
         return response()->json([
@@ -4322,7 +4382,7 @@ class AdminController extends Controller
 
     public function update_attachment(Request $request)
     {
-        $imagedata   = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
+        $imagedata = DB::table('tbl_lead')->where('admin_id', $request->admin_id)->where('id', $request->lead_id)->first();
         $imageFields = [
             'cibil_report_image',
             'passport_image',
@@ -4348,17 +4408,17 @@ class AdminController extends Controller
                 $existingFiles = [];
 
                 // If there are existing files in the database, fetch them
-                if ($imagedata && ! empty($imagedata->$field)) {
+                if ($imagedata && !empty($imagedata->$field)) {
                     $existingFiles = explode(',', $imagedata->$field); // Assuming files are stored in the DB as comma-separated
                 }
 
                 // Process each uploaded file
-                $files        = $request->file($field);
+                $files = $request->file($field);
                 $newFilePaths = [];
 
                 foreach ($files as $file) {
                     $unique_id = uniqid();
-                    $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+                    $name = $unique_id . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path("storage/Admin/$field/"), $name);
 
                     // Store the new file path
@@ -4381,10 +4441,10 @@ class AdminController extends Controller
 
         // Insert into tbl_lead_status after updating the attachment
         DB::table('tbl_lead_status')->insert([
-            'admin_id'    => $request->admin_id,
-            'lead_id'     => $request->lead_id,
+            'admin_id' => $request->admin_id,
+            'lead_id' => $request->lead_id,
             'lead_status' => 'Change Attachment Section', // Adjust this message as needed
-            'date'        => $this->date,
+            'date' => $this->date,
         ]);
 
         return response()->json([
@@ -4395,13 +4455,13 @@ class AdminController extends Controller
     // Attachment Delete Single
     public function delete_attachment_single_fileOLD(Request $request)
     {
-        if (! empty($request->admin_id) && ! empty($request->lead_id) && ! empty($request->column_name)) {
+        if (!empty($request->admin_id) && !empty($request->lead_id) && !empty($request->column_name)) {
             // Fetch the lead record
             $lead = DB::table("tbl_lead")
                 ->where("id", $request->lead_id)
                 ->where("admin_id", $request->admin_id)
                 ->first();
-            if (! $lead) {
+            if (!$lead) {
                 return response()->json(['success' => false, 'message' => 'Record not found.']);
             }
             // Delete the file and update the column
@@ -4419,14 +4479,14 @@ class AdminController extends Controller
 
     public function delete_attachment_single_file(Request $request)
     {
-        if (! empty($request->admin_id) && ! empty($request->lead_id) && ! empty($request->column_name) && ! empty($request->file_url)) {
+        if (!empty($request->admin_id) && !empty($request->lead_id) && !empty($request->column_name) && !empty($request->file_url)) {
             // Fetch the lead record
             $lead = DB::table("tbl_lead")
                 ->where("id", $request->lead_id)
                 ->where("admin_id", $request->admin_id)
                 ->first();
 
-            if (! $lead) {
+            if (!$lead) {
                 return response()->json(['success' => false, 'message' => 'Record not found.']);
             }
 
@@ -4476,44 +4536,44 @@ class AdminController extends Controller
     public function update_loginformlink(Request $request)
     {
         $data = [
-            'id'                          => $request->id,
-            'qualification'               => $request->qualification,
-            'pan_card_no'                 => $request->pan_card_no,
-            'product_id'                  => $request->product_id,
-            'dob'                         => $request->dob,
-            'account_no'                  => $request->account_no,
-            'father_name'                 => $request->father_name,
-            'ifsc_code'                   => $request->ifsc_code,
-            'mother_name'                 => $request->mother_name,
-            'marital_status'              => $request->marital_status,
-            'spouse_name'                 => $request->spouse_name,
-            'spouse_dob'                  => $request->spouse_dob,
-            'current_address'             => $request->current_address,
-            'current_address_landmark'    => $request->current_address_landmark,
-            'current_address_type'        => $request->current_address_type,
-            'current_address_proof'       => $request->current_address_proof,
+            'id' => $request->id,
+            'qualification' => $request->qualification,
+            'pan_card_no' => $request->pan_card_no,
+            'product_id' => $request->product_id,
+            'dob' => $request->dob,
+            'account_no' => $request->account_no,
+            'father_name' => $request->father_name,
+            'ifsc_code' => $request->ifsc_code,
+            'mother_name' => $request->mother_name,
+            'marital_status' => $request->marital_status,
+            'spouse_name' => $request->spouse_name,
+            'spouse_dob' => $request->spouse_dob,
+            'current_address' => $request->current_address,
+            'current_address_landmark' => $request->current_address_landmark,
+            'current_address_type' => $request->current_address_type,
+            'current_address_proof' => $request->current_address_proof,
             'living_current_address_year' => $request->living_current_address_year,
-            'living_current_city_year'    => $request->living_current_city_year,
-            'permanent_address'           => $request->permanent_address,
-            'permanent_address_landmark'  => $request->permanent_address_landmark,
-            'company_name'                => $request->company_name,
-            'designation'                 => $request->designation,
-            'department'                  => $request->department,
-            'current_company'             => $request->current_company,
-            'current_work_experience'     => $request->current_work_experience,
-            'total_work_experience'       => $request->total_work_experience,
-            'personal_email'              => $request->personal_email,
-            'work_email'                  => $request->work_email,
-            'office_address'              => $request->office_address,
-            'office_address_landmark'     => $request->office_address_landmark,
-            'reference_name1'             => $request->reference_name1,
-            'reference_mobile1'           => $request->reference_mobile1,
-            'reference_relation1'         => $request->reference_relation1,
-            'reference_address1'          => $request->reference_address1,
-            'reference_name2'             => $request->reference_name2,
-            'reference_mobile2'           => $request->reference_mobile2,
-            'reference_relation2'         => $request->reference_relation2,
-            'reference_address2'          => $request->reference_address2,
+            'living_current_city_year' => $request->living_current_city_year,
+            'permanent_address' => $request->permanent_address,
+            'permanent_address_landmark' => $request->permanent_address_landmark,
+            'company_name' => $request->company_name,
+            'designation' => $request->designation,
+            'department' => $request->department,
+            'current_company' => $request->current_company,
+            'current_work_experience' => $request->current_work_experience,
+            'total_work_experience' => $request->total_work_experience,
+            'personal_email' => $request->personal_email,
+            'work_email' => $request->work_email,
+            'office_address' => $request->office_address,
+            'office_address_landmark' => $request->office_address_landmark,
+            'reference_name1' => $request->reference_name1,
+            'reference_mobile1' => $request->reference_mobile1,
+            'reference_relation1' => $request->reference_relation1,
+            'reference_address1' => $request->reference_address1,
+            'reference_name2' => $request->reference_name2,
+            'reference_mobile2' => $request->reference_mobile2,
+            'reference_relation2' => $request->reference_relation2,
+            'reference_address2' => $request->reference_address2,
         ];
 
         $updatedata = DB::table('tbl_lead')->where('id', $request->id)->update($data);
@@ -4531,29 +4591,29 @@ class AdminController extends Controller
     // changeLeadStatus
     public function changeLeadStatus(Request $request)
     {
-        $admin_id    = $request->admin_id;
-        $id          = $request->id;
+        $admin_id = $request->admin_id;
+        $id = $request->id;
         $lead_status = $request->lead_status;
-        $remark      = $request->remark;
-        $data        = [
-            'lead_status'      => $lead_status,
+        $remark = $request->remark;
+        $data = [
+            'lead_status' => $lead_status,
             'lead_status_note' => $remark,
         ];
-        if (! empty($id)) {
+        if (!empty($id)) {
             DB::table("tbl_lead")->where('id', $id)->update($data);
             // Lead status Activity
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => $lead_status,
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             // Remark Activity
             DB::table('tbl_remark')->insert([
                 'admin_id' => $admin_id,
-                'lead_id'  => $id,
-                'remark'   => $remark,
-                'date'     => $this->date,
+                'lead_id' => $id,
+                'remark' => $remark,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -4564,29 +4624,29 @@ class AdminController extends Controller
     // Change Login Status Start Here
     public function changeLoginStatus(Request $request)
     {
-        $admin_id     = $request->admin_id;
-        $id           = $request->id;
+        $admin_id = $request->admin_id;
+        $id = $request->id;
         $login_status = $request->login_status;
-        $remark       = $request->remark;
-        $data         = [
-            'login_status'     => $login_status,
+        $remark = $request->remark;
+        $data = [
+            'login_status' => $login_status,
             'lead_status_note' => $remark,
         ];
-        if (! empty($id)) {
+        if (!empty($id)) {
             DB::table("tbl_lead")->where('id', $id)->update($data);
             // Lead status Activity
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $admin_id,
-                'lead_id'     => $id,
+                'admin_id' => $admin_id,
+                'lead_id' => $id,
                 'lead_status' => $login_status,
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             // Remark Activity
             DB::table('tbl_remark')->insert([
                 'admin_id' => $admin_id,
-                'lead_id'  => $id,
-                'remark'   => $remark,
-                'date'     => $this->date,
+                'lead_id' => $id,
+                'remark' => $remark,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -4598,15 +4658,15 @@ class AdminController extends Controller
     // changeLostLeadStatus
     public function changeLostLeadStatus(Request $request)
     {
-        $admin_id              = $request->admin_id;
-        $id                    = $request->id;
-        $lost_lead_status      = $request->lost_lead_status;
+        $admin_id = $request->admin_id;
+        $id = $request->id;
+        $lost_lead_status = $request->lost_lead_status;
         $lost_lead_status_note = $request->lost_lead_status_note;
-        $data                  = [
-            'lost_lead_status'      => $lost_lead_status,
+        $data = [
+            'lost_lead_status' => $lost_lead_status,
             'lost_lead_status_note' => $lost_lead_status_note,
         ];
-        if (! empty($id)) {
+        if (!empty($id)) {
             DB::table("tbl_lead")->where('id', $id)->update($data);
             return response()->json([
                 'success' => 'success',
@@ -4632,7 +4692,7 @@ class AdminController extends Controller
     public function fetchCompanyCategory(Request $request)
     {
         $companyType = $request->input('company_type');
-        $validTypes  = ['LLP FIRM', 'PARTENERSHIP FIRM', 'PROPRITER']; // JavaScript ke saath match kiya
+        $validTypes = ['LLP FIRM', 'PARTENERSHIP FIRM', 'PROPRITER']; // JavaScript ke saath match kiya
         if (in_array($companyType, $validTypes)) {
             $categories = DB::table('tbl_company_category')
                 ->select('id', 'company_name', 'company_category', 'company_bank')
@@ -4647,7 +4707,7 @@ class AdminController extends Controller
     public function filterLeads(Request $request)
     {
         $leadStatus = $request->input('lead_status');
-        $leads      = DB::table('tbl_lead')
+        $leads = DB::table('tbl_lead')
             ->leftJoin('tbl_product', 'tbl_product.id', '=', 'tbl_lead.product_id')
             ->leftJoin('tbl_campaign', 'tbl_campaign.id', '=', 'tbl_lead.campaign_id')
             ->leftJoin('tbl_product_need', 'tbl_product_need.id', '=', 'tbl_lead.product_need_id')
@@ -4669,11 +4729,11 @@ class AdminController extends Controller
     {
         $data = [
             'admin_id' => $request->admin_id,
-            'lead_id'  => $request->lead_id,
-            'remark'   => $request->remark,
-            'date'     => $this->date,
+            'lead_id' => $request->lead_id,
+            'remark' => $request->remark,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_remark')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -4686,19 +4746,19 @@ class AdminController extends Controller
     {
         $data = [
             'admin_id' => $request->admin_id,
-            'lead_id'  => $request->lead_id,
-            'remark'   => $request->remark,
-            'date'     => $this->date,
+            'lead_id' => $request->lead_id,
+            'remark' => $request->remark,
+            'date' => $this->date,
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_remark')->insert($data);
             if ($res) {
                 DB::table('tbl_lead_status')->insert([
-                    'admin_id'    => $request->admin_id,
-                    'lead_id'     => $request->lead_id,
+                    'admin_id' => $request->admin_id,
+                    'lead_id' => $request->lead_id,
                     'lead_status' => 'Change Remark Added Section',
-                    'date'        => $this->date,
+                    'date' => $this->date,
                 ]);
 
                 return response()->json([
@@ -4716,11 +4776,11 @@ class AdminController extends Controller
     {
         $data = [
             'admin_id' => $request->admin_id,
-            'task_id'  => $request->task_id,
-            'comment'  => $request->comment,
-            'date'     => $this->date,
+            'task_id' => $request->task_id,
+            'comment' => $request->comment,
+            'date' => $this->date,
         ];
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_task_comment')->insert($data);
             return response()->json([
                 'success' => 'success',
@@ -4735,9 +4795,9 @@ class AdminController extends Controller
         if ($task) {
             $data = [
                 'admin_id' => $request->admin_id,
-                'task_id'  => $request->task_id,
-                'comment'  => $request->comment,
-                'date'     => $this->date,
+                'task_id' => $request->task_id,
+                'comment' => $request->comment,
+                'date' => $this->date,
             ];
 
             // Insert comment into tbl_task_comment
@@ -4745,10 +4805,10 @@ class AdminController extends Controller
 
             // Insert into tbl_lead_status after adding the comment
             DB::table('tbl_lead_status')->insert([
-                'admin_id'    => $request->admin_id,
-                'lead_id'     => $task->lead_id,
+                'admin_id' => $request->admin_id,
+                'lead_id' => $task->lead_id,
                 'lead_status' => 'Change Comment Added Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
@@ -4791,9 +4851,9 @@ class AdminController extends Controller
             ->get();
 
         $task_completed = []; // Completed tasks
-        $duetoday       = []; // Tasks due today
-        $upcoming       = []; // Upcoming tasks
-        $overdues       = []; // Overdue tasks
+        $duetoday = []; // Tasks due today
+        $upcoming = []; // Upcoming tasks
+        $overdues = []; // Overdue tasks
 
         foreach ($tasks as $task) {
             $adminNames = DB::table('admin')
@@ -4824,23 +4884,23 @@ class AdminController extends Controller
             }
         }
 
-                                                        // Calculate totals
-        $total_tasks          = count($tasks);          // Total tasks
+        // Calculate totals
+        $total_tasks = count($tasks);          // Total tasks
         $total_task_completed = count($task_completed); // Total completed tasks
-        $total_duetoday       = count($duetoday);       // Total tasks due today
-        $total_upcoming       = count($upcoming);       // Total upcoming tasks
-        $total_overdues       = count($overdues);       // Total overdue tasks
+        $total_duetoday = count($duetoday);       // Total tasks due today
+        $total_upcoming = count($upcoming);       // Total upcoming tasks
+        $total_overdues = count($overdues);       // Total overdue tasks
 
         return view('Admin.pages.task', [
-            'tasks'                => $tasks,                // All tasks
-            'task_completed'       => $task_completed,       // Completed tasks
-            'duetoday'             => $duetoday,             // Tasks due today
-            'upcoming'             => $upcoming,             // Upcoming tasks
-            'overdues'             => $overdues,             // Overdue tasks
-            'total_tasks'          => $total_tasks,          // Total tasks
-            'total_duetoday'       => $total_duetoday,       // Total tasks due today
-            'total_upcoming'       => $total_upcoming,       // Total upcoming tasks
-            'total_overdues'       => $total_overdues,       // Total overdue tasks
+            'tasks' => $tasks,                // All tasks
+            'task_completed' => $task_completed,       // Completed tasks
+            'duetoday' => $duetoday,             // Tasks due today
+            'upcoming' => $upcoming,             // Upcoming tasks
+            'overdues' => $overdues,             // Overdue tasks
+            'total_tasks' => $total_tasks,          // Total tasks
+            'total_duetoday' => $total_duetoday,       // Total tasks due today
+            'total_upcoming' => $total_upcoming,       // Total upcoming tasks
+            'total_overdues' => $total_overdues,       // Total overdue tasks
             'total_task_completed' => $total_task_completed, // Total completed tasks
         ]);
     }
@@ -4858,26 +4918,26 @@ class AdminController extends Controller
     {
         $data = [
             'task_status' => 'Open Task',
-            'admin_id'    => $request->admin_id,
-            'subject'     => $request->subject,
-            'message'     => $request->message,
-            'task_type'   => implode(',', $request->task_type),
-            'lead_type'   => $request->lead_type,
-            'lead_id'     => $request->lead_id,
-            'date'        => date('Y-m-d', strtotime($request->date)),
-            'time'        => date('h:i A', strtotime($request->time)),
-            'assign'      => implode(',', $request->assign),
+            'admin_id' => $request->admin_id,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'task_type' => implode(',', $request->task_type),
+            'lead_type' => $request->lead_type,
+            'lead_id' => $request->lead_id,
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'time' => date('h:i A', strtotime($request->time)),
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $task_id = DB::table('tbl_task')->insertGetId($data);
             if ($task_id) {
                 $historyData = [
-                    'task_id'  => $task_id,
+                    'task_id' => $task_id,
                     'admin_id' => $request->admin_id,
-                    'lead_id'  => $request->lead_id,
-                    'changes'  => 'Open Task',
-                    'date'     => $this->date,
+                    'lead_id' => $request->lead_id,
+                    'changes' => 'Open Task',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_task_history')->insert($historyData);
@@ -4892,27 +4952,27 @@ class AdminController extends Controller
     public function updateTaskOLD(Request $request)
     {
         $data = [
-            'id'        => $request->task_id,
-            'admin_id'  => $request->admin_id,
-            'subject'   => $request->subject,
-            'message'   => $request->message,
+            'id' => $request->task_id,
+            'admin_id' => $request->admin_id,
+            'subject' => $request->subject,
+            'message' => $request->message,
             'task_type' => $request->task_type,
             'lead_type' => $request->lead_type,
-            'lead_id'   => $request->lead_id,
-            'date'      => date('Y-m-d', strtotime($request->date)),
-            'time'      => date('h:i A', strtotime($request->time)),
-            'assign'    => implode(',', $request->assign),
+            'lead_id' => $request->lead_id,
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'time' => date('h:i A', strtotime($request->time)),
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_task')->where('id', $request->task_id)->update($data);
             if ($res) {
                 $historyData = [
-                    'task_id'  => $request->task_id,
+                    'task_id' => $request->task_id,
                     'admin_id' => $request->admin_id,
-                    'lead_id'  => $request->lead_id,
-                    'changes'  => 'Changes Task',
-                    'date'     => $this->date,
+                    'lead_id' => $request->lead_id,
+                    'changes' => 'Changes Task',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_task_history')->insert($historyData);
@@ -4928,36 +4988,36 @@ class AdminController extends Controller
     {
         $data = [
             'task_status' => 'Open Task',
-            'admin_id'    => $request->admin_id,
-            'subject'     => $request->subject,
-            'message'     => $request->message,
-            'task_type'   => implode(',', $request->task_type),
-            'lead_type'   => $request->lead_type,
-            'lead_id'     => $request->lead_id,
-            'date'        => date('Y-m-d', strtotime($request->date)),
-            'time'        => date('h:i A', strtotime($request->time)),
-            'assign'      => implode(',', $request->assign),
+            'admin_id' => $request->admin_id,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'task_type' => implode(',', $request->task_type),
+            'lead_type' => $request->lead_type,
+            'lead_id' => $request->lead_id,
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'time' => date('h:i A', strtotime($request->time)),
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $task_id = DB::table('tbl_task')->insertGetId($data);
             if ($task_id) {
                 $historyData = [
-                    'task_id'  => $task_id,
+                    'task_id' => $task_id,
                     'admin_id' => $request->admin_id,
-                    'lead_id'  => $request->lead_id,
-                    'changes'  => 'Open Task',
-                    'date'     => $this->date,
+                    'lead_id' => $request->lead_id,
+                    'changes' => 'Open Task',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_task_history')->insert($historyData);
 
                 // Insert into tbl_lead_status after task is created
                 DB::table('tbl_lead_status')->insert([
-                    'admin_id'    => $request->admin_id,
-                    'lead_id'     => $request->lead_id,
+                    'admin_id' => $request->admin_id,
+                    'lead_id' => $request->lead_id,
                     'lead_status' => 'Change Add Task Section',
-                    'date'        => $this->date,
+                    'date' => $this->date,
                 ]);
 
                 return response()->json([
@@ -4971,37 +5031,37 @@ class AdminController extends Controller
     public function updateTask(Request $request)
     {
         $data = [
-            'id'        => $request->task_id,
-            'admin_id'  => $request->admin_id,
-            'subject'   => $request->subject,
-            'message'   => $request->message,
+            'id' => $request->task_id,
+            'admin_id' => $request->admin_id,
+            'subject' => $request->subject,
+            'message' => $request->message,
             'task_type' => $request->task_type,
             'lead_type' => $request->lead_type,
-            'lead_id'   => $request->lead_id,
-            'date'      => date('Y-m-d', strtotime($request->date)),
-            'time'      => date('h:i A', strtotime($request->time)),
-            'assign'    => implode(',', $request->assign),
+            'lead_id' => $request->lead_id,
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'time' => date('h:i A', strtotime($request->time)),
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_task')->where('id', $request->task_id)->update($data);
             if ($res) {
                 $historyData = [
-                    'task_id'  => $request->task_id,
+                    'task_id' => $request->task_id,
                     'admin_id' => $request->admin_id,
-                    'lead_id'  => $request->lead_id,
-                    'changes'  => 'Changes Task',
-                    'date'     => $this->date,
+                    'lead_id' => $request->lead_id,
+                    'changes' => 'Changes Task',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_task_history')->insert($historyData);
 
                 // Insert into tbl_lead_status after task is updated
                 DB::table('tbl_lead_status')->insert([
-                    'admin_id'    => $request->admin_id,
-                    'lead_id'     => $request->lead_id,
+                    'admin_id' => $request->admin_id,
+                    'lead_id' => $request->lead_id,
                     'lead_status' => 'Change Task Updated Section',
-                    'date'        => $this->date,
+                    'date' => $this->date,
                 ]);
 
                 return response()->json([
@@ -5016,7 +5076,7 @@ class AdminController extends Controller
     public function copyThisLead(Request $request)
     {
         $leadId = $request->input('lead_id');
-        $lead   = DB::table('tbl_lead')->where('id', $leadId)->first();
+        $lead = DB::table('tbl_lead')->where('id', $leadId)->first();
         if ($lead) {
             $leadData = (array) $lead;
             unset($leadData['id']);
@@ -5036,7 +5096,7 @@ class AdminController extends Controller
             ->orderBy('tbl_ticket.id', 'desc')
             ->get();
 
-        $openTickets   = []; // Tickets with status "Open Ticket"
+        $openTickets = []; // Tickets with status "Open Ticket"
         $closedTickets = []; // Tickets with status "Close Ticket"
 
         foreach ($tickets as $ticket) {
@@ -5056,17 +5116,17 @@ class AdminController extends Controller
             }
         }
 
-                                                     // Calculate totals
-        $totalTickets       = count($tickets);       // Total number of tickets
-        $totalOpenTickets   = count($openTickets);   // Total number of open tickets
+        // Calculate totals
+        $totalTickets = count($tickets);       // Total number of tickets
+        $totalOpenTickets = count($openTickets);   // Total number of open tickets
         $totalClosedTickets = count($closedTickets); // Total number of closed tickets
 
         return view('Admin.pages.ticket', [
-            'tickets'            => $tickets,            // All tickets
-            'open_tickets'       => $openTickets,        // Open Tickets
-            'closed_tickets'     => $closedTickets,      // Closed Tickets
-            'totalTickets'       => $totalTickets,       // Total tickets
-            'totalOpenTickets'   => $totalOpenTickets,   // Total open tickets
+            'tickets' => $tickets,            // All tickets
+            'open_tickets' => $openTickets,        // Open Tickets
+            'closed_tickets' => $closedTickets,      // Closed Tickets
+            'totalTickets' => $totalTickets,       // Total tickets
+            'totalOpenTickets' => $totalOpenTickets,   // Total open tickets
             'totalClosedTickets' => $totalClosedTickets, // Total closed tickets
         ]);
     }
@@ -5080,22 +5140,22 @@ class AdminController extends Controller
 
         $data = [
             'task_status' => 'Open Ticket',
-            'admin_id'    => $request->admin_id,
-            'subject'     => $request->subject,
-            'message'     => $request->message,
-            'date'     => $date,
-            'time'     => $time,
-            'assign'      => implode(',', $request->assign)
+            'admin_id' => $request->admin_id,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'date' => $date,
+            'time' => $time,
+            'assign' => implode(',', $request->assign)
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $ticket_id = DB::table('tbl_ticket')->insertGetId($data);
             if ($ticket_id) {
                 $historyData = [
                     'ticket_id' => $ticket_id,
-                    'admin_id'  => $request->admin_id,
-                    'changes'   => 'Ticket Created',
-                    'date'      => $this->date,
+                    'admin_id' => $request->admin_id,
+                    'changes' => 'Ticket Created',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_ticket_history')->insert($historyData);
@@ -5118,7 +5178,7 @@ class AdminController extends Controller
     public function getTicketHistory(Request $request)
     {
         $ticketId = $request->ticket_id;
-        $history  = DB::table('tbl_ticket_history')
+        $history = DB::table('tbl_ticket_history')
             ->where('ticket_id', $ticketId)
             ->leftJoin('admin', 'tbl_ticket_history.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
             ->select('tbl_ticket_history.*', 'admin.name as createdby')
@@ -5130,7 +5190,7 @@ class AdminController extends Controller
     // Ticket Comment Here in Task Tab
     public function getTicketComments(Request $request)
     {
-        $ticketId        = $request->ticket_id;
+        $ticketId = $request->ticket_id;
         $ticket_comments = DB::table('tbl_ticket_comment')
             ->where('ticket_id', $ticketId)
             ->leftJoin('admin', 'tbl_ticket_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
@@ -5147,10 +5207,10 @@ class AdminController extends Controller
         $ticket = DB::table('tbl_ticket')->where('id', $request->ticket_id)->first();
         if ($ticket) {
             $data = [
-                'admin_id'  => $request->admin_id,
+                'admin_id' => $request->admin_id,
                 'ticket_id' => $request->ticket_id,
-                'comment'   => $request->comment,
-                'date'      => $this->date,
+                'comment' => $request->comment,
+                'date' => $this->date,
             ];
             // Insert comment into tbl_task_comment
             DB::table('tbl_ticket_comment')->insert($data);
@@ -5165,21 +5225,21 @@ class AdminController extends Controller
     public function updateTicket(Request $request)
     {
         $data = [
-            'id'       => $request->ticket_id,
+            'id' => $request->ticket_id,
             'admin_id' => $request->admin_id,
-            'subject'  => $request->subject,
-            'message'  => $request->message,
-            'assign'   => implode(',', $request->assign),
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_ticket')->where('id', $request->ticket_id)->update($data);
             if ($res) {
                 $historyData = [
                     'ticket_id' => $request->ticket_id,
-                    'admin_id'  => $request->admin_id,
-                    'changes'   => 'Changes Ticket',
-                    'date'      => $this->date,
+                    'admin_id' => $request->admin_id,
+                    'changes' => 'Changes Ticket',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_ticket_history')->insert($historyData);
@@ -5195,33 +5255,33 @@ class AdminController extends Controller
     // updateTicketStatus
     public function updateTicketStatus(Request $request)
     {
-        $ticket_id  = $request->ticket_id;
-        $admin_id   = $request->admin_id;
+        $ticket_id = $request->ticket_id;
+        $admin_id = $request->admin_id;
         $new_status = $request->task_status;
         if ($new_status === 'Close Ticket') {
-            $ticket_status         = 'Close Ticket';
+            $ticket_status = 'Close Ticket';
             $ticket_history_status = 'Ticket Closed';
         } else {
-            $ticket_status         = 'Open Ticket';
+            $ticket_status = 'Open Ticket';
             $ticket_history_status = 'Reopen';
         }
         // dd($new_status);
 
         $ticket = DB::table('tbl_ticket')->where('id', $ticket_id)->first();
-        $data   = [
+        $data = [
             // 'task_status' => $new_status,
             'task_status' => $ticket_status,
-            'admin_id'    => $admin_id,
+            'admin_id' => $admin_id,
         ];
 
-        if (! empty($data)) {
-            $update      = DB::table('tbl_ticket')->where('id', $ticket->id)->update($data);
+        if (!empty($data)) {
+            $update = DB::table('tbl_ticket')->where('id', $ticket->id)->update($data);
             $historyData = [
-                'admin_id'  => $admin_id,
+                'admin_id' => $admin_id,
                 'ticket_id' => $ticket_id,
-                'changes'   => $ticket_history_status,
+                'changes' => $ticket_history_status,
                 // 'changes'  => $new_status,
-                'date'      => $this->date,
+                'date' => $this->date,
             ];
             DB::table('tbl_ticket_history')->insert($historyData);
             return response()->json([
@@ -5239,21 +5299,21 @@ class AdminController extends Controller
     public function issuedTotalWarning(Request $request)
     {
         $warningTypeId = $request->warningtype_id;
-        $issuedTo = $request->issued_to; 
+        $issuedTo = $request->issued_to;
         // Fetch warnings with warning type
         $warnings = DB::table('tbl_warning')
-                    ->leftJoin('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-                    ->leftJoin('admin as assign_admin', 'tbl_warning.assign', '=', 'assign_admin.id') // Assign ke liye
-                    ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id') // Admin_id ke liye
-                    ->where('tbl_warning.warningtype_id', $warningTypeId)
-                    ->where('tbl_warning.assign', $issuedTo)
-                    ->select(
-                        'tbl_warning.*',
-                        'tbl_warning_type.warning_name',
-                        'assign_admin.name as assign_name',
-                        'issued_admin.name as issued_by_name'
-                    )
-                    ->get();
+            ->leftJoin('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
+            ->leftJoin('admin as assign_admin', 'tbl_warning.assign', '=', 'assign_admin.id') // Assign ke liye
+            ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id') // Admin_id ke liye
+            ->where('tbl_warning.warningtype_id', $warningTypeId)
+            ->where('tbl_warning.assign', $issuedTo)
+            ->select(
+                'tbl_warning.*',
+                'tbl_warning_type.warning_name',
+                'assign_admin.name as assign_name',
+                'issued_admin.name as issued_by_name'
+            )
+            ->get();
         // Group by warning_name
         $groupedWarnings = $warnings->groupBy('warning_name');
         // Format response
@@ -5278,7 +5338,7 @@ class AdminController extends Controller
             'warnings' => $formattedWarnings
         ]);
     }
-    
+
     ########################## Warning Here ##########################
     // warning Show Start Here
     public function warning000()
@@ -5307,10 +5367,16 @@ class AdminController extends Controller
 
     public function Deletewarning00(Request $request)
     {
-        if (! empty($request->id)) {
-            $delete_data = DB::table("tbl_warning")->where("id", $request->id)->delete();
-            return response()->json(['success' => 'success']);
-        } else {
+        try {
+            if (!empty($request->id)) {
+                $delete_data = DB::table("tbl_warning")->where("id", $request->id)->delete();
+                return response()->json(['success' => 'success']);
+            } else {
+                return response()->json(['success' => 'error', 'message' => 'ID is required']);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Delete warning error: ' . $e->getMessage());
+            return response()->json(['success' => 'error', 'message' => 'Database error']);
         }
     }
 
@@ -5344,16 +5410,16 @@ class AdminController extends Controller
 
     // public function warning()
     // {
-       
+
     //     $adminSession = collect(session()->get('admin_login'))->first();
-        
+
     //     if (!$adminSession) {
     //         return redirect('/login');
     //     }
-        
+
     //     $admin_id = $adminSession->id;
     //     $admin_role = strtolower($adminSession->role);
-        
+
     //     // Get My Warnings (for all roles)
     //     $myWarnings = DB::table('tbl_warning')
     //         ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
@@ -5367,16 +5433,16 @@ class AdminController extends Controller
     //         )
     //         ->where('tbl_warning.assign', $admin_id)
     //         ->get();
-            
+
     //     // Get warnings by type for the user
     //     $myWarningsByType = $myWarnings->groupBy('warningtype_id');
-        
+
     //     // Initialize empty data for different tabs
     //     $all_warnings = collect();
     //     $team_warnings = collect();
     //     $team_members = [];
     //     $warning_types = DB::table('tbl_warning_type')->get();
-        
+
     //     // Admin & HR get access to all warnings
     //     if ($admin_role === 'admin' || $admin_role === 'hr') {
     //         $all_warnings = DB::table('tbl_warning')
@@ -5391,7 +5457,7 @@ class AdminController extends Controller
     //             )
     //             ->orderBy('tbl_warning.id', 'desc')
     //             ->get();
-                
+
     //         // Get warning counts by type for dashboard
     //         $warningCounts = DB::table('tbl_warning')
     //             ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
@@ -5400,7 +5466,7 @@ class AdminController extends Controller
     //             ->orderBy('total', 'desc')
     //             ->limit(5)
     //             ->get();
-                
+
     //     } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
     //         // Get team members
     //         if ($admin_role === 'manager') {
@@ -5412,10 +5478,10 @@ class AdminController extends Controller
     //                 ->where('team_leader', $admin_id)
     //                 ->pluck('name', 'id');
     //         }
-            
+
     //         $team_members = $team_members_query->toArray();
     //         $team_member_ids = array_keys($team_members);
-            
+
     //         // Get warnings for team members
     //         if (!empty($team_member_ids)) {
     //             $team_warnings = DB::table('tbl_warning')
@@ -5433,7 +5499,7 @@ class AdminController extends Controller
     //                 ->get();
     //         }
     //     }
-        
+
     //     // Format the data to be returned to the view
     //     return view('Admin.pages.warning', [
     //         'admin_login' => $adminSession,
@@ -5445,49 +5511,49 @@ class AdminController extends Controller
     //         'warningCounts' => $warningCounts ?? collect(), // For admin dashboard
     //     ]);
     // }
-    
-    
+
+
 
     public function warning()
     {
         $adminSession = collect(session()->get('admin_login'))->first();
-        
+
         if (!$adminSession) {
             return redirect('/login');
         }
-        
+
         $admin_id = $adminSession->id;
         $admin_role = strtolower($adminSession->role);
-        
+
         // Get My Warnings (for non-admin roles)
         $myWarnings = collect();
         $myWarningsByType = collect();
-        
+
         if ($admin_role !== 'admin') {
             $myWarnings = DB::table('tbl_warning')
                 ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
                 ->leftJoin('admin', 'tbl_warning.assign', '=', 'admin.id')
                 ->leftJoin('admin as issued_admin', 'tbl_warning.admin_id', '=', 'issued_admin.id')
                 ->select(
-                    'tbl_warning.*', 
-                    'tbl_warning_type.warning_name', 
-                    'admin.name as assign_name', 
+                    'tbl_warning.*',
+                    'tbl_warning_type.warning_name',
+                    'admin.name as assign_name',
                     'issued_admin.name as issued_by_name'
                 )
                 ->where('tbl_warning.assign', $admin_id)
                 ->get();
-                
+
             // Get warnings by type for the user
             $myWarningsByType = $myWarnings->groupBy('warningtype_id');
         }
-        
+
         # // Initialize empty data for different tabs
         $all_warnings = collect();
         $team_warnings = collect();
         $team_members = [];
         $warning_types = DB::table('tbl_warning_type')->get();
         $warningCounts = collect();
-        
+
         # // Admin & HR get access to all warnings
         if ($admin_role === 'admin' || $admin_role === 'hr') {
             $all_warnings = DB::table('tbl_warning')
@@ -5502,7 +5568,7 @@ class AdminController extends Controller
                 )
                 ->orderBy('tbl_warning.id', 'desc')
                 ->get();
-                
+
             # // Get warning counts by type for dashboard
             $warningCounts = DB::table('tbl_warning')
                 ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
@@ -5510,23 +5576,23 @@ class AdminController extends Controller
                 ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
                 ->orderBy('total', 'desc')
                 ->get();
-                
+
         } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
             # // Get team members
             if ($admin_role === 'manager') {
                 $team_members_query = DB::table('admin')
                     ->where('manager', $admin_id)
                     ->pluck('name', 'id');
-            } else { 
+            } else {
                 # // TL
                 $team_members_query = DB::table('admin')
                     ->where('team_leader', $admin_id)
                     ->pluck('name', 'id');
             }
-            
+
             $team_members = $team_members_query->toArray();
             $team_member_ids = array_keys($team_members);
-            
+
             # // Get warnings for team members
             if (!empty($team_member_ids)) {
                 $team_warnings = DB::table('tbl_warning')
@@ -5542,13 +5608,13 @@ class AdminController extends Controller
                     ->whereIn('tbl_warning.assign', $team_member_ids)
                     ->orderBy('tbl_warning.id', 'desc')
                     ->get();
-                    
+
                 # // Get warning counts for dashboard - including both team and personal warnings
                 $warningCounts = DB::table('tbl_warning')
                     ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id')
-                    ->where(function($query) use ($team_member_ids, $admin_id) {
+                    ->where(function ($query) use ($team_member_ids, $admin_id) {
                         $query->whereIn('tbl_warning.assign', $team_member_ids)
-                             ->orWhere('tbl_warning.assign', $admin_id);
+                            ->orWhere('tbl_warning.assign', $admin_id);
                     })
                     ->select('tbl_warning_type.id', 'tbl_warning_type.warning_name', DB::raw('count(*) as total'))
                     ->groupBy('tbl_warning_type.id', 'tbl_warning_type.warning_name')
@@ -5565,13 +5631,13 @@ class AdminController extends Controller
                 ->orderBy('total', 'desc')
                 ->get();
         }
-        
+
         # // Get all employees for filter
         $all_employees = DB::table('admin')
             ->where('role', '!=', 'Admin')
             ->orderBy('name')
             ->get();
-            
+
         # // Format the data to be returned to the view
         return view('Admin.pages.warning', [
             'admin_login' => $adminSession,
@@ -5591,16 +5657,16 @@ class AdminController extends Controller
         $adminSession = collect(session()->get('admin_login'))->first();
         $admin_id = $adminSession->id;
         $admin_role = strtolower($adminSession->role);
-        
+
         $query = DB::table('tbl_warning')
             ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id');
-        
+
         if ($filter !== 'all' && is_array($filter)) {
             $query->whereIn('tbl_warning.assign', $filter);
         } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
             # // For managers/TLs, filter by team members and self by default
             $team_member_ids = [];
-            
+
             if ($admin_role === 'manager') {
                 $team_member_ids = DB::table('admin')
                     ->where('manager', $admin_id)
@@ -5613,51 +5679,51 @@ class AdminController extends Controller
                     ->pluck('id')
                     ->toArray();
             }
-            
-            $query->where(function($q) use ($team_member_ids, $admin_id) {
+
+            $query->where(function ($q) use ($team_member_ids, $admin_id) {
                 $q->whereIn('tbl_warning.assign', $team_member_ids)
-                  ->orWhere('tbl_warning.assign', $admin_id);
+                    ->orWhere('tbl_warning.assign', $admin_id);
             });
         }
-        
+
         # // Get total count
         $total = $query->count();
-        
+
         # // Get counts by warning type
         $typeCounts = DB::table('tbl_warning')
             ->join('tbl_warning_type', 'tbl_warning.warningtype_id', '=', 'tbl_warning_type.id');
-            
+
         if ($filter !== 'all' && is_array($filter)) {
             $typeCounts->whereIn('tbl_warning.assign', $filter);
         } elseif ($admin_role === 'manager' || $admin_role === 'tl') {
             # // For managers/TLs, filter by team members and self by default
             $team_member_ids = [];
-            
+
             if ($admin_role === 'manager') {
                 $team_member_ids = DB::table('admin')
                     ->where('manager', $admin_id)
                     ->pluck('id')
                     ->toArray();
-            } else { 
+            } else {
                 # // TL
                 $team_member_ids = DB::table('admin')
                     ->where('team_leader', $admin_id)
                     ->pluck('id')
                     ->toArray();
             }
-            
-            $typeCounts->where(function($q) use ($team_member_ids, $admin_id) {
+
+            $typeCounts->where(function ($q) use ($team_member_ids, $admin_id) {
                 $q->whereIn('tbl_warning.assign', $team_member_ids)
-                  ->orWhere('tbl_warning.assign', $admin_id);
+                    ->orWhere('tbl_warning.assign', $admin_id);
             });
         }
-        
+
         $typeCountsResult = $typeCounts
             ->select('tbl_warning_type.id', DB::raw('count(*) as total'))
             ->groupBy('tbl_warning_type.id')
             ->pluck('total', 'id')
             ->toArray();
-        
+
         return response()->json([
             'total' => $total,
             'type_counts' => $typeCountsResult
@@ -5665,7 +5731,7 @@ class AdminController extends Controller
     }
 
 
-    
+
 
 
 
@@ -5685,17 +5751,17 @@ class AdminController extends Controller
             'penalty' => $request->penalty,
             'message' => $request->message,
             'assign' => $request->assign,
-            'date'       => $this->date
+            'date' => $this->date
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $warning_id = DB::table('tbl_warning')->insertGetId($data);
             if ($warning_id) {
                 $historyData = [
                     'warning_id' => $warning_id,
-                    'admin_id'   => $request->admin_id,
-                    'changes'    => 'Warning Created',
-                    'date'       => $this->date,
+                    'admin_id' => $request->admin_id,
+                    'changes' => 'Warning Created',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_task_history
                 DB::table('tbl_warning_history')->insert($historyData);
@@ -5718,7 +5784,7 @@ class AdminController extends Controller
     public function getWarningHistory(Request $request)
     {
         $warningId = $request->warning_id;
-        $history   = DB::table('tbl_warning_history')
+        $history = DB::table('tbl_warning_history')
             ->where('warning_id', $warningId)
             ->leftJoin('admin', 'tbl_warning_history.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
             ->select('tbl_warning_history.*', 'admin.name as createdby')
@@ -5730,7 +5796,7 @@ class AdminController extends Controller
     // Warning Comment Here in Task Tab
     public function getWarningComments(Request $request)
     {
-        $warningId        = $request->warning_id;
+        $warningId = $request->warning_id;
         $warning_comments = DB::table('tbl_warning_comment')
             ->where('warning_id', $warningId)
             ->leftJoin('admin', 'tbl_warning_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
@@ -5746,10 +5812,10 @@ class AdminController extends Controller
         $warning = DB::table('tbl_warning')->where('id', $request->warning_id)->first();
         if ($warning) {
             $data = [
-                'admin_id'   => $request->admin_id,
+                'admin_id' => $request->admin_id,
                 'warning_id' => $request->warning_id,
-                'comment'    => $request->comment,
-                'date'       => $this->date,
+                'comment' => $request->comment,
+                'date' => $this->date,
             ];
             // Insert comment into tbl_warning_comment
             DB::table('tbl_warning_comment')->insert($data);
@@ -5764,21 +5830,21 @@ class AdminController extends Controller
     public function updateWarning(Request $request)
     {
         $data = [
-            'id'             => $request->warning_id,
-            'admin_id'       => $request->admin_id,
+            'id' => $request->warning_id,
+            'admin_id' => $request->admin_id,
             'warningtype_id' => $request->warningtype_id,
-            'message'        => $request->message,
-            'assign'         => implode(',', $request->assign),
+            'message' => $request->message,
+            'assign' => implode(',', $request->assign),
         ];
 
-        if (! empty($data)) {
+        if (!empty($data)) {
             $res = DB::table('tbl_warning')->where('id', $request->warning_id)->update($data);
             if ($res) {
                 $historyData = [
                     'warning_id' => $request->warning_id,
-                    'admin_id'   => $request->admin_id,
-                    'changes'    => 'Changes Warning',
-                    'date'       => $this->date,
+                    'admin_id' => $request->admin_id,
+                    'changes' => 'Changes Warning',
+                    'date' => $this->date,
                 ];
                 // Insert into tbl_warning_history
                 DB::table('tbl_warning_history')->insert($historyData);
@@ -5794,7 +5860,7 @@ class AdminController extends Controller
     // deleteWarning delete here
     public function deleteWarning(Request $request)
     {
-        if (! empty($request->id)) {
+        if (!empty($request->id)) {
             $delete_data = DB::table("tbl_warning")->where("id", $request->id)->delete();
             return response()->json(['success' => 'success']);
         } else {
@@ -5811,7 +5877,7 @@ class AdminController extends Controller
     // checkmobile for employee
     public function checkMobileEmployeeExistence(Request $request)
     {
-        $mobile           = $request->mobile;
+        $mobile = $request->mobile;
         $alternate_mobile = $request->alternate_mobile;
 
         $existingMobile = DB::table('admin')
@@ -5838,51 +5904,51 @@ class AdminController extends Controller
     {
         $path1 = "";
         if ($request->hasFile('image')) {
-            $file   = $request->file("image");
+            $file = $request->file("image");
             $uniqid = uniqid();
-            $name   = $uniqid . "." . $file->getClientOriginalExtension();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
             $request->image->move(public_path('storage/Admin/employee'), $name);
             $path1 = "https://rupiyamaker.m-bit.org.in/storage/Admin/employee/$name";
         }
 
         $data = [
-            'created_by'            => $request->created_by,
-            'department'            => $request->department,
-            'role'                  => $request->role,
-            'team'                  => $request->team,
-            'manager'               => $request->manager,
-            'team_leader'           => $request->team_leader,
-            'name'                  => $request->name,
-            'email'                 => $request->personal_email,
-            'password'              => '123456',
-            'mobile'                => $request->mobile,
-            'alternate_mobile'      => $request->alternate_mobile,
-            'gender'                => $request->gender,
-            'personal_email'        => $request->personal_email,
-            'official_email'        => $request->official_email,
-            'pan_no'                => $request->pan_no,
-            'aadhar_no'             => $request->aadhar_no,
-            'dob'                   => $request->dob,
-            'experience'            => $request->experience,
-            'experience_in_years'   => $request->experience_in_years,
-            'qualification'         => $request->qualification,
-            'permanent_address'     => $request->permanent_address,
-            'current_address'       => $request->current_address,
-            'emergency_name1'       => $request->emergency_name1,
-            'emergency_mobile1'     => $request->emergency_mobile1,
-            'emergency_relation1'   => $request->emergency_relation1,
-            'emergency_name2'       => $request->emergency_name2,
-            'emergency_mobile2'     => $request->emergency_mobile2,
-            'emergency_relation2'   => $request->emergency_relation2,
-            'employee_id'           => $request->employee_id,
-            'joining_date'          => $request->joining_date,
-            'salary'                => $request->salary,
+            'created_by' => $request->created_by,
+            'department' => $request->department,
+            'role' => $request->role,
+            'team' => $request->team,
+            'manager' => $request->manager,
+            'team_leader' => $request->team_leader,
+            'name' => $request->name,
+            'email' => $request->personal_email,
+            'password' => '123456',
+            'mobile' => $request->mobile,
+            'alternate_mobile' => $request->alternate_mobile,
+            'gender' => $request->gender,
+            'personal_email' => $request->personal_email,
+            'official_email' => $request->official_email,
+            'pan_no' => $request->pan_no,
+            'aadhar_no' => $request->aadhar_no,
+            'dob' => $request->dob,
+            'experience' => $request->experience,
+            'experience_in_years' => $request->experience_in_years,
+            'qualification' => $request->qualification,
+            'permanent_address' => $request->permanent_address,
+            'current_address' => $request->current_address,
+            'emergency_name1' => $request->emergency_name1,
+            'emergency_mobile1' => $request->emergency_mobile1,
+            'emergency_relation1' => $request->emergency_relation1,
+            'emergency_name2' => $request->emergency_name2,
+            'emergency_mobile2' => $request->emergency_mobile2,
+            'emergency_relation2' => $request->emergency_relation2,
+            'employee_id' => $request->employee_id,
+            'joining_date' => $request->joining_date,
+            'salary' => $request->salary,
             'monthly_salary_target' => $request->monthly_salary_target,
-            'salary_bank'           => $request->salary_bank,
-            'salary_account_no'     => $request->salary_account_no,
-            'ifsc_code'             => $request->ifsc_code,
-            'status'                => '1',
-            'image'                 => $path1
+            'salary_bank' => $request->salary_bank,
+            'salary_account_no' => $request->salary_account_no,
+            'ifsc_code' => $request->ifsc_code,
+            'status' => '1',
+            'image' => $path1
         ];
 
         if (!empty($data)) {
@@ -5892,7 +5958,7 @@ class AdminController extends Controller
             ]);
         }
     }
-    
+
     // select manager 
     public function getManagersByTeam(Request $request)
     {
@@ -5900,7 +5966,7 @@ class AdminController extends Controller
         $managers = DB::table('admin')
             ->select('id', 'name')
             ->where('team', $team)
-            ->where('role', 'Manager') 
+            ->where('role', 'Manager')
             ->get();
         return response()->json($managers);
     }
@@ -5910,11 +5976,11 @@ class AdminController extends Controller
     {
         $team = $request->team;
         $manager = $request->manager;
-    
+
         $teamLeaders = DB::table("admin")->where('team', $team)
-                            ->where('manager', $manager)
-                            ->where('role', 'TL')
-                            ->get();
+            ->where('manager', $manager)
+            ->where('role', 'TL')
+            ->get();
         return response()->json($teamLeaders);
     }
 
@@ -5929,56 +5995,56 @@ class AdminController extends Controller
     {
         $status = $request->status; // 1 for Active, 0 for Inactive
         $search = $request->search; // Search keyword
-    
+
         // Query Admin Data excluding role 'Admin'
         $query = DB::table('admin')
             ->where('status', $status)
             ->where('role', '!=', 'Admin'); // Exclude Admin role
-    
+
         // Apply search filter if search keyword exists
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%')
-                  ->orWhere('mobile', 'like', '%' . $search . '%')
-                  ->orWhere('employee_id', 'like', '%' . $search . '%');
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('mobile', 'like', '%' . $search . '%')
+                    ->orWhere('employee_id', 'like', '%' . $search . '%');
             });
         }
-    
+
         // Pagination
         $admins = $query->orderBy('id', 'desc')->paginate(2);
-    
+
         // Count Active & Inactive Users excluding Admin role
         $total_active = DB::table('admin')->where('status', 1)->where('role', '!=', 'Admin')->count();
         $total_inactive = DB::table('admin')->where('status', 0)->where('role', '!=', 'Admin')->count();
-    
+
         return response()->json([
-            'data'          => $admins->items(),
-            'current_page'  => $admins->currentPage(),
-            'last_page'     => $admins->lastPage(),
-            'per_page'      => $admins->perPage(),
-            'total'         => $admins->total(),
-            'total_active'  => $total_active,
-            'total_inactive'=> $total_inactive,
-            'success'       => 'success',
+            'data' => $admins->items(),
+            'current_page' => $admins->currentPage(),
+            'last_page' => $admins->lastPage(),
+            'per_page' => $admins->perPage(),
+            'total' => $admins->total(),
+            'total_active' => $total_active,
+            'total_inactive' => $total_inactive,
+            'success' => 'success',
         ]);
     }
 
 
     public function EmployeeProfile($id)
     {
-        $data['employee_profile'] = DB::table('admin')->where('id',$id)->first();  // employee profile details 
-         // Fetch lead status data for this admin
+        $data['employee_profile'] = DB::table('admin')->where('id', $id)->first();  // employee profile details 
+        // Fetch lead status data for this admin
         $data['lead_activity'] = DB::table('tbl_employee_status')->where('admin_id', $id)->get();
-        return view('Admin.pages.employee_profile',$data);
+        return view('Admin.pages.employee_profile', $data);
     }
-    
+
     // show data remar,activity,employee details
     public function showData1(Request $request)
     {
         $search = $request->search;
         $admin_id = $request->admin_id;
-    
+
         // Fetch employee remarks with admin name
         $remarks = DB::table('tbl_employee_remark')
             ->leftJoin('admin', 'tbl_employee_remark.admin_id', '=', 'admin.id')
@@ -5989,25 +6055,25 @@ class AdminController extends Controller
             })
             ->orderBy('tbl_employee_remark.id', 'asc')
             ->get();
-    
+
         // Fetch status updates from tbl_employee_status
         $statuses = DB::table('tbl_employee_status')
             ->where('admin_id', $admin_id)
             ->orderBy('id', 'asc')
             ->get();
-    
+
         return response()->json([
-            'res'      => 'success',
-            'remarks'  => $remarks,
+            'res' => 'success',
+            'remarks' => $remarks,
             'statuses' => $statuses,
         ]);
     }
-    
+
     public function showData(Request $request)
     {
         $search = $request->search;
         $admin_id = $request->admin_id;
-    
+
         // Fetch employee remarks with admin name
         $remarks = DB::table('tbl_employee_remark')
             ->leftJoin('admin', 'tbl_employee_remark.admin_id', '=', 'admin.id')
@@ -6018,52 +6084,52 @@ class AdminController extends Controller
             })
             ->orderBy('tbl_employee_remark.id', 'asc')
             ->get();
-    
+
         // Fetch status updates from tbl_employee_status
         $statuses = DB::table('tbl_employee_status')
             ->where('admin_id', $admin_id)
             ->orderBy('id', 'asc')
             ->get();
-    
+
         // Fetch full employee profile data from admin table
         $employee_profile = DB::table('admin')
             ->where('id', $admin_id)
             ->first(); // Fetch all columns for the given admin_id
-    
+
         return response()->json([
-            'res'      => 'success',
-            'remarks'  => $remarks,
+            'res' => 'success',
+            'remarks' => $remarks,
             'statuses' => $statuses,
-            'profile'  => $employee_profile,
+            'profile' => $employee_profile,
         ]);
     }
 
 
 
-    
+
     // Add Employee remark
     public function addEmployeeRemark(Request $request)
     {
         $data = [
             'admin_id' => $request->admin_id,
-            'remark'   => $request->remark,
-            'date'     => $this->date
+            'remark' => $request->remark,
+            'date' => $this->date
         ];
-    
+
         if (!empty($data)) {
             $res = DB::table('tbl_employee_remark')->insert($data);
             if ($res) {
                 DB::table('tbl_employee_status')->insert([
-                    'admin_id'    => $request->admin_id,
+                    'admin_id' => $request->admin_id,
                     'lead_status' => $request->remark,
-                    'date'        => $this->date
+                    'date' => $this->date
                 ]);
-    
+
                 // Fetch the latest data from tbl_employee_remark
                 $result = DB::table('tbl_employee_remark')->orderBy('id', 'desc')->get();
-    
+
                 return response()->json([
-                    'data'    => $result,
+                    'data' => $result,
                     'success' => 'success',
                 ]);
             }
@@ -6111,17 +6177,17 @@ class AdminController extends Controller
             ]);
         }
     }
-    
+
     // Update Employee 
     public function updateEmployee(Request $request)
     {
         // Fetch existing employee data
         $employeeData = DB::table('admin')->where('id', $request->id)->first();
-    
+
         // Handle Image Upload
         if ($request->hasFile('image')) {
             $existingImage = $employeeData->image;
-    
+
             // Remove old image if it exists
             if ($existingImage) {
                 $image_path = public_path("storage/Admin/employees/" . basename($existingImage));
@@ -6130,32 +6196,32 @@ class AdminController extends Controller
                 }
             }
             // Upload new image
-            $file      = $request->file('image');
+            $file = $request->file('image');
             $unique_id = uniqid();
-            $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+            $name = $unique_id . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/Admin/employees/'), $name);
             $path = "https://rupiyamaker.m-bit.org.in/storage/Admin/employees/$name";
         } else {
             $path = $employeeData->image;
         }
-    
+
         // Prepare data for update
         $data = [
-            'name'               => $request->name,
-            'mobile'             => $request->mobile,
-            'alternate_mobile'   => $request->alternate_mobile,
-            'gender'             => $request->gender,
-            'email'              => $request->email,
-            'official_email'     => $request->official_email,
-            'pan_no'             => $request->pan_no,
-            'aadhar_no'          => $request->aadhar_no,
-            'dob'                => $request->dob,
-            'experience'         => $request->experience,
-            'qualification'      => $request->qualification,
-            'permanent_address'  => $request->permanent_address,
-            'current_address'    => $request->current_address,
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'alternate_mobile' => $request->alternate_mobile,
+            'gender' => $request->gender,
+            'email' => $request->email,
+            'official_email' => $request->official_email,
+            'pan_no' => $request->pan_no,
+            'aadhar_no' => $request->aadhar_no,
+            'dob' => $request->dob,
+            'experience' => $request->experience,
+            'qualification' => $request->qualification,
+            'permanent_address' => $request->permanent_address,
+            'current_address' => $request->current_address,
         ];
-    
+
         if ($path !== "") {
             $data['image'] = $path;
         }
@@ -6170,11 +6236,11 @@ class AdminController extends Controller
             ]);
         }
     }
-    
+
     // Employee Update Attachment 
     public function EmployeeUpdateAttachment(Request $request)
     {
-        $imagedata   = DB::table('admin')->where('id', $request->admin_id)->first();
+        $imagedata = DB::table('admin')->where('id', $request->admin_id)->first();
         $imageFields = [
             'cibil_report_image',
             'passport_image',
@@ -6200,17 +6266,17 @@ class AdminController extends Controller
                 $existingFiles = [];
 
                 // If there are existing files in the database, fetch them
-                if ($imagedata && ! empty($imagedata->$field)) {
+                if ($imagedata && !empty($imagedata->$field)) {
                     $existingFiles = explode(',', $imagedata->$field); // Assuming files are stored in the DB as comma-separated
                 }
 
                 // Process each uploaded file
-                $files        = $request->file($field);
+                $files = $request->file($field);
                 $newFilePaths = [];
 
                 foreach ($files as $file) {
                     $unique_id = uniqid();
-                    $name      = $unique_id . '.' . $file->getClientOriginalExtension();
+                    $name = $unique_id . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path("storage/Admin/employees/$field/"), $name);
 
                     // Store the new file path
@@ -6233,16 +6299,16 @@ class AdminController extends Controller
 
         // Insert into tbl_lead_status after updating the attachment
         DB::table('tbl_employee_status')->insert([
-            'admin_id'    => $request->admin_id,
+            'admin_id' => $request->admin_id,
             'lead_status' => 'Change Attachment Section',
-            'date'        => $this->date,
+            'date' => $this->date,
         ]);
 
         return response()->json([
             'success' => 'success',
         ]);
     }
-    
+
     // Employee Attachments Show All Content
     public function EmployeeAttachmentShow(Request $request)
     {
@@ -6255,17 +6321,17 @@ class AdminController extends Controller
             return response()->json(['message' => 'No data found'], 404);
         }
     }
-    
+
     // Employee Attachments Single File Deleted 
     public function EmployeeDeleteAttachmentSingleFile(Request $request)
     {
-        if (! empty($request->admin_id) && ! empty($request->column_name) && ! empty($request->file_url)) {
+        if (!empty($request->admin_id) && !empty($request->column_name) && !empty($request->file_url)) {
             // Fetch the lead record
             $admins = DB::table("admin")
                 ->where("id", $request->admin_id)
                 ->first();
 
-            if (! $admins) {
+            if (!$admins) {
                 return response()->json(['success' => false, 'message' => 'Record not found.']);
             }
 
@@ -6301,7 +6367,7 @@ class AdminController extends Controller
     public function EmployeeDownloadZip($id)
     {
         $item = DB::table('admin')->where('id', $id)->first();
-        if (! $item) {
+        if (!$item) {
             return response()->json(['error' => 'Record not found'], 404);
         }
         $imageFields = [
@@ -6319,7 +6385,7 @@ class AdminController extends Controller
         ];
         $files = [];
         foreach ($imageFields as $field) {
-            if (! empty($item->$field)) {
+            if (!empty($item->$field)) {
                 $filePath = public_path(parse_url($item->$field, PHP_URL_PATH));
                 if (File::exists($filePath)) {
                     $files[$field] = $filePath;
@@ -6330,7 +6396,7 @@ class AdminController extends Controller
             return response()->json(['error' => 'No files found to download'], 404);
         }
         $passwordFilePath = null;
-        if (! empty($item->all_file_password)) {
+        if (!empty($item->all_file_password)) {
             $passwordFileName = 'all_file_password.txt';
             $passwordFilePath = public_path($passwordFileName);
             File::put($passwordFilePath, $item->all_file_password);
@@ -6339,7 +6405,7 @@ class AdminController extends Controller
         $zipFileName = $item->name . '-' . $item->mobile . '.zip';
 
         $zipPath = storage_path($zipFileName);
-        $zip     = new ZipArchive;
+        $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
             foreach ($files as $field => $filePath) {
                 $folderName = str_replace('_image', '', $field);
@@ -6378,15 +6444,15 @@ class AdminController extends Controller
         if ($status && $status !== 'all') {
             $query->where('status', $status);
         }
-        
+
         // Apply search filter if search keyword exists
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('status', 'like', '%' . $search . '%')
-                ->orWhere('leave_type', 'like', '%' . $search . '%')
-                ->orWhere('from_date', 'like', '%' . $search . '%')
-                ->orWhere('to_date', 'like', '%' . $search . '%')
-                ->orWhere('note', 'like', '%' . $search . '%');
+                    ->orWhere('leave_type', 'like', '%' . $search . '%')
+                    ->orWhere('from_date', 'like', '%' . $search . '%')
+                    ->orWhere('to_date', 'like', '%' . $search . '%')
+                    ->orWhere('note', 'like', '%' . $search . '%');
             });
         }
         // Get counts for stats
@@ -6397,18 +6463,18 @@ class AdminController extends Controller
         // Pagination
         $leaves = $query->orderBy('id', 'desc')->paginate(10);
         return response()->json([
-            'data'           => $leaves->items(),
-            'current_page'   => $leaves->currentPage(),
-            'last_page'      => $leaves->lastPage(),
-            'per_page'       => $leaves->perPage(),
-            'total'          => $leaves->total(),
-            'counts'         => [
-            'pending'    => $total_pending,
-            'approved'   => $total_approved,
-            'rejected'   => $total_rejected,
-            'all'        => $all_leave
+            'data' => $leaves->items(),
+            'current_page' => $leaves->currentPage(),
+            'last_page' => $leaves->lastPage(),
+            'per_page' => $leaves->perPage(),
+            'total' => $leaves->total(),
+            'counts' => [
+                'pending' => $total_pending,
+                'approved' => $total_approved,
+                'rejected' => $total_rejected,
+                'all' => $all_leave
             ],
-            'success'        => 'success',
+            'success' => 'success',
         ]);
     }
 
@@ -6416,23 +6482,23 @@ class AdminController extends Controller
     {
         // Get admin session
         $adminSession = collect(session()->get('admin_login'))->first();
-        
+
         if (!$adminSession) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        
+
         $admin_id = $adminSession->id;
         $admin_role = strtolower($adminSession->role);
-        
+
         $search = $request->search; // Search keyword
         $status = $request->status; // Get status from request
-        
+
         // Query Leave Data with admin names
         $query = DB::table('tbl_leave')
-        ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
-        ->leftJoin('admin as approver', 'tbl_leave.approved_by', '=', 'approver.id')
-        ->select('tbl_leave.*', 'admin.name as admin_name' ,  'admin.role as role', 'approver.name as approved_by');
-        
+            ->leftJoin('admin', 'tbl_leave.admin_id', '=', 'admin.id')
+            ->leftJoin('admin as approver', 'tbl_leave.approved_by', '=', 'approver.id')
+            ->select('tbl_leave.*', 'admin.name as admin_name', 'admin.role as role', 'approver.name as approved_by');
+
         // Apply role-based filtering
         if ($admin_role === 'admin' || $admin_role === 'hr') {
             // Admin & HR see all leave requests
@@ -6443,10 +6509,10 @@ class AdminController extends Controller
                 ->where('manager', $admin_id)
                 ->pluck('id')
                 ->toArray();
-                
-            $query->where(function($q) use ($team_member_ids, $admin_id) {
+
+            $query->where(function ($q) use ($team_member_ids, $admin_id) {
                 $q->whereIn('tbl_leave.admin_id', $team_member_ids)
-                ->orWhere('tbl_leave.admin_id', $admin_id);
+                    ->orWhere('tbl_leave.admin_id', $admin_id);
             });
         } elseif ($admin_role === 'tl') {
             // Team Leaders see their own leaves and leaves of team members they lead
@@ -6454,33 +6520,33 @@ class AdminController extends Controller
                 ->where('team_leader', $admin_id)
                 ->pluck('id')
                 ->toArray();
-                
-            $query->where(function($q) use ($team_member_ids, $admin_id) {
+
+            $query->where(function ($q) use ($team_member_ids, $admin_id) {
                 $q->whereIn('tbl_leave.admin_id', $team_member_ids)
-                ->orWhere('tbl_leave.admin_id', $admin_id);
+                    ->orWhere('tbl_leave.admin_id', $admin_id);
             });
         } else {
             // Agent or other roles only see their own leave requests
             $query->where('tbl_leave.admin_id', $admin_id);
         }
-        
+
         // Apply status filter if provided
         if ($status && $status !== 'all') {
             $query->where('tbl_leave.status', $status);
         }
-        
+
         // Apply search filter if search keyword exists
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('tbl_leave.status', 'like', '%' . $search . '%')
-                ->orWhere('tbl_leave.leave_type', 'like', '%' . $search . '%')
-                ->orWhere('tbl_leave.from_date', 'like', '%' . $search . '%')
-                ->orWhere('tbl_leave.to_date', 'like', '%' . $search . '%')
-                ->orWhere('tbl_leave.note', 'like', '%' . $search . '%')
-                ->orWhere('admin.name', 'like', '%' . $search . '%'); // Also search by admin name
+                    ->orWhere('tbl_leave.leave_type', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_leave.from_date', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_leave.to_date', 'like', '%' . $search . '%')
+                    ->orWhere('tbl_leave.note', 'like', '%' . $search . '%')
+                    ->orWhere('admin.name', 'like', '%' . $search . '%'); // Also search by admin name
             });
         }
-        
+
         // Get counts for stats based on role filters
         if ($admin_role === 'admin' || $admin_role === 'hr') {
             // For admin/HR, show counts of all leaves
@@ -6491,51 +6557,51 @@ class AdminController extends Controller
         } else {
             // For other roles, show counts of relevant leaves only
             $roleFilterQuery = DB::table('tbl_leave');
-            
+
             if ($admin_role === 'manager') {
                 $team_member_ids = DB::table('admin')
                     ->where('manager', $admin_id)
                     ->pluck('id')
                     ->toArray();
-                    
-                $roleFilterQuery->where(function($q) use ($team_member_ids, $admin_id) {
+
+                $roleFilterQuery->where(function ($q) use ($team_member_ids, $admin_id) {
                     $q->whereIn('admin_id', $team_member_ids)
-                    ->orWhere('admin_id', $admin_id);
+                        ->orWhere('admin_id', $admin_id);
                 });
             } elseif ($admin_role === 'tl') {
                 $team_member_ids = DB::table('admin')
                     ->where('team_leader', $admin_id)
                     ->pluck('id')
                     ->toArray();
-                    
-                $roleFilterQuery->where(function($q) use ($team_member_ids, $admin_id) {
+
+                $roleFilterQuery->where(function ($q) use ($team_member_ids, $admin_id) {
                     $q->whereIn('admin_id', $team_member_ids)
-                    ->orWhere('admin_id', $admin_id);
+                        ->orWhere('admin_id', $admin_id);
                 });
             } else {
                 $roleFilterQuery->where('admin_id', $admin_id);
             }
-            
+
             $all_leave = $roleFilterQuery->count();
             $total_pending = $roleFilterQuery->clone()->where('status', 'pending')->count();
             $total_approved = $roleFilterQuery->clone()->where('status', 'approved')->count();
             $total_rejected = $roleFilterQuery->clone()->where('status', 'rejected')->count();
         }
-        
+
         // Pagination
         $leaves = $query->orderBy('tbl_leave.id', 'desc')->paginate(10);
-        
+
         return response()->json([
-            'data'           => $leaves->items(),
-            'current_page'   => $leaves->currentPage(),
-            'last_page'      => $leaves->lastPage(),
-            'per_page'       => $leaves->perPage(),
-            'total'          => $leaves->total(),
-            'counts'         => [
-            'pending'    => $total_pending,
-            'approved'   => $total_approved,
-            'rejected'   => $total_rejected,
-            'all'        => $all_leave
+            'data' => $leaves->items(),
+            'current_page' => $leaves->currentPage(),
+            'last_page' => $leaves->lastPage(),
+            'per_page' => $leaves->perPage(),
+            'total' => $leaves->total(),
+            'counts' => [
+                'pending' => $total_pending,
+                'approved' => $total_approved,
+                'rejected' => $total_rejected,
+                'all' => $all_leave
             ],
             'success' => 'success',
         ]);
@@ -6552,38 +6618,37 @@ class AdminController extends Controller
             'to_date' => $request->to_date,
             'duration' => $request->duration,
             'note' => $request->note,
-            'date' => date('Y-m-d',strtotime($this->date)),
-            'time' => date('h:i A',strtotime($this->date)),
+            'date' => date('Y-m-d', strtotime($this->date)),
+            'time' => date('h:i A', strtotime($this->date)),
         ];
 
         if (!empty($data)) {
-                DB::table('tbl_leave')->insert($data);
-                return response()->json([
-                    'success' => 'success',
-                ]);
-            }
-         else {
+            DB::table('tbl_leave')->insert($data);
+            return response()->json([
+                'success' => 'success',
+            ]);
+        } else {
         }
     }
 
-    
+
 
     public function updateLeaveStatus(Request $request)
     {
         // Get admin session 
         $adminSession = collect(session()->get('admin_login'))->first();
-        
+
         $admin_id = $adminSession->id;
         $leave_id = $request->leave_id;
         $status = $request->status;
-        
+
         $updated = DB::table('tbl_leave')
             ->where('id', $leave_id)
             ->update([
                 'status' => $status,
                 'approved_by' => $admin_id
             ]);
-        
+
         if ($updated) {
             return response()->json([
                 'success' => 'success',
@@ -6596,14 +6661,14 @@ class AdminController extends Controller
     public function updateEmployeeLeave(Request $request)
     {
         $data = [
-            'id'   => $request->leave_id,
-            'leave_type'  => $request->leave_type,
-            'from_date'   => $request->from_date,
-            'to_date'   => $request->to_date,
+            'id' => $request->leave_id,
+            'leave_type' => $request->leave_type,
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
             'duration' => $request->duration,
             'note' => $request->note,
-            'date'      => date('Y-m-d', strtotime($request->date)),
-            'time'      => date('h:i A', strtotime($request->time))
+            'date' => date('Y-m-d', strtotime($request->date)),
+            'time' => date('h:i A', strtotime($request->time))
         ];
 
         if (!empty($data)) {
@@ -6620,7 +6685,7 @@ class AdminController extends Controller
     // Leave Comment Here in Task Tab
     public function getLeaveComments(Request $request)
     {
-        $leaveId   = $request->leave_id;
+        $leaveId = $request->leave_id;
         $comments = DB::table('tbl_leave_comment')
             ->where('leave_id', $leaveId)
             ->leftJoin('admin', 'tbl_leave_comment.admin_id', '=', 'admin.id') // Assuming 'admins' table exists
@@ -6637,17 +6702,17 @@ class AdminController extends Controller
         if ($task) {
             $data = [
                 'admin_id' => $request->admin_id,
-                'leave_id'  => $request->leave_id,
-                'comment'  => $request->comment,
-                'date'     => $this->date
+                'leave_id' => $request->leave_id,
+                'comment' => $request->comment,
+                'date' => $this->date
             ];
             // Insert comment into tbl_task_comment
             DB::table('tbl_leave_comment')->insert($data);
             // Insert into tbl_lead_status after adding the comment
             DB::table('tbl_employee_status')->insert([
-                'admin_id'    => $request->admin_id,
+                'admin_id' => $request->admin_id,
                 'lead_status' => 'Change Comment Added Section',
-                'date'        => $this->date,
+                'date' => $this->date,
             ]);
             return response()->json([
                 'success' => 'success',
