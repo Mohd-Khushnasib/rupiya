@@ -6,9 +6,9 @@
         $data = session('admin_login');
         $admin = $data->first();
         $role = $admin->role ?? '';
-        $totalLeads = DB::table('tbl_lead')->count();
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
+        $totalLeads = DB::table('tbl_lead')->count();
         $today = Carbon::now()->format('m/d/Y');
 
         // Attendance data fetch
@@ -17,23 +17,28 @@
             ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
             ->first();
 
-        // Default state - show punch-in, hide punch-out
-        $showPunchIn = true;
-        $showPunchOut = false;
-        $disablePunchIn = false;
+        // Default - both buttons disabled initially
+        $disablePunchIn = true;
         $disablePunchOut = true;
 
         if ($attendance) {
-            if ($attendance->punchin_status == 'true' && $attendance->punchout_status == 'true') {
-                // Both punched in and out - disable both buttons
-                $disablePunchIn = true;
-                $disablePunchOut = true;
-            } else if ($attendance->punchin_status == 'true') {
-                // Only punched in - enable punch-out, disable punch-in
-                $disablePunchIn = false;
-                $disablePunchOut = true;
-                $showPunchOut = true;
+            // Check punch-in status
+            if ($attendance->punchin_status == 'true') {
+                $disablePunchIn = true; // Disable punch-in button
+                
+                // Only enable punch-out if user hasn't punched out yet
+                if ($attendance->punchout_status != 'true') {
+                    $disablePunchOut = false; // Enable punch-out button
+                }
+            } else {
+                // Not punched in yet
+                $disablePunchIn = false; // Enable punch-in button
+                $disablePunchOut = true; // Disable punch-out button
             }
+        } else {
+            // No attendance record for today - enable punch-in only
+            $disablePunchIn = false;
+            $disablePunchOut = true;
         }
     } else {
         echo '<script>
@@ -99,7 +104,7 @@
 
 
               
-<li>
+            <li>
     <div class="dropdown">
         <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
             Time: Loading...
