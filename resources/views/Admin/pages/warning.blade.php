@@ -1063,8 +1063,6 @@ $(document).ready(function() {
         
         var id = $("#delete_id").val();
         var token = $('input[name="_token"]').val();
-        alert(id);
-        return;
         
         $.ajax({
             type: "POST",
@@ -1078,8 +1076,7 @@ $(document).ready(function() {
                 if (response.success == 'success') {
                     $("#deletemodal").modal("hide");
                     swal("Lead Deleted Successfully!", "", "success");
-                    
-                    // Remove the deleted row from the table
+                   
                     $('button[data-id="' + id + '"]').closest('tr').remove();
                 } else {
                     swal('Failed to delete lead', '', 'error');
