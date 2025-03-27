@@ -977,7 +977,7 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput1">Your punch in datetime</label>
-                                        <input type="text" value="{{ $attendance->punchin_datetime }}" class="form-control mt-3" placeholder="Punch In Date"
+                                        <input type="text" id="dateInput1" value="{{ $attendance->punchin_datetime }}" class="form-control mt-3" placeholder="Punch In Date"
                                             readonly="">
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
@@ -1016,10 +1016,7 @@
                     const context1 = canvas1.getContext("2d");
                     const capturedImageInput1 = document.getElementById("capturedImage1");
                     const capturedImageDisplay1 = document.getElementById("capturedImageDisplay1");
-                    const dateInput1 = document.getElementById("dateInput1");
-                    const timeInput1 = document.getElementById("timeInput1");
                     const dateInput2 = document.getElementById("dateInput2");
-                    const timeInput2 = document.getElementById("timeInput2");
                     let stream1;
 
                     if (openModalBtn1) {
@@ -1031,11 +1028,9 @@
                                 video1.srcObject = stream1;
                                 $("#myModal1").modal("show");
 
-                                // Set the current date and time in a single column
                                 const now = new Date();
-                                const dateTime = now.toLocaleString(); // Combine date and time
-                                dateInput1.value = dateTime; // Set the combined value
-                                dateInput2.value = dateTime; // Set the combined value
+                                const dateTime = now.toLocaleString();
+                                dateInput2.value = dateTime; 
                             } catch (err) {
                                 console.error("Camera access denied:", err);
                                 alert("Camera access is required to proceed.");
