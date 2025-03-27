@@ -1071,11 +1071,11 @@
                         success: function (data) {
                             if (data.success == 'success') {
                                 $("#deletemodal").modal("hide");
-                                $("#delete_form")[0].reset();
+                                // $("#delete_form")[0].reset();
                                 swal("Lead Delete Successfully! ", "", "success");
-                                setTimeout(function () {
-                                    window.location.reload();
-                                }, 1000);
+                                // setTimeout(function () {
+                                //     window.location.reload();
+                                // }, 1000);
                             } else {
                                 swal('Lead Not Added', '', 'error');
                             }
