@@ -5307,11 +5307,7 @@ class AdminController extends Controller
 
     public function Deletewarning(Request $request)
     {
-        if (! empty($request->id)) {
-            $delete_data = DB::table("tbl_warning")->where("id", $request->id)->delete();
-            return response()->json(['success' => 'success']);
-        } else {
-        }
+       dd();
     }
 
 
