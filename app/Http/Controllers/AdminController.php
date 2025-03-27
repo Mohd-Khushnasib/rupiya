@@ -6772,8 +6772,11 @@ class AdminController extends Controller
             $path2 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
         }
     
+        // Format directly in the query
+        
         // Get today's date in Y-m-d format for comparison
         $today = $this->today_date;
+        
         DB::table('tbl_attendance')
             ->where('admin_id', $request->admin_id)
             ->where('punchin_status', 'true')
