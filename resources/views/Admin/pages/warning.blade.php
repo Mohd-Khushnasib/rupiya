@@ -1063,6 +1063,8 @@ $(document).ready(function() {
         
         var id = $("#delete_id").val();
         var token = $('input[name="_token"]').val();
+        alert(id);
+        return;
         
         $.ajax({
             type: "POST",
