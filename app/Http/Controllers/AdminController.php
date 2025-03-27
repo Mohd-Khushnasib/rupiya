@@ -6758,36 +6758,6 @@ class AdminController extends Controller
         ]);
     }
 
-    // Punchout here 
-    public function addAttendance(Request $request)
-    {
-        $path1 = ""; // Default empty path for punch-in image
-    
-        if ($request->hasFile('punchin_img')) {
-            $file = $request->file("punchin_img");
-            $uniqid = uniqid();
-            $name = $uniqid . "." . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/Admin/attendance/'), $name);
-            $path1 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
-        }
-    
-        $data = [
-            'admin_id' => $request->admin_id,
-            'punchin_datetime' => $request->punchin_datetime,
-            'punchin_note' => $request->punchin_note,
-            'punchin_status' => 'true',
-            'punchout_status' => 'false',
-            'attendance_status' => '0.5',
-            'punchin_img' => $path1, // Store image URL in punchin_img
-            'datetime' => $this->date
-        ];
-        
-        DB::table('tbl_attendance')->insert($data);
-        return response()->json([
-            'success' => 'success',
-        ]);
-    }
-    
     // New function to update punch-out information
     public function updatePunchOutAttendance(Request $request)
     {
