@@ -5,7 +5,7 @@
             date_default_timezone_set('Asia/Kolkata');
             $currentMonthYear = date('F Y');
 
-            $today = date('n/j/Y'); 
+            $today = date('n/j/Y');
             $attendance = DB::table('tbl_attendance')
                 ->where('admin_id', $adminlogin->id)
                 ->whereRaw("DATE_FORMAT(STR_TO_DATE(punchin_datetime, '%c/%e/%Y, %h:%i:%s %p'), '%c/%e/%Y') = ?", [$today])
@@ -741,10 +741,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                            <label for="timeInput">Your punch in time</label>
-                                                            <input type="text" id="timeInput" class="form-control mt-3"
-                                                                placeholder="Current Time" readonly="">
-                                                        </div> -->
+                                                                        <label for="timeInput">Your punch in time</label>
+                                                                        <input type="text" id="timeInput" class="form-control mt-3"
+                                                                            placeholder="Current Time" readonly="">
+                                                                    </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -977,8 +977,8 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput1">Your punch in datetime</label>
-                                        <input type="text" id="dateInput1" value="{{ $attendance->punchin_datetime }}" class="form-control mt-3" placeholder="Punch In Date"
-                                            readonly="">
+                                        <input type="text" id="dateInput1" value="{{ $attendance->punchin_datetime }}"
+                                            class="form-control mt-3" placeholder="Punch In Date" readonly="">
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput2">Your punch out datetime</label>
@@ -1008,7 +1008,6 @@
             <!-- punch out modal open -->
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    const openModalBtn1 = document.getElementById("openModalBtn1");
                     const video1 = document.getElementById("camera1");
                     const captureBtn1 = document.getElementById("captureBtn1");
                     const captureAgainBtn1 = document.getElementById("captureAgainBtn1");
@@ -1019,18 +1018,19 @@
                     const dateInput2 = document.getElementById("dateInput2");
                     let stream1;
 
-                    if (openModalBtn1) {
-                        openModalBtn1.addEventListener("click", async () => {
+                    // Ensure punch-out datetime is always updated when the modal is shown
+                    $("#myModal1").on("show.bs.modal", function () {
+                        const now = new Date();
+                        const dateTime = now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+                        dateInput2.value = dateTime;
+                    });
+
+                    if (document.getElementById("openModalBtn1")) {
+                        document.getElementById("openModalBtn1").addEventListener("click", async () => {
                             try {
-                                stream1 = await navigator.mediaDevices.getUserMedia({
-                                    video: true
-                                });
+                                stream1 = await navigator.mediaDevices.getUserMedia({ video: true });
                                 video1.srcObject = stream1;
                                 $("#myModal1").modal("show");
-
-                                const now = new Date();
-                                const dateTime = now.toLocaleString();
-                                dateInput2.value = dateTime; 
                             } catch (err) {
                                 console.error("Camera access denied:", err);
                                 alert("Camera access is required to proceed.");
@@ -1041,26 +1041,23 @@
                     captureBtn1.addEventListener("click", () => {
                         context1.drawImage(video1, 0, 0, canvas1.width, canvas1.height);
                         canvas1.toBlob((blob) => {
-                            const file = new File([blob], "captured-image.png", {
-                                type: "image/png",
-                            });
+                            const file = new File([blob], "captured-image.png", { type: "image/png" });
 
                             const dataTransfer1 = new DataTransfer();
                             dataTransfer1.items.add(file);
-
                             capturedImageInput1.files = dataTransfer1.files;
 
-                            // Display the captured image in the img tag
+                            // Display captured image
                             const imageURL = URL.createObjectURL(file);
                             capturedImageDisplay1.src = imageURL;
                             capturedImageDisplay1.style.display = "block";
 
-                            // Hide the camera and show the capture again button
+                            // Hide video and show "capture again" button
                             video1.style.display = "none";
                             captureBtn1.style.display = "none";
                             captureAgainBtn1.style.display = "block";
 
-                            // Disable the camera after capture
+                            // Stop the camera
                             if (stream1) {
                                 stream1.getTracks().forEach((track) => track.stop());
                                 stream1 = null;
@@ -1069,20 +1066,15 @@
                     });
 
                     captureAgainBtn1.addEventListener("click", async () => {
-                        // Remove the captured image
                         capturedImageDisplay1.src = "";
                         capturedImageDisplay1.style.display = "none";
 
-                        // Show the camera and capture button again
                         video1.style.display = "block";
                         captureBtn1.style.display = "block";
                         captureAgainBtn1.style.display = "none";
 
-                        // Reopen the camera
                         try {
-                            stream1 = await navigator.mediaDevices.getUserMedia({
-                                video: true
-                            });
+                            stream1 = await navigator.mediaDevices.getUserMedia({ video: true });
                             video1.srcObject = stream1;
                         } catch (err) {
                             console.error("Camera access denied:", err);
@@ -1104,8 +1096,6 @@
                 $("#myModal1").on("show.bs.modal", function () {
                     var currentDateTime = new Date();
                     var formattedDateTime = currentDateTime.toLocaleString();
-
-                    // Set the formatted date-time in the input field
                     $(this).find('input[type="text"]').val(formattedDateTime);
                 });
 
@@ -1193,12 +1183,12 @@
                             <div class="ak_container" style="margin-top: 20px;">
                                 <h4 class="ak_heading">Your Working Hour</h4>
                                 <!-- <div id="ak_inputContainer">
-                                                    </div>
-                                                    <button id="ak_plusBtn">+ Add Work History</button>
-                                                    <div class="ak_total_box">
-                                                        Total Working Hours: <span id="ak_totalHours">0</span>
-                                                    </div>
-                                                    <div id="ak_errorMessage" class="ak_error"></div> -->
+                                                                </div>
+                                                                <button id="ak_plusBtn">+ Add Work History</button>
+                                                                <div class="ak_total_box">
+                                                                    Total Working Hours: <span id="ak_totalHours">0</span>
+                                                                </div>
+                                                                <div id="ak_errorMessage" class="ak_error"></div> -->
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
@@ -1259,10 +1249,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                                        color: green !important;
-                                        margin-top: 15px;
-                                        font-weight: bold;
-                                      ">1.
+                                                    color: green !important;
+                                                    margin-top: 15px;
+                                                    font-weight: bold;
+                                                  ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1303,10 +1293,10 @@
 
 
             <!--
-                                -----------------------------------------------------------------------------------------------------------
-                                add multiple boxes for add your work time
-                                -----------------------------------------------------------------------------------------------------------
-                                -->
+                                            -----------------------------------------------------------------------------------------------------------
+                                            add multiple boxes for add your work time
+                                            -----------------------------------------------------------------------------------------------------------
+                                            -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1338,10 +1328,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                    <input type="text" placeholder="Work description">
-                                    <input type="number" placeholder="Hours" min="0">
-                                    <button class="ak_minus">-</button>
-                                `;
+                                                <input type="text" placeholder="Work description">
+                                                <input type="number" placeholder="Hours" min="0">
+                                                <button class="ak_minus">-</button>
+                                            `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1391,10 +1381,10 @@
             </script>
 
             <!--
-                                -----------------------------------------------------------------------------------------------------------
-                                Attendance Details Modal
-                                -----------------------------------------------------------------------------------------------------------
-                                -->
+                                            -----------------------------------------------------------------------------------------------------------
+                                            Attendance Details Modal
+                                            -----------------------------------------------------------------------------------------------------------
+                                            -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1447,14 +1437,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                <label for="">Change Attendance </label>
-                                                                <select name="" id="">
-                                                                    <option value="1">Full Day (1)</option>
-                                                                    <option value="0.5">Half Day (0.5)</option>
-                                                                    <option value="0">Leave (0)</option>
-                                                                    <option value="-1">Leave Not Approved (-1)</option>
-                                                                </select>
-                                                            </div> -->
+                                                                            <label for="">Change Attendance </label>
+                                                                            <select name="" id="">
+                                                                                <option value="1">Full Day (1)</option>
+                                                                                <option value="0.5">Half Day (0.5)</option>
+                                                                                <option value="0">Leave (0)</option>
+                                                                                <option value="-1">Leave Not Approved (-1)</option>
+                                                                            </select>
+                                                                        </div> -->
                                     </div>
                                 </div>
 
