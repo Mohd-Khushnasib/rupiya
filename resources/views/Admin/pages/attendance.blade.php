@@ -743,7 +743,7 @@
                             <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info add_btn" id="submitBtn">
+                            <button type="button" class="btn btn-info add_btn">
                                 Submit
                             </button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">
