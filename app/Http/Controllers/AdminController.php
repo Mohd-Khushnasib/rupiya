@@ -6789,10 +6789,9 @@ class AdminController extends Controller
     }
     
     // New function to update punch-out information
-    public function updatePunchOut(Request $request)
+    public function updatePunchOutAttendance(Request $request)
     {
-        $path2 = ""; // Default empty path for punch-out image
-    
+        $path2 = ""; 
         if ($request->hasFile('punchout_img')) {
             $file = $request->file("punchout_img");
             $uniqid = uniqid();
