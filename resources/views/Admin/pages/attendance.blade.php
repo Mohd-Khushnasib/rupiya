@@ -652,13 +652,16 @@
                             </button>
                             <h4 class="modal-title" style="color: black;">Punch In</h4>
                         </div>
+                        <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                            @csrf
+                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
                         <div class="modal-body">
                             <video id="camera" width="100%" autoplay=""></video>
                             <canvas id="snapshot" style="display: none" width="640" height="480"></canvas>
 
                             <!-- Input Field and Capture Button -->
                             <div class="form-group">
-                                <input type="file" style="display: none" id="capturedImage" class="form-control"
+                                <input type="file" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
                                     accept="image/png">
                             </div>
                             <button type="button" class="btn btn-success" id="captureBtn">
@@ -689,13 +692,14 @@
                             <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info" id="submitBtn">
+                            <button type="button" class="btn btn-info add_btn" id="submitBtn">
                                 Submit
                             </button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">
                                 Close
                             </button>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -726,9 +730,8 @@
                         const now = new Date();
                         const date = now.toLocaleDateString();
                         const time = now.toLocaleTimeString();
-                        // dateInput.value = date;
-                        // timeInput.value = time;
-                        const dateInput = date + "." + time;
+                        dateInput.value = date;
+                        timeInput.value = time;
                     } catch (err) {
                         console.error("Camera access denied:", err);
                         alert("Camera access is required to proceed.");
@@ -893,64 +896,66 @@
                             </button>
                             <h4 class="modal-title" style="color: black;">Punch Out</h4>
                         </div>
-                        <div class="modal-body">
-                            <video id="camera1" width="100%" autoplay=""></video>
-                            <canvas id="snapshot1" style="display: none" width="640" height="480"></canvas>
+                        
 
-                            <div class="form-group">
-                                <input type="file" id="capturedImage1" style="display: none" class="form-control"
-                                    accept="image/png">
+                            <div class="modal-body">
+                                <video id="camera1" width="100%" autoplay=""></video>
+                                <canvas id="snapshot1" style="display: none" width="640" height="480"></canvas>
+
+                                <div class="form-group">
+                                    <input type="file" id="capturedImage1" style="display: none" class="form-control"
+                                        accept="image/png">
+                                </div>
+                                <button type="button" class="btn btn-success" id="captureBtn1">
+                                    Capture Image
+                                </button>
+
+                                <!-- Image tag to display the captured image -->
+                                <img id="capturedImageDisplay1" style="display: none; width: 100%; margin-top: 15px;"
+                                    alt="Captured Image">
+
+                                <!-- Button to capture again -->
+                                <button type="button" class="btn btn-warning" id="captureAgainBtn1"
+                                    style="display: none; margin-top: 15px;">
+                                    Capture Again
+                                </button>
+
+                                <!-- Input fields for date and time -->
+                                <div style="display: flex; justify-content: space-between">
+                                    <div style="margin-top: 20px; width: 45%">
+                                        <label for="dateInput1">Your punch in date</label>
+                                        <input type="text" id="dateInput1" class="form-control mt-3"
+                                            placeholder="Punch In Date" readonly="">
+                                    </div>
+                                    <div style="margin-top: 20px; width: 45%">
+                                        <label for="timeInput1">Your punch in time</label>
+                                        <input type="text" id="timeInput1" class="form-control mt-3"
+                                            placeholder="Punch In Time" readonly="">
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between">
+                                    <div style="margin-top: 20px; width: 45%">
+                                        <label for="dateInput2">Your punch out date</label>
+                                        <input type="text" id="dateInput2" class="form-control mt-3"
+                                            placeholder="Punch Out Date" readonly="">
+                                    </div>
+                                    <div style="margin-top: 20px; width: 45%">
+                                        <label for="timeInput2">Your punch out time</label>
+                                        <input type="text" id="timeInput2" class="form-control mt-3"
+                                            placeholder="Punch Out Time" readonly="">
+                                    </div>
+                                </div>
+
+                                <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
                             </div>
-                            <button type="button" class="btn btn-success" id="captureBtn1">
-                                Capture Image
-                            </button>
-
-                            <!-- Image tag to display the captured image -->
-                            <img id="capturedImageDisplay1" style="display: none; width: 100%; margin-top: 15px;"
-                                alt="Captured Image">
-
-                            <!-- Button to capture again -->
-                            <button type="button" class="btn btn-warning" id="captureAgainBtn1"
-                                style="display: none; margin-top: 15px;">
-                                Capture Again
-                            </button>
-
-                            <!-- Input fields for date and time -->
-                            <div style="display: flex; justify-content: space-between">
-                                <div style="margin-top: 20px; width: 45%">
-                                    <label for="dateInput1">Your punch in date</label>
-                                    <input type="text" id="dateInput1" class="form-control mt-3"
-                                        placeholder="Punch In Date" readonly="">
-                                </div>
-                                <div style="margin-top: 20px; width: 45%">
-                                    <label for="timeInput1">Your punch in time</label>
-                                    <input type="text" id="timeInput1" class="form-control mt-3"
-                                        placeholder="Punch In Time" readonly="">
-                                </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-info" id="submitBtn1">
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            <div style="display: flex; justify-content: space-between">
-                                <div style="margin-top: 20px; width: 45%">
-                                    <label for="dateInput2">Your punch out date</label>
-                                    <input type="text" id="dateInput2" class="form-control mt-3"
-                                        placeholder="Punch Out Date" readonly="">
-                                </div>
-                                <div style="margin-top: 20px; width: 45%">
-                                    <label for="timeInput2">Your punch out time</label>
-                                    <input type="text" id="timeInput2" class="form-control mt-3"
-                                        placeholder="Punch Out Time" readonly="">
-                                </div>
-                            </div>
-
-                            <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-info" id="submitBtn1">
-                                Submit
-                            </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
