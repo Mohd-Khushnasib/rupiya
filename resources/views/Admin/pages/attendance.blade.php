@@ -508,9 +508,9 @@
 
             <script>
                 $(document).ready(function () {
+                    // Punchin Here 
                     $("#add_form").on("submit", function (e) {
                         e.preventDefault();
-
                         $(".add_btn").prop('disabled', true);
                         var admin_id = $(".admin_id").val();
                         var formdata = new FormData(this);
@@ -547,8 +547,61 @@
                             }
                         });
                     });
+
+                    // Punchout Here 
+                    $("#punchout_form").on("submit", function (e) {
+                        e.preventDefault();
+                        $(".punchout_btn").prop('disabled', true);
+                        var admin_id = $(".admin_id").val();
+                        var formdata = new FormData(this);
+                        formdata.append('admin_id', admin_id);
+
+                        // AJAX request
+                        $.ajax({
+                            type: "POST",
+                            url: "{{url('/punchout_attendance')}}", // Make sure this URL is correct
+                            data: formdata,
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            dataType: "json",
+                            success: function (data) {
+                                // Re-enable the button
+                                $(".punchout_btn").prop("disabled", false);
+                                if (data.success == 'success') {
+                                    document.getElementById("punchout_form").reset();
+                                    $("#myModal1").modal("hide");
+                                    swal("Punchout Submitted Successfully", "", "success");
+                                    // view_enquiry_api(currentPage);
+                                } else if (data.success == 'error') {
+                                    $(".punchout_btn").prop('disabled', false);
+                                    swal("Error", data.message, "error");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                $(".punchout_btn").prop("disabled", false);
+                                swal("Error", "An error occurred while submitting the form. Please try again.", "error");
+                                console.error("AJAX Error:", xhr.responseText);
+                            }
+                        });
+                    });
+
+                    // end here 
                 });
             </script>
+            <!-- Ajax Js End Here -->
+
+
+
+
+
+
+
+
+
+
+
+
             <!-- live time -->
             <script>
                 window.onload = function () {
@@ -947,10 +1000,8 @@
                             <h4 class="modal-title" style="color: black;">Punch Out</h4>
                         </div>
 
-                        <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                        <form id="punchout_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                             @csrf
-                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}"
-                                readonly>
                             <div class="modal-body">
                                 <video id="camera1" width="100%" autoplay=""></video>
                                 <canvas id="snapshot1" style="display: none" width="640" height="480"></canvas>
@@ -982,7 +1033,7 @@
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput2">Your punch out datetime</label>
-                                        <input type="text" id="dateInput2" class="form-control mt-3" placeholder="Punch Out Date"
+                                        <input type="text" name="punchout_datetime" id="dateInput2" class="form-control mt-3" placeholder="Punch Out Date"
                                             readonly="">
                                     </div>
 

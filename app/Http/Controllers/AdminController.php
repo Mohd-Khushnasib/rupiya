@@ -6758,6 +6758,70 @@ class AdminController extends Controller
         ]);
     }
 
+    // Punchout here 
+    public function addAttendance(Request $request)
+    {
+        $path1 = ""; // Default empty path for punch-in image
+    
+        if ($request->hasFile('punchin_img')) {
+            $file = $request->file("punchin_img");
+            $uniqid = uniqid();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/Admin/attendance/'), $name);
+            $path1 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
+        }
+    
+        $data = [
+            'admin_id' => $request->admin_id,
+            'punchin_datetime' => $request->punchin_datetime,
+            'punchin_note' => $request->punchin_note,
+            'punchin_status' => 'true',
+            'punchout_status' => 'false',
+            'attendance_status' => '0.5',
+            'punchin_img' => $path1, // Store image URL in punchin_img
+            'datetime' => $this->date
+        ];
+        
+        DB::table('tbl_attendance')->insert($data);
+        return response()->json([
+            'success' => 'success',
+        ]);
+    }
+    
+    // New function to update punch-out information
+    public function updatePunchOut(Request $request)
+    {
+        $path2 = ""; // Default empty path for punch-out image
+    
+        if ($request->hasFile('punchout_img')) {
+            $file = $request->file("punchout_img");
+            $uniqid = uniqid();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/Admin/attendance/'), $name);
+            $path2 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
+        }
+    
+        // Get today's date in Y-m-d format for comparison
+        $today = date('Y-m-d');
+        
+        // Update the attendance record where admin_id matches, has punched in but not out, and is from today
+        DB::table('tbl_attendance')
+            ->where('admin_id', $request->admin_id)
+            ->where('punchin_status', 'true')
+            ->where('punchout_status', 'false')
+            ->whereDate('datetime', $today) // Check that the record is from today
+            ->update([
+                'punchout_datetime' => $request->punchout_datetime,
+                'punchout_note' => $request->punchout_note,
+                'punchout_status' => 'true',
+                'attendance_status' => '1', // Update to full attendance
+                'punchout_img' => $path2 // Store image URL in punchout_img
+            ]);
+    
+        return response()->json([
+            'success' => 'success',
+        ]);
+    }
 
 
     // end here
