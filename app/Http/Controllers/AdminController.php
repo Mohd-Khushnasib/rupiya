@@ -6731,6 +6731,16 @@ class AdminController extends Controller
     // add attendance 
     public function addAttendance(Request $request)
     {
+        $path1 = ""; // Default empty path
+
+        if ($request->hasFile('punchin_img')) {
+            $file = $request->file("punchin_img");
+            $uniqid = uniqid();
+            $name = $uniqid . "." . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/Admin/attendance/'), $name);
+            $path1 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
+        }
+
         $data = [
             'admin_id' => $request->admin_id,
             'punchin_datetime' => $request->punchin_datetime,
@@ -6738,6 +6748,7 @@ class AdminController extends Controller
             'punchin_status' => 'true',
             'punchout_status' => 'false',
             'attendance_status' => '0.5',
+            'punchin_img' => $path1, // Store image URL in punchin_img
             'datetime' => $this->date
         ];
         
@@ -6746,6 +6757,7 @@ class AdminController extends Controller
             'success' => 'success',
         ]);
     }
+
 
 
     // end here
