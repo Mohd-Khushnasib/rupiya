@@ -493,6 +493,7 @@
 <script>
     $(document).ready(function() {
         $("#add_form").on("submit", function(e) {
+            alert("ok");
             e.preventDefault();
             
             $(".add_btn").prop('disabled', true);
