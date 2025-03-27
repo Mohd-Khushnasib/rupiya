@@ -6795,7 +6795,7 @@ class AdminController extends Controller
     // Puncout Commitment
     public function punchoutComitment()
     {
-        $data['products'] = DB::table('tbl_product')->orderBy('id', 'desc')->get();
+        $data['products'] = DB::table('tbl_punchoutcommitment')->orderBy('id', 'desc')->get();
         return view('Admin.pages.commitment', $data);
     }
 
