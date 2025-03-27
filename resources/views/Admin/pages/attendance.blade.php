@@ -876,10 +876,10 @@
 
 
             <!--
-    -----------------------------------------------------------------------------------------------------------
-    punch out modal
-    -----------------------------------------------------------------------------------------------------------
-    -->
+        -----------------------------------------------------------------------------------------------------------
+        punch out modal
+        -----------------------------------------------------------------------------------------------------------
+        -->
             <!-- punch out Modal -->
             <!-- Punch Out Modal -->
             <!-- Punch Out Modal -->
@@ -1075,62 +1075,62 @@
             <!-- After Punch out modal -->
             <!-- id="myModal2" class="modal fade" role="dialog" -->
             <!-- <div id="myModal2">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        &times;
-                    </button>
-                    <h4 class="modal-title text-center" style="color: black; font-weight: bold">
-                        Commitment vs Achievement
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <div class="ak_container">
-                        <h2 class="ak_heading">Your Working Hour</h2>
-                        <div id="ak_inputContainer">
-                        </div>
-                        <button id="ak_plusBtn">+ Add Work History</button>
-                        <div class="ak_total_box">
-                            Total Working Hours: <span id="ak_totalHours">0</span>
-                        </div>
-                        <div id="ak_errorMessage" class="ak_error"></div>
-                    </div>
-                    <div style="margin-top: 20px">
-                        <p style="font-weight: bold; margin: 0px;">
-                            Write Comment Here
-                        </p>
-                        <div id="commentBox" class="comment-box">
-                            <textarea placeholder="Write a comment..." style="width: 100%; height: 100px;"></textarea>
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px">
-                        <h4 class="text-center" style="color: black; font-weight: bold">
-                            all todo task show here
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title text-center" style="color: black; font-weight: bold">
+                            Commitment vs Achievement
                         </h4>
-                        <div style="margin-top: 15px">
-                            <input type="checkbox" name="" id="">
-                            <span style="font-weight: bold">1. All Workers name show here</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="ak_container">
+                            <h2 class="ak_heading">Your Working Hour</h2>
+                            <div id="ak_inputContainer">
+                            </div>
+                            <button id="ak_plusBtn">+ Add Work History</button>
+                            <div class="ak_total_box">
+                                Total Working Hours: <span id="ak_totalHours">0</span>
+                            </div>
+                            <div id="ak_errorMessage" class="ak_error"></div>
                         </div>
-                        <div style="margin-top: 13px">
-                            <input type="checkbox" checked="" name="" id="">
-                            <span style="
+                        <div style="margin-top: 20px">
+                            <p style="font-weight: bold; margin: 0px;">
+                                Write Comment Here
+                            </p>
+                            <div id="commentBox" class="comment-box">
+                                <textarea placeholder="Write a comment..." style="width: 100%; height: 100px;"></textarea>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px">
+                            <h4 class="text-center" style="color: black; font-weight: bold">
+                                all todo task show here
+                            </h4>
+                            <div style="margin-top: 15px">
+                                <input type="checkbox" name="" id="">
+                                <span style="font-weight: bold">1. All Workers name show here</span>
+                            </div>
+                            <div style="margin-top: 13px">
+                                <input type="checkbox" checked="" name="" id="">
+                                <span style="
                 color: green !important;
                 margin-top: 15px;
                 font-weight: bold;
               ">1. <del>All Workers name show here</del></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        Close
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div> -->
+        </div> -->
 
             <!-- After punch out modal -->
             <style>
@@ -1209,12 +1209,12 @@
                             <div class="ak_container" style="margin-top: 20px;">
                                 <h4 class="ak_heading">Your Working Hour</h4>
                                 <!-- <div id="ak_inputContainer">
-                        </div>
-                        <button id="ak_plusBtn">+ Add Work History</button>
-                        <div class="ak_total_box">
-                            Total Working Hours: <span id="ak_totalHours">0</span>
-                        </div>
-                        <div id="ak_errorMessage" class="ak_error"></div> -->
+                            </div>
+                            <button id="ak_plusBtn">+ Add Work History</button>
+                            <div class="ak_total_box">
+                                Total Working Hours: <span id="ak_totalHours">0</span>
+                            </div>
+                            <div id="ak_errorMessage" class="ak_error"></div> -->
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
@@ -1320,10 +1320,10 @@
 
 
             <!--
-    -----------------------------------------------------------------------------------------------------------
-    add multiple boxes for add your work time
-    -----------------------------------------------------------------------------------------------------------
-    -->
+        -----------------------------------------------------------------------------------------------------------
+        add multiple boxes for add your work time
+        -----------------------------------------------------------------------------------------------------------
+        -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1408,10 +1408,10 @@
             </script>
 
             <!--
-    -----------------------------------------------------------------------------------------------------------
-    Attendance Details Modal
-    -----------------------------------------------------------------------------------------------------------
-    -->
+        -----------------------------------------------------------------------------------------------------------
+        Attendance Details Modal
+        -----------------------------------------------------------------------------------------------------------
+        -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1464,14 +1464,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                    <label for="">Change Attendance </label>
-                                    <select name="" id="">
-                                        <option value="1">Full Day (1)</option>
-                                        <option value="0.5">Half Day (0.5)</option>
-                                        <option value="0">Leave (0)</option>
-                                        <option value="-1">Leave Not Approved (-1)</option>
-                                    </select>
-                                </div> -->
+                                        <label for="">Change Attendance </label>
+                                        <select name="" id="">
+                                            <option value="1">Full Day (1)</option>
+                                            <option value="0.5">Half Day (0.5)</option>
+                                            <option value="0">Leave (0)</option>
+                                            <option value="-1">Leave Not Approved (-1)</option>
+                                        </select>
+                                    </div> -->
                                     </div>
                                 </div>
 
