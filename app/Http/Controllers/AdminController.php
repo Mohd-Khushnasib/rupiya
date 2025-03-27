@@ -1518,28 +1518,32 @@ class AdminController extends Controller
     {
         // Check if lead already exists
         $existingLead = DB::table('tbl_lead')->where('mobile', $request->mobile)->first();
-
+    
         if ($existingLead) {
             return response()->json([
                 'success' => 'exists',
                 'message' => 'Mobile number already exists for this Lead',
             ]);
         }
-
+    
         $admin_id = $request->admin_id;
-
+    
+        // Get product name from tbl_product
+        $product = DB::table('tbl_product')->where('id', $request->product_id)->first();
+        $productName = $product ? $product->product_name : ''; // Using product_name or fallback to 'Lead'
+    
         // Sanitize numeric fields
         $obligation = preg_replace('/[^0-9]/', '', $request->obligation);
         $pos = preg_replace('/[^0-9]/', '', $request->pos);
-
+    
         $loan_amount = preg_replace('/[^0-9]/', '', $request->loan_amount);
         $salary = preg_replace('/[^0-9]/', '', $request->salary);
         $yearly_bonus = preg_replace('/[^0-9]/', '', $request->yearly_bonus);
-
+    
         // Ensure single values are stored properly
         $data = [
             'status' => '1',
-            'lead_login_status' => 'Lead',
+            'lead_login_status' => $productName, // Store product name instead of 'Lead'
             'lead_status' => 'NEW LEAD',
             'admin_id' => $admin_id,
             'product_id' => $request->product_id,
@@ -1566,26 +1570,23 @@ class AdminController extends Controller
             'cibil_score' => $request->cibil_score,
             'date' => $this->date
         ];
-
-        // Insert lead and get lead ID
+    
+        // Rest of the code remains the same
         $leadId = DB::table('tbl_lead')->insertGetId($data);
-
-        // Generate lead ID with 'PL' prefix
+    
         $leadIdWithPrefix = 'PL' . $leadId;
         DB::table('tbl_lead')->where('id', $leadId)->update(['leadid' => $leadIdWithPrefix]);
-
-        // Insert lead status
+    
         DB::table('tbl_lead_status')->insert([
             'admin_id' => $admin_id,
             'lead_id' => $leadId,
             'lead_status' => 'NEW LEAD',
             'date' => $this->date,
         ]);
-
-        // ✅ Insert into tbl_obligation (For multiple products)
+    
         if (!empty($request->product_idd) && is_array($request->product_idd)) {
             $obligationData = [];
-
+    
             foreach ($request->product_idd as $index => $productId) {
                 $obligationData[] = [
                     'admin_id' => $admin_id,
@@ -1599,10 +1600,10 @@ class AdminController extends Controller
                     'date' => $this->date,
                 ];
             }
-
+    
             DB::table('tbl_obligation')->insert($obligationData);
         }
-
+    
         return response()->json([
             'success' => 'success',
         ]);
