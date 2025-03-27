@@ -305,6 +305,9 @@ Route::post('/get-filtered-warning-counts', [AdminController::class, 'getFiltere
 
 Route::get('/get-warning',[AdminController::class, 'Getwarning']);
 
+// DeleteWarning
+Route::post('/delete_warning', [AdminController::class, 'Deletewarning']);
+
 
 // Add Comment 
 Route::post('/add_comment', [AdminController::class, 'addComment']);
