@@ -1570,7 +1570,6 @@ class AdminController extends Controller
             'cibil_score' => $request->cibil_score,
             'date' => $this->date
         ];
-        dd($data);
         // Rest of the code remains the same
         $leadId = DB::table('tbl_lead')->insertGetId($data);
     
