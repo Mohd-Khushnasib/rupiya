@@ -1,18 +1,39 @@
 @php
+    use Illuminate\Support\Facades\DB;
+    use Carbon\Carbon;
+
     if (session()->has('admin_login')) {
         $data = session('admin_login');
         $admin = $data->first();
         $role = $admin->role ?? '';
         $username = $admin->name ?? '';
-        $totalLeads = DB::table('tbl_lead')->count();
+        $admin_id = $admin->id ?? null;
+        $today = Carbon::now()->format('m/d/Y');
+
+        // Attendance data fetch
+        $attendance = DB::table('tbl_attendance')
+            ->where('admin_id', $admin_id)
+            ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
+            ->first();
+
+        $showPunchIn = true;
+        $showPunchOut = true;
+
+        if ($attendance) {
+            if ($attendance->punchin_status == 'true') {
+                $showPunchIn = false;
+            }
+            if ($attendance->punchout_status == 'true') {
+                $showPunchOut = false;
+            }
+        }
     } else {
         echo '<script>
-    window.location.href = "/login";
-    </script>';
+            window.location.href = "/login";
+        </script>';
         exit;
     }
 @endphp
-
 
 
 <!DOCTYPE html>
@@ -67,7 +88,6 @@
             <!-- BEGIN Navbar Buttons -->
             <ul class="nav flaty-nav pull-right">
 
-
                 <li>
                     <div class="dropdown">
                         <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
@@ -77,12 +97,18 @@
                             <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
                                         Leave
                                     </button></a></li>
-                            <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn">
-                                        Punch In
-                                    </button></a></li>
-                            <li><a href="#"> <button class="btn btn-success btn-block" id="openModalBtn1">
-                                        Punch Out
-                                    </button></a></li>
+                
+                            @if ($showPunchIn)
+                                <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn">
+                                            Punch In
+                                        </button></a></li>
+                            @endif
+                
+                            @if ($showPunchOut)
+                                <li><a href="#"> <button class="btn btn-success btn-block" id="openModalBtn1">
+                                            Punch Out
+                                        </button></a></li>
+                            @endif
                         </ul>
                     </div>
                 </li>
