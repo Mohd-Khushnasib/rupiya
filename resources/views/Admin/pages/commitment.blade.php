@@ -11,13 +11,13 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <button id="AddProductModal" class="btn btn-primary">
-                            <i class="fa fa-plus"></i> Product
+                        <button id="AddCommitmentModal" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>Add Commitment
                         </button>
                     </div>
 
                     <div class="col-sm-12" style="margin-top: 20px;">
-                        <h5>All Product List</h5>
+                        <h5>All Commitment List</h5>
                     </div>
 
                     <div class="col-sm-12">
@@ -26,38 +26,43 @@
                                 <thead>
                                     <tr>
                                         <th style="width:18px">#</th>
-                                        <th>Product Name</th>
-                                        <th>Datetime</th>
+                                        <th>Commitment Name</th>
+                                        <th>Type</th>
+                                        <th>Duration</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if($products->isEmpty())
                                     @else
-                                                            @php
-                                                                $sr = 1;
-                                                            @endphp
-                                                            @foreach($products as $item)
-                                                                                <tr class="table-flag-blue">
-                                                                                    <td>{{ $sr }}</td>
-                                                                                    <td>{{$item->product_name ?? ''}}</td>
-                                                                                    <td>{{$item->date ?? ''}}</td>
-                                                                                    <td>
-                                                                                        <a href="javascript:void(0);" class="btn btn-danger delete small-btn"
-                                                                                            data-id="{{ $item->id }}">
-                                                                                            <i class="fa fa-trash-o"></i>
-                                                                                        </a>
+                                        @php
+                                            $sr = 1;
+                                        @endphp
+                                        @foreach($products as $item)
+                                            <tr class="table-flag-blue">
+                                                <td>{{ $sr }}</td>
+                                                <td>{{$item->product_name ?? ''}}</td>
+                                                <td>{{$item->type ?? ''}}</td>
+                                                <td>{{$item->duration ?? ''}}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="btn btn-danger delete small-btn"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
 
-                                                                                        <a href="javascript:void(0);" class="btn btn-primary edit small-btn"
-                                                                                            data-product_name="{{$item->product_name}}" data-id="{{ $item->id }}">
-                                                                                            <i class="fa fa-pencil color-muted"></i>
-                                                                                        </a>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                @php
-                                                                                    $sr++;
-                                                                                @endphp
-                                                            @endforeach
+                                                    <a href="javascript:void(0);" class="btn btn-primary edit small-btn"
+                                                        data-product_name="{{$item->product_name}}" 
+                                                        data-type="{{$item->type}}" 
+                                                        data-duration="{{$item->duration}}"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-pencil color-muted"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $sr++;
+                                            @endphp
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -68,12 +73,12 @@
         </div>
 
         <!-- Add Modal  -->
-        <div id="AddProduct" class="modal fade" role="dialog">
+        <div id="AddCommitment" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="color: black;" id="modalTitle">Add Product</h4>
+                        <h4 class="modal-title" style="color: black;" id="modalTitle">Add Commitment</h4>
                     </div>
                     <div class="modal-body">
                         <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
@@ -81,25 +86,25 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label for="product_name">Name</label>
-                                    <input type="text" name="product_name" id="product_name" placeholder="Product Name"
-                                        class="form-control">
-                                </div>
-                                <div class="col-sm-12">
-                                    <label for="product_name">Duration/Time</label>
-                                    <input type="text" name="product_name" id="product_name" placeholder="Product Name"
+                                    <input type="text" name="product_name" id="product_name" placeholder="Commitment Name"
                                         class="form-control">
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="control-label text-light">Type</label>
                                         <div class="controls">
-                                            <select name="type" id="productSelect1" class="form-control" disabled>
+                                            <select name="type" id="type" class="form-control">
                                                 <option disabled="true" selected="true">Select Type</option>
                                                 <option value="Count">Count</option>
                                                 <option value="Time">Time</option>
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label for="duration">Duration/Time</label>
+                                    <input type="text" name="duration" id="duration" placeholder="Duration"
+                                        class="form-control">
                                 </div>
                                 <div class="col-sm-12 ">
                                     <button class="btn btn-primary btn_submit" style="margin-top:15px"
@@ -120,7 +125,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" style="color: black;" id="exampleModalLabel">Delete Product</h4>
+                        <h4 class="modal-title" style="color: black;" id="exampleModalLabel">Delete Commitment</h4>
                     </div>
                     <!-- Modal Body -->
                     <div class="modal-body">
@@ -150,7 +155,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-                        <h4 class="modal-title" style="color: black;" id="editModalLabel">Edit Product Name</h4>
+                        <h4 class="modal-title" style="color: black;" id="editModalLabel">Edit Commitment</h4>
                     </div>
                     <!-- Modal Body -->
                     <div class="modal-body">
@@ -159,8 +164,24 @@
                             <div class="row">
                                 <input type="hidden" name="id" id="edit_id" value="" class="form-control">
                                 <div class="col-sm-12">
-                                    <label for="product_name">Product Name</label>
+                                    <label for="edit_product_name">Commitment Name</label>
                                     <input type="text" name="product_name" id="edit_product_name" class="form-control">
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label text-light">Type</label>
+                                        <div class="controls">
+                                            <select name="type" id="edit_type" class="form-control">
+                                                <option disabled="true" selected="true">Select Type</option>
+                                                <option value="Count">Count</option>
+                                                <option value="Time">Time</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label for="edit_duration">Duration/Time</label>
+                                    <input type="text" name="duration" id="edit_duration" class="form-control">
                                 </div>
                                 <div class="col-sm-12">
                                     <button class="btn btn-primary btn_update" style="margin-top:15px; float:right;"
@@ -187,19 +208,35 @@
         <!-- JS Links End Here -->
 
         <script>
-            // product_name add here
+            // Add commitment here
             $("#add_form").submit(function (e) {
                 var product_name = $("#product_name").val();
-                if (product_name) { } else {
+                var type = $("#type").val();
+                var duration = $("#duration").val();
+                
+                if (!product_name) {
                     alertify.set('notifier', 'position', 'top-right');
-                    alertify.error('Product Name required');
+                    alertify.error('Commitment Name required');
                     return;
                 }
+                
+                if (!type || type === "Select Type") {
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.error('Type is required');
+                    return;
+                }
+                
+                if (!duration) {
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.error('Duration is required');
+                    return;
+                }
+                
                 e.preventDefault();
                 var formData = new FormData(this);
                 $.ajax({
                     type: "post",
-                    url: "{{url('/add_product')}}",
+                    url: "{{url('/add_punchout_comitment')}}",
                     data: formData,
                     dataType: "json",
                     contentType: false,
@@ -210,20 +247,20 @@
                         if (data.success == 'success') {
                             // Reset the form here
                             document.getElementById("add_form").reset();
-                            $("#AddProduct").modal("hide");
-                            swal("Product Name Added Successfully", "", "success");
+                            $("#AddCommitment").modal("hide");
+                            swal("Commitment Added Successfully", "", "success");
 
                             window.location.reload();
                         } else {
                             $(".btn_submit").prop("disabled", false);
-                            swal("Product Name Not Added", "", "error");
+                            swal("Commitment Not Added", "", "error");
                         }
                     },
                     error: function (err) { }
                 });
 
             });
-            // product_name end here
+            // Add commitment end here
 
             // delete
             $(document).on('click', '.delete', function () {
@@ -238,7 +275,7 @@
                 var formData = new FormData(this);
                 $.ajax({
                     type: "POST",
-                    url: "{{url('/delete_product')}}",
+                    url: "{{url('/delete_commitment')}}",
                     data: formData,
                     dataType: "json",
                     contentType: false,
@@ -250,10 +287,10 @@
                             $(".btn_delete").prop('disabled', false);
                             $("#deletemodal").modal("hide");
                             $("#delete_form")[0].reset();
-                            swal("Product Name Delete Successfully! ", "", "success");
+                            swal("Commitment Deleted Successfully! ", "", "success");
                             window.location.reload();
                         } else {
-                            swal('Product Name Not Added', '', 'error');
+                            swal('Commitment Not Deleted', '', 'error');
                             $(".btn_delete").prop("disabled", false);
                         }
                     },
@@ -264,22 +301,27 @@
                 });
             });
 
-            // edit category modal
+            // edit commitment modal
             $(document).on('click', '.edit', function () {
                 var id = $(this).data('id');
                 var product_name = $(this).data('product_name');
+                var type = $(this).data('type');
+                var duration = $(this).data('duration');
+                
                 $("#edit_id").val(id);
                 $("#edit_product_name").val(product_name);
+                $("#edit_type").val(type);
+                $("#edit_duration").val(duration);
                 $("#editmodal").modal("show");
             });
 
-            // update category
+            // update commitment
             $("#edit_form").submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 $.ajax({
                     type: "post",
-                    url: "{{url('/update_product')}}",
+                    url: "{{url('/update_commitment')}}",
                     data: formData,
                     dataType: "json",
                     contentType: false,
@@ -291,15 +333,15 @@
                             $(".btn_update").prop("disabled", false);
                             $("#edit_form")[0].reset();
                             $("#editmodal").modal("hide");
-                            swal("Product Name Updated Successfull", "", "success");
+                            swal("Commitment Updated Successfully", "", "success");
                             window.location.reload();
                         } else {
-                            swal("Product Name Not Update!", "", "error");
+                            swal("Commitment Not Updated!", "", "error");
                             $(".btn_update").prop('disabled', false);
                         }
                     },
                     error: function (errResponse) {
-                        swal("Somthing Went Wrong!", "", "error");
+                        swal("Something Went Wrong!", "", "error");
                         $(".btn_update").prop('disabled', false);
                     }
                 });
@@ -312,7 +354,7 @@
                 var switchLabel = this.value;
                 var checkedVal = isChecked ? 1 : 0;
                 // Display SweetAlert confirmation dialog with both buttons
-                var tableName = "tbl_product";
+                var tableName = "tbl_commitment";
                 swal({
                     title: "Are you sure?",
                     text: "You are about to update the status.",
@@ -351,20 +393,20 @@
         </script>
         <script>
             $(document).ready(function () {
-                $('#AddProductModal').on('click', function () {
-                    $('#AddProduct').modal('show');
+                $('#AddCommitmentModal').on('click', function () {
+                    $('#AddCommitment').modal('show');
                 });
 
                 $('#saveChangesBtn').on('click', function () {
                     alert('Your changes have been saved!');
-                    $('#AddProduct').modal('hide');
+                    $('#AddCommitment').modal('hide');
                 });
 
-                $('#AddProduct').on('shown.bs.modal', function () {
+                $('#AddCommitment').on('shown.bs.modal', function () {
                     console.log('Modal is now fully visible!');
                 });
 
-                $('#AddProduct').on('hidden.bs.modal', function () {
+                $('#AddCommitment').on('hidden.bs.modal', function () {
                     console.log('Modal has been closed.');
                 });
             });

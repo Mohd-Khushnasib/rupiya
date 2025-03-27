@@ -6792,11 +6792,31 @@ class AdminController extends Controller
         ]);
     }
 
+    // Puncout Commitment
     public function punchoutComitment()
     {
         $data['products'] = DB::table('tbl_product')->orderBy('id', 'desc')->get();
         return view('Admin.pages.commitment', $data);
     }
+
+    public function addPunchoutComitment(Request $request)
+    {
+        $data = [
+            'status' => '1',
+            'product_name' => $request->product_name,
+            'type' => $request->type,
+            'duration' => $request->duration,
+            'datetime' => $this->date,
+        ];
+        if (!empty($data)) {
+            $res = DB::table('tbl_punchoutcommitment')->insert($data);
+            return response()->json([
+                'success' => 'success',
+            ]);
+        } else {
+        }
+    }
+
 
 
     // end here

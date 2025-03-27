@@ -25,6 +25,7 @@
                     <li><a href="{{url('/admin-warning_type')}}">Manage Warning Type</a></li>
                     <li><a href="{{url('/admin-company-category')}}">Manage Company Category</a></li>
                     <li><a href="{{url('/admin-excel-upload')}}">Manage Excel Upload</a></li>
+                    <li><a href="{{url('/admin-punchout-comitment')}}">Manage commitment</a></li>
                 </ul>
             </li>
         </ul>
