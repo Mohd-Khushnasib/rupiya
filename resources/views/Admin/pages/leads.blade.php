@@ -47,7 +47,7 @@ datalist#tenureList {
 
                                     <!-- Disabled select field -->
                                     <select id="productSelect1" class="form-control" disabled>
-                                        <option disabled="true" selected="true">Select Product</option>
+                                        <option disabled="true" selected="true">Select Product old</option>
                                         @php
                                         $products = DB::table('tbl_product')->orderBy('id', 'desc')->get();
                                         @endphp
