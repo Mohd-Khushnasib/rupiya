@@ -13,13 +13,11 @@
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
         
-
         // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
         ->where('admin_id', $admin_id)
-        ->whereRaw("DATE(punchin_datetime) = ?", [$today]) // Compare dates correctly
+        ->whereRaw("DATE(punchin_datetime) = ?", [$today]) 
         ->first();
-        
         // Default - both buttons disabled initially
         $disablePunchIn = true;
         $disablePunchOut = true;
@@ -28,18 +26,18 @@
             // Check punch-in status
             if ($attendance->punchin_status == 'true') {
                 $disablePunchIn = true; // Disable punch-in button
-                
-                // Only enable punch-out if user hasn't punched out yet
                 if ($attendance->punchout_status != 'true') {
-                    $disablePunchOut = false; // Enable punch-out button
+                    $disablePunchOut = false; 
                 }
-            } else {
-                // Not punched in yet
+            } 
+            else 
+            {
                 $disablePunchIn = false; // Enable punch-in button
                 $disablePunchOut = true; // Disable punch-out button
             }
-        } else {
-            // No attendance record for today - enable punch-in only
+        } 
+        else 
+        {
             $disablePunchIn = false;
             $disablePunchOut = true;
         }
