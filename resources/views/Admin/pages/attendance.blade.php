@@ -2,29 +2,50 @@
     @extends('Admin.layouts.master')
     @section('main-content')
 
-    <!-- Custom CSS for Dark Theme -->
+    <!-- Dark Theme CSS -->
     <style>
+        /* Global styles for dark theme */
         body {
             background-color: #000000;
             color: white;
             font-family: Arial, sans-serif;
         }
         
+        .container {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        
+        .theam_color_text {
+            color: #00b0ff;
+            font-size: 32px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+        
+        .theam_color {
+            color: #00b0ff;
+        }
+        
         /* Navigation Bar Styling */
-        .navbar {
+        .top-navbar {
             background-color: #1a1a1a;
             padding: 10px 0;
             border-bottom: 1px solid #333;
+            margin-bottom: 20px;
         }
         
-        .navbar a {
+        .top-navbar a {
             color: white;
             padding: 10px 15px;
             text-decoration: none;
             font-weight: bold;
         }
         
-        .navbar a:hover {
+        .top-navbar a:hover {
             color: #00b0ff;
         }
         
@@ -36,178 +57,144 @@
             font-size: 12px;
         }
         
-        .time-display {
-            background-color: white;
-            color: black;
-            padding: 5px 15px;
-            border-radius: 3px;
-            font-weight: bold;
-        }
-        
-        /* Employee Name Styling */
-        .employee-name {
-            font-size: 36px;
-            font-weight: bold;
-            color: #00b0ff;
-            margin: 20px 0;
-        }
-        
-        .employee-icon {
-            font-size: 36px;
-            color: #00b0ff;
-            margin-right: 10px;
-        }
-        
-        /* Attendance Cards */
-        .attendance-cards {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .attendance-card {
+        /* Punch Card Styling */
+        .punch_card {
             background-color: white;
             border-radius: 10px;
-            padding: 20px;
-            width: 23%;
-            min-width: 200px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #00b0ff;
-            margin: 0;
-        }
-        
-        .card-value {
-            font-size: 30px;
-            font-weight: bold;
-            color: #00b0ff;
-            text-align: right;
-            margin: 0;
-        }
-        
-        /* Monthly Attendance Section */
-        .monthly-title {
-            font-size: 24px;
+            padding: 15px;
             text-align: center;
-            margin: 30px 0 20px;
-            color: white;
-        }
-        
-        .filters {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
-        .filter-select {
-            padding: 8px 15px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background-color: white;
-            color: #333;
-            width: 200px;
+        .punch_card_text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00b0ff;
+            margin: 0;
+            padding: 5px 0;
         }
         
         /* Table Styling */
-        .attendance-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 1px;
+        .table-container {
             overflow-x: auto;
-            color: white;
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
-        .attendance-table th {
-            background-color: #1a1a1a;
-            padding: 10px;
-            text-align: center;
+        .table.table-advance,
+        .table.table-advance th,
+        .table.table-advance td {
+            border: 1px solid #03b0f5;
+            border-collapse: collapse;
+        }
+        
+        .custom-table {
+            width: 100%;
+            min-width: 800px;
+        }
+        
+        thead {
             position: sticky;
             top: 0;
+            background-color: #1a1a1a;
             z-index: 10;
         }
         
-        .attendance-table td {
+        th, td {
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .name-header {
+            position: sticky;
+            left: 0;
+            background-color: #1a1a1a;
+            z-index: 20;
+            min-width: 180px;
+            color: white !important;
+        }
+        
+        .day-header {
+            background-color: #1a1a1a;
+            color: white;
             padding: 10px;
             text-align: center;
-            vertical-align: middle;
+            font-weight: bold;
+            min-width: 60px;
         }
         
         .name-cell {
-            background-color: #1a1a1a;
-            text-align: left;
-            padding: 10px;
             position: sticky;
             left: 0;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            background-color: #1a1a1a;
+            z-index: 15;
+            text-align: left;
         }
         
-        .profile-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .emp-name {
-            font-weight: bold;
-            font-size: 16px;
-            color: white;
-        }
-        
-        .emp-info {
-            font-size: 12px;
-            color: #aaa;
-        }
-        
-        /* Attendance Status Cells */
+        /* Attendance Status Styles */
         .full-day {
             background-color: #006400;
-            color: white;
+            color: white !important;
             cursor: pointer;
         }
         
         .half-day {
             background-color: #ffcc00;
-            color: black;
+            color: black !important;
             cursor: pointer;
         }
         
         .off {
             background-color: #0078d7;
-            color: white;
+            color: white !important;
             cursor: pointer;
         }
         
         .leave-approve {
             background-color: #00a0e4;
-            color: white;
+            color: white !important;
             cursor: pointer;
         }
         
         .leave-not-approve {
             background-color: #e74c3c;
-            color: white;
+            color: white !important;
             cursor: pointer;
         }
         
-        /* Responsive Scrollable Table */
-        .table-container {
-            overflow-x: auto;
-            max-width: 100%;
-            margin-bottom: 30px;
+        /* Monthly title and filter section */
+        .month-title {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
         }
         
-        /* Modal Styling for Dark Theme */
+        .filter-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .filter-column {
+            margin: 0 10px;
+            width: 200px;
+        }
+        
+        .form-control {
+            background-color: white;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        /* Modal Styling */
         .modal-content {
             background-color: #222;
             color: white;
@@ -224,8 +211,18 @@
             background-color: #333;
         }
         
+        .modal-title {
+            color: white;
+        }
+        
         .close {
             color: white;
+            opacity: 0.7;
+        }
+        
+        .close:hover {
+            color: white;
+            opacity: 1;
         }
         
         .btn-info {
@@ -239,36 +236,94 @@
             border-color: #555;
         }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+        /* Employee Image and Info Styling */
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
         }
         
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
+        .emp-name {
+            font-size: 17px;
+            font-weight: bold;
+            color: white;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 5px;
+        .emp-info {
+            font-size: 12px;
+            color: #aaa;
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: #888;
+        /* Custom Styles for AK Tables */
+        .ak_custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        
+        .ak_custom-table th,
+        .ak_custom-table td {
+            background-color: white !important;
+            color: black !important;
+            border: 1px solid black !important;
+            padding: 10px !important;
+        }
+        
+        .ak_custom-table th {
+            font-weight: bold !important;
+            background-color: #f4f4f4 !important;
+        }
+        
+        .ak_custom-table input {
+            width: 80px !important;
+            padding: 5px !important;
+            text-align: center !important;
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+            background: #ffff99 !important;
+            font-weight: bold !important;
+        }
+        
+        .ak_heading {
+            color: white;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .ak_total_box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            color: black;
+        }
+        
+        /* Time display in navbar */
+        .time-display {
+            background-color: white;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
         }
     </style>
 
     <!-- Navigation Bar -->
-    <div class="navbar">
+    <div class="top-navbar">
         <div class="container-fluid">
-            <div class="row" style="width: 100%;">
+            <div class="row">
                 <div class="col-md-8">
                     <a href="#"><i class="fa fa-home"></i> HOME</a>
                     <a href="#"><i class="fa fa-chart-line"></i> LEAD CRM <span class="badge">8+</span></a>
                     <a href="#"><i class="fa fa-sign-in-alt"></i> LOGIN CRM <i class="fa fa-caret-down"></i></a>
                     <a href="#"><i class="fa fa-tasks"></i> TASK</a>
-                    <a href="#"><i class="fa fa-ticket-alt"></i> TICKECT <i class="fa fa-caret-down"></i></a>
+                    <a href="#"><i class="fa fa-ticket-alt"></i> TICKET <i class="fa fa-caret-down"></i></a>
                     <a href="#"><i class="fa fa-users"></i> HRMS <i class="fa fa-caret-down"></i></a>
                     <a href="#"><i class="fa fa-exclamation-triangle"></i> WARNING <i class="fa fa-caret-down"></i></a>
                 </div>
@@ -280,501 +335,267 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Employee Name Section -->
-        <div class="employee-name">
-            <i class="fa fa-user-circle employee-icon"></i> EMPLOYEE NAME
-        </div>
-
-        <!-- Attendance Cards -->
-        <div class="attendance-cards">
-            <div class="attendance-card">
-                <div class="card-title">FULL DAY</div>
-                <div class="card-value">12</div>
+    <!-- Main Content Start Here -->
+    <div class="container" id="main-container">
+        <div id="main-content">
+            <div class="page-title">
+                <div>
+                    <h1 class="theam_color_text">
+                        <i class="fa fa-user theam_color"></i> EMPLOYEE NAME
+                    </h1>
+                </div>
             </div>
-            <div class="attendance-card">
-                <div class="card-title">HALF DAY</div>
-                <div class="card-value">30</div>
+            
+            <!-- Attendance Card Summary -->
+            <div class="row" style="margin-top: 20px">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="punch_card">
+                        <h3 class="punch_card_text">FULL DAY</h3>
+                        <h4 class="punch_card_text">12</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="punch_card">
+                        <h3 class="punch_card_text">HALF DAY</h3>
+                        <h4 class="punch_card_text">30</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="punch_card">
+                        <h3 class="punch_card_text">ABSENT</h3>
+                        <h4 class="punch_card_text">29</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="punch_card">
+                        <h3 class="punch_card_text">TOTAL DAY</h3>
+                        <h4 class="punch_card_text">30</h4>
+                    </div>
+                </div>
             </div>
-            <div class="attendance-card">
-                <div class="card-title">ABSENT</div>
-                <div class="card-value">29</div>
+            
+            <!-- Monthly Title and Filters -->
+            <h2 class="month-title">MONTHLY ATTENDANCE - FEBRUARY 2025</h2>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select name="employee" id="employee_filter" class="form-control" tabindex="-1">
+                                <option value="all">ALL EMPLOYEE</option>
+                                <option value="emp1">EMP 1</option>
+                                <option value="emp2">EMP 2</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <select name="month" id="month_filter" class="form-control" tabindex="-1">
+                                <option value="all">CHOOSE MONTH</option>
+                                <option value="01">JANUARY</option>
+                                <option value="02" selected>FEBRUARY</option>
+                                <option value="03">MARCH</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="attendance-card">
-                <div class="card-title">TOTAL DAY</div>
-                <div class="card-value">30</div>
+            
+            <!-- Attendance Table -->
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-12">
+                    <div class="table-responsive table-container">
+                        <table class="table table-advance custom-table">
+                            <thead>
+                                <tr>
+                                    <th class="name-header">NAME</th>
+                                    <th class="day-header">1<br>SAT</th>
+                                    <th class="day-header">2<br>SUN</th>
+                                    <th class="day-header">3<br>MON</th>
+                                    <th class="day-header">4<br>TUE</th>
+                                    <th class="day-header">5<br>WED</th>
+                                    <th class="day-header">6<br>THU</th>
+                                    <th class="day-header">7<br>FRI</th>
+                                    <th class="day-header">8<br>SAT</th>
+                                    <th class="day-header">9<br>SUN</th>
+                                    <th class="day-header">10<br>MON</th>
+                                    <th class="day-header">11<br>TUE</th>
+                                    <th class="day-header">12<br>WED</th>
+                                    <th class="day-header">13<br>THU</th>
+                                    <th class="day-header">14<br>FRI</th>
+                                    <th class="day-header">15<br>SAT</th>
+                                    <th class="day-header">16<br>SUN</th>
+                                    <th class="day-header">17<br>MON</th>
+                                    <th class="day-header">18<br>TUE</th>
+                                    <th class="day-header">19<br>WED</th>
+                                    <th class="day-header">20<br>THU</th>
+                                    <th class="day-header">21<br>FRI</th>
+                                    <th class="day-header">22<br>SAT</th>
+                                    <th class="day-header">23<br>SUN</th>
+                                    <th class="day-header">24<br>MON</th>
+                                    <th class="day-header">25<br>TUE</th>
+                                    <th class="day-header">26<br>WED</th>
+                                    <th class="day-header">27<br>THU</th>
+                                    <th class="day-header">28<br>FRI</th>
+                                    <th class="day-header">29<br>SAT</th>
+                                    <th class="day-header">30<br>SUN</th>
+                                    <th class="day-header">TOTAL<br>PRESENT</th>
+                                    <th class="day-header">PAID<br>LEAVE</th>
+                                    <th class="day-header">EARNED<br>LEAVE</th>
+                                    <th class="day-header">FINAL<br>ATTENDANCE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                        <div>
+                                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+                                                alt="" height="50px" width="50px"
+                                                style="object-fit: cover; border-radius: 50%;">
+                                        </div>
+                                        <div style="text-align: start;">
+                                            <span class="emp-name">RAVINDRA</span><br>
+                                            <span class="emp-info">ACHIEVERS | SR. EXECUTIVE</span><br>
+                                            <span class="emp-info">EMP-ID : RM02</span>
+                                        </div>
+                                    </td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal leave-approve"><b>0</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal leave-not-approve"><b>-1</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal off"><b>1</b><br><span>OFF</span></td>
+                                    <td>26.5</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>27.5</td>
+                                </tr>
+                                <!-- Duplicate rows for example -->
+                                <tr>
+                                    <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                        <div>
+                                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+                                                alt="" height="50px" width="50px"
+                                                style="object-fit: cover; border-radius: 50%;">
+                                        </div>
+                                        <div style="text-align: start;">
+                                            <span class="emp-name">RAVINDRA</span><br>
+                                            <span class="emp-info">ACHIEVERS | SR. EXECUTIVE</span><br>
+                                            <span class="emp-info">EMP-ID : RM02</span>
+                                        </div>
+                                    </td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal leave-approve"><b>0</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal leave-not-approve"><b>-1</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal off"><b>1</b><br><span>OFF</span></td>
+                                    <td>26.5</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>27.5</td>
+                                </tr>
+                                <tr>
+                                    <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                        <div>
+                                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+                                                alt="" height="50px" width="50px"
+                                                style="object-fit: cover; border-radius: 50%;">
+                                        </div>
+                                        <div style="text-align: start;">
+                                            <span class="emp-name">RAVINDRA</span><br>
+                                            <span class="emp-info">ACHIEVERS | SR. EXECUTIVE</span><br>
+                                            <span class="emp-info">EMP-ID : RM02</span>
+                                        </div>
+                                    </td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal off"><b>1</b><br>OFF</td>
+                                    <td class="opentdModal full-day"><b>1</b><br><span>6:00AM - 7:00PM<br>FULL DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal half-day"><b>0.5</b><br><span>6:00AM - 12:00PM<br>HALF DAY</span></td>
+                                    <td class="opentdModal leave-approve"><b>0</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal leave-not-approve"><b>-1</b><br><span>LEAVE</span></td>
+                                    <td class="opentdModal off"><b>1</b><br><span>OFF</span></td>
+                                    <td>26.5</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>27.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Monthly Attendance Section -->
-        <div class="monthly-title">MONTHLY ATTENDANCE - FEBRUARY 2025</div>
-        
-        <!-- Filters -->
-        <div class="filters">
-            <select class="filter-select">
-                <option>ALL EMPLOYEE</option>
-                <option>EMP 1</option>
-                <option>EMP 2</option>
-            </select>
-            <select class="filter-select">
-                <option>CHOOSE MONTH</option>
-                <option>JANUARY</option>
-                <option selected>FEBRUARY</option>
-                <option>MARCH</option>
-            </select>
-        </div>
-
-        <!-- Attendance Table -->
-        <div class="table-container">
-            <table class="attendance-table">
-                <thead>
-                    <tr>
-                        <th style="min-width: 200px; text-align: left;">NAME</th>
-                        <th>1<br>SAT</th>
-                        <th>2<br>SUN</th>
-                        <th>3<br>MON</th>
-                        <th>4<br>TUE</th>
-                        <th>5<br>WED</th>
-                        <th>6<br>THU</th>
-                        <th>7<br>FRI</th>
-                        <th>8<br>SAT</th>
-                        <th>9<br>SUN</th>
-                        <th>10<br>MON</th>
-                        <th>11<br>TUE</th>
-                        <th>12<br>WED</th>
-                        <th>13<br>THU</th>
-                        <th>14<br>FRI</th>
-                        <th>15<br>SAT</th>
-                        <th>16<br>SUN</th>
-                        <th>17<br>MON</th>
-                        <th>18<br>TUE</th>
-                        <th>19<br>WED</th>
-                        <th>20<br>THU</th>
-                        <th>21<br>FRI</th>
-                        <th>22<br>SAT</th>
-                        <th>23<br>SUN</th>
-                        <th>24<br>MON</th>
-                        <th>25<br>TUE</th>
-                        <th>26<br>WED</th>
-                        <th>27<br>THU</th>
-                        <th>28<br>FRI</th>
-                        <th>29<br>SAT</th>
-                        <th>30<br>SUN</th>
-                        <th>TOTAL<br>PRESENT</th>
-                        <th>PAID<br>LEAVE</th>
-                        <th>EARNED<br>LEAVE</th>
-                        <th>FINAL<br>ATTENDANCE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="name-cell">
-                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000" alt="" class="profile-img">
-                            <div>
-                                <div class="emp-name">RAVINDRA</div>
-                                <div class="emp-info">ACHIEVERS | SR. EXECUTIVE</div>
-                                <div class="emp-info">EMP-ID : RM02</div>
-                            </div>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="leave-approve opentdModal">
-                            <b>0</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="leave-not-approve opentdModal">
-                            <b>-1</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td>26.5</td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>27.5</td>
-                    </tr>
-                    <!-- Duplicate rows for the image example -->
-                    <tr>
-                        <td class="name-cell">
-                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000" alt="" class="profile-img">
-                            <div>
-                                <div class="emp-name">RAVINDRA</div>
-                                <div class="emp-info">ACHIEVERS | SR. EXECUTIVE</div>
-                                <div class="emp-info">EMP-ID : RM02</div>
-                            </div>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="leave-approve opentdModal">
-                            <b>0</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="leave-not-approve opentdModal">
-                            <b>-1</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td>26.5</td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>27.5</td>
-                    </tr>
-                    <tr>
-                        <td class="name-cell">
-                            <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000" alt="" class="profile-img">
-                            <div>
-                                <div class="emp-name">RAVINDRA</div>
-                                <div class="emp-info">ACHIEVERS | SR. EXECUTIVE</div>
-                                <div class="emp-info">EMP-ID : RM02</div>
-                            </div>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td class="full-day opentdModal">
-                            <b>1</b><br>
-                            <span>6:00AM - 7:00PM<br>FULL DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="half-day opentdModal">
-                            <b>0.5</b><br>
-                            <span>6:00AM - 12:00PM<br>HALF DAY</span>
-                        </td>
-                        <td class="leave-approve opentdModal">
-                            <b>0</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="leave-not-approve opentdModal">
-                            <b>-1</b><br>
-                            <span>LEAVE</span>
-                        </td>
-                        <td class="off opentdModal">
-                            <b>1</b><br>
-                            <span>OFF</span>
-                        </td>
-                        <td>26.5</td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>27.5</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
+    <!-- Main Content End Here -->
 
     <!-- Attendance Details Modal -->
     <div id="tdModal" class="modal fade" role="dialog">
@@ -782,13 +603,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Ravindra</h4>
-                    <p>Achievers | Sr. Executive</p>
-                    <p>Emp-ID : RM02</p>
-                    <p>Attendance : 1</p>
+                    <h4 class="modal-title">RAVINDRA</h4>
+                    <p>ACHIEVERS | SR. EXECUTIVE</p>
+                    <p>EMP-ID : RM02</p>
+                    <p>ATTENDANCE : 1</p>
                 </div>
                 <div class="modal-body">
-                    <div class="image-container" style="width: 100%; display: flex; align-items: center; justify-content: space-around;">
+                    <div class="image-container"
+                        style="width: 100%; display: flex; align-items: center; justify-content: space-around;">
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -830,34 +652,121 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" id="submitBtn2">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="submitAttendance">
+                        Submit
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JS Scripts -->
+    <!-- All Other Modals -->
+    <!-- Leave Request Modal -->
+    <div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel3">Leave Request</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="form-container">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Leave Request</label>
+                                                <div class="controls">
+                                                    <select class="form-control" data-placeholder="Choose a Category"
+                                                        tabindex="1">
+                                                        <option value="">Choose...</option>
+                                                        <option value="Category 1">Male</option>
+                                                        <option value="Category 1">Female</option>
+                                                        <option value="Category 2">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Employee</label>
+                                                <div class="controls">
+                                                    <select class="form-control" data-placeholder="Choose a Category"
+                                                        tabindex="1">
+                                                        <option value="">--select employee--</option>
+                                                        <option value="Category 1">Ajay</option>
+                                                        <option value="Category 1">Reena</option>
+                                                        <option value="Category 2">Gita</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label text-light"> Date Form</label>
+                                                <input type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label">DOB</label>
+                                                <input type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label"> Attachements</label>
+                                                <input type="file" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Reason note</label>
+                                                <br>
+                                                <textarea placeholder="add reason note here..."
+                                                    style="width: 100%; height: 80px;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-info">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
     <script>
-        $(document).ready(function() {
-            // Update time display
-            function updateTime() {
-                const now = new Date();
-                let hours = now.getHours();
-                let minutes = now.getMinutes();
-                let seconds = now.getSeconds();
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                
-                // Convert to 12-hour format
-                hours = hours % 12;
-                hours = hours ? hours : 12; // the hour '0' should be '12'
-                minutes = minutes < 10 ? '0' + minutes : minutes;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                
-                const timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-                $('#current-time').text(timeString);
-            }
+        // Update time display
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
             
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            const timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            $('#current-time').text(timeString);
+        }
+        
+        $(document).ready(function() {
             // Update time every second
             setInterval(updateTime, 1000);
             updateTime(); // Initial call
@@ -867,8 +776,13 @@
                 $("#tdModal").modal("show");
             });
             
-            // Other modal related functionality
-            $("#submitBtn2").click(function() {
+            // Open leave request modal
+            $("#openModalBtn3").click(function() {
+                $("#myModal3").modal("show");
+            });
+            
+            // Attendance detail submission
+            $("#submitAttendance").click(function() {
                 $("#tdModal").modal("hide");
                 alert("Attendance updated successfully!");
             });
