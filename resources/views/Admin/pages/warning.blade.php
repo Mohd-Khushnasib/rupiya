@@ -378,7 +378,8 @@
                                                                             <i class="fa fa-edit"></i>
                                                                         </button>
                                                                         @if($adminRole === 'admin')
-                                                                        <a class="btn btn-circle btn-bordered btn-fill btn-to-danger show-tooltip delete" 
+                                                                        <a 
+                                                                        class="btn btn-primary btn_delete delete" 
                                                                             title="Delete Lead" 
                                                                             href="javascript:void(0);" 
                                                                             data-id="${item.id}">
