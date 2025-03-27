@@ -1,5 +1,11 @@
 @if (session()->get('admin_login'))
     @foreach (session()->get('admin_login') as $adminlogin)
+
+    @php
+    use Carbon\Carbon;
+    $kolkataDateTime = Carbon::now('Asia/Kolkata');
+    $currentMonthYear = $kolkataDateTime->format('F Y');
+    @endphp
          
 
         @extends('Admin.layouts.master')
@@ -295,8 +301,8 @@
                     <div class="row"
                         style="width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; margin: 10px 0;">
                         <div style="border: none; padding: 0 10px; border-radius: 10px;">
-                            <h2>Monthly Attendance - February 2025
-                            </h2>
+                            <h2>Monthly Attendance - {{ $currentMonthYear }}</h2>
+                           
                             <div class="col-sm-12">
                                 <div class="col-sm-6">
                                     <select name="task_type" id="edit_task_type" data-placeholder="Type Task"
