@@ -1,7 +1,6 @@
 @php
     use Illuminate\Support\Facades\DB;
     use Carbon\Carbon;
-
     $DateTime = Carbon::now('Asia/Kolkata');
     $today = $DateTime->format('m/d/Y');
 
@@ -12,7 +11,7 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        
+
         // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
         ->where('admin_id', $admin_id)

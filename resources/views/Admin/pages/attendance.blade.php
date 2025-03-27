@@ -1,5 +1,16 @@
 @if (session()->get('admin_login'))
     @foreach (session()->get('admin_login') as $adminlogin)
+        @php 
+            // Attendance data fetch
+            use Carbon\Carbon;
+            $DateTime = Carbon::now('Asia/Kolkata');
+            $today = $DateTime->format('m/d/Y');
+            $attendance = DB::table('tbl_attendance')
+                ->where('admin_id', $adminlogin->id)
+                ->whereRaw("DATE(punchin_datetime) = ?", [$today]) 
+                ->first();
+        @endphp 
+
         @extends('Admin.layouts.master')
         @section('main-content')
             <style>
