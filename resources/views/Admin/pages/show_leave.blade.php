@@ -851,8 +851,6 @@ $(".add_comment_leave").submit(function(e) {
     });
 });
 
-
-
 // Function to Load Leave Data with Search Filter
 function loadLeaves(status, page, search = '') {
     $.ajax({
