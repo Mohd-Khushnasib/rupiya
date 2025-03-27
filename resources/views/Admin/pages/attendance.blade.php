@@ -1028,7 +1028,7 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput1">Your punch in datetime</label>
-                                        <input type="text" id="dateInput1" value="{{ $attendance->punchin_datetime }}"
+                                        <input type="text" id="dateInput1" value="{{ $attendance->punchin_datetime ?? '' }}"
                                             class="form-control mt-3" placeholder="Punch In Date" readonly="">
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
