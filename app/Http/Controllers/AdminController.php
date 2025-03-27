@@ -16,10 +16,12 @@ use ZipArchive;
 class AdminController extends Controller
 {
     protected $date;
+    protected $today_date;
     public function __construct()
     {
         $kolkataDateTime = Carbon::now('Asia/Kolkata');
         $this->date = $kolkataDateTime->format('Y-m-d h:i A');
+        $this->today_date = $kolkataDateTime->format('Y-m-d');
     }
 
     ### Feed 
@@ -6771,20 +6773,18 @@ class AdminController extends Controller
         }
     
         // Get today's date in Y-m-d format for comparison
-        $today = date('Y-m-d');
-        
-        // Update the attendance record where admin_id matches, has punched in but not out, and is from today
+        $today = $this->today_date;
         DB::table('tbl_attendance')
             ->where('admin_id', $request->admin_id)
             ->where('punchin_status', 'true')
             ->where('punchout_status', 'false')
-            ->whereDate('datetime', $today) // Check that the record is from today
+            ->whereDate('datetime', $today) 
             ->update([
                 'punchout_datetime' => $request->punchout_datetime,
                 'punchout_note' => $request->punchout_note,
                 'punchout_status' => 'true',
-                'attendance_status' => '1', // Update to full attendance
-                'punchout_img' => $path2 // Store image URL in punchout_img
+                'attendance_status' => '1',
+                'punchout_img' => $path2
             ]);
     
         return response()->json([
