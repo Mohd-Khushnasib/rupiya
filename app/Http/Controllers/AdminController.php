@@ -6798,7 +6798,6 @@ class AdminController extends Controller
         $data['products'] = DB::table('tbl_punchoutcommitment')->orderBy('id', 'desc')->get();
         return view('Admin.pages.commitment', $data);
     }
-
     public function addPunchoutComitment(Request $request)
     {
         $data = [
@@ -6813,6 +6812,15 @@ class AdminController extends Controller
             return response()->json([
                 'success' => 'success',
             ]);
+        } else {
+        }
+    }
+
+    public function deleteCommitment(Request $request)
+    {
+        if (!empty($request->id)) {
+            $delete_data = DB::table("tbl_punchoutcommitment")->where("id", $request->id)->delete();
+            return response()->json(['success' => 'success']);
         } else {
         }
     }

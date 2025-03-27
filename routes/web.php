@@ -406,3 +406,4 @@ Route::post('/punchout_attendance', [AdminController::class, 'updatePunchOutAtte
 // get-attendance-comments
 Route::get('/admin-punchout-comitment', [AdminController::class, 'punchoutComitment']);
 Route::post('/add_punchout_comitment', [AdminController::class, 'addPunchoutComitment']);
+Route::post('/delete_commitment', [AdminController::class, 'deleteCommitment']);
