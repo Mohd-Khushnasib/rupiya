@@ -11,26 +11,36 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        $today = $kolkataDateTime->format('m/d/Y');
+        $today = Carbon::now()->format('m/d/Y');
 
-        // Fetch today's attendance record
+        // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
             ->where('admin_id', $admin_id)
             ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
             ->first();
 
-        $showPunchIn = true;
-        $showPunchOut = true;
+        // Default - both buttons disabled initially
+        $disablePunchIn = true;
+        $disablePunchOut = true;
 
         if ($attendance) {
-            // If Punch In exists and is true, hide Punch In button
-            if (!empty($attendance->punchin_datetime) && $attendance->punchin_status == 'true') {
-                $showPunchIn = false;
+            // Check punch-in status
+            if ($attendance->punchin_status == 'true') {
+                $disablePunchIn = true; // Disable punch-in button
+                
+                // Only enable punch-out if user hasn't punched out yet
+                if ($attendance->punchout_status != 'true') {
+                    $disablePunchOut = false; // Enable punch-out button
+                }
+            } else {
+                // Not punched in yet
+                $disablePunchIn = false; // Enable punch-in button
+                $disablePunchOut = true; // Disable punch-out button
             }
-            // If Punch Out exists and is true, hide Punch Out button
-            if (!empty($attendance->punchout_datetime) && $attendance->punchout_status == 'true') {
-                $showPunchOut = false;
-            }
+        } else {
+            // No attendance record for today - enable punch-in only
+            $disablePunchIn = false;
+            $disablePunchOut = true;
         }
     } else {
         echo '<script>
@@ -95,30 +105,29 @@
             <ul class="nav flaty-nav pull-right">
 
 
-                <li>
-                    <div class="dropdown">
-                        <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
-                            Time: Loading...
-                        </button>
-                        <ul class="dropdown-menu" id="dropdown-menu">
-                            <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
-                                        Leave
-                                    </button></a></li>
-                
-                            @if ($showPunchIn)
-                                <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn">
-                                            Punch In
-                                        </button></a></li>
-                            @endif
-                
-                            @if ($showPunchOut)
-                                <li><a href="#"> <button class="btn btn-success btn-block" id="openModalBtn1">
-                                            Punch Out
-                                        </button></a></li>
-                            @endif
-                        </ul>
-                    </div>
-                </li>
+              
+            <li>
+    <div class="dropdown">
+        <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
+            Time: Loading...
+        </button>
+        <ul class="dropdown-menu" id="dropdown-menu">
+            <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
+                    Leave
+                </button></a></li>
+        
+            <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn" 
+                    {{ $disablePunchIn ? 'disabled' : '' }}>
+                    Punch In
+                </button></a></li>
+        
+            <li><a href="#"><button class="btn btn-success btn-block" id="openModalBtn1" 
+                    {{ $disablePunchOut ? 'disabled' : '' }}>
+                    Punch Out
+                </button></a></li>
+        </ul>
+    </div>
+</li>
 
 
 
