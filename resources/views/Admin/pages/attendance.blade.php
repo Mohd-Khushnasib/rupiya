@@ -491,43 +491,7 @@
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <!-- DataTables Start Here -->
 
-            <script>
-                // upload excel here 
-                $("#add_form").submit(function(e) 
-                {
-                    alert("ok");
-                    $(".add_btn").prop('disabled', true);
-                    e.preventDefault();
-                    var admin_id = $(".admin_id").val();
-                    alert(admin_id);
-                    var formdata = new FormData(this);
-                    formdata.append('admin_id', admin_id);
-
-                    $.ajax({
-                        type: "post",
-                        url: "{{url('/add_attendance')}}",
-                        data: formdata,
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        dataType: "json",
-                        encode: true,
-                        success: function(data) {
-                            $(".add_btn").prop("disabled", false);
-                            if (data.success == 'success') {
-                                document.getElementById("add_form").reset();
-                                $("#myModal").modal("hide");
-                                swal("Attendance Submitted Successfully", "", "success");
-                                // view_enquiry_api(currentPage);
-                            } else if (data.success == 'error') {
-                                $(".add_btn").prop('disabled', false);
-                                swal("Error", data.message, "error");
-                            }
-                        },
-                        error: function() {}
-                    });
-                });
-            </script>
+            
 
 
 
@@ -1489,7 +1453,43 @@
             </div>
 
 
-           
+            <script>
+                // upload excel here 
+                $("#add_form").submit(function(e) 
+                {
+                    alert("ok");
+                    $(".add_btn").prop('disabled', true);
+                    e.preventDefault();
+                    var admin_id = $(".admin_id").val();
+                    alert(admin_id);
+                    var formdata = new FormData(this);
+                    formdata.append('admin_id', admin_id);
+
+                    $.ajax({
+                        type: "post",
+                        url: "{{url('/add_attendance')}}",
+                        data: formdata,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        encode: true,
+                        success: function(data) {
+                            $(".add_btn").prop("disabled", false);
+                            if (data.success == 'success') {
+                                document.getElementById("add_form").reset();
+                                $("#myModal").modal("hide");
+                                swal("Attendance Submitted Successfully", "", "success");
+                                // view_enquiry_api(currentPage);
+                            } else if (data.success == 'error') {
+                                $(".add_btn").prop('disabled', false);
+                                swal("Error", data.message, "error");
+                            }
+                        },
+                        error: function() {}
+                    });
+                });
+            </script>
 
 
         @endsection
