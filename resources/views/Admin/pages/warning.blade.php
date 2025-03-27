@@ -363,7 +363,7 @@
                                                                     <td>{{ $item->warned_to ?? 'N/A' }}</td>
                                                                     <td>{{ $item->warning_name ?? 'No Type' }}</td>
                                                                     <td>₹{{ $item->penalty ?? '0' }}</td>
-                                                                    <td>{{ $item->message }}</td>
+                                                                    <td style="width:50px !important;">{{ $item->message }}</td>
                                                                     <td>{{ isset($item->date) ? \Carbon\Carbon::parse($item->date)->format('d/m/Y') : 'N/A' }}</td>
                                                                     <td>
                                                                         <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
