@@ -382,7 +382,7 @@
                                                                         class="btn btn-primary btn_delete delete" 
                                                                             title="Delete Lead" 
                                                                             data-id="${item.id}">
-                                                                            <i class="fa fa-trash-o"></i>
+                                                                            <i class="fa fa-trash"></i>
                                                                         </button>
                                                                         @endif
                                                                     </td>
