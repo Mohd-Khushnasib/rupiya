@@ -3,7 +3,8 @@
     use Carbon\Carbon;
 
     $kolkataDateTime = Carbon::now('Asia/Kolkata');
-    
+    $this->date = $kolkataDateTime->format('Y-m-d h:i A'); // Store current date-time
+
     if (session()->has('admin_login')) {
         $data = session('admin_login');
         $admin = $data->first();
@@ -11,36 +12,25 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        $today = Carbon::now()->format('m/d/Y');
+        $today = $kolkataDateTime->format('Y-m-d'); // Format date for query
 
-        // Attendance data fetch
+        // Fetch attendance data
         $attendance = DB::table('tbl_attendance')
             ->where('admin_id', $admin_id)
-            ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
+            ->whereRaw("DATE(punchin_datetime) = ?", [$today])
             ->first();
 
-        // Default - both buttons disabled initially
-        $disablePunchIn = true;
-        $disablePunchOut = true;
+        // Default: Show both buttons
+        $hidePunchIn = false;
+        $hidePunchOut = false;
 
         if ($attendance) {
-            // Check punch-in status
             if ($attendance->punchin_status == 'true') {
-                $disablePunchIn = true; // Disable punch-in button
-                
-                // Only enable punch-out if user hasn't punched out yet
-                if ($attendance->punchout_status != 'true') {
-                    $disablePunchOut = false; // Enable punch-out button
-                }
-            } else {
-                // Not punched in yet
-                $disablePunchIn = false; // Enable punch-in button
-                $disablePunchOut = true; // Disable punch-out button
+                $hidePunchIn = true;  // Hide Punch In button
             }
-        } else {
-            // No attendance record for today - enable punch-in only
-            $disablePunchIn = false;
-            $disablePunchOut = true;
+            if ($attendance->punchout_status == 'true') {
+                $hidePunchOut = true; // Hide Punch Out button
+            }
         }
     } else {
         echo '<script>
@@ -116,15 +106,23 @@
                     Leave
                 </button></a></li>
         
-            <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn" 
-                    {{ $disablePunchIn ? 'disabled' : '' }}>
-                    Punch In
-                </button></a></li>
-        
-            <li><a href="#"><button class="btn btn-success btn-block" id="openModalBtn1" 
-                    {{ $disablePunchOut ? 'disabled' : '' }}>
-                    Punch Out
-                </button></a></li>
+                @if(!$hidePunchIn)
+                <li><a href="#">
+                    <button type="button" class="btn btn-info btn-block" id="openModalBtn">
+                        Punch In
+                    </button>
+                </a></li>
+                @endif
+                
+                <!-- Punch Out Button -->
+                @if(!$hidePunchOut)
+                <li><a href="#">
+                    <button class="btn btn-success btn-block" id="openModalBtn1">
+                        Punch Out
+                    </button>
+                </a></li>
+                @endif
+                
         </ul>
     </div>
 </li>
