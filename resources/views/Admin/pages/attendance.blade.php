@@ -251,8 +251,8 @@
 
             <div class="container" id="main-container">
                 
-                <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
-                
+                <input type="hidden" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
+
                 <!-- BEGIN Content -->
                 <div id="main-content">
                     <!-- BEGIN Page Title -->
