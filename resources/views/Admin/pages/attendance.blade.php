@@ -677,7 +677,7 @@
 
                             <!-- Input fields for date and time -->
                             <div style="margin-top: 15px">
-                                <label for="dateInput">Your punch in date</label>
+                                <label for="dateInput">Your punch in datetime</label>
                                 <input type="text" id="dateInput" class="form-control mt-3"
                                     placeholder="Current Date" readonly="">
                             </div>

@@ -67,7 +67,7 @@
             <!-- BEGIN Navbar Buttons -->
             <ul class="nav flaty-nav pull-right">
 
-                
+
                 <li>
                     <div class="dropdown">
                         <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
@@ -261,12 +261,12 @@
                         <!-- <span class="nav_text_all"><i class="fa fa-calculator "></i></span> -->
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{url('/emi-status')}}" class="dropdown-toggle">
                         <i class="fa fa-file"></i>
                         <span class="nav_text_all">Emi Share</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <!-- Warning -->
                 <!-- <li>
