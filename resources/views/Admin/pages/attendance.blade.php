@@ -1,11 +1,20 @@
-
-
 @if (session()->get('admin_login'))
     @foreach (session()->get('admin_login') as $adminlogin)
-  
-    @php
-        $currentMonthYear = date('F Y');
-    @endphp
+
+        @php
+            date_default_timezone_set('Asia/Kolkata');
+            $currentMonthYear = date('F Y');
+
+            $today = date('n/j/Y'); // '3/27/2025' format (without time)
+
+            // Fetch attendance data
+            $attendance = DB::table('tbl_attendance')
+                ->where('admin_id', $adminlogin->id)
+                ->whereRaw("DATE_FORMAT(STR_TO_DATE(punchin_datetime, '%c/%e/%Y, %h:%i:%s %p'), '%c/%e/%Y') = ?", [$today])
+                ->first();
+
+                dd($attendance);
+        @endphp
 
 
         @extends('Admin.layouts.master')
@@ -736,10 +745,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                <label for="timeInput">Your punch in time</label>
-                                                <input type="text" id="timeInput" class="form-control mt-3"
-                                                    placeholder="Current Time" readonly="">
-                                            </div> -->
+                                                            <label for="timeInput">Your punch in time</label>
+                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                placeholder="Current Time" readonly="">
+                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1193,12 +1202,12 @@
                             <div class="ak_container" style="margin-top: 20px;">
                                 <h4 class="ak_heading">Your Working Hour</h4>
                                 <!-- <div id="ak_inputContainer">
-                                        </div>
-                                        <button id="ak_plusBtn">+ Add Work History</button>
-                                        <div class="ak_total_box">
-                                            Total Working Hours: <span id="ak_totalHours">0</span>
-                                        </div>
-                                        <div id="ak_errorMessage" class="ak_error"></div> -->
+                                                    </div>
+                                                    <button id="ak_plusBtn">+ Add Work History</button>
+                                                    <div class="ak_total_box">
+                                                        Total Working Hours: <span id="ak_totalHours">0</span>
+                                                    </div>
+                                                    <div id="ak_errorMessage" class="ak_error"></div> -->
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
@@ -1259,10 +1268,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                            color: green !important;
-                            margin-top: 15px;
-                            font-weight: bold;
-                          ">1.
+                                        color: green !important;
+                                        margin-top: 15px;
+                                        font-weight: bold;
+                                      ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1303,10 +1312,10 @@
 
 
             <!--
-                    -----------------------------------------------------------------------------------------------------------
-                    add multiple boxes for add your work time
-                    -----------------------------------------------------------------------------------------------------------
-                    -->
+                                -----------------------------------------------------------------------------------------------------------
+                                add multiple boxes for add your work time
+                                -----------------------------------------------------------------------------------------------------------
+                                -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1338,10 +1347,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                        <input type="text" placeholder="Work description">
-                        <input type="number" placeholder="Hours" min="0">
-                        <button class="ak_minus">-</button>
-                    `;
+                                    <input type="text" placeholder="Work description">
+                                    <input type="number" placeholder="Hours" min="0">
+                                    <button class="ak_minus">-</button>
+                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1391,10 +1400,10 @@
             </script>
 
             <!--
-                    -----------------------------------------------------------------------------------------------------------
-                    Attendance Details Modal
-                    -----------------------------------------------------------------------------------------------------------
-                    -->
+                                -----------------------------------------------------------------------------------------------------------
+                                Attendance Details Modal
+                                -----------------------------------------------------------------------------------------------------------
+                                -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1447,14 +1456,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                    <label for="">Change Attendance </label>
-                                                    <select name="" id="">
-                                                        <option value="1">Full Day (1)</option>
-                                                        <option value="0.5">Half Day (0.5)</option>
-                                                        <option value="0">Leave (0)</option>
-                                                        <option value="-1">Leave Not Approved (-1)</option>
-                                                    </select>
-                                                </div> -->
+                                                                <label for="">Change Attendance </label>
+                                                                <select name="" id="">
+                                                                    <option value="1">Full Day (1)</option>
+                                                                    <option value="0.5">Half Day (0.5)</option>
+                                                                    <option value="0">Leave (0)</option>
+                                                                    <option value="-1">Leave Not Approved (-1)</option>
+                                                                </select>
+                                                            </div> -->
                                     </div>
                                 </div>
 
