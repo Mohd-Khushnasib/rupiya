@@ -374,9 +374,9 @@
                                                                  
                                                                     <td>{{ isset($item->date) ? \Carbon\Carbon::parse($item->date)->format('d/m/Y') : 'N/A' }}</td>
                                                                     <td style="display:flex;gap:7px">
-                                                                        <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
+                                                                        <!-- <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
                                                                             <i class="fa fa-edit"></i>
-                                                                        </button>
+                                                                        </button> -->
                                                                         @if($adminRole === 'admin')
                                                                         <button 
                                                                         class="btn btn-primary btn_delete delete" 
@@ -441,9 +441,9 @@
                                                                     <td>{{ $item->message }}</td>
                                                                     <td>{{ isset($item->date) ? \Carbon\Carbon::parse($item->date)->format('d/m/Y') : 'N/A' }}</td>
                                                                     <td>
-                                                                        <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
+                                                                        <!-- <button class="btn btn-sm btn-primary edit-warning" data-id="{{ $item->id }}">
                                                                             <i class="fa fa-edit"></i>
-                                                                        </button>
+                                                                        </button> -->
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
