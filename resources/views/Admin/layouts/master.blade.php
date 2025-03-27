@@ -30,8 +30,8 @@
                 $disablePunchOut = true;
             } else if ($attendance->punchin_status == 'true') {
                 // Only punched in - enable punch-out, disable punch-in
-                $disablePunchIn = true;
-                $disablePunchOut = false;
+                $disablePunchIn = false;
+                $disablePunchOut = true;
                 $showPunchOut = true;
             }
         }
