@@ -473,7 +473,7 @@
         function updateTime() {
             const button = document.getElementById('timeButton');
             const currentTime = new Date().toLocaleTimeString(); // Get current time
-            button.innerText = `Time: ${currentTime}`; // Update button text
+            button.innerText = 'Time: ${currentTime}'; // Update button text
         }
         // Update the time every 1000ms (1 second)
         setInterval(updateTime, 1000);
