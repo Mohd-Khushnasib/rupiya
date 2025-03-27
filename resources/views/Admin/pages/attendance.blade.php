@@ -968,16 +968,14 @@
                                         <input type="text" id="dateInput1" class="form-control mt-3"
                                             placeholder="Punch In Date" readonly="">
                                     </div>
-                                   
-                                </div>
-                                <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput2">Your punch out datetime</label>
                                         <input type="text" id="dateInput2" class="form-control mt-3"
                                             placeholder="Punch Out Date" readonly="">
                                     </div>
-                                    
+                                   
                                 </div>
+                               
 
                                 <textarea placeholder="Comment" name="punchout_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
                             </div>
