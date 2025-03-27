@@ -250,6 +250,9 @@
 
 
             <div class="container" id="main-container">
+                
+                <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
+                
                 <!-- BEGIN Content -->
                 <div id="main-content">
                     <!-- BEGIN Page Title -->
@@ -711,7 +714,6 @@
                         </div>
                         <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                             @csrf
-                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
                             <div class="modal-body">
                                 <video id="camera" width="100%" autoplay=""></video>
                                 <canvas id="snapshot" style="display: none" width="640" height="480"></canvas>
@@ -979,11 +981,11 @@
                                         <input type="text" id="dateInput1" class="form-control mt-3"
                                             placeholder="Punch In Date" readonly="">
                                     </div>
-                                    {{-- <div style="margin-top: 20px; width: 45%">
+                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="timeInput1">Your punch in time</label>
                                         <input type="text" id="timeInput1" class="form-control mt-3"
                                             placeholder="Punch In Time" readonly="">
-                                    </div> --}}
+                                    </div> 
                                 </div>
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
@@ -991,11 +993,11 @@
                                         <input type="text" id="dateInput2" class="form-control mt-3"
                                             placeholder="Punch Out Date" readonly="">
                                     </div>
-                                    {{-- <div style="margin-top: 20px; width: 45%">
+                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="timeInput2">Your punch out time</label>
                                         <input type="text" id="timeInput2" class="form-control mt-3"
                                             placeholder="Punch Out Time" readonly="">
-                                    </div> --}}
+                                    </div> 
                                 </div>
 
                                 <textarea placeholder="Comment" name="punchout_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
