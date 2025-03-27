@@ -726,8 +726,9 @@
                         const now = new Date();
                         const date = now.toLocaleDateString();
                         const time = now.toLocaleTimeString();
-                        dateInput.value = date;
-                        timeInput.value = time;
+                        // dateInput.value = date;
+                        // timeInput.value = time;
+                        const dateInput = date + "." + time;
                     } catch (err) {
                         console.error("Camera access denied:", err);
                         alert("Camera access is required to proceed.");
