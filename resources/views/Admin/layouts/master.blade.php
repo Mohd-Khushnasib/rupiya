@@ -8,6 +8,7 @@
         $role = $admin->role ?? '';
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
+        $totalLeads = DB::table('tbl_lead')->count(); // Total leads count fix
         $today = Carbon::now()->format('m/d/Y');
 
         // Attendance data fetch
@@ -34,6 +35,7 @@
         exit;
     }
 @endphp
+
 
 
 <!DOCTYPE html>
