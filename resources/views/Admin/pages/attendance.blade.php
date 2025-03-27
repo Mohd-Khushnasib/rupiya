@@ -492,14 +492,10 @@
 
 <script>
     $(document).ready(function() {
-        // Ensure DOM is fully loaded before attaching event handlers
         $("#add_form").on("submit", function(e) {
-            e.preventDefault(); // Prevent the default form submission
+            e.preventDefault();
             
-            // Disable the submit button to prevent multiple submissions
             $(".add_btn").prop('disabled', true);
-            
-            // Get admin_id value
             var admin_id = $(".admin_id").val();
             
             // Create FormData object from the form
@@ -755,7 +751,7 @@
                             <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info add_btn">
+                            <button type="submit" class="btn btn-info add_btn">
                                 Submit
                             </button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">
