@@ -684,11 +684,11 @@
                                 <input type="text" id="dateInput" class="form-control mt-3"
                                     placeholder="Current Date" readonly="">
                             </div>
-                            <div style="margin-top: 15px">
+                            <!-- <div style="margin-top: 15px">
                                 <label for="timeInput">Your punch in time</label>
                                 <input type="text" id="timeInput" class="form-control mt-3"
                                     placeholder="Current Time" readonly="">
-                            </div>
+                            </div> -->
                             <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                         </div>
                         <div class="modal-footer">
@@ -726,12 +726,11 @@
                         video.srcObject = stream;
                         $("#myModal").modal("show");
 
-                        // Set the current date and time
+                        // Set the current date and time in the same input
                         const now = new Date();
-                        const date = now.toLocaleDateString();
-                        const time = now.toLocaleTimeString();
-                        dateInput.value = date;
-                        timeInput.value = time;
+                        const dateTime = now.toLocaleString(); // Combine date and time
+                        dateInput.value = dateTime; // Set the combined value
+                      
                     } catch (err) {
                         console.error("Camera access denied:", err);
                         alert("Camera access is required to proceed.");
