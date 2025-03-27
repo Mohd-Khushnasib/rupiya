@@ -6751,7 +6751,7 @@ class AdminController extends Controller
             'punchout_status' => 'false',
             'attendance_status' => '0.5',
             'punchin_img' => $path1, // Store image URL in punchin_img
-            'datetime' => $this->date
+            'date' => $this->today_date
         ];
         
         DB::table('tbl_attendance')->insert($data);
@@ -6773,15 +6773,13 @@ class AdminController extends Controller
         }
     
         // Format directly in the query
-        
-        // Get today's date in Y-m-d format for comparison
         $today = $this->today_date;
         
         DB::table('tbl_attendance')
             ->where('admin_id', $request->admin_id)
             ->where('punchin_status', 'true')
             ->where('punchout_status', 'false')
-            ->whereDate('datetime', $today) 
+            ->where('date', $today) 
             ->update([
                 'punchout_datetime' => $request->punchout_datetime,
                 'punchout_note' => $request->punchout_note,
@@ -6789,7 +6787,6 @@ class AdminController extends Controller
                 'attendance_status' => '1',
                 'punchout_img' => $path2
             ]);
-    
         return response()->json([
             'success' => 'success',
         ]);
