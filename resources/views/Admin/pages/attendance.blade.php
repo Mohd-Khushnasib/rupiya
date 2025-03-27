@@ -1,12 +1,12 @@
+
+
 @if (session()->get('admin_login'))
     @foreach (session()->get('admin_login') as $adminlogin)
-
+  
     @php
-    use Carbon\Carbon;
-    $kolkataDateTime = Carbon::now('Asia/Kolkata');
-    $currentMonthYear = $kolkataDateTime->format('F Y');
+        $currentMonthYear = date('F Y');
     @endphp
-         
+
 
         @extends('Admin.layouts.master')
         @section('main-content')
@@ -258,7 +258,7 @@
 
 
             <div class="container" id="main-container">
-                
+
                 <input type="hidden" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
 
                 <!-- BEGIN Content -->
@@ -302,7 +302,7 @@
                         style="width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; margin: 10px 0;">
                         <div style="border: none; padding: 0 10px; border-radius: 10px;">
                             <h2>Monthly Attendance - {{ $currentMonthYear }}</h2>
-                           
+
                             <div class="col-sm-12">
                                 <div class="col-sm-6">
                                     <select name="task_type" id="edit_task_type" data-placeholder="Type Task"
@@ -502,15 +502,15 @@
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
             <script>
-                $(document).ready(function() {
-                    $("#add_form").on("submit", function(e) {
+                $(document).ready(function () {
+                    $("#add_form").on("submit", function (e) {
                         e.preventDefault();
-                        
+
                         $(".add_btn").prop('disabled', true);
                         var admin_id = $(".admin_id").val();
                         var formdata = new FormData(this);
                         formdata.append('admin_id', admin_id);
-                        
+
                         // AJAX request
                         $.ajax({
                             type: "POST",
@@ -520,10 +520,10 @@
                             cache: false,
                             processData: false,
                             dataType: "json",
-                            success: function(data) {
+                            success: function (data) {
                                 // Re-enable the button
                                 $(".add_btn").prop("disabled", false);
-                                
+
                                 if (data.success == 'success') {
                                     document.getElementById("add_form").reset();
                                     $("#myModal").modal("hide");
@@ -534,7 +534,7 @@
                                     swal("Error", data.message, "error");
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 // Handle error case
                                 $(".add_btn").prop("disabled", false);
                                 swal("Error", "An error occurred while submitting the form. Please try again.", "error");
@@ -546,7 +546,7 @@
             </script>
             <!-- live time -->
             <script>
-                window.onload = function() {
+                window.onload = function () {
                     function updateTime() {
                         const button = document.getElementById('timeButton');
                         const currentTime = new Date().toLocaleTimeString(); // Get current time
@@ -560,8 +560,8 @@
 
             <!-- live time button dropdown -->
             <script>
-                $(document).ready(function() {
-                    $("#timeButton").on("click", function() {
+                $(document).ready(function () {
+                    $("#timeButton").on("click", function () {
                         // Update button text with current time
                         var currentTime = new Date().toLocaleTimeString();
                         $(this).text("Time: " + currentTime);
@@ -572,7 +572,7 @@
                         dropdown.toggle(); // Toggle the current one
                     });
                     // Close dropdown when clicking outside
-                    $(document).on("click", function(e) {
+                    $(document).on("click", function (e) {
                         if (!$(e.target).closest(".dropdown").length) {
                             $(".dropdown-menu").hide();
                         }
@@ -596,10 +596,8 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" style="color: black; margin-left: 16px !important;"
-                                id="myModalLabel3">Leave
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" style="color: black; margin-left: 16px !important;" id="myModalLabel3">Leave
                                 Request
                             </h4>
                         </div>
@@ -613,8 +611,8 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Leave Request</label>
                                                         <div class="controls">
-                                                            <select class="form-control"
-                                                                data-placeholder="Choose a Category" tabindex="1">
+                                                            <select class="form-control" data-placeholder="Choose a Category"
+                                                                tabindex="1">
                                                                 <option value="">Choose...</option>
                                                                 <option value="Category 1">Male</option>
                                                                 <option value="Category 1">Female</option>
@@ -627,8 +625,8 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Employee</label>
                                                         <div class="controls">
-                                                            <select class="form-control"
-                                                                data-placeholder="Choose a Category" tabindex="1">
+                                                            <select class="form-control" data-placeholder="Choose a Category"
+                                                                tabindex="1">
                                                                 <option value="">--select employee--</option>
                                                                 <option value="Category 1">Ajay</option>
                                                                 <option value="Category 1">Reena</option>
@@ -659,7 +657,8 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Reason note</label>
                                                         <br>
-                                                        <textarea placeholder="add reason note here..." style="width: 100%; height: 80px;"></textarea>
+                                                        <textarea placeholder="add reason note here..."
+                                                            style="width: 100%; height: 80px;"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -677,8 +676,8 @@
             </div>
             <!-- leave modal open js -->
             <script>
-                $(document).ready(function() {
-                    $("#openModalBtn3").click(function() {
+                $(document).ready(function () {
+                    $("#openModalBtn3").click(function () {
                         $("#myModal3").modal("show");
                     });
                 });
@@ -688,7 +687,7 @@
             <script>
                 document
                     .getElementById("openModalBtn")
-                    .addEventListener("click", function() {
+                    .addEventListener("click", function () {
                         let currentTime = new Date().toLocaleTimeString();
                         document.getElementById("timeInput").value = currentTime;
                     });
@@ -713,8 +712,8 @@
 
                                 <!-- Input Field and Capture Button -->
                                 <div class="form-group">
-                                    <input type="file" name="punchin_img" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
-                                        accept="image/png">
+                                    <input type="file" name="punchin_img" name="punchin_img" style="display: none"
+                                        id="capturedImage" class="form-control" accept="image/png">
                                 </div>
                                 <button type="button" class="btn btn-success" id="captureBtn">
                                     Capture Image
@@ -737,11 +736,12 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                    <label for="timeInput">Your punch in time</label>
-                                    <input type="text" id="timeInput" class="form-control mt-3"
-                                        placeholder="Current Time" readonly="">
-                                </div> -->
-                                <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
+                                                <label for="timeInput">Your punch in time</label>
+                                                <input type="text" id="timeInput" class="form-control mt-3"
+                                                    placeholder="Current Time" readonly="">
+                                            </div> -->
+                                <textarea placeholder="Comment" name="punchin_note"
+                                    style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-info add_btn">
@@ -751,7 +751,7 @@
                                     Close
                                 </button>
                             </div>
-                         </form>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -782,7 +782,7 @@
                         const now = new Date();
                         const dateTime = now.toLocaleString(); // Combine date and time
                         dateInput.value = dateTime; // Set the combined value
-                      
+
                     } catch (err) {
                         console.error("Camera access denied:", err);
                         alert("Camera access is required to proceed.");
@@ -840,7 +840,7 @@
                     }
                 });
 
-                $("#myModal").on("hidden.bs.modal", function() {
+                $("#myModal").on("hidden.bs.modal", function () {
                     if (stream) {
                         stream.getTracks().forEach((track) => track.stop());
                     }
@@ -849,22 +849,22 @@
 
             <!--  punch in modal open  -->
             <script>
-                $(document).ready(function() {
-                    $("#openModalBtn").on("click", function() {
+                $(document).ready(function () {
+                    $("#openModalBtn").on("click", function () {
                         $("#modalTitle").text("Add Task");
                         $("#myModal").modal("show");
                     });
 
-                    $("#saveChangesBtn").on("click", function() {
+                    $("#saveChangesBtn").on("click", function () {
                         alert("Your changes have been saved!");
                         $("#myModal").modal("hide");
                     });
 
-                    $("#myModal").on("shown.bs.modal", function() {
+                    $("#myModal").on("shown.bs.modal", function () {
                         console.log("Modal is now fully visible!");
                     });
 
-                    $("#myModal").on("hidden.bs.modal", function() {
+                    $("#myModal").on("hidden.bs.modal", function () {
                         console.log("Modal has been closed.");
                     });
                 });
@@ -918,10 +918,10 @@
 
             <!-- punch in modal submit button -->
             <script>
-                $(document).ready(function() {
-                    $("#submitBtn").click(function() {
+                $(document).ready(function () {
+                    $("#submitBtn").click(function () {
                         $("#myModal").modal("hide"); // Hide the first modal
-                        setTimeout(function() {
+                        setTimeout(function () {
                             $("#secondModal").modal("show"); // Show the second modal
                         }, 500); // Small delay to ensure smooth transition
                     });
@@ -930,7 +930,7 @@
 
 
 
-            
+
             <!-- Punch Out Modal -->
             <div id="myModal1" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -941,17 +941,18 @@
                             </button>
                             <h4 class="modal-title" style="color: black;">Punch Out</h4>
                         </div>
-                        
+
                         <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                             @csrf
-                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
+                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}"
+                                readonly>
                             <div class="modal-body">
                                 <video id="camera1" width="100%" autoplay=""></video>
                                 <canvas id="snapshot1" style="display: none" width="640" height="480"></canvas>
 
                                 <div class="form-group">
-                                    <input type="file" name="punchout_img" id="capturedImage1" style="display: none" class="form-control"
-                                        accept="image/png">
+                                    <input type="file" name="punchout_img" id="capturedImage1" style="display: none"
+                                        class="form-control" accept="image/png">
                                 </div>
                                 <button type="button" class="btn btn-success" id="captureBtn1">
                                     Capture Image
@@ -971,19 +972,20 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput1">Your punch in datetime</label>
-                                        <input type="text" id="dateInput1" class="form-control mt-3"
-                                            placeholder="Punch In Date" readonly="">
+                                        <input type="text" id="dateInput1" class="form-control mt-3" placeholder="Punch In Date"
+                                            readonly="">
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput2">Your punch out datetime</label>
-                                        <input type="text" id="dateInput2" class="form-control mt-3"
-                                            placeholder="Punch Out Date" readonly="">
+                                        <input type="text" id="dateInput2" class="form-control mt-3" placeholder="Punch Out Date"
+                                            readonly="">
                                     </div>
-                                   
-                                </div>
-                               
 
-                                <textarea placeholder="Comment" name="punchout_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
+                                </div>
+
+
+                                <textarea placeholder="Comment" name="punchout_note"
+                                    style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-info" id="submitBtn1">
@@ -1000,7 +1002,7 @@
 
             <!-- punch out modal open -->
             <script>
-                document.addEventListener("DOMContentLoaded", function() {
+                document.addEventListener("DOMContentLoaded", function () {
                     const openModalBtn1 = document.getElementById("openModalBtn1");
                     const video1 = document.getElementById("camera1");
                     const captureBtn1 = document.getElementById("captureBtn1");
@@ -1088,7 +1090,7 @@
                         }
                     });
 
-                    $("#myModal1").on("hidden.bs.modal", function() {
+                    $("#myModal1").on("hidden.bs.modal", function () {
                         if (stream1) {
                             stream1.getTracks().forEach((track) => track.stop());
                             stream1 = null;
@@ -1099,7 +1101,7 @@
 
             <!-- punch out store time -->
             <script>
-                $("#myModal1").on("show.bs.modal", function() {
+                $("#myModal1").on("show.bs.modal", function () {
                     var currentDateTime = new Date();
                     var formattedDateTime = currentDateTime.toLocaleString();
 
@@ -1107,10 +1109,10 @@
                     $(this).find('input[type="text"]').val(formattedDateTime);
                 });
 
-                $("#captureBtn1").on("click", function() {});
+                $("#captureBtn1").on("click", function () { });
 
                 // Optional: Submit button click event
-                $("#submitBtn1").on("click", function() {});
+                $("#submitBtn1").on("click", function () { });
             </script>
 
 
@@ -1191,12 +1193,12 @@
                             <div class="ak_container" style="margin-top: 20px;">
                                 <h4 class="ak_heading">Your Working Hour</h4>
                                 <!-- <div id="ak_inputContainer">
-                            </div>
-                            <button id="ak_plusBtn">+ Add Work History</button>
-                            <div class="ak_total_box">
-                                Total Working Hours: <span id="ak_totalHours">0</span>
-                            </div>
-                            <div id="ak_errorMessage" class="ak_error"></div> -->
+                                        </div>
+                                        <button id="ak_plusBtn">+ Add Work History</button>
+                                        <div class="ak_total_box">
+                                            Total Working Hours: <span id="ak_totalHours">0</span>
+                                        </div>
+                                        <div id="ak_errorMessage" class="ak_error"></div> -->
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
@@ -1256,12 +1258,11 @@
                                 </div>
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
-                                    <span
-                                        style="
-                color: green !important;
-                margin-top: 15px;
-                font-weight: bold;
-              ">1.
+                                    <span style="
+                            color: green !important;
+                            margin-top: 15px;
+                            font-weight: bold;
+                          ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1279,22 +1280,22 @@
 
             <!-- punch out modal -->
             <script>
-                $(document).ready(function() {
-                    $("#openModalBtn1").on("click", function() {
+                $(document).ready(function () {
+                    $("#openModalBtn1").on("click", function () {
                         $("#modalTitle1").text("Add Task");
                         $("#myModal1").modal("show");
                     });
 
-                    $("#saveChangesBtn1").on("click", function() {
+                    $("#saveChangesBtn1").on("click", function () {
                         alert("Your changes have been saved!");
                         $("#myModal1").modal("hide");
                     });
 
-                    $("#myModal1").on("shown.bs.modal", function() {
+                    $("#myModal1").on("shown.bs.modal", function () {
                         console.log("Modal is now fully visible!");
                     });
 
-                    $("#myModal1").on("hidden.bs.modal", function() {
+                    $("#myModal1").on("hidden.bs.modal", function () {
                         console.log("Modal has been closed.");
                     });
                 });
@@ -1302,10 +1303,10 @@
 
 
             <!--
-        -----------------------------------------------------------------------------------------------------------
-        add multiple boxes for add your work time
-        -----------------------------------------------------------------------------------------------------------
-        -->
+                    -----------------------------------------------------------------------------------------------------------
+                    add multiple boxes for add your work time
+                    -----------------------------------------------------------------------------------------------------------
+                    -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1337,10 +1338,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-            <input type="text" placeholder="Work description">
-            <input type="number" placeholder="Hours" min="0">
-            <button class="ak_minus">-</button>
-        `;
+                        <input type="text" placeholder="Work description">
+                        <input type="number" placeholder="Hours" min="0">
+                        <button class="ak_minus">-</button>
+                    `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1370,10 +1371,10 @@
 
 
             <script>
-                $(document).ready(function() {
-                    $("#submitBtn1").click(function() {
+                $(document).ready(function () {
+                    $("#submitBtn1").click(function () {
                         $("#myModal1").modal("hide");
-                        setTimeout(function() {
+                        setTimeout(function () {
                             $("#myModal2").modal("show");
                         }, 500);
                     });
@@ -1382,18 +1383,18 @@
 
             <!-- td modal js -->
             <script>
-                $(document).ready(function() {
-                    $(".opentdModal").click(function() {
+                $(document).ready(function () {
+                    $(".opentdModal").click(function () {
                         $("#tdModal").modal("show");
                     });
                 });
             </script>
 
             <!--
-        -----------------------------------------------------------------------------------------------------------
-        Attendance Details Modal
-        -----------------------------------------------------------------------------------------------------------
-        -->
+                    -----------------------------------------------------------------------------------------------------------
+                    Attendance Details Modal
+                    -----------------------------------------------------------------------------------------------------------
+                    -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1446,14 +1447,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                        <label for="">Change Attendance </label>
-                                        <select name="" id="">
-                                            <option value="1">Full Day (1)</option>
-                                            <option value="0.5">Half Day (0.5)</option>
-                                            <option value="0">Leave (0)</option>
-                                            <option value="-1">Leave Not Approved (-1)</option>
-                                        </select>
-                                    </div> -->
+                                                    <label for="">Change Attendance </label>
+                                                    <select name="" id="">
+                                                        <option value="1">Full Day (1)</option>
+                                                        <option value="0.5">Half Day (0.5)</option>
+                                                        <option value="0">Leave (0)</option>
+                                                        <option value="-1">Leave Not Approved (-1)</option>
+                                                    </select>
+                                                </div> -->
                                     </div>
                                 </div>
 
@@ -1473,7 +1474,7 @@
             </div>
 
 
-           
+
 
 
         @endsection
