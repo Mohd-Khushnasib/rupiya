@@ -11,7 +11,7 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        $today = Carbon::now()->format('m/d/Y');
+        $today = $kolkataDateTime->format('m/d/Y');
 
         // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
