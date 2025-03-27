@@ -484,11 +484,62 @@
                     </div>
                 </div>
             </div>
-            <!-- END Content -->
+            <!-- Main Content End Here -->
 
+            <!-- Js Links Start Here -->
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <!-- DataTables Start Here -->
+
+            <script>
+                // upload excel here 
+                $("#add_form").submit(function(e) 
+                {
+                    $(".add_btn").prop('disabled', true);
+                    e.preventDefault();
+                    var admin_id = $(".admin_id").val();
+                    alert(admin_id);
+                    var formdata = new FormData(this);
+                    formdata.append('admin_id', admin_id);
+
+                    $.ajax({
+                        type: "post",
+                        url: "{{url('/add_attendance')}}",
+                        data: formdata,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: "json",
+                        encode: true,
+                        success: function(data) {
+                            $(".add_btn").prop("disabled", false);
+                            if (data.success == 'success') {
+                                document.getElementById("add_form").reset();
+                                $("#myModal").modal("hide");
+                                swal("Attendance Submitted Successfully", "", "success");
+                                // view_enquiry_api(currentPage);
+                            } else if (data.success == 'error') {
+                                $(".add_btn").prop('disabled', false);
+                                swal("Error", data.message, "error");
+                            }
+                        },
+                        error: function() {}
+                    });
+                });
+            </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <!-- live time -->
@@ -661,7 +712,7 @@
 
                             <!-- Input Field and Capture Button -->
                             <div class="form-group">
-                                <input type="file" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
+                                <input type="file" name="punchin_img" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
                                     accept="image/png">
                             </div>
                             <button type="button" class="btn btn-success" id="captureBtn">
@@ -681,7 +732,7 @@
                             <!-- Input fields for date and time -->
                             <div style="margin-top: 15px">
                                 <label for="dateInput">Your punch in datetime</label>
-                                <input type="text" id="dateInput" class="form-control mt-3"
+                                <input type="text" name="punchin_datetime" id="dateInput" class="form-control mt-3"
                                     placeholder="Current Date" readonly="">
                             </div>
                             <!-- <div style="margin-top: 15px">
@@ -689,7 +740,7 @@
                                 <input type="text" id="timeInput" class="form-control mt-3"
                                     placeholder="Current Time" readonly="">
                             </div> -->
-                            <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
+                            <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-info add_btn" id="submitBtn">
@@ -1077,65 +1128,6 @@
                 $("#submitBtn1").on("click", function() {});
             </script>
 
-            <!-- After Punch out modal -->
-            <!-- id="myModal2" class="modal fade" role="dialog" -->
-            <!-- <div id="myModal2">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            &times;
-                        </button>
-                        <h4 class="modal-title text-center" style="color: black; font-weight: bold">
-                            Commitment vs Achievement
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="ak_container">
-                            <h2 class="ak_heading">Your Working Hour</h2>
-                            <div id="ak_inputContainer">
-                            </div>
-                            <button id="ak_plusBtn">+ Add Work History</button>
-                            <div class="ak_total_box">
-                                Total Working Hours: <span id="ak_totalHours">0</span>
-                            </div>
-                            <div id="ak_errorMessage" class="ak_error"></div>
-                        </div>
-                        <div style="margin-top: 20px">
-                            <p style="font-weight: bold; margin: 0px;">
-                                Write Comment Here
-                            </p>
-                            <div id="commentBox" class="comment-box">
-                                <textarea placeholder="Write a comment..." style="width: 100%; height: 100px;"></textarea>
-                            </div>
-                        </div>
-                        <div style="margin-top: 20px">
-                            <h4 class="text-center" style="color: black; font-weight: bold">
-                                all todo task show here
-                            </h4>
-                            <div style="margin-top: 15px">
-                                <input type="checkbox" name="" id="">
-                                <span style="font-weight: bold">1. All Workers name show here</span>
-                            </div>
-                            <div style="margin-top: 13px">
-                                <input type="checkbox" checked="" name="" id="">
-                                <span style="
-                color: green !important;
-                margin-top: 15px;
-                font-weight: bold;
-              ">1. <del>All Workers name show here</del></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-info">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
 
             <!-- After punch out modal -->
             <style>
@@ -1494,6 +1486,11 @@
                     </div>
                 </div>
             </div>
+
+
+           
+
+
         @endsection
     @endforeach
 @else

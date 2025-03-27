@@ -6728,6 +6728,12 @@ class AdminController extends Controller
         return view('Admin.pages.attendance');
     }
 
+    // add attendance 
+    public function addAttendance()
+    {
+        
+    }
+
 
     // end here
 }

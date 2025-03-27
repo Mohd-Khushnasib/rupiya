@@ -400,3 +400,4 @@ Route::post('/add_leave_comment', [AdminController::class, 'addLeaveComment']);
 
 ### attendance ###
 Route::get('/attendance', [AdminController::class, 'showAttendance']);
+Route::post('/add_attendance', [AdminController::class, 'addAttendance']);
