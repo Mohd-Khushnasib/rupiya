@@ -268,26 +268,7 @@
                     </a>
                 </li> --}}
 
-                <!-- Warning -->
-                <!-- <li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-file"></i>
-                        <span class="nav_text_all">Warning</span>
-                        <b class="arrow fa fa-caret-down"></b>
-                    </a>
-                    <ul class="dropdown-menu dropdown-navbar">
-                        <div class="" role="toolbar" aria-label="...">
-                            <div class="btn-group btn btn-pill" role="group" aria-label="..."><a href="">Dashboard</a>
-                            </div>
-                            <div class="btn-group btn btn-pill" role="group" aria-label="..."><a href="">PL & OD
-                                    Login</a>
-                            </div>
-                            <div class="btn-group btn btn-pill" role="group" aria-label="..."><a href="">Home Loan
-                                    Login</a>
-                            </div>
-                        </div>
-                    </ul>
-                </li> -->
+                
             </ul>
             <!-- END Horizontal Menu -->
         </div>
