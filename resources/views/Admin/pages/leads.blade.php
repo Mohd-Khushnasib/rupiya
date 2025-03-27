@@ -59,7 +59,7 @@ datalist#tenureList {
                                         @endforeach
                                     </select>
                                     <!-- Hidden Input Field -->
-                                    <input type="text" name="product_id" id="hiddenProductId"
+                                    <input type="hidden" name="product_id" id="hiddenProductId"
                                         value="{{ $selectedProductId ?? '' }}">
                                 </div>
                             </div>
