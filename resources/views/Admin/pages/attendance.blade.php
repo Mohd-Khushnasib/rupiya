@@ -2,6 +2,252 @@
     @foreach(session()->get('admin_login') as $adminlogin)
         @extends('Admin.layouts.master')
         @section('main-content')
+        <style>
+        .table.table-advance,
+        .table.table-advance th,
+        .table.table-advance td {
+            border-top: 1px solid #03b0f5;
+            border-bottom: 1px solid #03b0f5;
+            border-right: 1px solid #03b0f5;
+            border-collapse: collapse;
+        }
+
+        .row th {
+            border-right: 1px solid #03b0f5;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        th {
+            font-size: 15px !important;
+            text-align: center !important;
+        }
+
+        td {
+            font-weight: normal !important;
+            text-align: center !important;
+        }
+
+        th:first-child,
+        td:first-child {
+            position: sticky;
+            background-color: black;
+            left: 0;
+            z-index: 2;
+        }
+
+        th:first-child,
+        td:first-child {
+            z-index: 3;
+        }
+
+        .scrollable-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .punchin_hover:hover {
+            background-color: none;
+        }
+
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+    </style>
+
+    <style>
+        .table-margin {
+            margin-top: 60px;
+        }
+
+        .table-container {
+            border: 0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .custom-table {
+            width: 100%;
+        }
+
+        .name-header {
+            width: 100px;
+            color: aliceblue !important;
+        }
+
+        input[type="month"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+    </style>
+
+    <style>
+        .full-day {
+            color: black !important;
+            /* background-color: #fff3e0; */
+            background-color: green;
+            color: white !important;
+            /* Light Orange */
+        }
+
+        .half-day {
+            color: black !important;
+            background-color: #ffff00;
+            /* Yellow */
+        }
+
+        .leave-approve {
+            color: black !important;
+            background-color: #ff5722;
+            /* Red-Orange */
+        }
+
+        .leave-not-approve {
+            color: black !important;
+            /* background-color: #d81b60; */
+            background-color: red;
+            color: white !important;
+            /* Dark Pink */
+        }
+
+        .off {
+            color: white !important;
+            background-color: #0288d1;
+            /* Blue */
+        }
+    </style>
+
+    <style>
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        thead {
+            position: sticky;
+            top: -1px;
+            left: 20px;
+            background-color: black;
+            z-index: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            /* border: 1px solid #ddd; */
+            text-align: left;
+        }
+    </style>
+
+    <!-- Attendance Details Modal -->
+    <style>
+        .ak_container {
+            /* background-color: #fff; */
+            /* padding: 20px; */
+            /* border: 1px solid black; */
+            /* border-radius: 8px; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            /* width: 400px; */
+        }
+
+        .ak_heading {
+            /* text-align: center; */
+            margin-bottom: 20px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .ak_input_group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .ak_input_group input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .ak_input_group input[type="number"] {
+            width: 80px;
+        }
+
+        .ak_minus {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .ak_minus:hover {
+            background-color: #c82333;
+        }
+
+        #ak_plusBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #ak_plusBtn:hover {
+            background-color: #218838;
+        }
+
+        .ak_total_box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .ak_error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+
+    <style>
+        .chosen-container {
+            background-color: whitesmoke;
+        }
+    </style>
+
 
          <!-- Main Content Start Here  -->
         <div class="container" id="main-container">
@@ -747,66 +993,6 @@ punch out modal
     $("#submitBtn1").on("click", function () {
     });
 </script>
-
-<!-- After Punch out modal -->
-<!-- id="myModal2" class="modal fade" role="dialog" -->
-<!-- <div id="myModal2">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    &times;
-                </button>
-                <h4 class="modal-title text-center" style="color: black; font-weight: bold">
-                    Commitment vs Achievement
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="ak_container">
-                    <h2 class="ak_heading">Your Working Hour</h2>
-                    <div id="ak_inputContainer">
-                    </div>
-                    <button id="ak_plusBtn">+ Add Work History</button>
-                    <div class="ak_total_box">
-                        Total Working Hours: <span id="ak_totalHours">0</span>
-                    </div>
-                    <div id="ak_errorMessage" class="ak_error"></div>
-                </div>
-                <div style="margin-top: 20px">
-                    <p style="font-weight: bold; margin: 0px;">
-                        Write Comment Here
-                    </p>
-                    <div id="commentBox" class="comment-box">
-                        <textarea placeholder="Write a comment..." style="width: 100%; height: 100px;"></textarea>
-                    </div>
-                </div>
-                <div style="margin-top: 20px">
-                    <h4 class="text-center" style="color: black; font-weight: bold">
-                        all todo task show here
-                    </h4>
-                    <div style="margin-top: 15px">
-                        <input type="checkbox" name="" id="">
-                        <span style="font-weight: bold">1. All Workers name show here</span>
-                    </div>
-                    <div style="margin-top: 13px">
-                        <input type="checkbox" checked="" name="" id="">
-                        <span style="
-                color: green !important;
-                margin-top: 15px;
-                font-weight: bold;
-              ">1. <del>All Workers name show here</del></span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info">Submit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <!-- After punch out modal -->
 <style>
