@@ -1520,28 +1520,28 @@ class AdminController extends Controller
     {
         // Check if lead already exists
         $existingLead = DB::table('tbl_lead')->where('mobile', $request->mobile)->first();
-    
+
         if ($existingLead) {
             return response()->json([
                 'success' => 'exists',
                 'message' => 'Mobile number already exists for this Lead',
             ]);
         }
-    
+
         $admin_id = $request->admin_id;
-    
+
         // Get product name from tbl_product
         $product = DB::table('tbl_product')->where('id', $request->product_id)->first();
         $productName = $product ? $product->product_name : '';
-        
+
         // Sanitize numeric fields
         $obligation = preg_replace('/[^0-9]/', '', $request->obligation);
         $pos = preg_replace('/[^0-9]/', '', $request->pos);
-    
+
         $loan_amount = preg_replace('/[^0-9]/', '', $request->loan_amount);
         $salary = preg_replace('/[^0-9]/', '', $request->salary);
         $yearly_bonus = preg_replace('/[^0-9]/', '', $request->yearly_bonus);
-    
+
         // Ensure single values are stored properly
         $data = [
             'status' => '1',
@@ -1574,20 +1574,20 @@ class AdminController extends Controller
         ];
         // Rest of the code remains the same
         $leadId = DB::table('tbl_lead')->insertGetId($data);
-    
+
         $leadIdWithPrefix = 'PL' . $leadId;
         DB::table('tbl_lead')->where('id', $leadId)->update(['leadid' => $leadIdWithPrefix]);
-    
+
         DB::table('tbl_lead_status')->insert([
             'admin_id' => $admin_id,
             'lead_id' => $leadId,
             'lead_status' => 'NEW LEAD',
             'date' => $this->date,
         ]);
-    
+
         if (!empty($request->product_idd) && is_array($request->product_idd)) {
             $obligationData = [];
-    
+
             foreach ($request->product_idd as $index => $productId) {
                 $obligationData[] = [
                     'admin_id' => $admin_id,
@@ -1601,10 +1601,10 @@ class AdminController extends Controller
                     'date' => $this->date,
                 ];
             }
-    
+
             DB::table('tbl_obligation')->insert($obligationData);
         }
-    
+
         return response()->json([
             'success' => 'success',
         ]);
@@ -1839,17 +1839,17 @@ class AdminController extends Controller
             ->where('lead_id', $request->lead_id)
             ->where('sender_id', $request->sender_id)
             ->update([
-                    'lead_request_status' => $request->action // Accept or Reject
-                ]);
+                'lead_request_status' => $request->action // Accept or Reject
+            ]);
 
         // ✅ Agar "Accept" hai tabhi `tbl_lead` update hoga 
         if ($request->action === "Accept") {
             $updateLead = DB::table('tbl_lead')
                 ->where('id', $request->lead_id)
                 ->update([
-                        'admin_id' => $request->sender_id,
-                        'date' => $this->date
-                    ]);
+                    'admin_id' => $request->sender_id,
+                    'date' => $this->date
+                ]);
         }
 
         // ✅ Response based on updates
@@ -1986,15 +1986,15 @@ class AdminController extends Controller
             DB::table('tbl_obligation')
                 ->where('id', $obligation['obligation_id'])
                 ->update([
-                        'admin_id' => $obligation['admin_id'],
-                        'lead_id' => $obligation['lead_id'],
-                        'product_id' => $obligation['product_id'],
-                        'bank_id' => $obligation['bank_id'],
-                        'total_loan_amount' => $obligation['total_loan_amount'],
-                        'bt_pos' => $obligation['bt_pos'],
-                        'bt_emi' => $obligation['bt_emi'],
-                        'bt_obligation' => $obligation['bt_obligation'],
-                    ]);
+                    'admin_id' => $obligation['admin_id'],
+                    'lead_id' => $obligation['lead_id'],
+                    'product_id' => $obligation['product_id'],
+                    'bank_id' => $obligation['bank_id'],
+                    'total_loan_amount' => $obligation['total_loan_amount'],
+                    'bt_pos' => $obligation['bt_pos'],
+                    'bt_emi' => $obligation['bt_emi'],
+                    'bt_obligation' => $obligation['bt_obligation'],
+                ]);
 
             // Store lead-wise total changes
             if (!isset($leadTotals[$obligation['lead_id']])) {
@@ -2014,9 +2014,9 @@ class AdminController extends Controller
                 DB::table('tbl_lead')
                     ->where('id', $lead_id)
                     ->update([
-                            'pos' => DB::raw("pos + {$totals['bt_pos_change']}"),
-                            'obligation' => DB::raw("obligation + {$totals['bt_emi_change']}"),
-                        ]);
+                        'pos' => DB::raw("pos + {$totals['bt_pos_change']}"),
+                        'obligation' => DB::raw("obligation + {$totals['bt_emi_change']}"),
+                    ]);
             }
         }
 
@@ -6753,7 +6753,7 @@ class AdminController extends Controller
             'punchin_img' => $path1, // Store image URL in punchin_img
             'date' => $this->today_date
         ];
-        
+
         DB::table('tbl_attendance')->insert($data);
         return response()->json([
             'success' => 'success',
@@ -6763,7 +6763,7 @@ class AdminController extends Controller
     // New function to update punch-out information
     public function updatePunchOutAttendance(Request $request)
     {
-        $path2 = ""; 
+        $path2 = "";
         if ($request->hasFile('punchout_img')) {
             $file = $request->file("punchout_img");
             $uniqid = uniqid();
@@ -6771,15 +6771,15 @@ class AdminController extends Controller
             $file->move(public_path('storage/Admin/attendance/'), $name);
             $path2 = "https://rupiyamaker.m-bit.org.in/storage/Admin/attendance/$name";
         }
-    
+
         // Format directly in the query
         $today = $this->today_date;
-        
+
         DB::table('tbl_attendance')
             ->where('admin_id', $request->admin_id)
             ->where('punchin_status', 'true')
             ->where('punchout_status', 'false')
-            ->where('date', $today) 
+            ->where('date', $today)
             ->update([
                 'punchout_datetime' => $request->punchout_datetime,
                 'punchout_note' => $request->punchout_note,
@@ -6792,7 +6792,12 @@ class AdminController extends Controller
         ]);
     }
 
+    public function punchoutComitment()
+    {
+        $data['products'] = DB::table('tbl_product')->orderBy('id', 'desc')->get();
+        return view('Admin.pages.commitment', $data);
+    }
+
 
     // end here
 }
-        

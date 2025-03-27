@@ -402,3 +402,6 @@ Route::post('/add_leave_comment', [AdminController::class, 'addLeaveComment']);
 Route::get('/attendance', [AdminController::class, 'showAttendance']);
 Route::post('/add_attendance', [AdminController::class, 'addAttendance']);
 Route::post('/punchout_attendance', [AdminController::class, 'updatePunchOutAttendance']);
+
+// get-attendance-comments
+Route::get('/admin-punchout-comitment', [AdminController::class, 'punchoutComitment']);
