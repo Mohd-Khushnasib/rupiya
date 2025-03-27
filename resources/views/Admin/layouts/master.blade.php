@@ -2,8 +2,9 @@
     use Illuminate\Support\Facades\DB;
     use Carbon\Carbon;
 
-    $kolkataDateTime = Carbon::now('Asia/Kolkata');
-    
+    $DateTime = Carbon::now('Asia/Kolkata');
+    $today = $DateTime->format('m/d/Y');
+
     if (session()->has('admin_login')) {
         $data = session('admin_login');
         $admin = $data->first();
@@ -11,15 +12,16 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        $today = $kolkataDateTime->format('m/d/Y');
+        
 
         // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
-            ->where('admin_id', $admin_id)
-            ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
-            ->first();
-        dd($today);
+    ->where('admin_id', $admin_id)
+    ->whereRaw("DATE(punchin_datetime) = ?", [$today]) // Compare dates correctly
+    ->first();
 
+dd($attendance);
+        
         // Default - both buttons disabled initially
         $disablePunchIn = true;
         $disablePunchOut = true;
