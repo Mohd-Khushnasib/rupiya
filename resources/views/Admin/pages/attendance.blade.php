@@ -495,6 +495,7 @@
                 // upload excel here 
                 $("#add_form").submit(function(e) 
                 {
+                    alert("ok");
                     $(".add_btn").prop('disabled', true);
                     e.preventDefault();
                     var admin_id = $(".admin_id").val();
