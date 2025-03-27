@@ -712,51 +712,51 @@
                         <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
                             @csrf
                             <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
-                        <div class="modal-body">
-                            <video id="camera" width="100%" autoplay=""></video>
-                            <canvas id="snapshot" style="display: none" width="640" height="480"></canvas>
+                            <div class="modal-body">
+                                <video id="camera" width="100%" autoplay=""></video>
+                                <canvas id="snapshot" style="display: none" width="640" height="480"></canvas>
 
-                            <!-- Input Field and Capture Button -->
-                            <div class="form-group">
-                                <input type="file" name="punchin_img" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
-                                    accept="image/png">
+                                <!-- Input Field and Capture Button -->
+                                <div class="form-group">
+                                    <input type="file" name="punchin_img" name="punchin_img" style="display: none" id="capturedImage" class="form-control"
+                                        accept="image/png">
+                                </div>
+                                <button type="button" class="btn btn-success" id="captureBtn">
+                                    Capture Image
+                                </button>
+
+                                <!-- Image tag to display the captured image -->
+                                <img id="capturedImageDisplay" style="display: none; width: 100%; margin-top: 15px;"
+                                    alt="Captured Image">
+
+                                <!-- Button to capture again -->
+                                <button type="button" class="btn btn-warning" id="captureAgainBtn"
+                                    style="display: none; margin-top: 15px;">
+                                    Capture Again
+                                </button>
+
+                                <!-- Input fields for date and time -->
+                                <div style="margin-top: 15px">
+                                    <label for="dateInput">Your punch in datetime</label>
+                                    <input type="text" name="punchin_datetime" id="dateInput" class="form-control mt-3"
+                                        placeholder="Current Date" readonly="">
+                                </div>
+                                <!-- <div style="margin-top: 15px">
+                                    <label for="timeInput">Your punch in time</label>
+                                    <input type="text" id="timeInput" class="form-control mt-3"
+                                        placeholder="Current Time" readonly="">
+                                </div> -->
+                                <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
-                            <button type="button" class="btn btn-success" id="captureBtn">
-                                Capture Image
-                            </button>
-
-                            <!-- Image tag to display the captured image -->
-                            <img id="capturedImageDisplay" style="display: none; width: 100%; margin-top: 15px;"
-                                alt="Captured Image">
-
-                            <!-- Button to capture again -->
-                            <button type="button" class="btn btn-warning" id="captureAgainBtn"
-                                style="display: none; margin-top: 15px;">
-                                Capture Again
-                            </button>
-
-                            <!-- Input fields for date and time -->
-                            <div style="margin-top: 15px">
-                                <label for="dateInput">Your punch in datetime</label>
-                                <input type="text" name="punchin_datetime" id="dateInput" class="form-control mt-3"
-                                    placeholder="Current Date" readonly="">
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-info add_btn">
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-                            <!-- <div style="margin-top: 15px">
-                                <label for="timeInput">Your punch in time</label>
-                                <input type="text" id="timeInput" class="form-control mt-3"
-                                    placeholder="Current Time" readonly="">
-                            </div> -->
-                            <textarea placeholder="Comment" name="punchin_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-info add_btn">
-                                Submit
-                            </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
-                    </form>
+                         </form>
                     </div>
                 </div>
             </div>
@@ -935,13 +935,7 @@
 
 
 
-            <!--
-        -----------------------------------------------------------------------------------------------------------
-        punch out modal
-        -----------------------------------------------------------------------------------------------------------
-        -->
-            <!-- punch out Modal -->
-            <!-- Punch Out Modal -->
+            
             <!-- Punch Out Modal -->
             <div id="myModal1" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -953,13 +947,15 @@
                             <h4 class="modal-title" style="color: black;">Punch Out</h4>
                         </div>
                         
-
+                        <form id="add_form" action="javascript:void(0);" enctype="multipart/form-data" method="post">
+                            @csrf
+                            <input type="text" placeholder="Name" class="form-control admin_id" value="{{$adminlogin->id ?? ''}}" readonly>
                             <div class="modal-body">
                                 <video id="camera1" width="100%" autoplay=""></video>
                                 <canvas id="snapshot1" style="display: none" width="640" height="480"></canvas>
 
                                 <div class="form-group">
-                                    <input type="file" id="capturedImage1" style="display: none" class="form-control"
+                                    <input type="file" name="punchout_img" id="capturedImage1" style="display: none" class="form-control"
                                         accept="image/png">
                                 </div>
                                 <button type="button" class="btn btn-success" id="captureBtn1">
@@ -979,30 +975,30 @@
                                 <!-- Input fields for date and time -->
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
-                                        <label for="dateInput1">Your punch in date</label>
+                                        <label for="dateInput1">Your punch in datetime</label>
                                         <input type="text" id="dateInput1" class="form-control mt-3"
                                             placeholder="Punch In Date" readonly="">
                                     </div>
-                                    <div style="margin-top: 20px; width: 45%">
+                                    {{-- <div style="margin-top: 20px; width: 45%">
                                         <label for="timeInput1">Your punch in time</label>
                                         <input type="text" id="timeInput1" class="form-control mt-3"
                                             placeholder="Punch In Time" readonly="">
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
-                                        <label for="dateInput2">Your punch out date</label>
+                                        <label for="dateInput2">Your punch out datetime</label>
                                         <input type="text" id="dateInput2" class="form-control mt-3"
                                             placeholder="Punch Out Date" readonly="">
                                     </div>
-                                    <div style="margin-top: 20px; width: 45%">
+                                    {{-- <div style="margin-top: 20px; width: 45%">
                                         <label for="timeInput2">Your punch out time</label>
                                         <input type="text" id="timeInput2" class="form-control mt-3"
                                             placeholder="Punch Out Time" readonly="">
-                                    </div>
+                                    </div> --}}
                                 </div>
 
-                                <textarea placeholder="Comment" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
+                                <textarea placeholder="Comment" name="punchout_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-info" id="submitBtn1">
@@ -1012,6 +1008,7 @@
                                     Close
                                 </button>
                             </div>
+                        </form>
                     </div>
                 </div>
             </div>
