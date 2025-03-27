@@ -16,11 +16,9 @@
 
         // Attendance data fetch
         $attendance = DB::table('tbl_attendance')
-    ->where('admin_id', $admin_id)
-    ->whereRaw("DATE(punchin_datetime) = ?", [$today]) // Compare dates correctly
-    ->first();
-
-dd($attendance);
+        ->where('admin_id', $admin_id)
+        ->whereRaw("DATE(punchin_datetime) = ?", [$today]) // Compare dates correctly
+        ->first();
         
         // Default - both buttons disabled initially
         $disablePunchIn = true;
