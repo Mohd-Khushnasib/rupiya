@@ -1530,7 +1530,7 @@ class AdminController extends Controller
     
         // Get product name from tbl_product
         $product = DB::table('tbl_product')->where('id', $request->product_id)->first();
-        $productName = $product ? $product->product_name : ''; // Using product_name or fallback to 'Lead'
+        $productName = $product ? $product->product_name : '';
     
         // Sanitize numeric fields
         $obligation = preg_replace('/[^0-9]/', '', $request->obligation);
@@ -1570,7 +1570,7 @@ class AdminController extends Controller
             'cibil_score' => $request->cibil_score,
             'date' => $this->date
         ];
-    
+           dd($data);
         // Rest of the code remains the same
         $leadId = DB::table('tbl_lead')->insertGetId($data);
     
