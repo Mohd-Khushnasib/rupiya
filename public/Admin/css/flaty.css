@@ -8906,8 +8906,12 @@ button i {
     background-color: white;
     border-radius: 15px;
     padding: 20px;
-    display: flex
-;
+    display: flex;
     justify-content: space-between;
     color: black;
+}
+
+.punch_card_text {
+    color: #03b0f5 !important;
+    font-weight: bold;
 }
