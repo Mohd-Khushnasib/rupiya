@@ -160,7 +160,6 @@
             <!-- Main Content End Here  -->
             <input type="hidden" id="search" />
 
-
             <!-- Delete Start Here -->
             <div id="deletemodal" class="modal fade" role="dialog">
                 <div class="modal-dialog">

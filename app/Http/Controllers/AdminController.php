@@ -6657,5 +6657,12 @@ class AdminController extends Controller
     }
 
 
+    ########### Attendance Start Here ###########
+    public function showAttendance(Request $request)
+    {
+        return view('Admin.pages.attendance');
+    }
+
+
     // end here
 }
