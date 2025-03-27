@@ -18,7 +18,8 @@
             ->where('admin_id', $admin_id)
             ->whereRaw("DATE_FORMAT(punchin_datetime, '%m/%d/%Y') = ?", [$today])
             ->first();
-dd($attendance);
+        dd($today);
+
         // Default - both buttons disabled initially
         $disablePunchIn = true;
         $disablePunchOut = true;
