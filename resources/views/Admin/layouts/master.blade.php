@@ -2,6 +2,8 @@
     use Illuminate\Support\Facades\DB;
     use Carbon\Carbon;
 
+    $kolkataDateTime = Carbon::now('Asia/Kolkata');
+    
     if (session()->has('admin_login')) {
         $data = session('admin_login');
         $admin = $data->first();
@@ -9,7 +11,7 @@
         $username = $admin->name ?? '';
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
-        $today = Carbon::now()->format('m/d/Y'); // Today's date in required format
+        $today = $kolkataDateTime->format('m/d/Y');
 
         // Fetch today's attendance record
         $attendance = DB::table('tbl_attendance')
