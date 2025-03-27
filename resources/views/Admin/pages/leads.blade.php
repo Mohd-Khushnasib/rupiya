@@ -597,7 +597,7 @@ $(document).ready(function() {
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    var productSelect = document.getElementById("productSelect");
+    var productSelect = document.getElementById("productSelect1");
     var hiddenProductId = document.getElementById("hiddenProductId");
 
     // Select change hone par hidden input update ho
@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function sendData() {
     var admin_id = document.getElementById('admin_id').value;
     var mobile = document.getElementById('alternate_mobile').value;
-    var productId = document.getElementById('productSelect').value;
+    var productId = document.getElementById('productSelect1').value;
     var formData = new FormData();
     formData.append('admin_id', admin_id);
     formData.append('mobile', mobile);
