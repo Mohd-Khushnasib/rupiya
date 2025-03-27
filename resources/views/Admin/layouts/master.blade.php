@@ -66,6 +66,29 @@
 
             <!-- BEGIN Navbar Buttons -->
             <ul class="nav flaty-nav pull-right">
+
+                
+                <li>
+                    <div class="dropdown">
+                        <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
+                            Time: Loading...
+                        </button>
+                        <ul class="dropdown-menu" id="dropdown-menu">
+                            <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
+                                        Leave
+                                    </button></a></li>
+                            <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn">
+                                        Punch In
+                                    </button></a></li>
+                            <li><a href="#"> <button class="btn btn-success btn-block" id="openModalBtn1">
+                                        Punch Out
+                                    </button></a></li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
                 <!-- BEGIN Button User -->
                 <li class="user-profile">
                     <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
