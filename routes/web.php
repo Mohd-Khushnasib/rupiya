@@ -13,8 +13,8 @@ Route::get('/login', function () {
     return view('Auth.login');
 });
 Route::post("/admin-login", [AdminController::class, 'admin_login']);
-Route::get('/admin-dashboard', function () { 
-    return view('Admin.index'); 
+Route::get('/admin-dashboard', function () {
+    return view('Admin.index');
 });
 
 
@@ -26,7 +26,7 @@ Route::post('/fetch_feeds', function (Request $request) {
     }
     $admin_id = $adminSession->id;
     $admin_role = $adminSession->role;
-    
+
     $query = DB::table('tbl_feed')
         ->join('admin', 'tbl_feed.admin_id', '=', 'admin.id')
         ->leftJoin('tbl_feed_comment', 'tbl_feed.id', '=', 'tbl_feed_comment.feed_id')
@@ -269,14 +269,14 @@ Route::post('/filter_leads', [AdminController::class, 'filterLeads']);
 // Add Remark From User Profile
 Route::post('/add_remark', [AdminController::class, 'addRemark']);
 ####################   Task Start Here  #######################
-Route::get('/admin-task',[AdminController::class, 'task']);
+Route::get('/admin-task', [AdminController::class, 'task']);
 Route::post('/add_task', [AdminController::class, 'addTask']);
 Route::post('/update_task', [AdminController::class, 'updateTask']);
 
 
 
 ####################   Ticket Start Here  #######################
-Route::get('/admin-ticket',[AdminController::class, 'ticket']);
+Route::get('/admin-ticket', [AdminController::class, 'ticket']);
 Route::post('/add_ticket', [AdminController::class, 'addTicket']);
 Route::get('/get-ticket-status', [AdminController::class, 'getTicketStatus']);  // Ticket Status 
 Route::get('/get-ticket-history', [AdminController::class, 'getTicketHistory']);    // Ticket History 
@@ -287,7 +287,7 @@ Route::post('/update-ticket-status', [AdminController::class, 'updateTicketStatu
 
 
 ####################   Warning Start Here  #######################
-Route::get('/admin-warning',[AdminController::class, 'warning']);
+Route::get('/admin-warning', [AdminController::class, 'warning']);
 Route::post('/add_warning', [AdminController::class, 'addWarning']);
 Route::get('/get-warning-status', [AdminController::class, 'getWarningStatus']);  // Warning Status 
 Route::get('/get-warning-history', [AdminController::class, 'getWarningHistory']);    // Warning History 
@@ -303,7 +303,10 @@ Route::post('/issuedtotalwaning', [AdminController::class, 'issuedTotalWarning']
 Route::post('/get-filtered-warning-counts', [AdminController::class, 'getFilteredWarningCounts']);
 
 
-Route::get('/get-warning',[AdminController::class, 'Getwarning']);
+Route::get('/get-warning', [AdminController::class, 'Getwarning']);
+
+// DeleteWarning
+Route::post('/delete_warning', [AdminController::class, 'Deletewarning']);
 
 
 // Add Comment 
@@ -323,13 +326,13 @@ Route::post('/lead-login-status', [AdminController::class, 'LeadLoginStatus']);
 Route::post('/check_mobile_existence', [AdminController::class, 'checkMobileExistence']);
 
 // emi calculator 
-Route::get('/admin-calculator',function(){
+Route::get('/admin-calculator', function () {
     return view('Admin.pages.calculator');
 });
 // emi_status change 
-Route::get('/emi-status',function(){
+Route::get('/emi-status', function () {
     $data['emi'] = DB::table("tbl_emi")->first();
-    return view('Admin.pages.emi_status',$data);
+    return view('Admin.pages.emi_status', $data);
 });
 // emi share link
 Route::get('/emi_link/{status}', function ($status) {
@@ -339,7 +342,7 @@ Route::get('/emi_link/{status}', function ($status) {
 
 
 // Excel Upload Here 
-Route::get('/excel',function(){
+Route::get('/excel', function () {
     return view('Admin.pages.excel');
 });
 Route::post('/import_excel', [AdminController::class, 'importExcel']);

@@ -5305,6 +5305,10 @@ class AdminController extends Controller
         ]);
     }
 
+    public function Deletewarning(Request $request)
+    {
+       dd();
+    }
 
 
 
