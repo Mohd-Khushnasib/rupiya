@@ -533,7 +533,7 @@
                                     document.getElementById("add_form").reset();
                                     $("#myModal").modal("hide");
                                     swal("Attendance Submitted Successfully", "", "success");
-                                    // view_enquiry_api(currentPage);
+                                    window.location.reload();
                                 } else if (data.success == 'error') {
                                     $(".add_btn").prop('disabled', false);
                                     swal("Error", data.message, "error");
@@ -572,7 +572,7 @@
                                     document.getElementById("punchout_form").reset();
                                     $("#myModal1").modal("hide");
                                     swal("Punchout Submitted Successfully", "", "success");
-                                    // view_enquiry_api(currentPage);
+                                    window.location.reload();
                                 } else if (data.success == 'error') {
                                     $(".punchout_btn").prop('disabled', false);
                                     swal("Error", data.message, "error");
