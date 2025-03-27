@@ -547,21 +547,6 @@
                     });
                 });
             </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- live time -->
             <script>
                 window.onload = function() {
@@ -992,11 +977,7 @@
                                         <input type="text" id="dateInput1" class="form-control mt-3"
                                             placeholder="Punch In Date" readonly="">
                                     </div>
-                                     <div style="margin-top: 20px; width: 45%">
-                                        <label for="timeInput1">Your punch in time</label>
-                                        <input type="text" id="timeInput1" class="form-control mt-3"
-                                            placeholder="Punch In Time" readonly="">
-                                    </div> 
+                                   
                                 </div>
                                 <div style="display: flex; justify-content: space-between">
                                     <div style="margin-top: 20px; width: 45%">
@@ -1004,11 +985,7 @@
                                         <input type="text" id="dateInput2" class="form-control mt-3"
                                             placeholder="Punch Out Date" readonly="">
                                     </div>
-                                     <div style="margin-top: 20px; width: 45%">
-                                        <label for="timeInput2">Your punch out time</label>
-                                        <input type="text" id="timeInput2" class="form-control mt-3"
-                                            placeholder="Punch Out Time" readonly="">
-                                    </div> 
+                                    
                                 </div>
 
                                 <textarea placeholder="Comment" name="punchout_note" style="width: 100%; height: 80px; margin-top: 15px" id="comment1"></textarea>
@@ -1052,14 +1029,11 @@
                                 video1.srcObject = stream1;
                                 $("#myModal1").modal("show");
 
-                                // Set the current date and time
+                                // Set the current date and time in a single column
                                 const now = new Date();
-                                const date = now.toLocaleDateString();
-                                const time = now.toLocaleTimeString();
-                                dateInput1.value = date;
-                                timeInput1.value = time;
-                                dateInput2.value = date;
-                                timeInput2.value = time;
+                                const dateTime = now.toLocaleString(); // Combine date and time
+                                dateInput1.value = dateTime; // Set the combined value
+                                dateInput2.value = dateTime; // Set the combined value
                             } catch (err) {
                                 console.error("Camera access denied:", err);
                                 alert("Camera access is required to proceed.");
