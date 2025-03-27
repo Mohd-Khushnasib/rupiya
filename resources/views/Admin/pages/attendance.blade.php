@@ -488,54 +488,51 @@
 
             <!-- Js Links Start Here -->
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $("#add_form").on("submit", function(e) {
-            alert("ok");
-            e.preventDefault();
-            
-            $(".add_btn").prop('disabled', true);
-            var admin_id = $(".admin_id").val();
-            
-            // Create FormData object from the form
-            var formdata = new FormData(this);
-            formdata.append('admin_id', admin_id);
-            
-            // AJAX request
-            $.ajax({
-                type: "POST",
-                url: "{{url('/add_attendance')}}", // Make sure this URL is correct
-                data: formdata,
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json",
-                success: function(data) {
-                    // Re-enable the button
-                    $(".add_btn").prop("disabled", false);
-                    
-                    if (data.success == 'success') {
-                        document.getElementById("add_form").reset();
-                        $("#myModal").modal("hide");
-                        swal("Attendance Submitted Successfully", "", "success");
-                        // view_enquiry_api(currentPage);
-                    } else if (data.success == 'error') {
-                        $(".add_btn").prop('disabled', false);
-                        swal("Error", data.message, "error");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Handle error case
-                    $(".add_btn").prop("disabled", false);
-                    swal("Error", "An error occurred while submitting the form. Please try again.", "error");
-                    console.error("AJAX Error:", xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
+            <script>
+                $(document).ready(function() {
+                    $("#add_form").on("submit", function(e) {
+                        e.preventDefault();
+                        
+                        $(".add_btn").prop('disabled', true);
+                        var admin_id = $(".admin_id").val();
+                        var formdata = new FormData(this);
+                        formdata.append('admin_id', admin_id);
+                        
+                        // AJAX request
+                        $.ajax({
+                            type: "POST",
+                            url: "{{url('/add_attendance')}}", // Make sure this URL is correct
+                            data: formdata,
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            dataType: "json",
+                            success: function(data) {
+                                // Re-enable the button
+                                $(".add_btn").prop("disabled", false);
+                                
+                                if (data.success == 'success') {
+                                    document.getElementById("add_form").reset();
+                                    $("#myModal").modal("hide");
+                                    swal("Attendance Submitted Successfully", "", "success");
+                                    // view_enquiry_api(currentPage);
+                                } else if (data.success == 'error') {
+                                    $(".add_btn").prop('disabled', false);
+                                    swal("Error", data.message, "error");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error case
+                                $(".add_btn").prop("disabled", false);
+                                swal("Error", "An error occurred while submitting the form. Please try again.", "error");
+                                console.error("AJAX Error:", xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
 
 
 

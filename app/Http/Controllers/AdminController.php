@@ -6729,9 +6729,22 @@ class AdminController extends Controller
     }
 
     // add attendance 
-    public function addAttendance()
+    public function addAttendance(Request $request)
     {
+        $data = [
+            'admin_id' => $request->admin_id,
+            'punchin_datetime' => $request->punchin_datetime,
+            'punchin_note' => $request->punchin_note,
+            'punchin_status' => 'true',
+            'punchout_status' => 'false',
+            'attendance_status' => '0.5',
+            'datetime' => $this->date
+        ];
         
+        DB::table('tbl_attendance')->insert($data);
+        return response()->json([
+            'success' => 'success',
+        ]);
     }
 
 
