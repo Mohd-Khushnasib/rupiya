@@ -794,10 +794,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                        <label for="timeInput">Your punch in time</label>
-                                                                        <input type="text" id="timeInput" class="form-control mt-3"
-                                                                            placeholder="Current Time" readonly="">
-                                                                    </div> -->
+                                                                                    <label for="timeInput">Your punch in time</label>
+                                                                                    <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                        placeholder="Current Time" readonly="">
+                                                                                </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1033,8 +1033,8 @@
                                     </div>
                                     <div style="margin-top: 20px; width: 45%">
                                         <label for="dateInput2">Your punch out datetime</label>
-                                        <input type="text" name="punchout_datetime" id="dateInput2" class="form-control mt-3" placeholder="Punch Out Date"
-                                            readonly="">
+                                        <input type="text" name="punchout_datetime" id="dateInput2" class="form-control mt-3"
+                                            placeholder="Punch Out Date" readonly="">
                                     </div>
 
                                 </div>
@@ -1215,31 +1215,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Leads</td>
-                                            <td class="ak_table-cell">3</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Logins</td>
-                                            <td class="ak_table-cell">3</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
+                                        @if(isset($count) && $count->count() > 0)
+                                            @foreach($count as $item)
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">{{ $item->product_name ?? 'N/A' }}</td>
+                                                    <td class="ak_table-cell">{{ $item->duration ?? '0' }}</td>
+                                                    <td class="ak_table-cell">
+                                                        <input type="number" class="ak_input-field" name="count_value[{{ $item->id }}]">
+                                                    </td>
+                                                    <td class="ak_table-cell">
+                                                        <input type="hidden" name="commitment_id[]" value="{{ $item->id }}">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr class="ak_table-row">
+                                                <td colspan="4" class="ak_table-cell text-center">No count-based commitments found</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
 
                             </div>
                             <div class="ak_container" style="margin-top: 20px;">
                                 <h4 class="ak_heading">Your Working Hour</h4>
-                                <!-- <div id="ak_inputContainer">
-                                                                </div>
-                                                                <button id="ak_plusBtn">+ Add Work History</button>
-                                                                <div class="ak_total_box">
-                                                                    Total Working Hours: <span id="ak_totalHours">0</span>
-                                                                </div>
-                                                                <div id="ak_errorMessage" class="ak_error"></div> -->
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
@@ -1300,10 +1299,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                                                    color: green !important;
-                                                    margin-top: 15px;
-                                                    font-weight: bold;
-                                                  ">1.
+                                                                color: green !important;
+                                                                margin-top: 15px;
+                                                                font-weight: bold;
+                                                              ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1344,10 +1343,10 @@
 
 
             <!--
-                                            -----------------------------------------------------------------------------------------------------------
-                                            add multiple boxes for add your work time
-                                            -----------------------------------------------------------------------------------------------------------
-                                            -->
+                                                        -----------------------------------------------------------------------------------------------------------
+                                                        add multiple boxes for add your work time
+                                                        -----------------------------------------------------------------------------------------------------------
+                                                        -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1379,10 +1378,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                <input type="text" placeholder="Work description">
-                                                <input type="number" placeholder="Hours" min="0">
-                                                <button class="ak_minus">-</button>
-                                            `;
+                                                            <input type="text" placeholder="Work description">
+                                                            <input type="number" placeholder="Hours" min="0">
+                                                            <button class="ak_minus">-</button>
+                                                        `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1432,10 +1431,10 @@
             </script>
 
             <!--
-                                            -----------------------------------------------------------------------------------------------------------
-                                            Attendance Details Modal
-                                            -----------------------------------------------------------------------------------------------------------
-                                            -->
+                                                        -----------------------------------------------------------------------------------------------------------
+                                                        Attendance Details Modal
+                                                        -----------------------------------------------------------------------------------------------------------
+                                                        -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1488,14 +1487,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                            <label for="">Change Attendance </label>
-                                                                            <select name="" id="">
-                                                                                <option value="1">Full Day (1)</option>
-                                                                                <option value="0.5">Half Day (0.5)</option>
-                                                                                <option value="0">Leave (0)</option>
-                                                                                <option value="-1">Leave Not Approved (-1)</option>
-                                                                            </select>
-                                                                        </div> -->
+                                                                                        <label for="">Change Attendance </label>
+                                                                                        <select name="" id="">
+                                                                                            <option value="1">Full Day (1)</option>
+                                                                                            <option value="0.5">Half Day (0.5)</option>
+                                                                                            <option value="0">Leave (0)</option>
+                                                                                            <option value="-1">Leave Not Approved (-1)</option>
+                                                                                        </select>
+                                                                                    </div> -->
                                     </div>
                                 </div>
 

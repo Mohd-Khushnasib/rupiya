@@ -6727,7 +6727,12 @@ class AdminController extends Controller
     ########### Attendance Start Here ###########
     public function showAttendance(Request $request)
     {
-        return view('Admin.pages.attendance');
+        $allCommitments = DB::table('tbl_punchoutcommitment')->orderBy('id', 'desc')->get();
+        $data['time'] = $allCommitments->where('type', 'Time');
+        $data['count'] = $allCommitments->where('type', 'Count');
+        $data['products'] = $allCommitments;
+        
+        return view('Admin.pages.attendance', $data);
     }
 
     // add attendance 
