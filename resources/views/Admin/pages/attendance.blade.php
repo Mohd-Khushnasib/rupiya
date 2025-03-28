@@ -383,10 +383,10 @@
                                                                                         $dayData = $attendance['attendance'][$date['date']];
 
                                                                                         // Calculate attendance totals
-                                                                                        if ($dayData['attendance_status'] == 'present') {
+                                                                                        if ($dayData['attendance_status'] == '1') {
                                                                                             $totalPresent += 1;
                                                                                             $value = 1;
-                                                                                        } elseif ($dayData['attendance_status'] == 'half-day') {
+                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
                                                                                             $totalPresent += 0.5;
                                                                                             $value = 0.5;
                                                                                         } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
