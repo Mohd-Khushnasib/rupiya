@@ -782,10 +782,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                                                                                                                <label for="timeInput">Your punch in time</label>
-                                                                                                                                                                                                                                                <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                                                                                                    placeholder="Current Time" readonly="">
-                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                            <label for="timeInput">Your punch in time</label>
+                                                                                                                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                                                                                                                placeholder="Current Time" readonly="">
+                                                                                                                                                                                                                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1174,10 +1174,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                                                                                        <input type="text" placeholder="Work description">
-                                                                                                                                                                                                                        <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                                                                                        <button class="ak_minus">-</button>
-                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                    <input type="text" placeholder="Work description">
+                                                                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                                                                    <button class="ak_minus">-</button>
+                                                                                                                                                                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1277,13 +1277,45 @@
                         $("#attendance-date").val(attendanceDate);
 
                         // Check if employee is absent or has no punch details
-                        var isAbsent = attendanceStatus === '0' || attendanceStatus === 'absent';
-                        var hasNoPunchData = !punchInTime && !punchOutTime;
+                        // For debugging
+                        console.log("Attendance Status:", attendanceStatus, "Type:", typeof attendanceStatus);
+                        console.log("Punch In Time:", punchInTime);
+                        console.log("Punch Out Time:", punchOutTime);
 
-                        if (isAbsent || hasNoPunchData) {
+                        // More precise check for absence
+                        var isAbsent = attendanceStatus === '0' ||
+                            attendanceStatus === 0 ||
+                            attendanceStatus === 'absent' ||
+                            attendanceStatus === 'leave' ||
+                            attendanceStatus === 'leave approved' ||
+                            attendanceStatus === 'leave not approved';
+
+                        // Only consider missing punch data for present employees
+                        var isPresent = attendanceStatus === '1' ||
+                            attendanceStatus === 1 ||
+                            attendanceStatus === '0.5' ||
+                            attendanceStatus === 0.5;
+
+                        var hasNoPunchData = isPresent && !punchInTime && !punchOutTime;
+
+                        console.log("Is Absent:", isAbsent);
+                        console.log("Is Present:", isPresent);
+                        console.log("Has No Punch Data:", hasNoPunchData);
+
+                        if (isAbsent) {
                             // Show the no attendance message and hide attendance details
                             $("#tdModal .no-attendance-message").show();
                             $("#tdModal .attendance-details-container").hide();
+
+                            // Set a more specific absence message
+                            var absenceReason = "";
+                            if (attendanceStatus === '0' || attendanceStatus === 0 || attendanceStatus === 'absent') {
+                                absenceReason = "This employee was marked as absent on this date.";
+                            } else if (attendanceStatus === 'leave' || attendanceStatus.includes('leave')) {
+                                absenceReason = "This employee was on leave on this date.";
+                            }
+
+                            $("#tdModal .absence-reason").text(absenceReason);
                         } else {
                             // Hide the no attendance message and show attendance details
                             $("#tdModal .no-attendance-message").hide();
@@ -1291,27 +1323,45 @@
 
                             // Update punch in details with error handling
                             var $punchInImg = $("#tdModal .punch-in-img");
-                            $punchInImg.attr("src", punchInImg)
-                                .on("error", function () {
-                                    // If image fails to load, replace with default
-                                    $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                    console.log("Punch in image failed to load, using default");
-                                });
 
-                            $("#tdModal .punch-in-date").text("Punch In Date: " + formattedDate);
-                            $("#tdModal .punch-in-time").text("Punch In Time: " + (punchInTime || "N/A"));
+                            // Check if punch in time exists
+                            if (punchInTime) {
+                                $punchInImg.attr("src", punchInImg)
+                                    .on("error", function () {
+                                        // If image fails to load, replace with default
+                                        $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
+                                        console.log("Punch in image failed to load, using default");
+                                    });
+
+                                $("#tdModal .punch-in-date").text("Punch In Date: " + formattedDate);
+                                $("#tdModal .punch-in-time").text("Punch In Time: " + punchInTime);
+                            } else {
+                                // No punch in time available
+                                $punchInImg.attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
+                                $("#tdModal .punch-in-date").text("Punch In Date: " + formattedDate);
+                                $("#tdModal .punch-in-time").text("Punch In Time: Not recorded");
+                            }
 
                             // Update punch out details with error handling
                             var $punchOutImg = $("#tdModal .punch-out-img");
-                            $punchOutImg.attr("src", punchOutImg)
-                                .on("error", function () {
-                                    // If image fails to load, replace with default
-                                    $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                    console.log("Punch out image failed to load, using default");
-                                });
 
-                            $("#tdModal .punch-out-date").text("Punch Out Date: " + formattedDate);
-                            $("#tdModal .punch-out-time").text("Punch Out Time: " + (punchOutTime || "N/A"));
+                            // Check if punch out time exists
+                            if (punchOutTime) {
+                                $punchOutImg.attr("src", punchOutImg)
+                                    .on("error", function () {
+                                        // If image fails to load, replace with default
+                                        $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
+                                        console.log("Punch out image failed to load, using default");
+                                    });
+
+                                $("#tdModal .punch-out-date").text("Punch Out Date: " + formattedDate);
+                                $("#tdModal .punch-out-time").text("Punch Out Time: " + punchOutTime);
+                            } else {
+                                // No punch out time available
+                                $punchOutImg.attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
+                                $("#tdModal .punch-out-date").text("Punch Out Date: " + formattedDate);
+                                $("#tdModal .punch-out-time").text("Punch Out Time: Not recorded");
+                            }
                         }
 
                         // Set the current status in the dropdown
