@@ -814,10 +814,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                            <label for="timeInput">Your punch in time</label>
-                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                placeholder="Current Time" readonly="">
-                                                                                                        </div> -->
+                                                                                                                                    <label for="timeInput">Your punch in time</label>
+                                                                                                                                    <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                        placeholder="Current Time" readonly="">
+                                                                                                                                </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1268,31 +1268,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Working Hour</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Break</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Wrap Up Time</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Meeting</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Other Work</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
+                                        @if(isset($time) && $time->count() > 0)
+                                            @foreach($time as $item)
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">{{ $item->product_name ?? 'N/A' }}</td>
+                                                    <td class="ak_table-cell">
+                                                        <input type="number" class="ak_input-field time-input"
+                                                            name="time_value[{{ $item->id }}]" data-target-time="{{ $item->duration ?? 0 }}"
+                                                            data-row-id="{{ $item->id }}">
+                                                    </td>
+                                                    <td class="ak_table-cell feedback-cell" id="feedback-{{ $item->id }}">
+                                                        <input type="hidden" name="commitment_id[]" value="{{ $item->id }}">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr class="ak_table-row">
+                                                <td colspan="3" class="ak_table-cell text-center">No time-based commitments found</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                                 <div class="ak_total_box">
@@ -1319,10 +1313,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                                                                                        color: green !important;
-                                                                                        margin-top: 15px;
-                                                                                        font-weight: bold;
-                                                                                      ">1.
+                                                                                                                color: green !important;
+                                                                                                                margin-top: 15px;
+                                                                                                                font-weight: bold;
+                                                                                                              ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1361,12 +1355,57 @@
                 });
             </script>
 
+            <!-- puchout feedback  -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Get all time input fields
+                    const timeInputs = document.querySelectorAll('.time-input');
+
+                    // Add event listeners to each input field
+                    timeInputs.forEach(input => {
+                        input.addEventListener('input', updateFeedback);
+                        input.addEventListener('change', updateFeedback);
+                    });
+
+                    // Function to update feedback based on input value
+                    function updateFeedback(event) {
+                        const input = event.target;
+                        const inputValue = parseInt(input.value) || 0;
+                        const targetTime = parseInt(input.getAttribute('data-target-time')) || 0;
+                        const rowId = input.getAttribute('data-row-id');
+                        const feedbackCell = document.getElementById('feedback-' + rowId);
+
+                        let feedbackText = '';
+                        let feedbackColor = '';
+
+                        // Compare input time with target time and set appropriate feedback
+                        if (inputValue < targetTime) {
+                            feedbackText = 'Poor';
+                            feedbackColor = '#ff6666'; // Light red
+                        } else if (inputValue === targetTime) {
+                            feedbackText = 'Good';
+                            feedbackColor = '#66cc66'; // Light green
+                        } else {
+                            feedbackText = 'Very Good';
+                            feedbackColor = '#5cb85c'; // Green
+                        }
+
+                        // Update the feedback cell
+                        feedbackCell.innerHTML = `
+                        <span style="color: ${feedbackColor}; font-weight: bold;">${feedbackText}</span>
+                        <input type="hidden" name="commitment_id[]" value="${rowId}">
+                        <input type="hidden" name="feedback[${rowId}]" value="${feedbackText}">
+                    `;
+                    }
+                });
+            </script>
+
 
             <!--
-                                                                                -----------------------------------------------------------------------------------------------------------
-                                                                                add multiple boxes for add your work time
-                                                                                -----------------------------------------------------------------------------------------------------------
-                                                                                -->
+                                                                                                        -----------------------------------------------------------------------------------------------------------
+                                                                                                        add multiple boxes for add your work time
+                                                                                                        -----------------------------------------------------------------------------------------------------------
+                                                                                                        -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1398,10 +1437,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                    <input type="text" placeholder="Work description">
-                                                                                    <input type="number" placeholder="Hours" min="0">
-                                                                                    <button class="ak_minus">-</button>
-                                                                                `;
+                                                                                                            <input type="text" placeholder="Work description">
+                                                                                                            <input type="number" placeholder="Hours" min="0">
+                                                                                                            <button class="ak_minus">-</button>
+                                                                                                        `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1451,10 +1490,10 @@
             </script>
 
             <!--
-                                                                                -----------------------------------------------------------------------------------------------------------
-                                                                                Attendance Details Modal
-                                                                                -----------------------------------------------------------------------------------------------------------
-                                                                                -->
+                                                                                                        -----------------------------------------------------------------------------------------------------------
+                                                                                                        Attendance Details Modal
+                                                                                                        -----------------------------------------------------------------------------------------------------------
+                                                                                                        -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1507,14 +1546,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                                                                <label for="">Change Attendance </label>
-                                                                                                                <select name="" id="">
-                                                                                                                    <option value="1">Full Day (1)</option>
-                                                                                                                    <option value="0.5">Half Day (0.5)</option>
-                                                                                                                    <option value="0">Leave (0)</option>
-                                                                                                                    <option value="-1">Leave Not Approved (-1)</option>
-                                                                                                                </select>
-                                                                                                            </div> -->
+                                                                                                                                        <label for="">Change Attendance </label>
+                                                                                                                                        <select name="" id="">
+                                                                                                                                            <option value="1">Full Day (1)</option>
+                                                                                                                                            <option value="0.5">Half Day (0.5)</option>
+                                                                                                                                            <option value="0">Leave (0)</option>
+                                                                                                                                            <option value="-1">Leave Not Approved (-1)</option>
+                                                                                                                                        </select>
+                                                                                                                                    </div> -->
                                     </div>
                                 </div>
 
