@@ -782,10 +782,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                                                                            <label for="timeInput">Your punch in time</label>
-                                                                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                                                                placeholder="Current Time" readonly="">
-                                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                                        <label for="timeInput">Your punch in time</label>
+                                                                                                                                                                                                                        <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                                                                            placeholder="Current Time" readonly="">
+                                                                                                                                                                                                                    </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1174,10 +1174,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                                                    <input type="text" placeholder="Work description">
-                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                                                    <button class="ak_minus">-</button>
-                                                                                                                                                                                `;
+                                                                                                                                                                                                <input type="text" placeholder="Work description">
+                                                                                                                                                                                                <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                                <button class="ak_minus">-</button>
+                                                                                                                                                                                            `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1299,88 +1299,91 @@
 
             <!-- td modal -->
             <div id="tdModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="color: black;">Employee Name</h4>
-                <p class="employee-department">Department | Role</p>
-                <p class="employee-id">Emp-ID: </p>
-                <p class="attendance-status">Attendance: </p>
-            </div>
-            <div class="modal-body">
-                <div class="image-container">
-                    <div class="container">
-                        <div class="row">
-                            <!-- Punch In Details -->
-                            <div class="col-sm-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">Check In</h4>
-                                    </div>
-                                    <div class="panel-body text-center">
-                                        <img src="" alt="Punch In Image" height="120px" class="punch-in-img img-thumbnail">
-                                        <div class="punch-details mt-3">
-                                            <p class="punch-in-date">Punch In Date: </p>
-                                            <p class="punch-in-time">Punch In Time: </p>
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="color: black;">Employee Name</h4>
+                            <p class="employee-department">Department | Role</p>
+                            <p class="employee-id">Emp-ID: </p>
+                            <p class="attendance-status">Attendance: </p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="image-container">
+                                <div class="container">
+                                    <div class="row">
+                                        <!-- Punch In Details -->
+                                        <div class="col-sm-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">Check In</h4>
+                                                </div>
+                                                <div class="panel-body text-center">
+                                                    <img src="" alt="Punch In Image" height="120px"
+                                                        class="punch-in-img img-thumbnail">
+                                                    <div class="punch-details mt-3">
+                                                        <p class="punch-in-date">Punch In Date: </p>
+                                                        <p class="punch-in-time">Punch In Time: </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Punch Out Details -->
+                                        <div class="col-sm-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">Check Out</h4>
+                                                </div>
+                                                <div class="panel-body text-center">
+                                                    <img src="" alt="Punch Out Image" height="120px"
+                                                        class="punch-out-img img-thumbnail">
+                                                    <div class="punch-details mt-3">
+                                                        <p class="punch-out-date">Punch Out Date: </p>
+                                                        <p class="punch-out-time">Punch Out Time: </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Attendance Update Form -->
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="attendance-select"><b>Change Attendance: </b></label>
+                                                <select name="attendance_status" id="attendance-select" class="form-control">
+                                                    <option value="1">Full Day (1)</option>
+                                                    <option value="0.5">Half Day (0.5)</option>
+                                                    <option value="0">Absent (0)</option>
+                                                    <option value="leave">Leave</option>
+                                                    <option value="leave approved">Leave Approved</option>
+                                                    <option value="paid leave">Paid Leave</option>
+                                                    <option value="earned leave">Earned Leave</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="attendance-comments"><b>Comments: </b></label>
+                                                <textarea id="attendance-comments" name="comments" class="form-control wysihtml5"
+                                                    rows="4" placeholder="Add comments about this attendance record..."></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Punch Out Details -->
-                            <div class="col-sm-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">Check Out</h4>
-                                    </div>
-                                    <div class="panel-body text-center">
-                                        <img src="" alt="Punch Out Image" height="120px" class="punch-out-img img-thumbnail">
-                                        <div class="punch-details mt-3">
-                                            <p class="punch-out-date">Punch Out Date: </p>
-                                            <p class="punch-out-time">Punch Out Time: </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Attendance Update Form -->
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="attendance-select"><b>Change Attendance: </b></label>
-                                    <select name="attendance_status" id="attendance-select" class="form-control">
-                                        <option value="1">Full Day (1)</option>
-                                        <option value="0.5">Half Day (0.5)</option>
-                                        <option value="0">Absent (0)</option>
-                                        <option value="leave">Leave</option>
-                                        <option value="leave approved">Leave Approved</option>
-                                        <option value="paid leave">Paid Leave</option>
-                                        <option value="earned leave">Earned Leave</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="attendance-comments"><b>Comments: </b></label>
-                                    <textarea id="attendance-comments" name="comments" class="form-control wysihtml5" rows="4" placeholder="Add comments about this attendance record..."></textarea>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="attendance-date" name="date" value="">
+                            <input type="hidden" id="employee-id-hidden" name="admin_id" value="">
+                            <button type="button" class="btn btn-info" id="submitBtn">
+                                Update Attendance
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <input type="hidden" id="attendance-date" name="date" value="">
-                <input type="hidden" id="employee-id-hidden" name="admin_id" value="">
-                <button type="button" class="btn btn-info" id="submitBtn">
-                    Update Attendance
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
