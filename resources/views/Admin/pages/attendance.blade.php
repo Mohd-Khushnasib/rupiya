@@ -782,10 +782,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                                                                                                                            <label for="timeInput">Your punch in time</label>
-                                                                                                                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                                                                                                                placeholder="Current Time" readonly="">
-                                                                                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                            <label for="timeInput">Your punch in time</label>
+                                                                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                                                                placeholder="Current Time" readonly="">
+                                                                                                                                                                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1174,10 +1174,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                                                                                                    <input type="text" placeholder="Work description">
-                                                                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                                                                                                    <button class="ak_minus">-</button>
-                                                                                                                                                                                                                                `;
+                                                                                                                                                                                    <input type="text" placeholder="Work description">
+                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                    <button class="ak_minus">-</button>
+                                                                                                                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1220,17 +1220,6 @@
             <!-- td modal js -->
             <script>
                 $(document).ready(function () {
-                    // Helper function to preload images
-                    function preloadImage(url, callback) {
-                        var img = new Image();
-                        img.onload = function () {
-                            callback(url, true);
-                        };
-                        img.onerror = function () {
-                            callback(url, false);
-                        };
-                        img.src = url;
-                    }
                     $(".opentdModal").click(function () {
                         // Get employee data from clicked cell
                         var employeeName = $(this).data('employee-name');
@@ -1243,21 +1232,8 @@
                         // Get punch data
                         var punchInTime = $(this).data('punch-in-time');
                         var punchOutTime = $(this).data('punch-out-time');
-
-                        // Get image paths with better fallback handling
-                        var punchInImg = $(this).data('punch-in-img');
-                        var punchOutImg = $(this).data('punch-out-img');
-
-                        // For debugging: Log the values to console
-                        console.log('Punch in image:', punchInImg);
-                        console.log('Punch out image:', punchOutImg);
-
-                        // Default image if null, undefined, or empty string
-                        var defaultImg = 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
-
-                        // Check if image paths are valid and not empty
-                        punchInImg = (punchInImg && punchInImg.trim() !== '') ? punchInImg : defaultImg;
-                        punchOutImg = (punchOutImg && punchOutImg.trim() !== '') ? punchOutImg : defaultImg;
+                        var punchInImg = $(this).data('punch-in-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
+                        var punchOutImg = $(this).data('punch-out-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
 
                         // Format date from YYYY-MM-DD to a more readable format
                         var formattedDate = new Date(attendanceDate).toLocaleDateString('en-US', {
@@ -1268,107 +1244,22 @@
 
                         // Update modal title and employee details
                         $("#tdModal .modal-title").text(employeeName);
-                        $("#tdModal .employee-department").text(employeeDept + " | " + employeeRole);
-                        $("#tdModal .employee-id").text("Emp-ID: " + employeeId);
-                        $("#tdModal .attendance-status").text("Attendance: " + attendanceStatus);
+                        $("#tdModal p:eq(0)").text(employeeDept + " | " + employeeRole);
+                        $("#tdModal p:eq(1)").text("Emp-ID: " + employeeId);
+                        $("#tdModal p:eq(2)").text("Attendance: " + attendanceStatus);
 
-                        // Update hidden fields
-                        $("#employee-id-hidden").val(employeeId);
-                        $("#attendance-date").val(attendanceDate);
+                        // Update punch in details
+                        $("#tdModal .col-sm-6:eq(0) img").attr("src", punchInImg);
+                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text("Punch In Date: " + attendanceDate);
+                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(1)").text("Punch In Time: " + (punchInTime || "N/A"));
 
-                        // Check if employee is absent or has no punch details
-                        // For debugging
-                        console.log("Attendance Status:", attendanceStatus, "Type:", typeof attendanceStatus);
-                        console.log("Punch In Time:", punchInTime);
-                        console.log("Punch Out Time:", punchOutTime);
-
-                        // More precise check for absence
-                        var isAbsent = attendanceStatus === '0' ||
-                            attendanceStatus === 0 ||
-                            attendanceStatus === 'absent' ||
-                            attendanceStatus === 'leave' ||
-                            attendanceStatus === 'leave approved' ||
-                            attendanceStatus === 'leave not approved';
-
-                        // Only consider missing punch data for present employees
-                        var isPresent = attendanceStatus === '1' ||
-                            attendanceStatus === 1 ||
-                            attendanceStatus === '0.5' ||
-                            attendanceStatus === 0.5;
-
-                        var hasNoPunchData = isPresent && !punchInTime && !punchOutTime;
-
-                        console.log("Is Absent:", isAbsent);
-                        console.log("Is Present:", isPresent);
-                        console.log("Has No Punch Data:", hasNoPunchData);
-
-                        if (isAbsent) {
-                            // Show the no attendance message and hide attendance details
-                            $("#tdModal .no-attendance-message").show();
-                            $("#tdModal .attendance-details-container").hide();
-
-                            // Set a more specific absence message
-                            var absenceReason = "";
-                            if (attendanceStatus === '0' || attendanceStatus === 0 || attendanceStatus === 'absent') {
-                                absenceReason = "This employee was marked as absent on this date.";
-                            } else if (attendanceStatus === 'leave' || attendanceStatus.includes('leave')) {
-                                absenceReason = "This employee was on leave on this date.";
-                            }
-
-                            $("#tdModal .absence-reason").text(absenceReason);
-                        } else {
-                            // Hide the no attendance message and show attendance details
-                            $("#tdModal .no-attendance-message").hide();
-                            $("#tdModal .attendance-details-container").show();
-
-                            // Update punch in details with error handling
-                            var $punchInImg = $("#tdModal .punch-in-img");
-
-                            // Check if punch in time exists
-                            if (punchInTime) {
-                                $punchInImg.attr("src", punchInImg)
-                                    .on("error", function () {
-                                        // If image fails to load, replace with default
-                                        $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                        console.log("Punch in image failed to load, using default");
-                                    });
-
-                                $("#tdModal .punch-in-date").text("Punch In Date: " + formattedDate);
-                                $("#tdModal .punch-in-time").text("Punch In Time: " + punchInTime);
-                            } else {
-                                // No punch in time available
-                                $punchInImg.attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                $("#tdModal .punch-in-date").text("Punch In Date: " + formattedDate);
-                                $("#tdModal .punch-in-time").text("Punch In Time: Not recorded");
-                            }
-
-                            // Update punch out details with error handling
-                            var $punchOutImg = $("#tdModal .punch-out-img");
-
-                            // Check if punch out time exists
-                            if (punchOutTime) {
-                                $punchOutImg.attr("src", punchOutImg)
-                                    .on("error", function () {
-                                        // If image fails to load, replace with default
-                                        $(this).attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                        console.log("Punch out image failed to load, using default");
-                                    });
-
-                                $("#tdModal .punch-out-date").text("Punch Out Date: " + formattedDate);
-                                $("#tdModal .punch-out-time").text("Punch Out Time: " + punchOutTime);
-                            } else {
-                                // No punch out time available
-                                $punchOutImg.attr("src", "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg");
-                                $("#tdModal .punch-out-date").text("Punch Out Date: " + formattedDate);
-                                $("#tdModal .punch-out-time").text("Punch Out Time: Not recorded");
-                            }
-                        }
+                        // Update punch out details
+                        $("#tdModal .col-sm-6:eq(1) img").attr("src", punchOutImg);
+                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(0)").text("Punch Out Date: " + attendanceDate);
+                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(1)").text("Punch Out Time: " + (punchOutTime || "N/A"));
 
                         // Set the current status in the dropdown
-                        $("#attendance-select").val(attendanceStatus);
-
-                        // Clear any previous comments
-                        $("#attendance-comments").val("");
+                        $("#tdModal select").val(attendanceStatus);
 
                         // Show the modal
                         $("#tdModal").modal("show");
@@ -1376,16 +1267,12 @@
 
                     // Handle form submission
                     $("#submitBtn").click(function () {
-                        var newAttendanceStatus = $("#attendance-select").val();
-                        var comments = $("#attendance-comments").val();
-                        var employeeId = $("#employee-id-hidden").val();
-                        var attendanceDate = $("#attendance-date").val();
+                        var newAttendanceStatus = $("#tdModal select").val();
+                        var comments = $("#tdModal textarea").val();
+                        var employeeId = $("#tdModal p:eq(1)").text().replace("Emp-ID: ", "");
+                        var attendanceDate = $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text().replace("Punch In Date: ", "");
 
-                        // Show loading state
-                        var $btn = $(this);
-                        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
-
-                        // Send data to the server with Ajax
+                        // You can add Ajax to send this data to the server
                         $.ajax({
                             url: "/update-attendance",
                             method: "POST",
@@ -1397,129 +1284,104 @@
                                 _token: $('meta[name="csrf-token"]').attr('content')
                             },
                             success: function (response) {
-                                // Show success notification
-                                toastr.success('Attendance updated successfully');
-
-                                // Close modal
+                                // Close modal and optionally refresh the page
                                 $("#tdModal").modal("hide");
-
-                                // Reload the page after a brief delay to show the updated data
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1000);
+                                // You can reload the page or update the UI as needed
+                                location.reload();
                             },
                             error: function (error) {
-                                // Reset button state
-                                $btn.prop('disabled', false).text('Update Attendance');
-
-                                // Show error notification
-                                toastr.error('Error updating attendance: ' + (error.responseJSON ? error.responseJSON.message : 'Unknown error'));
+                                alert("Error updating attendance: " + error.responseJSON.message);
                             }
                         });
                     });
                 });
             </script>
 
-
-            <!-- Attendance Details Modal -->
+            <!-- td modal -->
             <div id="tdModal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" style="color: black;">Employee Name</h4>
-                            <p class="employee-department">Department | Role</p>
-                            <p class="employee-id">Emp-ID: </p>
-                            <p class="attendance-status">Attendance: </p>
-                        </div>
-                        <div class="modal-body">
-                            <div class="image-container">
-                                <div class="container">
-                                    <div class="row">
-                                        <!-- No Attendance Message - Hidden by default -->
-                                        <div class="col-sm-12 no-attendance-message" style="display: none;">
-                                            <div class="alert alert-warning text-center">
-                                                <i class="fa fa-exclamation-circle fa-2x mb-2"></i>
-                                                <h4>No Attendance Details Found</h4>
-                                                <p>This employee was marked as absent on this date.</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Attendance Details Container - Will be hidden when absent -->
-                                        <div class="attendance-details-container">
-                                            <!-- Punch In Details -->
-                                            <div class="col-sm-6">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <h4 class="panel-title">Check In</h4>
-                                                    </div>
-                                                    <div class="panel-body text-center">
-                                                        <img src="" alt="Punch In Image" height="120px"
-                                                            class="punch-in-img img-thumbnail">
-                                                        <div class="punch-details mt-3">
-                                                            <p class="punch-in-date">Punch In Date: </p>
-                                                            <p class="punch-in-time">Punch In Time: </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Punch Out Details -->
-                                            <div class="col-sm-6">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <h4 class="panel-title">Check Out</h4>
-                                                    </div>
-                                                    <div class="panel-body text-center">
-                                                        <img src="" alt="Punch Out Image" height="120px"
-                                                            class="punch-out-img img-thumbnail">
-                                                        <div class="punch-details mt-3">
-                                                            <p class="punch-out-date">Punch Out Date: </p>
-                                                            <p class="punch-out-time">Punch Out Time: </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Attendance Update Form -->
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label for="attendance-select"><b>Change Attendance: </b></label>
-                                                <select name="attendance_status" id="attendance-select" class="form-control">
-                                                    <option value="1">Full Day (1)</option>
-                                                    <option value="0.5">Half Day (0.5)</option>
-                                                    <option value="0">Absent (0)</option>
-                                                    <option value="leave">Leave</option>
-                                                    <option value="leave approved">Leave Approved</option>
-                                                    <option value="paid leave">Paid Leave</option>
-                                                    <option value="earned leave">Earned Leave</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="attendance-comments"><b>Comments: </b></label>
-                                                <textarea id="attendance-comments" name="comments" class="form-control wysihtml5"
-                                                    rows="4" placeholder="Add comments about this attendance record..."></textarea>
-                                            </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color: black;">Employee Name</h4>
+                <p class="employee-department">Department | Role</p>
+                <p class="employee-id">Emp-ID: </p>
+                <p class="attendance-status">Attendance: </p>
+            </div>
+            <div class="modal-body">
+                <div class="image-container">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Punch In Details -->
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Check In</h4>
+                                    </div>
+                                    <div class="panel-body text-center">
+                                        <img src="" alt="Punch In Image" height="120px" class="punch-in-img img-thumbnail">
+                                        <div class="punch-details mt-3">
+                                            <p class="punch-in-date">Punch In Date: </p>
+                                            <p class="punch-in-time">Punch In Time: </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="hidden" id="attendance-date" name="date" value="">
-                            <input type="hidden" id="employee-id-hidden" name="admin_id" value="">
-                            <button type="button" class="btn btn-info" id="submitBtn">
-                                Update Attendance
-                            </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Close
-                            </button>
+
+                            <!-- Punch Out Details -->
+                            <div class="col-sm-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Check Out</h4>
+                                    </div>
+                                    <div class="panel-body text-center">
+                                        <img src="" alt="Punch Out Image" height="120px" class="punch-out-img img-thumbnail">
+                                        <div class="punch-details mt-3">
+                                            <p class="punch-out-date">Punch Out Date: </p>
+                                            <p class="punch-out-time">Punch Out Time: </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Attendance Update Form -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="attendance-select"><b>Change Attendance: </b></label>
+                                    <select name="attendance_status" id="attendance-select" class="form-control">
+                                        <option value="1">Full Day (1)</option>
+                                        <option value="0.5">Half Day (0.5)</option>
+                                        <option value="0">Absent (0)</option>
+                                        <option value="leave">Leave</option>
+                                        <option value="leave approved">Leave Approved</option>
+                                        <option value="paid leave">Paid Leave</option>
+                                        <option value="earned leave">Earned Leave</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="attendance-comments"><b>Comments: </b></label>
+                                    <textarea id="attendance-comments" name="comments" class="form-control wysihtml5" rows="4" placeholder="Add comments about this attendance record..."></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <input type="hidden" id="attendance-date" name="date" value="">
+                <input type="hidden" id="employee-id-hidden" name="admin_id" value="">
+                <button type="button" class="btn btn-info" id="submitBtn">
+                    Update Attendance
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
