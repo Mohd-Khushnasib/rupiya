@@ -402,15 +402,15 @@
                                                                                         // Set cell class based on status
                                                                                         if ($date['isSunday']) {
                                                                                             $cellClass = 'off';
-                                                                                        } elseif ($dayData['attendance_status'] == 'present') {
+                                                                                        } elseif ($dayData['attendance_status'] == '1') {
                                                                                             $cellClass = 'full-day';
-                                                                                        } elseif ($dayData['attendance_status'] == 'half-day') {
+                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
                                                                                             $cellClass = 'half-day';
                                                                                         } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
                                                                                             $cellClass = 'leave-approve';
                                                                                         } elseif ($dayData['attendance_status'] == 'leave') {
                                                                                             $cellClass = 'leave-not-approve';
-                                                                                        } elseif ($dayData['attendance_status'] == 'absent') {
+                                                                                        } elseif ($dayData['attendance_status'] == '0') {
                                                                                             $cellClass = 'absent';
                                                                                         } else {
                                                                                             $cellClass = '';
