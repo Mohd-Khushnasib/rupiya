@@ -6789,6 +6789,14 @@ class AdminController extends Controller
                         ? Carbon::parse($record->punch_out_time)->format('g:i:s A')
                         : null,
                     'attendance_status' => $record ? $record->attendance_status : 'absent',
+                    'punchin_img' => $record ? $record->punchin_img : null,
+                    'punchout_img' => $record ? $record->punchout_img : null,
+                    'punchin_datetime' => $record && isset($record->punchin_time)
+                        ? Carbon::parse($record->punchin_time)->format('Y-m-d g:i:s A')
+                        : null,
+                    'punchout_datetime' => $record && isset($record->punch_out_time)
+                        ? Carbon::parse($record->punch_out_time)->format('Y-m-d g:i:s A')
+                        : null,
                 ];
             }
 

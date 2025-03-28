@@ -334,126 +334,140 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive table-container">
-                            <table class="table table-advance custom-table">
-                            <thead>
-                                <tr>
-                                    <th class="name-header">Employee Details</th>
-                                    @foreach($dates as $date)
-                                        <th class="day-header {{ $date['isSunday'] ? 'bg-light text-danger' : '' }}">
-                                            {{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}
-                                        </th>
-                                    @endforeach
-                                    <th class="day-header">Total <br> Present</th>
-                                    <th class="day-header">Paid <br> Leave</th>
-                                    <th class="day-header">Earned <br> Leave</th>
-                                    <th class="day-header">Final <br> Attendance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($attendanceData as $attendance)
-                                <tr>
-                                    <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
-                                        <div>
-                                            @if($attendance['image'])
-                                            <img src="{{ asset($attendance['image']) }}" alt="" height="50px" width="50px" style="object-fit: cover;">
-                                            @else
-                                            <div style="height: 50px; width: 50px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
-                                                <span>{{ substr($attendance['name'], 0, 1) }}</span>
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <div style="text-align: start;">
-                                            <span style="font-size: 17px;"><b>{{ $attendance['name'] }}</b></span><br>
-                                            <span style="font-size: 12px;">Emp-ID: {{ $attendance['admin_id'] }}</span><br>
-                                            <span style="font-size: 12px;">{{ $attendance['department'] }} | {{ $attendance['role'] }}</span>
-                                        </div>
-                                    </td>
-                                    
-                                    @php
-                                        $totalPresent = 0;
-                                        $paidLeave = 0;
-                                        $earnedLeave = 0;
-                                    @endphp
-                                    
-                                    @foreach($dates as $date)
-                                        @php
-                                            $dayData = $attendance['attendance'][$date['date']];
-                                            
-                                            // Calculate attendance totals
-                                            if ($dayData['attendance_status'] == '1') {
-                                                $totalPresent += 1;
-                                                $value = 1;
-                                            } elseif ($dayData['attendance_status'] == '0.5') {
-                                                $totalPresent += 0.5;
-                                                $value = 0.5;
-                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
-                                                $paidLeave += 1;
-                                                $value = 0;
-                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'earned') !== false) {
-                                                $earnedLeave += 1;
-                                                $value = 0;
-                                            } else {
-                                                $value = $date['isSunday'] ? 1 : 0;
-                                            }
-                                            
-                                            // Set cell class based on status
-                                            if ($date['isSunday']) {
-                                                $cellClass = 'off';
-                                            } elseif ($dayData['attendance_status'] == '1') {
-                                                $cellClass = 'full-day';
-                                            } elseif ($dayData['attendance_status'] == '0.5') {
-                                                $cellClass = 'half-day';
-                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
-                                                $cellClass = 'leave-approve';
-                                            } elseif ($dayData['attendance_status'] == 'leave') {
-                                                $cellClass = 'leave-not-approve';
-                                            } elseif ($dayData['attendance_status'] == '0') {
-                                                $cellClass = 'absent';
-                                            } else {
-                                                $cellClass = '';
-                                            }
-                                        @endphp
-                                        
-                                        <td class="opentdModal {{ $cellClass }}">
-                                            <b>{{ $value }}</b><br>
-                                            @if($date['isSunday'])
-                                                <span>Off</span>
-                                            @elseif($dayData['attendance_status'] == 'leave')
-                                                <span>Leave</span>
-                                            @elseif($dayData['attendance_status'] == '1')
-                                                <span>Present<br>
-                                                @if($dayData['punch_in_time'])
-                                                    {{ $dayData['punch_in_time'] }} 
-                                                    @if($dayData['punch_out_time'])
-                                                    - {{ $dayData['punch_out_time'] }}
-                                                    @endif
-                                                @endif
-                                                </span>
-                                            @elseif($dayData['attendance_status'] == '0.5')
-                                                <span>Half day<br>
-                                                @if($dayData['punch_in_time'])
-                                                    {{ $dayData['punch_in_time'] }} 
-                                                    @if($dayData['punch_out_time'])
-                                                    - {{ $dayData['punch_out_time'] }}
-                                                    @endif
-                                                @endif
-                                                </span>
-                                            @elseif($dayData['attendance_status'] == '0')
-                                                <span>Absent</span>
-                                            @else
-                                                <span>{{ $dayData['attendance_status'] }}</span>
-                                            @endif
-                                        </td>
-                                    @endforeach
-                                    
-                                    <td>{{ $totalPresent }}</td>
-                                    <td>{{ $paidLeave }}</td>
-                                    <td>{{ $earnedLeave }}</td>
-                                    <td>{{ $totalPresent + $paidLeave + $earnedLeave }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                <table class="table table-advance custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="name-header">Employee Details</th>
+                                            @foreach($dates as $date)
+                                                <th class="day-header {{ $date['isSunday'] ? 'bg-light text-danger' : '' }}">
+                                                    {{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}
+                                                </th>
+                                            @endforeach
+                                            <th class="day-header">Total <br> Present</th>
+                                            <th class="day-header">Paid <br> Leave</th>
+                                            <th class="day-header">Earned <br> Leave</th>
+                                            <th class="day-header">Final <br> Attendance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($attendanceData as $attendance)
+                                                            <tr>
+                                                                <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                                                    <div>
+                                                                        @if($attendance['image'])
+                                                                            <img src="{{ asset($attendance['image']) }}" alt="" height="50px" width="50px"
+                                                                                style="object-fit: cover;">
+                                                                        @else
+                                                                            <div
+                                                                                style="height: 50px; width: 50px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                                                                                <span>{{ substr($attendance['name'], 0, 1) }}</span>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div style="text-align: start;">
+                                                                        <span style="font-size: 17px;"><b>{{ $attendance['name'] }}</b></span><br>
+                                                                        <span style="font-size: 12px;">Emp-ID: {{ $attendance['admin_id'] }}</span><br>
+                                                                        <span style="font-size: 12px;">{{ $attendance['department'] }} |
+                                                                            {{ $attendance['role'] }}</span>
+                                                                    </div>
+                                                                </td>
+
+                                                                @php
+                                                                    $totalPresent = 0;
+                                                                    $paidLeave = 0;
+                                                                    $earnedLeave = 0;
+                                                                @endphp
+
+                                                                @foreach($dates as $date)
+                                                                                    @php
+                                                                                        $dayData = $attendance['attendance'][$date['date']];
+
+                                                                                        // Calculate attendance totals
+                                                                                        if ($dayData['attendance_status'] == '1') {
+                                                                                            $totalPresent += 1;
+                                                                                            $value = 1;
+                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
+                                                                                            $totalPresent += 0.5;
+                                                                                            $value = 0.5;
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
+                                                                                            $paidLeave += 1;
+                                                                                            $value = 0;
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'earned') !== false) {
+                                                                                            $earnedLeave += 1;
+                                                                                            $value = 0;
+                                                                                        } else {
+                                                                                            $value = $date['isSunday'] ? 1 : 0;
+                                                                                        }
+
+                                                                                        // Set cell class based on status
+                                                                                        if ($date['isSunday']) {
+                                                                                            $cellClass = 'off';
+                                                                                        } elseif ($dayData['attendance_status'] == '1') {
+                                                                                            $cellClass = 'full-day';
+                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
+                                                                                            $cellClass = 'half-day';
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
+                                                                                            $cellClass = 'leave-approve';
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave') {
+                                                                                            $cellClass = 'leave-not-approve';
+                                                                                        } elseif ($dayData['attendance_status'] == '0') {
+                                                                                            $cellClass = 'absent';
+                                                                                        } else {
+                                                                                            $cellClass = '';
+                                                                                        }
+                                                                                    @endphp
+
+                                                                                    <td class="opentdModal {{ $cellClass }}" data-employee-name="{{ $attendance['name'] }}"
+                                                                                        data-employee-id="{{ $attendance['admin_id'] }}"
+                                                                                        data-employee-dept="{{ $attendance['department'] }}"
+                                                                                        data-employee-role="{{ $attendance['role'] }}"
+                                                                                        data-employee-image="{{ $attendance['image'] }}"
+                                                                                        data-attendance-date="{{ $date['date'] }}"
+                                                                                        data-attendance-status="{{ $dayData['attendance_status'] }}"
+                                                                                        data-punch-in-time="{{ $dayData['punch_in_time'] ?? '' }}"
+                                                                                        data-punch-out-time="{{ $dayData['punch_out_time'] ?? '' }}"
+                                                                                        data-punch-in-img="{{ $dayData['punchin_img'] ?? '' }}"
+                                                                                        data-punch-out-img="{{ $dayData['punchout_img'] ?? '' }}">
+
+                                                                                        <b>{{ $value }}</b><br>
+                                                                                        @if($date['isSunday'])
+                                                                                            <span>Off</span>
+                                                                                        @elseif($dayData['attendance_status'] == 'leave')
+                                                                                            <span>Leave</span>
+                                                                                        @elseif($dayData['attendance_status'] == '1')
+                                                                                            <span>Present<br>
+                                                                                                @if($dayData['punch_in_time'])
+                                                                                                    {{ $dayData['punch_in_time'] }}
+                                                                                                    @if($dayData['punch_out_time'])
+                                                                                                        - {{ $dayData['punch_out_time'] }}
+                                                                                                    @endif
+                                                                                                @endif
+                                                                                            </span>
+                                                                                        @elseif($dayData['attendance_status'] == '0.5')
+                                                                                            <span>Half day<br>
+                                                                                                @if($dayData['punch_in_time'])
+                                                                                                    {{ $dayData['punch_in_time'] }}
+                                                                                                    @if($dayData['punch_out_time'])
+                                                                                                        - {{ $dayData['punch_out_time'] }}
+                                                                                                    @endif
+                                                                                                @endif
+                                                                                            </span>
+                                                                                        @elseif($dayData['attendance_status'] == '0')
+                                                                                            <span>Absent</span>
+                                                                                        @else
+                                                                                            <span>{{ $dayData['attendance_status'] }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                @endforeach
+
+                                                                <td>{{ $totalPresent }}</td>
+                                                                <td>{{ $paidLeave }}</td>
+                                                                <td>{{ $earnedLeave }}</td>
+                                                                <td>{{ $totalPresent + $paidLeave + $earnedLeave }}</td>
+                                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -768,10 +782,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                                                    <label for="timeInput">Your punch in time</label>
-                                                                                                                                                                                    <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                                        placeholder="Current Time" readonly="">
-                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                            <label for="timeInput">Your punch in time</label>
+                                                                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                                                                placeholder="Current Time" readonly="">
+                                                                                                                                                                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1160,10 +1174,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                            <input type="text" placeholder="Work description">
-                                                                                                                                                            <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                            <button class="ak_minus">-</button>
-                                                                                                                                                        `;
+                                                                                                                                                                                    <input type="text" placeholder="Work description">
+                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                    <button class="ak_minus">-</button>
+                                                                                                                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1207,7 +1221,78 @@
             <script>
                 $(document).ready(function () {
                     $(".opentdModal").click(function () {
+                        // Get employee data from clicked cell
+                        var employeeName = $(this).data('employee-name');
+                        var employeeId = $(this).data('employee-id');
+                        var employeeDept = $(this).data('employee-dept');
+                        var employeeRole = $(this).data('employee-role');
+                        var attendanceStatus = $(this).data('attendance-status');
+                        var attendanceDate = $(this).data('attendance-date');
+
+                        // Get punch data
+                        var punchInTime = $(this).data('punch-in-time');
+                        var punchOutTime = $(this).data('punch-out-time');
+                        var punchInImg = $(this).data('punch-in-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
+                        var punchOutImg = $(this).data('punch-out-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
+
+                        // Format date from YYYY-MM-DD to a more readable format
+                        var formattedDate = new Date(attendanceDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                        // Update modal title and employee details
+                        $("#tdModal .modal-title").text(employeeName);
+                        $("#tdModal p:eq(0)").text(employeeDept + " | " + employeeRole);
+                        $("#tdModal p:eq(1)").text("Emp-ID: " + employeeId);
+                        $("#tdModal p:eq(2)").text("Attendance: " + attendanceStatus);
+
+                        // Update punch in details
+                        $("#tdModal .col-sm-6:eq(0) img").attr("src", punchInImg);
+                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text("Punch In Date: " + attendanceDate);
+                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(1)").text("Punch In Time: " + (punchInTime || "N/A"));
+
+                        // Update punch out details
+                        $("#tdModal .col-sm-6:eq(1) img").attr("src", punchOutImg);
+                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(0)").text("Punch Out Date: " + attendanceDate);
+                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(1)").text("Punch Out Time: " + (punchOutTime || "N/A"));
+
+                        // Set the current status in the dropdown
+                        $("#tdModal select").val(attendanceStatus);
+
+                        // Show the modal
                         $("#tdModal").modal("show");
+                    });
+
+                    // Handle form submission
+                    $("#submitBtn").click(function () {
+                        var newAttendanceStatus = $("#tdModal select").val();
+                        var comments = $("#tdModal textarea").val();
+                        var employeeId = $("#tdModal p:eq(1)").text().replace("Emp-ID: ", "");
+                        var attendanceDate = $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text().replace("Punch In Date: ", "");
+
+                        // You can add Ajax to send this data to the server
+                        $.ajax({
+                            url: "/update-attendance",
+                            method: "POST",
+                            data: {
+                                admin_id: employeeId,
+                                date: attendanceDate,
+                                attendance_status: newAttendanceStatus,
+                                comments: comments,
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                // Close modal and optionally refresh the page
+                                $("#tdModal").modal("hide");
+                                // You can reload the page or update the UI as needed
+                                location.reload();
+                            },
+                            error: function (error) {
+                                alert("Error updating attendance: " + error.responseJSON.message);
+                            }
+                        });
                     });
                 });
             </script>
