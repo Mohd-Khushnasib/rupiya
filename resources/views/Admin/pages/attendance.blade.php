@@ -1232,8 +1232,8 @@
                         // Get punch data
                         var punchInTime = $(this).data('punch-in-time');
                         var punchOutTime = $(this).data('punch-out-time');
-                        var punchInImg = $(this).data('punch-in-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
-                        var punchOutImg = $(this).data('punch-out-img') || 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg';
+                        var punchInImg = $(this).data('punch-in-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
+                        var punchOutImg = $(this).data('punch-out-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
 
                         // Format date from YYYY-MM-DD to a more readable format
                         var formattedDate = new Date(attendanceDate).toLocaleDateString('en-US', {
