@@ -334,129 +334,126 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive table-container">
-                                <table class="table table-advance custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="name-header">Employee Details</th>
-                                            @foreach($dates as $date)
-                                                <th class="day-header {{ $date['isSunday'] ? 'bg-light text-danger' : '' }}">
-                                                    {{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}
-                                                </th>
-                                            @endforeach
-                                            <th class="day-header">Total <br> Present</th>
-                                            <th class="day-header">Paid <br> Leave</th>
-                                            <th class="day-header">Earned <br> Leave</th>
-                                            <th class="day-header">Final <br> Attendance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($attendanceData as $attendance)
-                                                            <tr>
-                                                                <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
-                                                                    <div>
-                                                                        @if($attendance['image'])
-                                                                            <img src="{{ asset($attendance['image']) }}" alt="" height="50px" width="50px"
-                                                                                style="object-fit: cover;">
-                                                                        @else
-                                                                            <div
-                                                                                style="height: 50px; width: 50px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
-                                                                                <span>{{ substr($attendance['name'], 0, 1) }}</span>
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                    <div style="text-align: start;">
-                                                                        <span style="font-size: 17px;"><b>{{ $attendance['name'] }}</b></span><br>
-                                                                        <span style="font-size: 12px;">Emp-ID: {{ $attendance['admin_id'] }}</span><br>
-                                                                        <span style="font-size: 12px;">{{ $attendance['department'] }} |
-                                                                            {{ $attendance['role'] }}</span>
-                                                                    </div>
-                                                                </td>
-
-                                                                @php
-                                                                    $totalPresent = 0;
-                                                                    $paidLeave = 0;
-                                                                    $earnedLeave = 0;
-                                                                @endphp
-
-                                                                @foreach($dates as $date)
-                                                                                    @php
-                                                                                        $dayData = $attendance['attendance'][$date['date']];
-
-                                                                                        // Calculate attendance totals
-                                                                                        if ($dayData['attendance_status'] == '1') {
-                                                                                            $totalPresent += 1;
-                                                                                            $value = 1;
-                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
-                                                                                            $totalPresent += 0.5;
-                                                                                            $value = 0.5;
-                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
-                                                                                            $paidLeave += 1;
-                                                                                            $value = 0;
-                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'earned') !== false) {
-                                                                                            $earnedLeave += 1;
-                                                                                            $value = 0;
-                                                                                        } else {
-                                                                                            $value = $date['isSunday'] ? 1 : 0;
-                                                                                        }
-
-                                                                                        // Set cell class based on status
-                                                                                        if ($date['isSunday']) {
-                                                                                            $cellClass = 'off';
-                                                                                        } elseif ($dayData['attendance_status'] == '1') {
-                                                                                            $cellClass = 'full-day';
-                                                                                        } elseif ($dayData['attendance_status'] == '0.5') {
-                                                                                            $cellClass = 'half-day';
-                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
-                                                                                            $cellClass = 'leave-approve';
-                                                                                        } elseif ($dayData['attendance_status'] == 'leave') {
-                                                                                            $cellClass = 'leave-not-approve';
-                                                                                        } elseif ($dayData['attendance_status'] == '0') {
-                                                                                            $cellClass = 'absent';
-                                                                                        } else {
-                                                                                            $cellClass = '';
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    <td class="opentdModal {{ $cellClass }}">
-                                                                                        <b>{{ $value }}</b><br>
-                                                                                        @if($date['isSunday'])
-                                                                                            <span>Off</span>
-                                                                                        @elseif($dayData['attendance_status'] == 'leave')
-                                                                                            <span>Leave</span>
-                                                                                        @elseif($dayData['attendance_status'] == '1')
-                                                                                            <span>Present<br>
-                                                                                                @if($dayData['punch_in_time'])
-                                                                                                    {{ $dayData['punch_in_time'] }}
-                                                                                                    @if($dayData['punch_out_time'])
-                                                                                                        - {{ $dayData['punch_out_time'] }}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                            </span>
-                                                                                        @elseif($dayData['attendance_status'] == '0.5')
-                                                                                            <span>Half day<br>
-                                                                                                @if($dayData['punch_in_time'])
-                                                                                                    {{ $dayData['punch_in_time'] }}
-                                                                                                    @if($dayData['punch_out_time'])
-                                                                                                        - {{ $dayData['punch_out_time'] }}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                            </span>
-                                                                                        @elseif($dayData['attendance_status'] == '0')
-                                                                                            <span>Absent</span>
-                                                                                        @else
-                                                                                            <span>{{ $dayData['attendance_status'] }}</span>
-                                                                                        @endif
-                                                                                    </td>
-                                                                @endforeach
-
-                                                                <td>{{ $totalPresent }}</td>
-                                                                <td>{{ $paidLeave }}</td>
-                                                                <td>{{ $earnedLeave }}</td>
-                                                                <td>{{ $totalPresent + $paidLeave + $earnedLeave }}</td>
-                                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <table class="table table-advance custom-table">
+                            <thead>
+                                <tr>
+                                    <th class="name-header">Employee Details</th>
+                                    @foreach($dates as $date)
+                                        <th class="day-header {{ $date['isSunday'] ? 'bg-light text-danger' : '' }}">
+                                            {{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}
+                                        </th>
+                                    @endforeach
+                                    <th class="day-header">Total <br> Present</th>
+                                    <th class="day-header">Paid <br> Leave</th>
+                                    <th class="day-header">Earned <br> Leave</th>
+                                    <th class="day-header">Final <br> Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($attendanceData as $attendance)
+                                <tr>
+                                    <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                        <div>
+                                            @if($attendance['image'])
+                                            <img src="{{ asset($attendance['image']) }}" alt="" height="50px" width="50px" style="object-fit: cover;">
+                                            @else
+                                            <div style="height: 50px; width: 50px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                                                <span>{{ substr($attendance['name'], 0, 1) }}</span>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div style="text-align: start;">
+                                            <span style="font-size: 17px;"><b>{{ $attendance['name'] }}</b></span><br>
+                                            <span style="font-size: 12px;">Emp-ID: {{ $attendance['admin_id'] }}</span><br>
+                                            <span style="font-size: 12px;">{{ $attendance['department'] }} | {{ $attendance['role'] }}</span>
+                                        </div>
+                                    </td>
+                                    
+                                    @php
+                                        $totalPresent = 0;
+                                        $paidLeave = 0;
+                                        $earnedLeave = 0;
+                                    @endphp
+                                    
+                                    @foreach($dates as $date)
+                                        @php
+                                            $dayData = $attendance['attendance'][$date['date']];
+                                            
+                                            // Calculate attendance totals
+                                            if ($dayData['attendance_status'] == '1') {
+                                                $totalPresent += 1;
+                                                $value = 1;
+                                            } elseif ($dayData['attendance_status'] == '0.5') {
+                                                $totalPresent += 0.5;
+                                                $value = 0.5;
+                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
+                                                $paidLeave += 1;
+                                                $value = 0;
+                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'earned') !== false) {
+                                                $earnedLeave += 1;
+                                                $value = 0;
+                                            } else {
+                                                $value = $date['isSunday'] ? 1 : 0;
+                                            }
+                                            
+                                            // Set cell class based on status
+                                            if ($date['isSunday']) {
+                                                $cellClass = 'off';
+                                            } elseif ($dayData['attendance_status'] == '1') {
+                                                $cellClass = 'full-day';
+                                            } elseif ($dayData['attendance_status'] == '0.5') {
+                                                $cellClass = 'half-day';
+                                            } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
+                                                $cellClass = 'leave-approve';
+                                            } elseif ($dayData['attendance_status'] == 'leave') {
+                                                $cellClass = 'leave-not-approve';
+                                            } elseif ($dayData['attendance_status'] == '0') {
+                                                $cellClass = 'absent';
+                                            } else {
+                                                $cellClass = '';
+                                            }
+                                        @endphp
+                                        
+                                        <td class="opentdModal {{ $cellClass }}">
+                                            <b>{{ $value }}</b><br>
+                                            @if($date['isSunday'])
+                                                <span>Off</span>
+                                            @elseif($dayData['attendance_status'] == 'leave')
+                                                <span>Leave</span>
+                                            @elseif($dayData['attendance_status'] == '1')
+                                                <span>Present<br>
+                                                @if($dayData['punch_in_time'])
+                                                    {{ $dayData['punch_in_time'] }} 
+                                                    @if($dayData['punch_out_time'])
+                                                    - {{ $dayData['punch_out_time'] }}
+                                                    @endif
+                                                @endif
+                                                </span>
+                                            @elseif($dayData['attendance_status'] == '0.5')
+                                                <span>Half day<br>
+                                                @if($dayData['punch_in_time'])
+                                                    {{ $dayData['punch_in_time'] }} 
+                                                    @if($dayData['punch_out_time'])
+                                                    - {{ $dayData['punch_out_time'] }}
+                                                    @endif
+                                                @endif
+                                                </span>
+                                            @elseif($dayData['attendance_status'] == '0')
+                                                <span>Absent</span>
+                                            @else
+                                                <span>{{ $dayData['attendance_status'] }}</span>
+                                            @endif
+                                        </td>
+                                    @endforeach
+                                    
+                                    <td>{{ $totalPresent }}</td>
+                                    <td>{{ $paidLeave }}</td>
+                                    <td>{{ $earnedLeave }}</td>
+                                    <td>{{ $totalPresent + $paidLeave + $earnedLeave }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                             </div>
                         </div>
                     </div>
@@ -1266,15 +1263,6 @@
                                         <p class="col-sm-12" style="margin-top: 10px;">
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
-                                        <!-- <div class="col-sm-12">
-                                                                                                                                                                                        <label for="">Change Attendance </label>
-                                                                                                                                                                                        <select name="" id="">
-                                                                                                                                                                                            <option value="1">Full Day (1)</option>
-                                                                                                                                                                                            <option value="0.5">Half Day (0.5)</option>
-                                                                                                                                                                                            <option value="0">Leave (0)</option>
-                                                                                                                                                                                            <option value="-1">Leave Not Approved (-1)</option>
-                                                                                                                                                                                        </select>
-                                                                                                                                                                                    </div> -->
                                     </div>
                                 </div>
 
