@@ -549,6 +549,7 @@
                     });
 
                     // Punchout Here 
+                    // On the punch-out form submission
                     $("#punchout_form").on("submit", function (e) {
                         e.preventDefault();
                         $(".punchout_btn").prop('disabled', true);
@@ -559,20 +560,25 @@
                         // AJAX request
                         $.ajax({
                             type: "POST",
-                            url: "{{url('/punchout_attendance')}}", // Make sure this URL is correct
+                            url: "{{url('/punchout_attendance')}}",
                             data: formdata,
                             contentType: false,
                             cache: false,
                             processData: false,
                             dataType: "json",
                             success: function (data) {
-                                // Re-enable the button
                                 $(".punchout_btn").prop("disabled", false);
                                 if (data.success == 'success') {
                                     document.getElementById("punchout_form").reset();
                                     $("#myModal1").modal("hide");
-                                    swal("Punchout Submitted Successfully", "", "success");
-                                    window.location.reload();
+
+                                    // Set a flag in localStorage to indicate successful punch-out
+                                    localStorage.setItem('showWorkReportModal', 'true');
+
+                                    swal("Punchout Submitted Successfully", "", "success").then(() => {
+                                        // Refresh the page
+                                        window.location.reload();
+                                    });
                                 } else if (data.success == 'error') {
                                     $(".punchout_btn").prop('disabled', false);
                                     swal("Error", data.message, "error");
@@ -584,6 +590,20 @@
                                 console.error("AJAX Error:", xhr.responseText);
                             }
                         });
+                    });
+
+                    // Add this code at the bottom of your script or in document.ready function
+                    $(document).ready(function () {
+                        // Check if we need to show the Work Report modal after page load
+                        if (localStorage.getItem('showWorkReportModal') === 'true') {
+                            // Clear the flag first to prevent it from showing again on future refreshes
+                            localStorage.removeItem('showWorkReportModal');
+
+                            // Wait a short moment to ensure the page is fully loaded
+                            setTimeout(function () {
+                                $("#myModal2").modal("show");
+                            }, 500);
+                        }
                     });
 
                     // end here 
@@ -794,10 +814,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                    <label for="timeInput">Your punch in time</label>
-                                                                                    <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                        placeholder="Current Time" readonly="">
-                                                                                </div> -->
+                                                                                                            <label for="timeInput">Your punch in time</label>
+                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                placeholder="Current Time" readonly="">
+                                                                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1299,10 +1319,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                                                                color: green !important;
-                                                                margin-top: 15px;
-                                                                font-weight: bold;
-                                                              ">1.
+                                                                                        color: green !important;
+                                                                                        margin-top: 15px;
+                                                                                        font-weight: bold;
+                                                                                      ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1343,10 +1363,10 @@
 
 
             <!--
-                                                        -----------------------------------------------------------------------------------------------------------
-                                                        add multiple boxes for add your work time
-                                                        -----------------------------------------------------------------------------------------------------------
-                                                        -->
+                                                                                -----------------------------------------------------------------------------------------------------------
+                                                                                add multiple boxes for add your work time
+                                                                                -----------------------------------------------------------------------------------------------------------
+                                                                                -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1378,10 +1398,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                            <input type="text" placeholder="Work description">
-                                                            <input type="number" placeholder="Hours" min="0">
-                                                            <button class="ak_minus">-</button>
-                                                        `;
+                                                                                    <input type="text" placeholder="Work description">
+                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                    <button class="ak_minus">-</button>
+                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1431,10 +1451,10 @@
             </script>
 
             <!--
-                                                        -----------------------------------------------------------------------------------------------------------
-                                                        Attendance Details Modal
-                                                        -----------------------------------------------------------------------------------------------------------
-                                                        -->
+                                                                                -----------------------------------------------------------------------------------------------------------
+                                                                                Attendance Details Modal
+                                                                                -----------------------------------------------------------------------------------------------------------
+                                                                                -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1487,14 +1507,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                                        <label for="">Change Attendance </label>
-                                                                                        <select name="" id="">
-                                                                                            <option value="1">Full Day (1)</option>
-                                                                                            <option value="0.5">Half Day (0.5)</option>
-                                                                                            <option value="0">Leave (0)</option>
-                                                                                            <option value="-1">Leave Not Approved (-1)</option>
-                                                                                        </select>
-                                                                                    </div> -->
+                                                                                                                <label for="">Change Attendance </label>
+                                                                                                                <select name="" id="">
+                                                                                                                    <option value="1">Full Day (1)</option>
+                                                                                                                    <option value="0.5">Half Day (0.5)</option>
+                                                                                                                    <option value="0">Leave (0)</option>
+                                                                                                                    <option value="-1">Leave Not Approved (-1)</option>
+                                                                                                                </select>
+                                                                                                            </div> -->
                                     </div>
                                 </div>
 
