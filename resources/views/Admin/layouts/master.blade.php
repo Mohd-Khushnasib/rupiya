@@ -2,7 +2,7 @@
     use Illuminate\Support\Facades\DB;
     use Carbon\Carbon;
     $DateTime = Carbon::now('Asia/Kolkata');
-    $today = $DateTime->format('m/d/Y');
+    $today = $DateTime->format('Y-m-d'); // Format matching your database: 2025-03-28
 
     if (session()->has('admin_login')) {
         $data = session('admin_login');
@@ -12,33 +12,42 @@
         $admin_id = $admin->id ?? null;
         $totalLeads = DB::table('tbl_lead')->count();
 
-        // Attendance data fetch
-        $attendance = DB::table('tbl_attendance')
-        ->where('admin_id', $admin_id)
-        ->whereRaw("DATE(punchin_datetime) = ?", [$today]) 
-        ->first();
-        // Default - both buttons disabled initially
+        // Check for today's attendance using the date column
+        $todayAttendance = DB::table('tbl_attendance')
+            ->where('admin_id', $admin_id)
+            ->where('date', $today)
+            ->first();
+        
+        // Default state
         $disablePunchIn = true;
         $disablePunchOut = true;
 
-        if ($attendance) {
-            // Check punch-in status
-            if ($attendance->punchin_status == 'true') {
-                $disablePunchIn = true; // Disable punch-in button
-                if ($attendance->punchout_status != 'true') {
-                    $disablePunchOut = false; 
-                }
-            } 
-            else 
-            {
-                $disablePunchIn = false; // Enable punch-in button
-                $disablePunchOut = true; // Disable punch-out button
+        if ($todayAttendance) {
+            // Record exists for today
+            if ($todayAttendance->punchin_status == 'true') {
+                $disablePunchIn = true; // Already punched in
+                $disablePunchOut = ($todayAttendance->punchout_status == 'true'); // Enable punch-out if not done yet
+            } else {
+                $disablePunchIn = false; // Can punch in
+                $disablePunchOut = true; // Can't punch out yet
             }
-        } 
-        else 
-        {
-            $disablePunchIn = false;
-            $disablePunchOut = true;
+        } else {
+            // No record for today - check the latest record
+            $lastAttendance = DB::table('tbl_attendance')
+                ->where('admin_id', $admin_id)
+                ->orderBy('date', 'desc')
+                ->first();
+                
+            if (!$lastAttendance || ($lastAttendance->punchin_status == 'true' && 
+                                    $lastAttendance->punchout_status == 'true')) {
+                // Previous day is complete or no previous record - enable punch-in for new day
+                $disablePunchIn = false;
+                $disablePunchOut = true;
+            } else {
+                // Previous day has incomplete status - maintain that state
+                $disablePunchIn = ($lastAttendance->punchin_status == 'true');
+                $disablePunchOut = ($lastAttendance->punchout_status == 'true');
+            }
         }
     } else {
         echo '<script>
@@ -105,27 +114,27 @@
 
               
             <li>
-    <div class="dropdown">
-        <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
-            Time: Loading...
-        </button>
-        <ul class="dropdown-menu" id="dropdown-menu">
-            <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
-                    Leave
-                </button></a></li>
-        
-            <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn" 
-                    {{ $disablePunchIn ? 'disabled' : '' }}>
-                    Punch In
-                </button></a></li>
-        
-            <li><a href="#"><button class="btn btn-success btn-block" id="openModalBtn1" 
-                    {{ $disablePunchOut ? 'disabled' : '' }}>
-                    Punch Out
-                </button></a></li>
-        </ul>
-    </div>
-</li>
+                <div class="dropdown">
+                    <button id="timeButton" class="btn btn-light dropdown-toggle btn-block" type="button" style="width: 160px;">
+                        Time: Loading...
+                    </button>
+                    <ul class="dropdown-menu" id="dropdown-menu">
+                        <li><a href="employee_leaves.html"><button type="button" class="btn btn-light btn-block">
+                                Leave
+                            </button></a></li>
+                    
+                        <li><a href="#"><button type="button" class="btn btn-info btn-block" id="openModalBtn" 
+                                {{ $disablePunchIn ? 'disabled' : '' }}>
+                                Punch In
+                            </button></a></li>
+                    
+                        <li><a href="#"><button class="btn btn-success btn-block" id="openModalBtn1" 
+                                {{ $disablePunchOut ? 'disabled' : '' }}>
+                                Punch Out
+                            </button></a></li>
+                    </ul>
+                </div>
+            </li>
 
 
 
