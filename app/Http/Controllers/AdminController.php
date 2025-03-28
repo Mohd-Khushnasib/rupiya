@@ -6761,7 +6761,7 @@ class AdminController extends Controller
         // Group attendance records by admin_id and date
         $groupedRecords = [];
         foreach ($attendanceRecords as $record) {
-            $date = Carbon::parse($record->created_at)->format('Y-m-d');
+            $date = Carbon::parse($record->date)->format('Y-m-d');
             $groupedRecords[$record->admin_id][$date] = $record;
         }
 
