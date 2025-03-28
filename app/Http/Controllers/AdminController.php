@@ -6755,7 +6755,7 @@ class AdminController extends Controller
         $monthEnd = Carbon::createFromDate($year, $now->month, $daysInMonth)->format('Y-m-d');
 
         $attendanceRecords = DB::table('tbl_attendance')
-            ->whereBetween(DB::raw('DATE(created_at)'), [$monthStart, $monthEnd])
+            ->whereBetween(DB::raw('DATE(date)'), [$monthStart, $monthEnd])
             ->get();
 
         // Group attendance records by admin_id and date
