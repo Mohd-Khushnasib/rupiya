@@ -760,10 +760,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                            <label for="timeInput">Your punch in time</label>
-                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                placeholder="Current Time" readonly="">
-                                                                                                                                                        </div> -->
+                                                                                                                                                                        <label for="timeInput">Your punch in time</label>
+                                                                                                                                                                        <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                            placeholder="Current Time" readonly="">
+                                                                                                                                                                    </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1152,10 +1152,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                    <input type="text" placeholder="Work description">
-                                                                                                                                    <input type="number" placeholder="Hours" min="0">
-                                                                                                                                    <button class="ak_minus">-</button>
-                                                                                                                                `;
+                                                                                                                                                <input type="text" placeholder="Work description">
+                                                                                                                                                <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                <button class="ak_minus">-</button>
+                                                                                                                                            `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1256,14 +1256,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                                                                                                                <label for="">Change Attendance </label>
-                                                                                                                                                                <select name="" id="">
-                                                                                                                                                                    <option value="1">Full Day (1)</option>
-                                                                                                                                                                    <option value="0.5">Half Day (0.5)</option>
-                                                                                                                                                                    <option value="0">Leave (0)</option>
-                                                                                                                                                                    <option value="-1">Leave Not Approved (-1)</option>
-                                                                                                                                                                </select>
-                                                                                                                                                            </div> -->
+                                                                                                                                                                            <label for="">Change Attendance </label>
+                                                                                                                                                                            <select name="" id="">
+                                                                                                                                                                                <option value="1">Full Day (1)</option>
+                                                                                                                                                                                <option value="0.5">Half Day (0.5)</option>
+                                                                                                                                                                                <option value="0">Leave (0)</option>
+                                                                                                                                                                                <option value="-1">Leave Not Approved (-1)</option>
+                                                                                                                                                                            </select>
+                                                                                                                                                                        </div> -->
                                     </div>
                                 </div>
 
