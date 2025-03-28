@@ -6727,12 +6727,80 @@ class AdminController extends Controller
     ########### Attendance Start Here ###########
     public function showAttendance(Request $request)
     {
-        $allCommitments = DB::table('tbl_punchoutcommitment')->orderBy('id', 'desc')->get();
-        $data['time'] = $allCommitments->where('type', 'Time');
-        $data['count'] = $allCommitments->where('type', 'Count');
-        $data['products'] = $allCommitments;
-        
-        return view('Admin.pages.attendance', $data);
+        // Get the current month dates
+        $now = Carbon::now();
+        $daysInMonth = $now->daysInMonth;
+        $month = $now->format('F');
+        $year = $now->year;
+
+        // Create array of all dates in current month
+        $dates = [];
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::createFromDate($year, $now->month, $day);
+            $dates[] = [
+                'day' => $day,
+                'date' => $date->format('Y-m-d'),
+                'dayOfWeek' => $date->format('D'),
+                'isSunday' => $date->dayOfWeek === 0
+            ];
+        }
+
+        // Fetch all users from admin table
+        $users = DB::table('admin')
+            ->select(['id', 'name', 'department', 'team', 'role', 'image'])
+            ->get();
+
+        // Get attendance records for the entire month
+        $monthStart = Carbon::createFromDate($year, $now->month, 1)->format('Y-m-d');
+        $monthEnd = Carbon::createFromDate($year, $now->month, $daysInMonth)->format('Y-m-d');
+
+        $attendanceRecords = DB::table('tbl_attendance')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$monthStart, $monthEnd])
+            ->get();
+
+        // Group attendance records by admin_id and date
+        $groupedRecords = [];
+        foreach ($attendanceRecords as $record) {
+            $date = Carbon::parse($record->created_at)->format('Y-m-d');
+            $groupedRecords[$record->admin_id][$date] = $record;
+        }
+
+        // Format the attendance data
+        $attendanceData = $users->map(function ($user) use ($groupedRecords, $dates) {
+            $userData = [
+                'admin_id' => $user->id,
+                'name' => $user->name,
+                'department' => $user->department ?? '',
+                'team' => $user->team ?? '',
+                'role' => $user->role ?? '',
+                'image' => $user->image ?? '',
+                'attendance' => []
+            ];
+
+            // Add attendance for each day
+            foreach ($dates as $date) {
+                $record = $groupedRecords[$user->id][$date['date']] ?? null;
+
+                $userData['attendance'][$date['date']] = [
+                    'punch_in_time' => $record && isset($record->punchin_time)
+                        ? Carbon::parse($record->punchin_time)->format('g:i:s A')
+                        : null,
+                    'punch_out_time' => $record && isset($record->punch_out_time)
+                        ? Carbon::parse($record->punch_out_time)->format('g:i:s A')
+                        : null,
+                    'attendance_status' => $record ? $record->attendance_status : 'absent',
+                ];
+            }
+
+            return $userData;
+        });
+
+        return view('Admin.pages.attendance', [
+            'attendanceData' => $attendanceData,
+            'dates' => $dates,
+            'month' => $month,
+            'year' => $year
+        ]);
     }
 
     // add attendance 

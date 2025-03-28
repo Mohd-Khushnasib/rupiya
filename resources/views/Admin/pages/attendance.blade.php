@@ -337,37 +337,12 @@
                                 <table class="table table-advance custom-table">
                                     <thead>
                                         <tr>
-                                            <th class="name-header">Name</th>
-                                            <th class="day-header">1 <br> Sat</th>
-                                            <th class="day-header">2 <br> Sun</th>
-                                            <th class="day-header sorting_disabled">3 <br> Mon</th>
-                                            <th class="day-header sorting_disabled">4 <br> Tue</th>
-                                            <th class="day-header">5 <br> Wed</th>
-                                            <th class="day-header">6 <br> Thu</th>
-                                            <th class="day-header">7 <br> Fri</th>
-                                            <th class="day-header">8 <br> Sat</th>
-                                            <th class="day-header">9 <br> Sun</th>
-                                            <th class="day-header">10 <br> Mon</th>
-                                            <th class="day-header">11 <br> Tue</th>
-                                            <th class="day-header">12 <br> Wed</th>
-                                            <th class="day-header">13 <br> Thu</th>
-                                            <th class="day-header">14 <br> Fri</th>
-                                            <th class="day-header">15 <br> Sat</th>
-                                            <th class="day-header">16 <br> Sun</th>
-                                            <th class="day-header">17 <br> Mon</th>
-                                            <th class="day-header">18 <br> Tue</th>
-                                            <th class="day-header">19 <br> Wed</th>
-                                            <th class="day-header">20 <br> Thu</th>
-                                            <th class="day-header">21 <br> Fri</th>
-                                            <th class="day-header">22 <br> Sat</th>
-                                            <th class="day-header">23 <br> Sun</th>
-                                            <th class="day-header">24 <br> Mon</th>
-                                            <th class="day-header">25 <br> Tue</th>
-                                            <th class="day-header">26 <br> Wed</th>
-                                            <th class="day-header">27 <br> Thu</th>
-                                            <th class="day-header">28 <br> Fri</th>
-                                            <th class="day-header">29 <br> Sat</th>
-                                            <th class="day-header">30 <br> Sun</th>
+                                            <th class="name-header">Employee Details</th>
+                                            @foreach($dates as $date)
+                                                <th class="day-header {{ $date['isSunday'] ? 'bg-light text-danger' : '' }}">
+                                                    {{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}
+                                                </th>
+                                            @endforeach
                                             <th class="day-header">Total <br> Present</th>
                                             <th class="day-header">Paid <br> Leave</th>
                                             <th class="day-header">Earned <br> Leave</th>
@@ -375,125 +350,100 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
-                                                <div>
-                                                    <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
-                                                        alt="" height="50px" width="50px"
-                                                        style="object-fit: cover; ">
-                                                </div>
-                                                <div style="text-align: start;">
-                                                    <span style="font-size: 17px;"><b>Ravindra</span>
-                                                    <span style="font-size: 12px;">Emp-ID : RM02</span></br>
-                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span>
-                                                   
-                                                </div>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal off"><b>1</b><br>Off
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal off"><b>1</b><br>Off
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal off"><b>1</b><br>Off
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal off"><b>1</b><br>Off
-                                            </td>
-                                            <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
-                                                    day
-                                                </span>
-                                            </td>
-                                            <td class="opentdModal half-day"><b>0.5</b><br><span>6:00am - 12:00pm <br> half
-                                                    day</span>
-                                            </td>
-                                            <td class="opentdModal half-day"><b>0.5</b><br><span>6:00am - 12:00pm <br> half
-                                                    day</span>
-                                            </td>
-                                            <td class="opentdModal half-day"><b>0.5</b><br><span>6:00am - 12:00pm <br> half
-                                                    day</span>
-                                            </td>
-                                            <td class="opentdModal leave-approve"><b>0</b><br><span>Leave</span></td>
-                                            <td class="opentdModal leave-not-approve"><b>-1</b><br><span>Leave</span></td>
-                                            <td class="opentdModal off"><b>1</b><br><span>Off</span></td>
-                                            <td>26.5</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>27.5</td>
-                                        </tr>
+                                        @foreach($attendanceData as $attendance)
+                                                            <tr>
+                                                                <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                                                    <div>
+                                                                        @if($attendance['image'])
+                                                                            <img src="{{ asset($attendance['image']) }}" alt="" height="50px" width="50px"
+                                                                                style="object-fit: cover;">
+                                                                        @else
+                                                                            <div
+                                                                                style="height: 50px; width: 50px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center;">
+                                                                                <span>{{ substr($attendance['name'], 0, 1) }}</span>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div style="text-align: start;">
+                                                                        <span style="font-size: 17px;"><b>{{ $attendance['name'] }}</b></span><br>
+                                                                        <span style="font-size: 12px;">Emp-ID: {{ $attendance['admin_id'] }}</span><br>
+                                                                        <span style="font-size: 12px;">{{ $attendance['department'] }} |
+                                                                            {{ $attendance['role'] }}</span>
+                                                                    </div>
+                                                                </td>
+
+                                                                @php
+                                                                    $totalPresent = 0;
+                                                                    $paidLeave = 0;
+                                                                    $earnedLeave = 0;
+                                                                @endphp
+
+                                                                @foreach($dates as $date)
+                                                                                    @php
+                                                                                        $dayData = $attendance['attendance'][$date['date']];
+
+                                                                                        // Calculate attendance totals
+                                                                                        if ($dayData['attendance_status'] == 'present') {
+                                                                                            $totalPresent += 1;
+                                                                                            $value = 1;
+                                                                                        } elseif ($dayData['attendance_status'] == 'half-day') {
+                                                                                            $totalPresent += 0.5;
+                                                                                            $value = 0.5;
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'paid') !== false) {
+                                                                                            $paidLeave += 1;
+                                                                                            $value = 0;
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'earned') !== false) {
+                                                                                            $earnedLeave += 1;
+                                                                                            $value = 0;
+                                                                                        } else {
+                                                                                            $value = $date['isSunday'] ? 1 : 0;
+                                                                                        }
+
+                                                                                        // Set cell class based on status
+                                                                                        if ($date['isSunday']) {
+                                                                                            $cellClass = 'off';
+                                                                                        } elseif ($dayData['attendance_status'] == 'present') {
+                                                                                            $cellClass = 'full-day';
+                                                                                        } elseif ($dayData['attendance_status'] == 'half-day') {
+                                                                                            $cellClass = 'half-day';
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave' && strpos($dayData['attendance_status'], 'approved') !== false) {
+                                                                                            $cellClass = 'leave-approve';
+                                                                                        } elseif ($dayData['attendance_status'] == 'leave') {
+                                                                                            $cellClass = 'leave-not-approve';
+                                                                                        } elseif ($dayData['attendance_status'] == 'absent') {
+                                                                                            $cellClass = 'absent';
+                                                                                        } else {
+                                                                                            $cellClass = '';
+                                                                                        }
+                                                                                    @endphp
+
+                                                                                    <td class="opentdModal {{ $cellClass }}">
+                                                                                        <b>{{ $value }}</b><br>
+                                                                                        @if($date['isSunday'])
+                                                                                            <span>Off</span>
+                                                                                        @elseif($dayData['attendance_status'] == 'leave')
+                                                                                            <span>Leave</span>
+                                                                                        @elseif($dayData['punch_in_time'])
+                                                                                            <span>
+                                                                                                {{ $dayData['punch_in_time'] }}
+                                                                                                @if($dayData['punch_out_time'])
+                                                                                                    - {{ $dayData['punch_out_time'] }}
+                                                                                                @endif
+                                                                                                <br>
+                                                                                                {{ $dayData['attendance_status'] == 'half-day' ? 'half day' : 'full day' }}
+                                                                                            </span>
+                                                                                        @else
+                                                                                            <span>{{ $dayData['attendance_status'] }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                @endforeach
+
+                                                                <td>{{ $totalPresent }}</td>
+                                                                <td>{{ $paidLeave }}</td>
+                                                                <td>{{ $earnedLeave }}</td>
+                                                                <td>{{ $totalPresent + $paidLeave + $earnedLeave }}</td>
+                                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -810,10 +760,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                                <label for="timeInput">Your punch in time</label>
-                                                                                                                                                <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                    placeholder="Current Time" readonly="">
-                                                                                                                                            </div> -->
+                                                                                                                                                            <label for="timeInput">Your punch in time</label>
+                                                                                                                                                            <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                                placeholder="Current Time" readonly="">
+                                                                                                                                                        </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1202,10 +1152,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                        <input type="text" placeholder="Work description">
-                                                                                                                        <input type="number" placeholder="Hours" min="0">
-                                                                                                                        <button class="ak_minus">-</button>
-                                                                                                                    `;
+                                                                                                                                    <input type="text" placeholder="Work description">
+                                                                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                                                                    <button class="ak_minus">-</button>
+                                                                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1306,14 +1256,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                                                                                                    <label for="">Change Attendance </label>
-                                                                                                                                                    <select name="" id="">
-                                                                                                                                                        <option value="1">Full Day (1)</option>
-                                                                                                                                                        <option value="0.5">Half Day (0.5)</option>
-                                                                                                                                                        <option value="0">Leave (0)</option>
-                                                                                                                                                        <option value="-1">Leave Not Approved (-1)</option>
-                                                                                                                                                    </select>
-                                                                                                                                                </div> -->
+                                                                                                                                                                <label for="">Change Attendance </label>
+                                                                                                                                                                <select name="" id="">
+                                                                                                                                                                    <option value="1">Full Day (1)</option>
+                                                                                                                                                                    <option value="0.5">Half Day (0.5)</option>
+                                                                                                                                                                    <option value="0">Leave (0)</option>
+                                                                                                                                                                    <option value="-1">Leave Not Approved (-1)</option>
+                                                                                                                                                                </select>
+                                                                                                                                                            </div> -->
                                     </div>
                                 </div>
 
