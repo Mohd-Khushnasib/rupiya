@@ -384,7 +384,7 @@
                                                 </div>
                                                 <div style="text-align: start;">
                                                     <span style="font-size: 17px;"><b>Ravindra</span>
-                                                    <span style="font-size: 12px;">Emp-ID : RM02</span></b>
+                                                    <span style="font-size: 12px;">Emp-ID : RM02</span></br>
                                                     <span style="font-size: 12px;">Achievers | Sr. Executive</span>
                                                    
                                                 </div>
