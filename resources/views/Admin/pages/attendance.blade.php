@@ -814,10 +814,10 @@
                                         placeholder="Current Date" readonly="">
                                 </div>
                                 <!-- <div style="margin-top: 15px">
-                                                                                                                                    <label for="timeInput">Your punch in time</label>
-                                                                                                                                    <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                        placeholder="Current Time" readonly="">
-                                                                                                                                </div> -->
+                                                                                                                                                <label for="timeInput">Your punch in time</label>
+                                                                                                                                                <input type="text" id="timeInput" class="form-control mt-3"
+                                                                                                                                                    placeholder="Current Time" readonly="">
+                                                                                                                                            </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1228,7 +1228,7 @@
                                 <table class="ak_custom-table">
                                     <thead>
                                         <tr>
-                                            <th class="ak_table-header" style="width: 20px;"></th>
+                                            <th class="ak_table-header" style="width: 20px;">Type</th>
                                             <th class="ak_table-header" style="width: 20px;">Commitment</th>
                                             <th class="ak_table-header" style="width: 20px;">Achievement</th>
                                             <th class="ak_table-header" style="width: 20px;">Feedback</th>
@@ -1241,9 +1241,11 @@
                                                     <td class="ak_table-cell">{{ $item->product_name ?? 'N/A' }}</td>
                                                     <td class="ak_table-cell">{{ $item->duration ?? '0' }}</td>
                                                     <td class="ak_table-cell">
-                                                        <input type="number" class="ak_input-field" name="count_value[{{ $item->id }}]">
+                                                        <input type="number" class="ak_input-field count-input"
+                                                            name="count_value[{{ $item->id }}]"
+                                                            data-target-count="{{ $item->duration ?? 0 }}" data-row-id="{{ $item->id }}">
                                                     </td>
-                                                    <td class="ak_table-cell">
+                                                    <td class="ak_table-cell feedback-cell" id="count-feedback-{{ $item->id }}">
                                                         <input type="hidden" name="commitment_id[]" value="{{ $item->id }}">
                                                     </td>
                                                 </tr>
@@ -1255,6 +1257,7 @@
                                         @endif
                                     </tbody>
                                 </table>
+
 
                             </div>
                             <div class="ak_container" style="margin-top: 20px;">
@@ -1313,10 +1316,10 @@
                                 <div style="margin-top: 13px">
                                     <input type="checkbox" checked="" name="" id="">
                                     <span style="
-                                                                                                                color: green !important;
-                                                                                                                margin-top: 15px;
-                                                                                                                font-weight: bold;
-                                                                                                              ">1.
+                                                                                                                            color: green !important;
+                                                                                                                            margin-top: 15px;
+                                                                                                                            font-weight: bold;
+                                                                                                                          ">1.
                                         <del>All Workers name show here</del></span>
                                 </div>
                             </div>
@@ -1355,7 +1358,7 @@
                 });
             </script>
 
-            <!-- puchout feedback  -->
+            <!-- puchout wroking hour feedback  -->
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     // Get all time input fields
@@ -1392,9 +1395,53 @@
 
                         // Update the feedback cell
                         feedbackCell.innerHTML = `
+                                    <span style="color: ${feedbackColor}; font-weight: bold;">${feedbackText}</span>
+                                    <input type="hidden" name="commitment_id[]" value="${rowId}">
+                                    <input type="hidden" name="feedback[${rowId}]" value="${feedbackText}">
+                                `;
+                    }
+                });
+            </script>
+            <!-- puchout lead commetment feedback -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Get all count input fields
+                    const countInputs = document.querySelectorAll('.count-input');
+
+                    // Add event listeners to each input field
+                    countInputs.forEach(input => {
+                        input.addEventListener('input', updateCountFeedback);
+                        input.addEventListener('change', updateCountFeedback);
+                    });
+
+                    // Function to update feedback based on input value
+                    function updateCountFeedback(event) {
+                        const input = event.target;
+                        const inputValue = parseInt(input.value) || 0;
+                        const targetCount = parseInt(input.getAttribute('data-target-count')) || 0;
+                        const rowId = input.getAttribute('data-row-id');
+                        const feedbackCell = document.getElementById('count-feedback-' + rowId);
+
+                        let feedbackText = '';
+                        let feedbackColor = '';
+
+                        // Compare input count with target count and set appropriate feedback
+                        if (inputValue < targetCount) {
+                            feedbackText = 'Poor';
+                            feedbackColor = '#ff6666'; // Light red
+                        } else if (inputValue === targetCount) {
+                            feedbackText = 'Good';
+                            feedbackColor = '#66cc66'; // Light green
+                        } else {
+                            feedbackText = 'Very Good';
+                            feedbackColor = '#5cb85c'; // Green
+                        }
+
+                        // Update the feedback cell
+                        feedbackCell.innerHTML = `
                         <span style="color: ${feedbackColor}; font-weight: bold;">${feedbackText}</span>
                         <input type="hidden" name="commitment_id[]" value="${rowId}">
-                        <input type="hidden" name="feedback[${rowId}]" value="${feedbackText}">
+                        <input type="hidden" name="count_feedback[${rowId}]" value="${feedbackText}">
                     `;
                     }
                 });
@@ -1402,10 +1449,10 @@
 
 
             <!--
-                                                                                                        -----------------------------------------------------------------------------------------------------------
-                                                                                                        add multiple boxes for add your work time
-                                                                                                        -----------------------------------------------------------------------------------------------------------
-                                                                                                        -->
+                                                                                                                    -----------------------------------------------------------------------------------------------------------
+                                                                                                                    add multiple boxes for add your work time
+                                                                                                                    -----------------------------------------------------------------------------------------------------------
+                                                                                                                    -->
 
             <script>
                 const inputContainer = document.getElementById('ak_inputContainer');
@@ -1437,10 +1484,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                            <input type="text" placeholder="Work description">
-                                                                                                            <input type="number" placeholder="Hours" min="0">
-                                                                                                            <button class="ak_minus">-</button>
-                                                                                                        `;
+                                                                                                                        <input type="text" placeholder="Work description">
+                                                                                                                        <input type="number" placeholder="Hours" min="0">
+                                                                                                                        <button class="ak_minus">-</button>
+                                                                                                                    `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1490,10 +1537,10 @@
             </script>
 
             <!--
-                                                                                                        -----------------------------------------------------------------------------------------------------------
-                                                                                                        Attendance Details Modal
-                                                                                                        -----------------------------------------------------------------------------------------------------------
-                                                                                                        -->
+                                                                                                                    -----------------------------------------------------------------------------------------------------------
+                                                                                                                    Attendance Details Modal
+                                                                                                                    -----------------------------------------------------------------------------------------------------------
+                                                                                                                    -->
 
             <div id="tdModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -1546,14 +1593,14 @@
                                             <textarea class="form-control wysihtml5" rows="6"></textarea>
                                         </p>
                                         <!-- <div class="col-sm-12">
-                                                                                                                                        <label for="">Change Attendance </label>
-                                                                                                                                        <select name="" id="">
-                                                                                                                                            <option value="1">Full Day (1)</option>
-                                                                                                                                            <option value="0.5">Half Day (0.5)</option>
-                                                                                                                                            <option value="0">Leave (0)</option>
-                                                                                                                                            <option value="-1">Leave Not Approved (-1)</option>
-                                                                                                                                        </select>
-                                                                                                                                    </div> -->
+                                                                                                                                                    <label for="">Change Attendance </label>
+                                                                                                                                                    <select name="" id="">
+                                                                                                                                                        <option value="1">Full Day (1)</option>
+                                                                                                                                                        <option value="0.5">Half Day (0.5)</option>
+                                                                                                                                                        <option value="0">Leave (0)</option>
+                                                                                                                                                        <option value="-1">Leave Not Approved (-1)</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div> -->
                                     </div>
                                 </div>
 
