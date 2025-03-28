@@ -383,9 +383,9 @@
                                                         style="object-fit: cover; ">
                                                 </div>
                                                 <div style="text-align: start;">
-                                                    <span style="font-size: 17px;"><b>Ravindra</b></span>
-                                                    <span style="font-size: 12px;">Emp-ID : RM02</span>
-                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span><br>
+                                                    <span style="font-size: 17px;"><b>Ravindra</span>
+                                                    <span style="font-size: 12px;">Emp-ID : RM02</span></b>
+                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span>
                                                    
                                                 </div>
                                             </td>
