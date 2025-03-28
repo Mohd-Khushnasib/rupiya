@@ -380,12 +380,13 @@
                                                 <div>
                                                     <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
                                                         alt="" height="50px" width="50px"
-                                                        style="object-fit: cover; border-radius: 50%;">
+                                                        style="object-fit: cover; ">
                                                 </div>
                                                 <div style="text-align: start;">
-                                                    <span style="font-size: 17px;"><b>Ravindra</b></span><br>
-                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span><br>
+                                                    <span style="font-size: 17px;"><b>Ravindra</b></span>
                                                     <span style="font-size: 12px;">Emp-ID : RM02</span>
+                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span><br>
+                                                   
                                                 </div>
                                             </td>
                                             <td class="opentdModal full-day"><b>1</b><br><span>6:00am - 7:00pm <br> full
