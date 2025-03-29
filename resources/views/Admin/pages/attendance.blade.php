@@ -781,11 +781,6 @@
                                     <input type="text" name="punchin_datetime" id="dateInput" class="form-control mt-3"
                                         placeholder="Current Date" readonly="">
                                 </div>
-                                <!-- <div style="margin-top: 15px">
-                                                                                                                                                                                                                        <label for="timeInput">Your punch in time</label>
-                                                                                                                                                                                                                        <input type="text" id="timeInput" class="form-control mt-3"
-                                                                                                                                                                                                                            placeholder="Current Time" readonly="">
-                                                                                                                                                                                                                    </div> -->
                                 <textarea placeholder="Comment" name="punchin_note"
                                     style="width: 100%; height: 80px; margin-top: 15px" id="comment"></textarea>
                             </div>
@@ -1174,10 +1169,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                                                                <input type="text" placeholder="Work description">
-                                                                                                                                                                                                <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                                                                <button class="ak_minus">-</button>
-                                                                                                                                                                                            `;
+                                                                                                                                                                                                            <input type="text" placeholder="Work description">
+                                                                                                                                                                                                            <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                                            <button class="ak_minus">-</button>
+                                                                                                                                                                                                        `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1242,24 +1237,48 @@
                             day: 'numeric'
                         });
 
+                        // Check if today's date and no attendance data
+                        var today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+                        var isToday = attendanceDate === today;
+                        var noAttendanceData = !punchInTime && !punchOutTime &&
+                            (attendanceStatus === 'absent' || attendanceStatus === '0');
+
                         // Update modal title and employee details
                         $("#tdModal .modal-title").text(employeeName);
                         $("#tdModal p:eq(0)").text(employeeDept + " | " + employeeRole);
                         $("#tdModal p:eq(1)").text("Emp-ID: " + employeeId);
-                        $("#tdModal p:eq(2)").text("Attendance: " + attendanceStatus);
 
-                        // Update punch in details
-                        $("#tdModal .col-sm-6:eq(0) img").attr("src", punchInImg);
-                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text("Punch In Date: " + attendanceDate);
-                        $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(1)").text("Punch In Time: " + (punchInTime || "N/A"));
+                        // Handle "Attendance not found" message for today
+                        if (isToday && noAttendanceData) {
+                            $("#tdModal p:eq(2)").html("<strong style='color: #dc3545;'>Attendance not found</strong>");
 
-                        // Update punch out details
-                        $("#tdModal .col-sm-6:eq(1) img").attr("src", punchOutImg);
-                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(0)").text("Punch Out Date: " + attendanceDate);
-                        $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(1)").text("Punch Out Time: " + (punchOutTime || "N/A"));
+                            // Disable the images and show attendance not found message
+                            $("#tdModal .col-sm-6:eq(0) .panel-body").html(
+                                "<div class='alert alert-info text-center' style='margin-top: 10px;'>No check-in record found for today</div>"
+                            );
+                            $("#tdModal .col-sm-6:eq(1) .panel-body").html(
+                                "<div class='alert alert-info text-center' style='margin-top: 10px;'>No check-out record found for today</div>"
+                            );
+                        } else {
+                            $("#tdModal p:eq(2)").text("Attendance: " + attendanceStatus);
+
+                            // Update punch in details
+                            $("#tdModal .col-sm-6:eq(0) img").attr("src", punchInImg);
+                            $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text("Punch In Date: " + attendanceDate);
+                            $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(1)").text("Punch In Time: " + (punchInTime || "N/A"));
+
+                            // Update punch out details
+                            $("#tdModal .col-sm-6:eq(1) img").attr("src", punchOutImg);
+                            $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(0)").text("Punch Out Date: " + attendanceDate);
+                            $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(1)").text("Punch Out Time: " + (punchOutTime || "N/A"));
+                        }
 
                         // Set the current status in the dropdown
                         $("#tdModal select").val(attendanceStatus);
+
+                        // Store the admin_id and date in hidden fields for the form submission
+                        $("#attendance-date").val(attendanceDate);
+                        $("#employee-id-hidden").val(employeeId);
 
                         // Show the modal
                         $("#tdModal").modal("show");
@@ -1269,10 +1288,10 @@
                     $("#submitBtn").click(function () {
                         var newAttendanceStatus = $("#tdModal select").val();
                         var comments = $("#tdModal textarea").val();
-                        var employeeId = $("#tdModal p:eq(1)").text().replace("Emp-ID: ", "");
-                        var attendanceDate = $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text().replace("Punch In Date: ", "");
+                        var employeeId = $("#employee-id-hidden").val();
+                        var attendanceDate = $("#attendance-date").val();
 
-                        // You can add Ajax to send this data to the server
+                        // Ajax to send this data to the server
                         $.ajax({
                             url: "/update-attendance",
                             method: "POST",
@@ -1284,9 +1303,8 @@
                                 _token: $('meta[name="csrf-token"]').attr('content')
                             },
                             success: function (response) {
-                                // Close modal and optionally refresh the page
+                                // Close modal and refresh the page
                                 $("#tdModal").modal("hide");
-                                // You can reload the page or update the UI as needed
                                 location.reload();
                             },
                             error: function (error) {
