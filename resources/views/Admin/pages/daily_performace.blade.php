@@ -562,9 +562,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <script>
                 $(document).ready(function () {
                     $(".opentdModal").click(function () {
