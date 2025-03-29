@@ -291,33 +291,7 @@
                             </h1>
                         </div>
                     </div>
-                    <!-- BEGIN Main Content -->
-                    <!-- <div class="row" style="margin-top: 20px">
-                                                                    <div class="col-lg-3">
-                                                                        <div class="card punch_card">
-                                                                            <h3 class="punch_card_text">Full Day</h3>
-                                                                            <h4 class="punch_card_text">12</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-3">
-                                                                        <div class="card punch_card">
-                                                                            <h3 class="punch_card_text">Half Day</h3>
-                                                                            <h4 class="punch_card_text">30</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-3">
-                                                                        <div class="card punch_card">
-                                                                            <h3 class="punch_card_text">Absent</h3>
-                                                                            <h4 class="punch_card_text">29</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-3">
-                                                                        <div class="card punch_card">
-                                                                            <h3 class="punch_card_text">Total Day</h3>
-                                                                            <h4 class="punch_card_text">30</h4>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> -->
+                
                     <div class="row"
                         style="width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; margin: 10px 0;">
                         <div style="border: none; padding: 0 10px; border-radius: 10px;">
@@ -400,8 +374,9 @@
                                                     <span style="font-size: 12px;">Emp-ID : RM02</span>
                                                 </div>
                                             </td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
+                                            <td cclass="opentdModal" onclick="$('#tdModal').modal('show');"><span class="badge" style="background-color: green;">C : 5 | A :
                                                     2</span> <br> <br>Best 😍</td>
+                                                   
                                             <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
                                                     2</span> <br> <br>Best 😍</td>
                                             <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
