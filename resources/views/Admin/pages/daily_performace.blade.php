@@ -363,22 +363,20 @@
                             </div>
                         </div>
                     </div>
-                    <!-- table end -->
-
-                    <!-- END Main Content -->
                 </div>
                 <!-- END Content -->
             </div>
 
 
-            <div id="tdModal" class="modal fade" role="dialog">
+            <!-- Replace your existing modal with this simplified version -->
+            <div class="modal fade" id="tdModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
                 <div class="modal-dialog" style="width: fit-content;">
                     <div class="modal-content" style="width: fit-content;">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                &times;
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title text-center" style="color: black; font-weight: bold">
+                            <h4 class="modal-title text-center" id="modalLabel" style="color: black; font-weight: bold">
                                 Daily Work Report - <span id="modalDate"></span>
                             </h4>
                         </div>
@@ -395,7 +393,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- This will be populated dynamically via AJAX -->
+                                        <!-- Placeholder rows -->
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Leads</td>
+                                            <td class="ak_table-cell">5</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Logins</td>
+                                            <td class="ak_table-cell">3</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -410,148 +420,168 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- This will be populated dynamically via AJAX -->
+                                        <!-- Placeholder rows -->
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Working Hour</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"
+                                                    value="8"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Break</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"
+                                                    value="1"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 <div class="ak_total_box">
-                                    Total Working Hours: <span id="ak_totalHours">0</span>
+                                    Total Working Hours: <span id="ak_totalHours">9</span>
                                 </div>
-                                <div id="ak_errorMessage" class="ak_error"></div>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Fallback button to test modal -->
+            <!-- <button type="button" class="btn btn-primary" onclick="$('#tdModal').modal('show');" 
+                style="position: fixed; bottom: 10px; left: 10px; z-index: 9999;">
+                Test Modal
+            </button> -->
             <!-- Replace your existing script with this updated version -->
+            <!-- Add this at the top of your blade file, right after @section('main-content') -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+            <!-- Add this right before your existing script tag -->
+            <style>
+                /* Ensure modal appears on top of everything */
+                .modal {
+                    z-index: 9999 !important;
+                }
+
+                .modal-backdrop {
+                    z-index: 9998 !important;
+                }
+
+                /* Make clickable cells more obvious */
+                .opentdModal {
+                    cursor: pointer !important;
+                    background-color: rgba(255, 255, 255, 0.05);
+                    transition: all 0.3s;
+                }
+
+                .opentdModal:hover {
+                    background-color: rgba(3, 176, 245, 0.1) !important;
+                    transform: scale(1.02);
+                }
+            </style>
+
+            <!-- Replace your entire script block with this -->
             <script>
-                // Add this script to your view or include it in a separate JS file
-                $(document).ready(function () {
-                    // Click event for opening the modal
-                    $(document).on('click', '.opentdModal', function () {
-                        // Get employee ID and date from the clicked cell's data attributes
-                        var empId = $(this).data('empid');
-                        var date = $(this).data('date');
-                        var displayDate = $(this).data('display-date');
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Pure JS click handler that doesn't rely on jQuery events
+                    var cells = document.querySelectorAll('.opentdModal');
 
-                        // Update modal title with the date
-                        $('#modalDate').text(displayDate || date);
+                    cells.forEach(function (cell) {
+                        cell.addEventListener('click', function () {
+                            var empId = this.getAttribute('data-empid');
+                            var date = this.getAttribute('data-date');
+                            var displayDate = this.getAttribute('data-display-date');
 
-                        // Show the modal while loading data
-                        $('#tdModal').modal('show');
+                            // Direct DOM manipulation for the modal title
+                            document.getElementById('modalDate').textContent = displayDate || date;
 
-                        // Fetch data via AJAX
-                        $.ajax({
-                            url: "/get-daily-performance-data",
-                            method: "GET",
-                            data: {
-                                emp_id: empId,
-                                date: date
-                            },
-                            success: function (response) {
-                                // Clear existing table content
-                                $('#countRecordsTable tbody').empty();
-                                $('#timeRecordsTable tbody').empty();
+                            // Force show using direct Bootstrap API
+                            jQuery('#tdModal').modal('show');
 
-                                // Update Count Records table
-                                if (response.countRecords && response.countRecords.length > 0) {
-                                    $.each(response.countRecords, function (index, record) {
-                                        var row = `
-                                                                            <tr class="ak_table-row">
-                                                                                <td class="ak_table-cell">${record.product_name}</td>
-                                                                                <td class="ak_table-cell">${record.duration}</td>
-                                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field achievement-input" data-record-id="${record.id}"></td>
-                                                                                <td class="ak_table-cell" id="feedback-${record.id}"></td>
-                                                                            </tr>
-                                                                        `;
-                                        $('#countRecordsTable tbody').append(row);
-                                    });
-                                } else {
-                                    // If no count records found, show placeholder rows
-                                    $('#countRecordsTable tbody').append(`
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Leads</td>
-                                                                            <td class="ak_table-cell">0</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Logins</td>
-                                                                            <td class="ak_table-cell">0</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                    `);
-                                }
+                            // For demonstration, add placeholder data without AJAX
+                            var countTable = document.querySelector('#countRecordsTable tbody');
+                            var timeTable = document.querySelector('#timeRecordsTable tbody');
 
-                                // Update Time Records table
-                                if (response.timeRecords && response.timeRecords.length > 0) {
-                                    var totalHours = 0;
+                            // Clear existing content
+                            countTable.innerHTML = '';
+                            timeTable.innerHTML = '';
 
-                                    $.each(response.timeRecords, function (index, record) {
-                                        var row = `
-                                                                            <tr class="ak_table-row">
-                                                                                <td class="ak_table-cell">${record.product_name}</td>
-                                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
-                                                                                <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
-                                                                            </tr>
-                                                                        `;
-                                        $('#timeRecordsTable tbody').append(row);
+                            // Add placeholder data
+                            countTable.innerHTML = `
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Leads</td>
+                                            <td class="ak_table-cell">5</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Logins</td>
+                                            <td class="ak_table-cell">10</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                    `;
 
-                                        totalHours += parseFloat(record.duration) || 0;
-                                    });
+                            timeTable.innerHTML = `
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Working Hour</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                        <tr class="ak_table-row">
+                                            <td class="ak_table-cell">Break</td>
+                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
+                                            <td class="ak_table-cell"></td>
+                                        </tr>
+                                    `;
 
-                                    // Update total hours
-                                    $('#ak_totalHours').text(totalHours.toFixed(2));
-                                } else {
-                                    // If no time records found, show placeholder rows
-                                    $('#timeRecordsTable tbody').append(`
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Working Hour</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Break</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Wrap Up Time</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Meeting</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                        <tr class="ak_table-row">
-                                                                            <td class="ak_table-cell">Other Work</td>
-                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                            <td class="ak_table-cell"></td>
-                                                                        </tr>
-                                                                    `);
-                                }
+                            // Set up total hours calculation
+                            calculateTotalHours();
 
-                                // Set up event listeners for time inputs to recalculate total
-                                $('.time-input').on('input', calculateTotalHours);
-                            },
-                            error: function (xhr) {
-                                console.error('Error fetching data:', xhr);
-                                // Show error message
-                                $('#ak_errorMessage').text('Failed to load data. Please try again.');
-                            }
+                            // Add event listeners to inputs
+                            var timeInputs = document.querySelectorAll('.time-input');
+                            timeInputs.forEach(function (input) {
+                                input.addEventListener('input', calculateTotalHours);
+                            });
                         });
                     });
 
-                    // Function to calculate total hours when time inputs change
+                    // Add a direct test button
+                    var testBtn = document.createElement('button');
+                    testBtn.textContent = 'Open Modal';
+                    testBtn.style.position = 'fixed';
+                    testBtn.style.bottom = '20px';
+                    testBtn.style.right = '20px';
+                    testBtn.style.zIndex = '9999';
+                    testBtn.style.padding = '10px 15px';
+                    testBtn.style.backgroundColor = '#4CAF50';
+                    testBtn.style.color = 'white';
+                    testBtn.style.border = 'none';
+                    testBtn.style.borderRadius = '4px';
+                    testBtn.style.cursor = 'pointer';
+
+                    testBtn.addEventListener('click', function () {
+                        // Force the modal to display
+                        jQuery('#tdModal').modal({
+                            show: true,
+                            backdrop: true,
+                            keyboard: true
+                        });
+                    });
+
+                    document.body.appendChild(testBtn);
+
                     function calculateTotalHours() {
                         var totalHours = 0;
-                        $('.time-input').each(function () {
-                            totalHours += parseFloat($(this).val()) || 0;
+                        var timeInputs = document.querySelectorAll('.time-input');
+
+                        timeInputs.forEach(function (input) {
+                            totalHours += parseFloat(input.value) || 0;
                         });
-                        $('#ak_totalHours').text(totalHours.toFixed(2));
+
+                        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
                     }
                 });
             </script>
