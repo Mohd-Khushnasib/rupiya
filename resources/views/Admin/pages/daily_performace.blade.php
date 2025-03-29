@@ -408,157 +408,166 @@
 
             <!-- JavaScript -->
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Pure JS click handler that doesn't rely on jQuery events
-                    var cells = document.querySelectorAll('.opentdModal');
+            document.addEventListener('DOMContentLoaded', function () {
+    // Pure JS click handler that doesn't rely on jQuery events
+    var cells = document.querySelectorAll('.opentdModal');
 
-                    cells.forEach(function (cell) {
-                        cell.addEventListener('click', function () {
-                            var displayDate = this.getAttribute('data-display-date');
+    cells.forEach(function (cell) {
+        cell.addEventListener('click', function () {
+            var empId = this.getAttribute('data-empid');
+            var date = this.getAttribute('data-date');
+            var displayDate = this.getAttribute('data-display-date');
 
-                            // Direct DOM manipulation for the modal title
-                            document.getElementById('modalDate').textContent = displayDate;
+            // Direct DOM manipulation for the modal title
+            document.getElementById('modalDate').textContent = displayDate || date;
 
-                            // Force show using direct Bootstrap API
-                            jQuery('#tdModal').modal('show');
+            // Force show using direct Bootstrap API
+            jQuery('#tdModal').modal('show');
 
-                            // Fetch data via AJAX
-                            fetch(`/get-daily-performance-data`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    // Clear existing content
-                                    var countTable = document.querySelector('#countRecordsTable tbody');
-                                    var timeTable = document.querySelector('#timeRecordsTable tbody');
+            // Fetch data via AJAX
+            fetch(`/get-daily-performance-data?emp_id=${empId}&date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing content
+                    var countTable = document.querySelector('#countRecordsTable tbody');
+                    var timeTable = document.querySelector('#timeRecordsTable tbody');
+                    
+                    countTable.innerHTML = '';
+                    timeTable.innerHTML = '';
 
-                                    countTable.innerHTML = '';
-                                    timeTable.innerHTML = '';
-
-                                    // Add count records
-                                    if (data.countRecords && data.countRecords.length > 0) {
-                                        data.countRecords.forEach(record => {
-                                            var row = `
-                                                        <tr class="ak_table-row">
-                                                            <td class="ak_table-cell">${record.product_name}</td>
-                                                            <td class="ak_table-cell">${record.duration}</td>
-                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field" data-record-id="${record.id}"></td>
-                                                            <td class="ak_table-cell"></td>
-                                                        </tr>
-                                                    `;
-                                            countTable.innerHTML += row;
-                                        });
-                                    } else {
-                                        // If no count records found, show placeholder rows
-                                        countTable.innerHTML = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Leads</td>
-                                                        <td class="ak_table-cell">5</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Logins</td>
-                                                        <td class="ak_table-cell">3</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                `;
-                                    }
-
-                                    // Add time records
-                                    if (data.timeRecords && data.timeRecords.length > 0) {
-                                        var totalHours = 0;
-
-                                        data.timeRecords.forEach(record => {
-                                            var row = `
-                                                        <tr class="ak_table-row">
-                                                            <td class="ak_table-cell">${record.product_name}</td>
-                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
-                                                            <td class="ak_table-cell"></td>
-                                                        </tr>
-                                                    `;
-                                            timeTable.innerHTML += row;
-
-                                            totalHours += parseFloat(record.duration) || 0;
-                                        });
-
-                                        // Update total hours
-                                        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
-                                    } else {
-                                        // If no time records found, show placeholder rows
-                                        timeTable.innerHTML = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Working Hour</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Break</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                `;
-                                    }
-
-                                    // Set up total hours calculation
-                                    calculateTotalHours();
-
-                                    // Add event listeners to inputs
-                                    var timeInputs = document.querySelectorAll('.time-input');
-                                    timeInputs.forEach(function (input) {
-                                        input.addEventListener('input', calculateTotalHours);
-                                    });
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching data:', error);
-
-                                    // Show default data if there's an error
-                                    var countTable = document.querySelector('#countRecordsTable tbody');
-                                    var timeTable = document.querySelector('#timeRecordsTable tbody');
-
-                                    countTable.innerHTML = `
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Leads</td>
-                                                    <td class="ak_table-cell">5</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Logins</td>
-                                                    <td class="ak_table-cell">3</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                            `;
-
-                                    timeTable.innerHTML = `
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Working Hour</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Break</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                            `;
-
-                                    calculateTotalHours();
-                                });
+                    // Add count records
+                    if (data.countRecords && data.countRecords.length > 0) {
+                        data.countRecords.forEach(record => {
+                            var row = `
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">${record.product_name}</td>
+                                    <td class="ak_table-cell">${record.duration}</td>
+                                    <td class="ak_table-cell">
+                                        <input type="number" class="ak_input-field achievement-input" 
+                                            data-record-id="${record.id}" 
+                                            data-commitment="${record.duration}"
+                                            onchange="updateFeedback(this)">
+                                    </td>
+                                    <td class="ak_table-cell" id="feedback-${record.id}"></td>
+                                </tr>
+                            `;
+                            countTable.innerHTML += row;
                         });
-                    });
-
-                    function calculateTotalHours() {
-                        var totalHours = 0;
-                        var timeInputs = document.querySelectorAll('.time-input');
-
-                        timeInputs.forEach(function (input) {
-                            totalHours += parseFloat(input.value) || 0;
-                        });
-
-                        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
+                    } else {
+                        // If no count records found, show placeholder rows
+                        countTable.innerHTML = `
+                            <tr class="ak_table-row">
+                                <td class="ak_table-cell">No records found</td>
+                                <td class="ak_table-cell">0</td>
+                                <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                <td class="ak_table-cell"></td>
+                            </tr>
+                        `;
                     }
+
+                    // Add time records
+                    if (data.timeRecords && data.timeRecords.length > 0) {
+                        var totalHours = 0;
+                        
+                        data.timeRecords.forEach(record => {
+                            var row = `
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">${record.product_name}</td>
+                                    <td class="ak_table-cell">
+                                        <input type="number" class="ak_input-field time-input" 
+                                            value="${record.duration}" 
+                                            data-record-id="${record.id}" 
+                                            data-commitment="${record.duration}"
+                                            onchange="updateTimeFeedback(this)">
+                                    </td>
+                                    <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
+                                </tr>
+                            `;
+                            timeTable.innerHTML += row;
+                            
+                            totalHours += parseFloat(record.duration) || 0;
+                        });
+                        
+                        // Update total hours
+                        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
+                    } else {
+                        // If no time records found, show placeholder rows
+                        timeTable.innerHTML = `
+                            <tr class="ak_table-row">
+                                <td class="ak_table-cell">No records found</td>
+                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="0"></td>
+                                <td class="ak_table-cell"></td>
+                            </tr>
+                        `;
+                    }
+
+                    // Set up total hours calculation
+                    calculateTotalHours();
+
+                    // Add event listeners to inputs
+                    var timeInputs = document.querySelectorAll('.time-input');
+                    timeInputs.forEach(function (input) {
+                        input.addEventListener('input', calculateTotalHours);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
                 });
+        });
+    });
+    
+    // Global function to update feedback based on achievement vs commitment
+    window.updateFeedback = function(input) {
+        var achievement = parseFloat(input.value) || 0;
+        var commitment = parseFloat(input.getAttribute('data-commitment')) || 0;
+        var recordId = input.getAttribute('data-record-id');
+        var feedbackElement = document.getElementById('feedback-' + recordId);
+        
+        if (achievement < commitment) {
+            feedbackElement.textContent = 'Poor';
+            feedbackElement.style.color = 'red';
+        } else if (achievement === commitment) {
+            feedbackElement.textContent = 'Good';
+            feedbackElement.style.color = 'blue';
+        } else {
+            feedbackElement.textContent = 'Very Good';
+            feedbackElement.style.color = 'green';
+        }
+    };
+    
+    // Global function to update time feedback
+    window.updateTimeFeedback = function(input) {
+        var achievement = parseFloat(input.value) || 0;
+        var commitment = parseFloat(input.getAttribute('data-commitment')) || 0;
+        var recordId = input.getAttribute('data-record-id');
+        var feedbackElement = document.getElementById('time-feedback-' + recordId);
+        
+        if (achievement < commitment) {
+            feedbackElement.textContent = 'Poor';
+            feedbackElement.style.color = 'red';
+        } else if (achievement === commitment) {
+            feedbackElement.textContent = 'Good';
+            feedbackElement.style.color = 'blue';
+        } else {
+            feedbackElement.textContent = 'Very Good';
+            feedbackElement.style.color = 'green';
+        }
+        
+        // Update total hours
+        calculateTotalHours();
+    };
+
+    function calculateTotalHours() {
+        var totalHours = 0;
+        var timeInputs = document.querySelectorAll('.time-input');
+
+        timeInputs.forEach(function (input) {
+            totalHours += parseFloat(input.value) || 0;
+        });
+
+        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
+    }
+});
             </script>
         @endsection
     @endforeach

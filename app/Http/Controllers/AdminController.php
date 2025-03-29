@@ -6954,10 +6954,16 @@ class AdminController extends Controller
         
         return view('Admin.pages.daily_performace', compact('dates', 'monthName', 'admins', 'currentYear', 'currentMonth'));
     }
-    public function getDailyPerformanceData()
+    public function getDailyPerformanceData(Request $request)
     {
-        // Get all commitments from tbl_punchoutcommitment without filtering by employee
+        // Get date and employee ID from request
+        $date = $request->date;
+        $empId = $request->emp_id;
+        
+        // Get commitments from tbl_punchoutcommitment filtered by date and employee ID
         $commitments = DB::table('tbl_punchoutcommitment')
+            ->where('date', $date)
+            ->where('emp_id', $empId)
             ->get();
         
         // Separate count and time records
