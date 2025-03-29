@@ -295,7 +295,7 @@
                     <div class="row"
                         style="width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; margin: 10px 0;">
                         <div style="border: none; padding: 0 10px; border-radius: 10px;">
-                        <h2>Daily Performance - {{ $monthName }}</h2>
+                            <h2>Daily Performance - {{ $monthName }}</h2>
                             <div class="col-sm-12">
                                 <div class="col-sm-6">
                                     <select name="task_type" id="edit_task_type" data-placeholder="Type Task"
@@ -323,33 +323,32 @@
                         <div class="col-md-12">
                             <div class="table-responsive table-container">
                                 <table class="table table-advance custom-table">
-                                     <tbody>
+                                    <tbody>
                                         @foreach($admins as $admin)
                                             <tr>
                                                 <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
                                                     <div>
-                                                        <img src="{{ $admin->profile_image ?? 'https://via.placeholder.com/50' }}"
-                                                            alt="" height="50px" width="50px"
-                                                            style="object-fit: cover; border-radius: 50%;">
+                                                        <img src="{{ $admin->image ?? 'https://via.placeholder.com/50' }}" alt=""
+                                                            height="50px" width="50px" style="object-fit: cover; border-radius: 50%;">
                                                     </div>
                                                     <div style="text-align: start;">
-                                                                <span style="font-size: 17px;"><b>{{ $admin->name }}</b></span><br>
-                                                                <span style="font-size: 12px;">{{ $admin->team }} | {{ $admin->role }}</span><br>
-                                                                <span style="font-size: 12px;">Emp-ID : {{ $admin->id ?? 'N/A' }}</span><br>
-                                                                <span style="font-size: 12px;">Dept: {{ $admin->department }}</span>
-                                                            </div>
-                                                        </td>
-                                                        
-                                                        @foreach($dates as $date)
-                                                            <td class="opentdModal" 
-                                                                data-empid="{{ $admin->id }}" 
-                                                                data-date="{{ $currentYear }}-{{ $currentMonth }}-{{ $date['day'] }}"
-                                                                data-display-date="{{ $date['day'] }} {{ $date['dayOfWeek'] }}, {{ $monthName }}">
-                                                                <span class="badge" style="background-color: green;">C : 5 | A : 2</span> 
-                                                                <br><br>Best 😍
-                                                            </td>
-                                                        @endforeach
-                                                    </tr>
+                                                        <span style="font-size: 17px;"><b>{{ $admin->name }}</b></span><br>
+                                                        <span style="font-size: 12px;">{{ $admin->team }} |
+                                                            {{ $admin->role }}</span><br>
+                                                        <span style="font-size: 12px;">Emp-ID : {{ $admin->id ?? 'N/A' }}</span><br>
+                                                        <span style="font-size: 12px;">Dept: {{ $admin->department }}</span>
+                                                    </div>
+                                                </td>
+
+                                                @foreach($dates as $date)
+                                                    <td class="opentdModal" data-empid="{{ $admin->id }}"
+                                                        data-date="{{ $currentYear }}-{{ $currentMonth }}-{{ $date['day'] }}"
+                                                        data-display-date="{{ $date['day'] }} {{ $date['dayOfWeek'] }}, {{ $monthName }}">
+                                                        <span class="badge" style="background-color: green;">C : 5 | A : 2</span>
+                                                        <br><br>Best 😍
+                                                    </td>
+                                                @endforeach
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -450,31 +449,31 @@
                                 if (response.countRecords && response.countRecords.length > 0) {
                                     $.each(response.countRecords, function (index, record) {
                                         var row = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">${record.product_name}</td>
-                                                        <td class="ak_table-cell">${record.duration}</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field achievement-input" data-record-id="${record.id}"></td>
-                                                        <td class="ak_table-cell" id="feedback-${record.id}"></td>
-                                                    </tr>
-                                                `;
+                                                                <tr class="ak_table-row">
+                                                                    <td class="ak_table-cell">${record.product_name}</td>
+                                                                    <td class="ak_table-cell">${record.duration}</td>
+                                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field achievement-input" data-record-id="${record.id}"></td>
+                                                                    <td class="ak_table-cell" id="feedback-${record.id}"></td>
+                                                                </tr>
+                                                            `;
                                         $('#countRecordsTable tbody').append(row);
                                     });
                                 } else {
                                     // If no count records found, show placeholder rows
                                     $('#countRecordsTable tbody').append(`
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Leads</td>
-                                                    <td class="ak_table-cell">0</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Logins</td>
-                                                    <td class="ak_table-cell">0</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                            `);
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Leads</td>
+                                                                <td class="ak_table-cell">0</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Logins</td>
+                                                                <td class="ak_table-cell">0</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                        `);
                                 }
 
                                 // Update Time Records table
@@ -483,12 +482,12 @@
 
                                     $.each(response.timeRecords, function (index, record) {
                                         var row = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">${record.product_name}</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
-                                                        <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
-                                                    </tr>
-                                                `;
+                                                                <tr class="ak_table-row">
+                                                                    <td class="ak_table-cell">${record.product_name}</td>
+                                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
+                                                                    <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
+                                                                </tr>
+                                                            `;
                                         $('#timeRecordsTable tbody').append(row);
 
                                         totalHours += parseFloat(record.duration) || 0;
@@ -499,32 +498,32 @@
                                 } else {
                                     // If no time records found, show placeholder rows
                                     $('#timeRecordsTable tbody').append(`
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Working Hour</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Break</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Wrap Up Time</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Meeting</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                                <tr class="ak_table-row">
-                                                    <td class="ak_table-cell">Other Work</td>
-                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                    <td class="ak_table-cell"></td>
-                                                </tr>
-                                            `);
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Working Hour</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Break</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Wrap Up Time</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Meeting</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                            <tr class="ak_table-row">
+                                                                <td class="ak_table-cell">Other Work</td>
+                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                <td class="ak_table-cell"></td>
+                                                            </tr>
+                                                        `);
                                 }
 
                                 // Set up event listeners for time inputs to recalculate total
