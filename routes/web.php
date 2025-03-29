@@ -411,3 +411,6 @@ Route::post('/delete_commitment', [AdminController::class, 'deleteCommitment']);
 
 // daily performance
 Route::get('/daily_performace', [AdminController::class, 'dailyPerformace']);
+Route::get('/get-daily-performance-data', [AdminController::class, 'getDailyPerformanceData']);
+
+

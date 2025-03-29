@@ -6931,6 +6931,32 @@ class AdminController extends Controller
     {
         return view('Admin.pages.daily_performace');
     }
+    public function getDailyPerformanceData(Request $request)
+    {
+        $empId = $request->input('emp_id');
+        $date = $request->input('date');
+
+        // Get records where type = 'Count'
+        $countRecords = DB::table('tbl_punchoutcommitment')
+            ->where('type', 'Count')
+            ->where('emp_id', $empId)
+            ->where('date', $date)
+            ->select('product_name', 'duration')
+            ->get();
+
+        // Get records where type = 'Time'
+        $timeRecords = DB::table('tbl_punchoutcommitment')
+            ->where('type', 'Time')
+            ->where('emp_id', $empId)
+            ->where('date', $date)
+            ->select('product_name', 'duration')
+            ->get();
+
+        return response()->json([
+            'countRecords' => $countRecords,
+            'timeRecords' => $timeRecords
+        ]);
+    }
 
 
 
