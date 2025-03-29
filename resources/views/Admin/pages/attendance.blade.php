@@ -1214,105 +1214,123 @@
 
             <!-- td modal js -->
             <script>
-                $(document).ready(function () {
-                    $(".opentdModal").click(function () {
-                        // Get employee data from clicked cell
-                        var employeeName = $(this).data('employee-name');
-                        var employeeId = $(this).data('employee-id');
-                        var employeeDept = $(this).data('employee-dept');
-                        var employeeRole = $(this).data('employee-role');
-                        var attendanceStatus = $(this).data('attendance-status');
-                        var attendanceDate = $(this).data('attendance-date');
+               $(document).ready(function () {
+    $(".opentdModal").click(function () {
+        // Get employee data from clicked cell
+        var employeeName = $(this).data('employee-name');
+        var employeeId = $(this).data('employee-id');
+        var employeeDept = $(this).data('employee-dept');
+        var employeeRole = $(this).data('employee-role');
+        var attendanceStatus = $(this).data('attendance-status');
+        var attendanceDate = $(this).data('attendance-date');
 
-                        // Get punch data
-                        var punchInTime = $(this).data('punch-in-time');
-                        var punchOutTime = $(this).data('punch-out-time');
-                        var punchInImg = $(this).data('punch-in-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
-                        var punchOutImg = $(this).data('punch-out-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
+        // Get punch data
+        var punchInTime = $(this).data('punch-in-time');
+        var punchOutTime = $(this).data('punch-out-time');
+        var punchInImg = $(this).data('punch-in-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
+        var punchOutImg = $(this).data('punch-out-img') || 'https://cs5.pikabu.ru/post_img/big/2015/06/25/7/1435228793_1097179331.png';
 
-                        // Format date from YYYY-MM-DD to a more readable format
-                        var formattedDate = new Date(attendanceDate).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
+        // Format date from YYYY-MM-DD to a more readable format
+        var formattedDate = new Date(attendanceDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
 
-                        // Check if today's date and no attendance data
-                        var today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-                        var isToday = attendanceDate === today;
-                        var noAttendanceData = !punchInTime && !punchOutTime &&
-                            (attendanceStatus === 'absent' || attendanceStatus === '0');
+        // Check if today's date and no attendance data
+        var today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        var isToday = attendanceDate === today;
+        var noAttendanceData = (!punchInTime && !punchOutTime && 
+                                (attendanceStatus === 'absent' || attendanceStatus === '0'));
 
-                        // Update modal title and employee details
-                        $("#tdModal .modal-title").text(employeeName);
-                        $("#tdModal p:eq(0)").text(employeeDept + " | " + employeeRole);
-                        $("#tdModal p:eq(1)").text("Emp-ID: " + employeeId);
+        // Update modal title and employee details
+        $("#tdModal .modal-title").text(employeeName);
+        $("#tdModal .employee-department").text(employeeDept + " | " + employeeRole);
+        $("#tdModal .employee-id").text("Emp-ID: " + employeeId);
+        
+        // Handle attendance status display
+        if (isToday && noAttendanceData) {
+            $("#tdModal .attendance-status").html('<span style="color: #dc3545; font-weight: bold;">Attendance not found</span>');
+        } else {
+            $("#tdModal .attendance-status").text("Attendance: " + attendanceStatus);
+        }
 
-                        // Handle "Attendance not found" message for today
-                        if (isToday && noAttendanceData) {
-                            $("#tdModal p:eq(2)").html("<strong style='color: #dc3545;'>Attendance not found</strong>");
+        // Update punch-in panel
+        if (isToday && noAttendanceData) {
+            $("#tdModal .col-sm-6:eq(0) .panel-body").html(
+                '<div class="text-center" style="padding: 20px;">' +
+                '<div class="alert alert-info">No check-in record found for today</div>' +
+                '</div>'
+            );
+        } else {
+            var punchInContent = '<img src="' + punchInImg + '" alt="Punch In Image" height="120px" class="punch-in-img img-thumbnail">' +
+                                '<div class="punch-details mt-3">' +
+                                '<p class="punch-in-date">Punch In Date: ' + attendanceDate + '</p>' +
+                                '<p class="punch-in-time">Punch In Time: ' + (punchInTime || "N/A") + '</p>' +
+                                '</div>';
+            $("#tdModal .col-sm-6:eq(0) .panel-body").html(punchInContent);
+        }
 
-                            // Disable the images and show attendance not found message
-                            $("#tdModal .col-sm-6:eq(0) .panel-body").html(
-                                "<div class='alert alert-info text-center' style='margin-top: 10px;'>No check-in record found for today</div>"
-                            );
-                            $("#tdModal .col-sm-6:eq(1) .panel-body").html(
-                                "<div class='alert alert-info text-center' style='margin-top: 10px;'>No check-out record found for today</div>"
-                            );
-                        } else {
-                            $("#tdModal p:eq(2)").text("Attendance: " + attendanceStatus);
+        // Update punch-out panel
+        if (isToday && noAttendanceData) {
+            $("#tdModal .col-sm-6:eq(1) .panel-body").html(
+                '<div class="text-center" style="padding: 20px;">' +
+                '<div class="alert alert-info">No check-out record found for today</div>' +
+                '</div>'
+            );
+        } else {
+            var punchOutContent = '<img src="' + punchOutImg + '" alt="Punch Out Image" height="120px" class="punch-out-img img-thumbnail">' +
+                                 '<div class="punch-details mt-3">' +
+                                 '<p class="punch-out-date">Punch Out Date: ' + attendanceDate + '</p>' +
+                                 '<p class="punch-out-time">Punch Out Time: ' + (punchOutTime || "N/A") + '</p>' +
+                                 '</div>';
+            $("#tdModal .col-sm-6:eq(1) .panel-body").html(punchOutContent);
+        }
 
-                            // Update punch in details
-                            $("#tdModal .col-sm-6:eq(0) img").attr("src", punchInImg);
-                            $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(0)").text("Punch In Date: " + attendanceDate);
-                            $("#tdModal .col-sm-6:eq(0) .punch-details p:eq(1)").text("Punch In Time: " + (punchInTime || "N/A"));
+        // Set the current status in the dropdown
+        $("#attendance-select").val(attendanceStatus);
 
-                            // Update punch out details
-                            $("#tdModal .col-sm-6:eq(1) img").attr("src", punchOutImg);
-                            $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(0)").text("Punch Out Date: " + attendanceDate);
-                            $("#tdModal .col-sm-6:eq(1) .punch-details p:eq(1)").text("Punch Out Time: " + (punchOutTime || "N/A"));
-                        }
+        // Store values in hidden fields for form submission
+        $("#attendance-date").val(attendanceDate);
+        $("#employee-id-hidden").val(employeeId);
 
-                        // Set the current status in the dropdown
-                        $("#tdModal select").val(attendanceStatus);
+        // Show the modal
+        $("#tdModal").modal("show");
+    });
 
-                        // Store the admin_id and date in hidden fields for the form submission
-                        $("#attendance-date").val(attendanceDate);
-                        $("#employee-id-hidden").val(employeeId);
+    // Handle form submission
+    $("#submitBtn").click(function () {
+        var newAttendanceStatus = $("#attendance-select").val();
+        var comments = $("#attendance-comments").val();
+        var employeeId = $("#employee-id-hidden").val();
+        var attendanceDate = $("#attendance-date").val();
 
-                        // Show the modal
-                        $("#tdModal").modal("show");
-                    });
-
-                    // Handle form submission
-                    $("#submitBtn").click(function () {
-                        var newAttendanceStatus = $("#tdModal select").val();
-                        var comments = $("#tdModal textarea").val();
-                        var employeeId = $("#employee-id-hidden").val();
-                        var attendanceDate = $("#attendance-date").val();
-
-                        // Ajax to send this data to the server
-                        $.ajax({
-                            url: "/update-attendance",
-                            method: "POST",
-                            data: {
-                                admin_id: employeeId,
-                                date: attendanceDate,
-                                attendance_status: newAttendanceStatus,
-                                comments: comments,
-                                _token: $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (response) {
-                                // Close modal and refresh the page
-                                $("#tdModal").modal("hide");
-                                location.reload();
-                            },
-                            error: function (error) {
-                                alert("Error updating attendance: " + error.responseJSON.message);
-                            }
-                        });
-                    });
-                });
+        // Ajax to send this data to the server
+        $.ajax({
+            url: "/update-attendance",
+            method: "POST",
+            data: {
+                admin_id: employeeId,
+                date: attendanceDate,
+                attendance_status: newAttendanceStatus,
+                comments: comments,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                // Show success message
+                alert("Attendance updated successfully");
+                
+                // Close modal and refresh the page
+                $("#tdModal").modal("hide");
+                location.reload();
+            },
+            error: function (error) {
+                // Show error message
+                alert("Error updating attendance: " + (error.responseJSON ? error.responseJSON.message : "Unknown error"));
+            }
+        });
+    });
+});
             </script>
 
             <!-- td modal -->
