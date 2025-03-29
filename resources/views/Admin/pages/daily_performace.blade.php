@@ -335,7 +335,7 @@
                                                     <div style="text-align: start;">
                                                                 <span style="font-size: 17px;"><b>{{ $admin->name }}</b></span><br>
                                                                 <span style="font-size: 12px;">{{ $admin->team }} | {{ $admin->role }}</span><br>
-                                                                <span style="font-size: 12px;">Emp-ID : {{ $admin->emp_id ?? 'N/A' }}</span><br>
+                                                                <span style="font-size: 12px;">Emp-ID : {{ $admin->id ?? 'N/A' }}</span><br>
                                                                 <span style="font-size: 12px;">Dept: {{ $admin->department }}</span>
                                                             </div>
                                                         </td>

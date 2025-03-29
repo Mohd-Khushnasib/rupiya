@@ -6949,7 +6949,7 @@ class AdminController extends Controller
 
         // Fetch admin users from the admin table
         $admins = DB::table('admin')
-            ->select('id', 'name', 'department', 'team', 'role', 'emp_id', 'profile_image')
+            ->select('id', 'name', 'department', 'team', 'role', 'profile_image')
             ->get();
 
         return view('Admin.pages.daily_performace', compact('dates', 'monthName', 'admins'));
