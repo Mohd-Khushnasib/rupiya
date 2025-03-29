@@ -368,7 +368,7 @@
             </div>
 
 
-            <!-- Replace your existing modal with this simplified version -->
+
             <div class="modal fade" id="tdModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
                 <div class="modal-dialog" style="width: fit-content;">
                     <div class="modal-content" style="width: fit-content;">
@@ -448,39 +448,6 @@
                 </div>
             </div>
 
-            <!-- Fallback button to test modal -->
-            <!-- <button type="button" class="btn btn-primary" onclick="$('#tdModal').modal('show');" 
-                style="position: fixed; bottom: 10px; left: 10px; z-index: 9999;">
-                Test Modal
-            </button> -->
-            <!-- Replace your existing script with this updated version -->
-            <!-- Add this at the top of your blade file, right after @section('main-content') -->
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-            <!-- Add this right before your existing script tag -->
-            <style>
-                /* Ensure modal appears on top of everything */
-                .modal {
-                    z-index: 9999 !important;
-                }
-
-                .modal-backdrop {
-                    z-index: 9998 !important;
-                }
-
-                /* Make clickable cells more obvious */
-                .opentdModal {
-                    cursor: pointer !important;
-                    background-color: rgba(255, 255, 255, 0.05);
-                    transition: all 0.3s;
-                }
-
-                .opentdModal:hover {
-                    background-color: rgba(3, 176, 245, 0.1) !important;
-                    transform: scale(1.02);
-                }
-            </style>
 
             <!-- Replace your entire script block with this -->
             <script>
@@ -510,32 +477,32 @@
 
                             // Add placeholder data
                             countTable.innerHTML = `
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Leads</td>
-                                            <td class="ak_table-cell">5</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Logins</td>
-                                            <td class="ak_table-cell">10</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                    `;
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Leads</td>
+                                                        <td class="ak_table-cell">5</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Logins</td>
+                                                        <td class="ak_table-cell">10</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                `;
 
                             timeTable.innerHTML = `
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Working Hour</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                        <tr class="ak_table-row">
-                                            <td class="ak_table-cell">Break</td>
-                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
-                                            <td class="ak_table-cell"></td>
-                                        </tr>
-                                    `;
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Working Hour</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Break</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                `;
 
                             // Set up total hours calculation
                             calculateTotalHours();
