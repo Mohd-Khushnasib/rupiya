@@ -6811,6 +6811,26 @@ class AdminController extends Controller
         ]);
     }
 
+    // update attendance status after punchout 
+    public function UpdateAttendanceafterPunchOut(Request $request)
+    {
+        dd($request->all());
+        $data = [
+            'attendance_status' => $request->attendance_status,
+            'punchout_datetime' => $request->punchout_datetime,
+            'punchout_note' => $request->punchout_note,
+            'punchout_status' => 'true',
+            'date' => date('Y-m-d', strtotime($this->date)),
+        ];
+
+        if (!empty($data)) {
+            DB::table('tbl_attendance')->where('admin_id', $request->admin_id)->update($data);
+            return response()->json([
+                'success' => 'success',
+            ]);
+        } else {
+        }
+    }
     // add attendance 
     public function addAttendance(Request $request)
     {
