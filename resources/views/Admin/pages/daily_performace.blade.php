@@ -323,6 +323,14 @@
                         <div class="col-md-12">
                             <div class="table-responsive table-container">
                                 <table class="table table-advance custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="name-header">Name</th>
+                                            @foreach($dates as $date)
+                                                <th class="day-header">{{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach($admins as $admin)
                                             <tr>
