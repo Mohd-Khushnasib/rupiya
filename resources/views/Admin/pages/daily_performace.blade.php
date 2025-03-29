@@ -293,31 +293,31 @@
                     </div>
                     <!-- BEGIN Main Content -->
                     <!-- <div class="row" style="margin-top: 20px">
-                                                        <div class="col-lg-3">
-                                                            <div class="card punch_card">
-                                                                <h3 class="punch_card_text">Full Day</h3>
-                                                                <h4 class="punch_card_text">12</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="card punch_card">
-                                                                <h3 class="punch_card_text">Half Day</h3>
-                                                                <h4 class="punch_card_text">30</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="card punch_card">
-                                                                <h3 class="punch_card_text">Absent</h3>
-                                                                <h4 class="punch_card_text">29</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="card punch_card">
-                                                                <h3 class="punch_card_text">Total Day</h3>
-                                                                <h4 class="punch_card_text">30</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
+                                                                    <div class="col-lg-3">
+                                                                        <div class="card punch_card">
+                                                                            <h3 class="punch_card_text">Full Day</h3>
+                                                                            <h4 class="punch_card_text">12</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <div class="card punch_card">
+                                                                            <h3 class="punch_card_text">Half Day</h3>
+                                                                            <h4 class="punch_card_text">30</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <div class="card punch_card">
+                                                                            <h3 class="punch_card_text">Absent</h3>
+                                                                            <h4 class="punch_card_text">29</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <div class="card punch_card">
+                                                                            <h3 class="punch_card_text">Total Day</h3>
+                                                                            <h4 class="punch_card_text">30</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> -->
                     <div class="row"
                         style="width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; margin: 10px 0;">
                         <div style="border: none; padding: 0 10px; border-radius: 10px;">
@@ -562,14 +562,42 @@
                     </div>
                 </div>
             </div>
+
+            <!-- First, ensure these scripts are properly included in your master layout -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+            <!-- Replace your existing script with this updated version -->
             <script>
                 $(document).ready(function () {
-                    $(".opentdModal").click(function () {
-                        $("#tdModal").modal("show");
-                    });
+                    // Make sure jQuery is loaded
+                    if (typeof jQuery != 'undefined') {
+                        console.log("jQuery is loaded");
+
+                        // Use direct click binding with event delegation
+                        $(document).on('click', '.opentdModal', function () {
+                            console.log("Modal trigger clicked");
+                            $('#tdModal').modal('show');
+                        });
+
+                        // Alternative method - add direct click handlers to each cell
+                        $('.opentdModal').each(function () {
+                            $(this).on('click', function () {
+                                console.log("Cell clicked");
+                                $('#tdModal').modal('show');
+                            });
+                        });
+
+                        // Test if modal can be shown programmatically
+                        // Uncomment this to test if modal works at all
+                        // setTimeout(function() {
+                        //     $('#tdModal').modal('show');
+                        // }, 2000);
+                    } else {
+                        console.error("jQuery is not loaded!");
+                    }
                 });
             </script>
-
         @endsection
     @endforeach
 @else
