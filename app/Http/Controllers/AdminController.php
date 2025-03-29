@@ -6926,6 +6926,12 @@ class AdminController extends Controller
         }
     }
 
+    // daily perforamce 
+    public function daily_performace()
+    {
+        return view('Admin.pages.daily_performance');
+    }
+
 
 
     // end here

@@ -404,7 +404,10 @@ Route::post('/add_attendance', [AdminController::class, 'addAttendance']);
 Route::post('/punchout_attendance', [AdminController::class, 'updatePunchOutAttendance']);
 Route::post('/update-attendance', [AdminController::class, 'UpdateAttendanceafterPunchOut']);
 
-// get-attendance-comments
+// All Comitment
 Route::get('/admin-punchout-comitment', [AdminController::class, 'punchoutComitment']);
 Route::post('/add_punchout_comitment', [AdminController::class, 'addPunchoutComitment']);
 Route::post('/delete_commitment', [AdminController::class, 'deleteCommitment']);
+
+// daily performance
+Route::get('/daily_performace', [AdminController::class, 'daily_performace']);
