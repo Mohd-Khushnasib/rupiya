@@ -410,4 +410,4 @@ Route::post('/add_punchout_comitment', [AdminController::class, 'addPunchoutComi
 Route::post('/delete_commitment', [AdminController::class, 'deleteCommitment']);
 
 // daily performance
-Route::get('/daily_performace', [AdminController::class, 'daily_performace']);
+Route::get('/daily_performace', [AdminController::class, 'dailyPerformace']);
