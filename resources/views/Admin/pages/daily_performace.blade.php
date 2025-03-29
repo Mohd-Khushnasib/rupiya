@@ -323,93 +323,34 @@
                         <div class="col-md-12">
                             <div class="table-responsive table-container">
                                 <table class="table table-advance custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th class="name-header">Name</th>
-                                            @foreach($dates as $date)
-                                                <th class="day-header">{{ $date['day'] }} <br> {{ $date['dayOfWeek'] }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr>
-                                            <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
-                                                <div>
-                                                    <img src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&amp;q=60&amp;w=3000&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
-                                                        alt="" height="50px" width="50px"
-                                                        style="object-fit: cover; border-radius: 50%;">
-                                                </div>
-                                                <div style="text-align: start;">
-                                                    <span style="font-size: 17px;"><b>Ravindra</b></span><br>
-                                                    <span style="font-size: 12px;">Achievers | Sr. Executive</span><br>
-                                                    <span style="font-size: 12px;">Emp-ID : RM02</span>
-                                                </div>
-                                            </td>
-                                            <td cclass="opentdModal" onclick="$('#tdModal').modal('show');"><span class="badge"
-                                                    style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                            <td class="opentdModal"><span class="badge" style="background-color: green;">C : 5 | A :
-                                                    2</span> <br> <br>Best 😍</td>
-                                        </tr>
-
+                                     <tbody>
+                                        @foreach($admins as $admin)
+                                            <tr>
+                                                <td class="name-cell" style="display: flex; gap: 10px; align-items: center;">
+                                                    <div>
+                                                        <img src="{{ $admin->profile_image ?? 'https://via.placeholder.com/50' }}"
+                                                            alt="" height="50px" width="50px"
+                                                            style="object-fit: cover; border-radius: 50%;">
+                                                    </div>
+                                                    <div style="text-align: start;">
+                                                                <span style="font-size: 17px;"><b>{{ $admin->name }}</b></span><br>
+                                                                <span style="font-size: 12px;">{{ $admin->team }} | {{ $admin->role }}</span><br>
+                                                                <span style="font-size: 12px;">Emp-ID : {{ $admin->emp_id ?? 'N/A' }}</span><br>
+                                                                <span style="font-size: 12px;">Dept: {{ $admin->department }}</span>
+                                                            </div>
+                                                        </td>
+                                                        
+                                                        @foreach($dates as $date)
+                                                            <td class="opentdModal" 
+                                                                data-empid="{{ $admin->id }}" 
+                                                                data-date="{{ $currentYear }}-{{ $currentMonth }}-{{ $date['day'] }}"
+                                                                data-display-date="{{ $date['day'] }} {{ $date['dayOfWeek'] }}, {{ $monthName }}">
+                                                                <span class="badge" style="background-color: green;">C : 5 | A : 2</span> 
+                                                                <br><br>Best 😍
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

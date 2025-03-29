@@ -6935,19 +6935,24 @@ class AdminController extends Controller
         $currentYear = $now->year;
         $monthName = $now->format('F Y');
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
-        
+
         $dates = [];
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = \Carbon\Carbon::createFromDate($currentYear, $currentMonth, $day);
             $dayOfWeek = $date->format('D'); // Mon, Tue, etc.
-            
+
             $dates[] = [
                 'day' => $day,
                 'dayOfWeek' => $dayOfWeek
             ];
         }
-        
-        return view('Admin.pages.daily_performace', compact('dates', 'monthName'));
+
+        // Fetch admin users from the admin table
+        $admins = DB::table('admin')
+            ->select('id', 'name', 'department', 'team', 'role', 'emp_id', 'profile_image')
+            ->get();
+
+        return view('Admin.pages.daily_performace', compact('dates', 'monthName', 'admins'));
     }
     public function getDailyPerformanceData(Request $request)
     {
