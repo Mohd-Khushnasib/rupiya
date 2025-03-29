@@ -888,8 +888,8 @@
                 });
             </script>
 
-           
-          
+
+
 
             <!-- punch in modal submit button -->
             <script>
@@ -1103,10 +1103,10 @@
                     const inputGroup = document.createElement('div');
                     inputGroup.className = 'ak_input_group';
                     inputGroup.innerHTML = `
-                                                                                                                                                                                                                        <input type="text" placeholder="Work description">
-                                                                                                                                                                                                                        <input type="number" placeholder="Hours" min="0">
-                                                                                                                                                                                                                        <button class="ak_minus">-</button>
-                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                    <input type="text" placeholder="Work description">
+                                                                                                                                                                                                                                    <input type="number" placeholder="Hours" min="0">
+                                                                                                                                                                                                                                    <button class="ak_minus">-</button>
+                                                                                                                                                                                                                                `;
 
                     // Add event listener to the minus button
                     inputGroup.querySelector('.ak_minus').addEventListener('click', () => {
@@ -1233,13 +1233,20 @@
                     });
 
                     // Handle form submission
-                    $("#submitBtn").click(function () {
-                        var newAttendanceStatus = $("#attendance-select").val();
-                        var comments = $("#attendance-comments").val();
+                    $("#submitBtn").on("click", function () {
+                        // Get form values
                         var employeeId = $("#employee-id-hidden").val();
                         var attendanceDate = $("#attendance-date").val();
+                        var newAttendanceStatus = $("#attendance-select").val();
+                        var comments = $("#attendance-comments").val();
 
-                        // Ajax to send this data to the server
+                        // Validate data
+                        if (!employeeId || !attendanceDate) {
+                            alert("Missing employee ID or attendance date");
+                            return;
+                        }
+
+                        // Send AJAX request
                         $.ajax({
                             url: "/update-attendance",
                             method: "POST",
