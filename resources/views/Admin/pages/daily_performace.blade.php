@@ -335,7 +335,7 @@
                                                         <span style="font-size: 17px;"><b>{{ $admin->name }}</b></span><br>
                                                         <span style="font-size: 12px;">{{ $admin->team }} |
                                                             {{ $admin->role }}</span><br>
-                                                        <span style="font-size: 12px;">Emp-ID : {{ $admin->id ?? 'N/A' }}</span><br>
+                                                        <span style="font-size: 12px;">Emp-ID : {{ $admin->id }}</span><br>
                                                         <span style="font-size: 12px;">Dept: {{ $admin->department }}</span>
                                                     </div>
                                                 </td>
@@ -449,31 +449,31 @@
                                 if (response.countRecords && response.countRecords.length > 0) {
                                     $.each(response.countRecords, function (index, record) {
                                         var row = `
-                                                                <tr class="ak_table-row">
-                                                                    <td class="ak_table-cell">${record.product_name}</td>
-                                                                    <td class="ak_table-cell">${record.duration}</td>
-                                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field achievement-input" data-record-id="${record.id}"></td>
-                                                                    <td class="ak_table-cell" id="feedback-${record.id}"></td>
-                                                                </tr>
-                                                            `;
+                                                                            <tr class="ak_table-row">
+                                                                                <td class="ak_table-cell">${record.product_name}</td>
+                                                                                <td class="ak_table-cell">${record.duration}</td>
+                                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field achievement-input" data-record-id="${record.id}"></td>
+                                                                                <td class="ak_table-cell" id="feedback-${record.id}"></td>
+                                                                            </tr>
+                                                                        `;
                                         $('#countRecordsTable tbody').append(row);
                                     });
                                 } else {
                                     // If no count records found, show placeholder rows
                                     $('#countRecordsTable tbody').append(`
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Leads</td>
-                                                                <td class="ak_table-cell">0</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Logins</td>
-                                                                <td class="ak_table-cell">0</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                        `);
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Leads</td>
+                                                                            <td class="ak_table-cell">0</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Logins</td>
+                                                                            <td class="ak_table-cell">0</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                    `);
                                 }
 
                                 // Update Time Records table
@@ -482,12 +482,12 @@
 
                                     $.each(response.timeRecords, function (index, record) {
                                         var row = `
-                                                                <tr class="ak_table-row">
-                                                                    <td class="ak_table-cell">${record.product_name}</td>
-                                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
-                                                                    <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
-                                                                </tr>
-                                                            `;
+                                                                            <tr class="ak_table-row">
+                                                                                <td class="ak_table-cell">${record.product_name}</td>
+                                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
+                                                                                <td class="ak_table-cell" id="time-feedback-${record.id}"></td>
+                                                                            </tr>
+                                                                        `;
                                         $('#timeRecordsTable tbody').append(row);
 
                                         totalHours += parseFloat(record.duration) || 0;
@@ -498,32 +498,32 @@
                                 } else {
                                     // If no time records found, show placeholder rows
                                     $('#timeRecordsTable tbody').append(`
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Working Hour</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Break</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Wrap Up Time</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Meeting</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                            <tr class="ak_table-row">
-                                                                <td class="ak_table-cell">Other Work</td>
-                                                                <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
-                                                                <td class="ak_table-cell"></td>
-                                                            </tr>
-                                                        `);
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Working Hour</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Break</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Wrap Up Time</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Meeting</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                        <tr class="ak_table-row">
+                                                                            <td class="ak_table-cell">Other Work</td>
+                                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input"></td>
+                                                                            <td class="ak_table-cell"></td>
+                                                                        </tr>
+                                                                    `);
                                 }
 
                                 // Set up event listeners for time inputs to recalculate total
