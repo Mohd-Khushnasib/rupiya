@@ -888,74 +888,8 @@
                 });
             </script>
 
-            <!--  punch in modal open  -->
-            <script>
-                $(document).ready(function () {
-                    $("#openModalBtn").on("click", function () {
-                        $("#modalTitle").text("Add Task");
-                        $("#myModal").modal("show");
-                    });
-
-                    $("#saveChangesBtn").on("click", function () {
-                        alert("Your changes have been saved!");
-                        $("#myModal").modal("hide");
-                    });
-
-                    $("#myModal").on("shown.bs.modal", function () {
-                        console.log("Modal is now fully visible!");
-                    });
-
-                    $("#myModal").on("hidden.bs.modal", function () {
-                        console.log("Modal has been closed.");
-                    });
-                });
-            </script>
-
-            <!--  After punch modal  -->
-            <div id="secondModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                &times;
-                            </button>
-                            <h4 class="modal-title text-center" style="color: black; font-weight: bold">
-                                Today Commitment
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            <label class="text-dark control-label" style="font-weight: bold">Today Login
-                                Commitment</label>
-                            <input type="text" placeholder="" style="font-weight: bold" class="form-control">
-                            <label class="text-dark control-label" style="font-weight: bold">Today Lead Commitment</label>
-                            <input type="text" placeholder="" style="font-weight: bold" class="form-control">
-                            <div>
-                                <h4 class="modal-title text-center"
-                                    style="color: black; font-weight: bold; margin-top: 20px !important">
-                                    Today Work ToDo
-                                </h4>
-                                <p>1. Work 1</p>
-                                <p>2. Work 2</p>
-                                <p>3. Work 3</p>
-                            </div>
-                            <hr>
-                            <!-- <i class="fa fa-comment theam_color" style="font-size: 25px; cursor: pointer"></i>  -->
-                            <p style="font-weight: bold; margin: 0px;">
-                                Write Comment Here
-                            </p>
-                            <div id="commentBox" class="comment-box">
-                                <textarea placeholder="Write a comment..." style="width: 100%; height: 100px;"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-info">Save</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
+          
 
             <!-- punch in modal submit button -->
             <script>
