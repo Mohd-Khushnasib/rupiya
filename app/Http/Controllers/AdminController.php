@@ -6929,7 +6929,25 @@ class AdminController extends Controller
     // daily perforamce 
     public function dailyPerformace()
     {
-        return view('Admin.pages.daily_performace');
+        // Get current month's dates
+        $now = now();
+        $currentMonth = $now->month;
+        $currentYear = $now->year;
+        $monthName = $now->format('F Y');
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
+        
+        $dates = [];
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = \Carbon\Carbon::createFromDate($currentYear, $currentMonth, $day);
+            $dayOfWeek = $date->format('D'); // Mon, Tue, etc.
+            
+            $dates[] = [
+                'day' => $day,
+                'dayOfWeek' => $dayOfWeek
+            ];
+        }
+        
+        return view('Admin.pages.daily_performace', compact('dates', 'monthName'));
     }
     public function getDailyPerformanceData(Request $request)
     {
@@ -6944,7 +6962,6 @@ class AdminController extends Controller
             ->select('product_name', 'duration')
             ->get();
 
-        // Get records where type = 'Time'
         $timeRecords = DB::table('tbl_punchoutcommitment')
             ->where('type', 'Time')
             ->where('emp_id', $empId)
