@@ -6956,14 +6956,9 @@ class AdminController extends Controller
     }
     public function getDailyPerformanceData(Request $request)
     {
-        // Get date and employee ID from request
-        $date = $request->date;
-        $empId = $request->emp_id;
         
         // Get commitments from tbl_punchoutcommitment filtered by date and employee ID
         $commitments = DB::table('tbl_punchoutcommitment')
-            ->where('date', $date)
-            ->where('emp_id', $empId)
             ->get();
         
         // Separate count and time records
