@@ -20,6 +20,10 @@
                     width: 100%;
                     overflow-x: auto;
                     position: relative;
+                    max-height: 400px;
+                    overflow-y: auto;
+                    border: 0;
+                    white-space: nowrap;
                 }
 
                 table {
@@ -32,6 +36,7 @@
                 td {
                     white-space: nowrap;
                     text-align: left;
+                    padding: 8px;
                 }
 
                 th {
@@ -49,12 +54,15 @@
                     position: sticky;
                     background-color: black;
                     left: 0;
-                    z-index: 2;
+                    z-index: 3;
                 }
 
-                th:first-child,
-                td:first-child {
-                    z-index: 3;
+                thead {
+                    position: sticky;
+                    top: -1px;
+                    left: 20px;
+                    background-color: black;
+                    z-index: 1;
                 }
 
                 .scrollable-table {
@@ -72,17 +80,9 @@
                     align-items: center;
                     justify-content: space-around;
                 }
-            </style>
 
-            <style>
                 .table-margin {
                     margin-top: 60px;
-                }
-
-                .table-container {
-                    border: 0;
-                    overflow-x: auto;
-                    white-space: nowrap;
                 }
 
                 .custom-table {
@@ -97,85 +97,41 @@
                 input[type="month"]::-webkit-calendar-picker-indicator {
                     filter: invert(1);
                 }
-            </style>
 
-            <style>
+                /* Status styling */
                 .full-day {
                     color: black !important;
-                    /* background-color: #fff3e0; */
                     background-color: green;
                     color: white !important;
-                    /* Light Orange */
                 }
 
                 .half-day {
                     color: black !important;
                     background-color: #ffff00;
-                    /* Yellow */
                 }
 
                 .leave-approve {
                     color: black !important;
                     background-color: #ff5722;
-                    /* Red-Orange */
                 }
 
                 .leave-not-approve {
                     color: black !important;
-                    /* background-color: #d81b60; */
                     background-color: red;
                     color: white !important;
-                    /* Dark Pink */
                 }
 
                 .off {
                     color: white !important;
                     background-color: #0288d1;
-                    /* Blue */
-                }
-            </style>
-
-            <style>
-                .table-container {
-                    max-height: 400px;
-                    overflow-y: auto;
                 }
 
-                thead {
-                    position: sticky;
-                    top: -1px;
-                    left: 20px;
-                    background-color: black;
-                    z-index: 1;
-                }
-
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-
-                th,
-                td {
-                    padding: 8px;
-                    /* border: 1px solid #ddd; */
-                    text-align: left;
-                }
-            </style>
-
-
-            <!-- Attendance Details Modal -->
-            <style>
+                /* Modal Styles */
                 .ak_container {
-                    /* background-color: #fff; */
-                    /* padding: 20px; */
-                    /* border: 1px solid black; */
-                    /* border-radius: 8px; */
-                    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-                    /* width: 400px; */
+                    margin-bottom: 20px;
                 }
 
                 .ak_heading {
-                    /* text-align: center; */
                     margin-bottom: 20px;
                     color: black;
                     font-weight: bold;
@@ -241,14 +197,12 @@
                     margin-top: 10px;
                     text-align: center;
                 }
-            </style>
 
-            <style>
                 .chosen-container {
                     background-color: whitesmoke;
                 }
 
-                /* <!-- After punch out modal --> */
+                /* Table styling for modal */
                 .ak_custom-table {
                     width: 100%;
                     border-collapse: collapse;
@@ -277,6 +231,11 @@
                     border-radius: 5px !important;
                     background: #ffff99 !important;
                     font-weight: bold !important;
+                }
+                
+                /* Make clickable cells more obvious */
+                .opentdModal {
+                    cursor: pointer;
                 }
             </style>
 
@@ -367,8 +326,7 @@
                 <!-- END Content -->
             </div>
 
-
-
+            <!-- Modal -->
             <div class="modal fade" id="tdModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
                 <div class="modal-dialog" style="width: fit-content;">
                     <div class="modal-content" style="width: fit-content;">
@@ -448,8 +406,7 @@
                 </div>
             </div>
 
-
-            <!-- Replace your entire script block with this -->
+            <!-- JavaScript -->
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     // Pure JS click handler that doesn't rely on jQuery events
@@ -477,32 +434,32 @@
 
                             // Add placeholder data
                             countTable.innerHTML = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Leads</td>
-                                                        <td class="ak_table-cell">5</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Logins</td>
-                                                        <td class="ak_table-cell">10</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                `;
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">Leads</td>
+                                    <td class="ak_table-cell">5</td>
+                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                    <td class="ak_table-cell"></td>
+                                </tr>
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">Logins</td>
+                                    <td class="ak_table-cell">10</td>
+                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                    <td class="ak_table-cell"></td>
+                                </tr>
+                            `;
 
                             timeTable.innerHTML = `
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Working Hour</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                    <tr class="ak_table-row">
-                                                        <td class="ak_table-cell">Break</td>
-                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
-                                                        <td class="ak_table-cell"></td>
-                                                    </tr>
-                                                `;
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">Working Hour</td>
+                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
+                                    <td class="ak_table-cell"></td>
+                                </tr>
+                                <tr class="ak_table-row">
+                                    <td class="ak_table-cell">Break</td>
+                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
+                                    <td class="ak_table-cell"></td>
+                                </tr>
+                            `;
 
                             // Set up total hours calculation
                             calculateTotalHours();
@@ -514,31 +471,6 @@
                             });
                         });
                     });
-
-                    // Add a direct test button
-                    var testBtn = document.createElement('button');
-                    testBtn.textContent = 'Open Modal';
-                    testBtn.style.position = 'fixed';
-                    testBtn.style.bottom = '20px';
-                    testBtn.style.right = '20px';
-                    testBtn.style.zIndex = '9999';
-                    testBtn.style.padding = '10px 15px';
-                    testBtn.style.backgroundColor = '#4CAF50';
-                    testBtn.style.color = 'white';
-                    testBtn.style.border = 'none';
-                    testBtn.style.borderRadius = '4px';
-                    testBtn.style.cursor = 'pointer';
-
-                    testBtn.addEventListener('click', function () {
-                        // Force the modal to display
-                        jQuery('#tdModal').modal({
-                            show: true,
-                            backdrop: true,
-                            keyboard: true
-                        });
-                    });
-
-                    document.body.appendChild(testBtn);
 
                     function calculateTotalHours() {
                         var totalHours = 0;
