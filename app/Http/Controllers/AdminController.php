@@ -6954,26 +6954,16 @@ class AdminController extends Controller
         
         return view('Admin.pages.daily_performace', compact('dates', 'monthName', 'admins', 'currentYear', 'currentMonth'));
     }
-    public function getDailyPerformanceData(Request $request)
+    public function getDailyPerformanceData()
     {
-        $empId = $request->input('emp_id');
-        $date = $request->input('date');
-
-        // Get records where type = 'Count'
-        $countRecords = DB::table('tbl_punchoutcommitment')
-            ->where('type', 'Count')
-            ->where('emp_id', $empId)
-            ->where('date', $date)
-            ->select('product_name', 'duration')
+        // Get all commitments from tbl_punchoutcommitment without filtering by employee
+        $commitments = DB::table('tbl_punchoutcommitment')
             ->get();
-
-        $timeRecords = DB::table('tbl_punchoutcommitment')
-            ->where('type', 'Time')
-            ->where('emp_id', $empId)
-            ->where('date', $date)
-            ->select('product_name', 'duration')
-            ->get();
-
+        
+        // Separate count and time records
+        $countRecords = $commitments->where('type', 'Count');
+        $timeRecords = $commitments->where('type', 'Time');
+        
         return response()->json([
             'countRecords' => $countRecords,
             'timeRecords' => $timeRecords

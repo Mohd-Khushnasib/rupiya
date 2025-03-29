@@ -232,7 +232,7 @@
                     background: #ffff99 !important;
                     font-weight: bold !important;
                 }
-                
+
                 /* Make clickable cells more obvious */
                 .opentdModal {
                     cursor: pointer;
@@ -414,61 +414,137 @@
 
                     cells.forEach(function (cell) {
                         cell.addEventListener('click', function () {
-                            var empId = this.getAttribute('data-empid');
-                            var date = this.getAttribute('data-date');
                             var displayDate = this.getAttribute('data-display-date');
 
                             // Direct DOM manipulation for the modal title
-                            document.getElementById('modalDate').textContent = displayDate || date;
+                            document.getElementById('modalDate').textContent = displayDate;
 
                             // Force show using direct Bootstrap API
                             jQuery('#tdModal').modal('show');
 
-                            // For demonstration, add placeholder data without AJAX
-                            var countTable = document.querySelector('#countRecordsTable tbody');
-                            var timeTable = document.querySelector('#timeRecordsTable tbody');
+                            // Fetch data via AJAX
+                            fetch(`/get-daily-performance-data`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Clear existing content
+                                    var countTable = document.querySelector('#countRecordsTable tbody');
+                                    var timeTable = document.querySelector('#timeRecordsTable tbody');
 
-                            // Clear existing content
-                            countTable.innerHTML = '';
-                            timeTable.innerHTML = '';
+                                    countTable.innerHTML = '';
+                                    timeTable.innerHTML = '';
 
-                            // Add placeholder data
-                            countTable.innerHTML = `
-                                <tr class="ak_table-row">
-                                    <td class="ak_table-cell">Leads</td>
-                                    <td class="ak_table-cell">5</td>
-                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                    <td class="ak_table-cell"></td>
-                                </tr>
-                                <tr class="ak_table-row">
-                                    <td class="ak_table-cell">Logins</td>
-                                    <td class="ak_table-cell">10</td>
-                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
-                                    <td class="ak_table-cell"></td>
-                                </tr>
-                            `;
+                                    // Add count records
+                                    if (data.countRecords && data.countRecords.length > 0) {
+                                        data.countRecords.forEach(record => {
+                                            var row = `
+                                                        <tr class="ak_table-row">
+                                                            <td class="ak_table-cell">${record.product_name}</td>
+                                                            <td class="ak_table-cell">${record.duration}</td>
+                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field" data-record-id="${record.id}"></td>
+                                                            <td class="ak_table-cell"></td>
+                                                        </tr>
+                                                    `;
+                                            countTable.innerHTML += row;
+                                        });
+                                    } else {
+                                        // If no count records found, show placeholder rows
+                                        countTable.innerHTML = `
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Leads</td>
+                                                        <td class="ak_table-cell">5</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Logins</td>
+                                                        <td class="ak_table-cell">3</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                `;
+                                    }
 
-                            timeTable.innerHTML = `
-                                <tr class="ak_table-row">
-                                    <td class="ak_table-cell">Working Hour</td>
-                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
-                                    <td class="ak_table-cell"></td>
-                                </tr>
-                                <tr class="ak_table-row">
-                                    <td class="ak_table-cell">Break</td>
-                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
-                                    <td class="ak_table-cell"></td>
-                                </tr>
-                            `;
+                                    // Add time records
+                                    if (data.timeRecords && data.timeRecords.length > 0) {
+                                        var totalHours = 0;
 
-                            // Set up total hours calculation
-                            calculateTotalHours();
+                                        data.timeRecords.forEach(record => {
+                                            var row = `
+                                                        <tr class="ak_table-row">
+                                                            <td class="ak_table-cell">${record.product_name}</td>
+                                                            <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="${record.duration}" data-record-id="${record.id}"></td>
+                                                            <td class="ak_table-cell"></td>
+                                                        </tr>
+                                                    `;
+                                            timeTable.innerHTML += row;
 
-                            // Add event listeners to inputs
-                            var timeInputs = document.querySelectorAll('.time-input');
-                            timeInputs.forEach(function (input) {
-                                input.addEventListener('input', calculateTotalHours);
-                            });
+                                            totalHours += parseFloat(record.duration) || 0;
+                                        });
+
+                                        // Update total hours
+                                        document.getElementById('ak_totalHours').textContent = totalHours.toFixed(2);
+                                    } else {
+                                        // If no time records found, show placeholder rows
+                                        timeTable.innerHTML = `
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Working Hour</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                    <tr class="ak_table-row">
+                                                        <td class="ak_table-cell">Break</td>
+                                                        <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
+                                                        <td class="ak_table-cell"></td>
+                                                    </tr>
+                                                `;
+                                    }
+
+                                    // Set up total hours calculation
+                                    calculateTotalHours();
+
+                                    // Add event listeners to inputs
+                                    var timeInputs = document.querySelectorAll('.time-input');
+                                    timeInputs.forEach(function (input) {
+                                        input.addEventListener('input', calculateTotalHours);
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching data:', error);
+
+                                    // Show default data if there's an error
+                                    var countTable = document.querySelector('#countRecordsTable tbody');
+                                    var timeTable = document.querySelector('#timeRecordsTable tbody');
+
+                                    countTable.innerHTML = `
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">Leads</td>
+                                                    <td class="ak_table-cell">5</td>
+                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                    <td class="ak_table-cell"></td>
+                                                </tr>
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">Logins</td>
+                                                    <td class="ak_table-cell">3</td>
+                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field"></td>
+                                                    <td class="ak_table-cell"></td>
+                                                </tr>
+                                            `;
+
+                                    timeTable.innerHTML = `
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">Working Hour</td>
+                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="8"></td>
+                                                    <td class="ak_table-cell"></td>
+                                                </tr>
+                                                <tr class="ak_table-row">
+                                                    <td class="ak_table-cell">Break</td>
+                                                    <td class="ak_table-cell"><input type="number" class="ak_input-field time-input" value="1"></td>
+                                                    <td class="ak_table-cell"></td>
+                                                </tr>
+                                            `;
+
+                                    calculateTotalHours();
+                                });
                         });
                     });
 
